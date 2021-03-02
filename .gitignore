@@ -48,3 +48,11 @@ Thumbs.db
 *.mov
 *.wmv
 
+node_modules
+bower_components
+dist
+config.json
+.idea
+build
+/*.zip
+
