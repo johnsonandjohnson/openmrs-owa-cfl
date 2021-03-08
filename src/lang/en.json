@@ -1,0 +1,16 @@
+{
+  "common": {
+    "home": "Home"
+  },
+  "findPatient": {
+    "title": "Find Patient Record",
+    "subtitle": "Search for Patient Record below",
+    "tableHeader": {
+      "id": "IDENTIFIER",
+      "name": "NAME",
+      "gender": "GENDER",
+      "age": "AGE",
+      "dob": "BIRTHDATE"
+    }
+  }
+}

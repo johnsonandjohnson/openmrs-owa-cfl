@@ -1,0 +1,18 @@
+@font-face {
+  font-family: "CircularStd";
+  font-style: normal;
+  font-weight: normal;
+  src: url("../font/CircularStd-Medium.otf") format("opentype");
+}
+
+.app {
+  min-height: 100vh;
+  background-color: #fafafa;
+  font-family: "CircularStd", serif;
+
+  .content {
+    margin-left: 15%;
+    margin-right: 5%;
+    margin-top: 1rem;
+  }
+}

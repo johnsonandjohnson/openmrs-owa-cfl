@@ -4,7 +4,7 @@
   "description": "CFL UI for OpenMRS",
   "launch_path": "index.html",
   "icons": {
-    "48": "/img/omrs-button.png"
+    "48": "/img/cfl48.png"
   },
   "developer": {
     "name": "jkondrat",

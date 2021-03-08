@@ -1,0 +1,15 @@
+{
+  "id": "cfl-ui",
+  "description": "CFL UI",
+  "order": 0,
+  "extensions": [
+    {
+      "id": "demoapp.homepageLink",
+      "extensionPointId": "org.openmrs.referenceapplication.homepageLink",
+      "type": "link",
+      "label": "CFL UI",
+      "url": "owa/cfl-ui/index.html",
+      "icon": "icon-globe"
+    }
+  ]
+}

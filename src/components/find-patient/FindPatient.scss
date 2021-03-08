@@ -1,0 +1,25 @@
+.patients {
+  .subtitle {
+    opacity: 0.5;
+  }
+
+  .search-section {
+    margin-top: 2rem;
+    background-color: white;
+    min-height: 400px;
+    input.patient-search {
+      padding: 1.75em;
+      border-color: #eaeaea;
+    }
+    thead {
+      font-size: 14px;
+    }
+    tbody tr td:first-of-type,
+    thead tr th:first-of-type {
+      padding-left: 2em;
+    }
+
+    .patient-table {
+    }
+  }
+}
