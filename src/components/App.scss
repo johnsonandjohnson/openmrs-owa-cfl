@@ -5,14 +5,63 @@
   src: url("../font/CircularStd-Medium.otf") format("opentype");
 }
 
+@font-face {
+  font-family: "CircularStd";
+  font-style: normal;
+  font-weight: bold;
+  src: url("../font/CircularStd-Bold.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "CircularStd-Book";
+  font-style: normal;
+  font-weight: normal;
+  src: url("../font/CircularStd-Book.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "CircularStd-Book";
+  font-style: italic;
+  font-weight: normal;
+  src: url("../font/CircularStd-BookItalic.otf") format("opentype");
+}
+
 .app {
   min-height: 100vh;
   background-color: #fafafa;
   font-family: "CircularStd", serif;
 
+  .header {
+    padding: 0 12% 0 12%;
+  }
   .content {
-    margin-left: 15%;
-    margin-right: 5%;
-    margin-top: 1rem;
+    margin: 1rem 12% 0;
+  }
+
+  h1 {
+    font-size: 40px;
+    color: #333333;
+  }
+
+  h2 {
+    font-size: 26px;
+    color: #333333;
+  }
+
+  p {
+    font-family: CircularStd-Book;
+    font-size: 16px;
+    color: #333333;
+  }
+
+  .helper-text {
+    font-family: CircularStd-Book;
+    font-size: 16px;
+    color: #333333;
+    opacity: 0.5;
+  }
+
+  .error {
+    color: #dc3545;
   }
 }

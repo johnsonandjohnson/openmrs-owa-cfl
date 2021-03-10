@@ -1,25 +1,37 @@
-.patients {
-  .subtitle {
-    opacity: 0.5;
-  }
-
+.find-patient {
   .search-section {
     margin-top: 2rem;
     background-color: white;
     min-height: 400px;
-    input.patient-search {
-      padding: 1.75em;
-      border-color: #eaeaea;
+    .patient-search {
+      position: relative;
+      .search-icon {
+        position: absolute;
+        top: 1.875em;
+        left: 2em;
+      }
+      .search-input {
+        padding: 2.5em 2.5em 2.5em 4em;
+        border-color: #eaeaea;
+        font-family: CircularStd-Book;
+        font-style: italic;
+      }
     }
-    thead {
-      font-size: 14px;
-    }
-    tbody tr td:first-of-type,
-    thead tr th:first-of-type {
-      padding-left: 2em;
-    }
-
     .patient-table {
+      text-align: center;
+      thead tr th {
+        font-size: 16px;
+        font-weight: normal;
+        padding-top: 0;
+      }
+      tbody tr td:first-of-type,
+      thead tr th:first-of-type {
+        padding-left: 2em;
+      }
+      tbody tr td {
+        padding-top: 1.25em;
+        padding-bottom: 1.25em;
+      }
     }
   }
 }

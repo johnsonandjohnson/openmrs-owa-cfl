@@ -20,7 +20,9 @@ const Breadcrumbs = () => {
               }
             />
           </Link>
-          <span>{breadcrumbs.length !== i + 1 && " >> "}</span>
+          <span className="separator">
+            {(breadcrumbs.length === 1 || breadcrumbs.length !== i + 1) && ">>"}
+          </span>
         </span>
       ))}
     </div>

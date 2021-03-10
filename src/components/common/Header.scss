@@ -1,11 +1,10 @@
 .header {
   display: flex;
   background-color: #00455c;
+  height: 40px;
+  align-items: center;
   .logo {
     height: 30px;
     float: left;
-    margin-left: 15%;
-    margin-top: 0.5rem;
-    margin-bottom: 0.5rem;
   }
 }

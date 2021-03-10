@@ -10,21 +10,34 @@
       text-decoration: none;
     }
   }
-  .item {
+  .items {
     display: flex;
-    width: 200px;
-    height: 200px;
-    border: 1px solid #eaeaea;
-    .item-content {
-      img {
-        padding: 2em;
-      }
-      .item-label {
-        padding-left: 2em;
-        padding-right: 2em;
-      }
-      text-align: center;
+    .item {
+      display: flex;
+      width: 235px;
+      height: 235px;
+      border: 1px solid #eaeaea;
       background-color: white;
+      padding: 1em;
+      margin-right: 1.25em;
+      div {
+        display: flex;
+        flex: 1;
+        align-items: center;
+        justify-content: center;
+      }
+      .item-content {
+        flex-direction: column;
+        .item-icon {
+          padding-top: 1em;
+        }
+        .item-label {
+          font-size: 16px;
+          word-break: break-word;
+          padding: 0 3em 0 3em;
+        }
+        text-align: center;
+      }
     }
   }
 }

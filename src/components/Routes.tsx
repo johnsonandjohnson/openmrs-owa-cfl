@@ -6,12 +6,18 @@ import Breadcrumbs from "./common/Breadcrumbs";
 import _ from "lodash";
 import Header from "./common/Header";
 import ErrorBoundary from "./common/ErrorBoundary";
+import RegisterPatient from "./register-patient/RegisterPatient";
 
 export const routeConfig = [
   {
     path: "/find-patient",
     component: <FindPatient />,
     breadcrumb: "findPatient.title",
+  },
+  {
+    path: "/register-patient",
+    component: <RegisterPatient />,
+    breadcrumb: "registerPatient.title",
   },
   {
     path: "/",

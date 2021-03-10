@@ -2,6 +2,10 @@
   "common": {
     "home": "Home"
   },
+  "dashboard": {
+    "findPatient": "Find Patient Record",
+    "registerPatient": "CFL Register Patient"
+  },
   "findPatient": {
     "title": "Find Patient Record",
     "subtitle": "Search for Patient Record below",
@@ -12,5 +16,9 @@
       "age": "AGE",
       "dob": "BIRTHDATE"
     }
+  },
+  "registerPatient": {
+    "title": "Register a Patient",
+    "subtitle": "Register Patient"
   }
 }

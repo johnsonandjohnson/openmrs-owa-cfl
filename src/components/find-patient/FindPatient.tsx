@@ -6,12 +6,35 @@ import { Form, FormGroup, Input, Table } from "reactstrap";
 import "./FindPatient.scss";
 import { dobToAge } from "../../shared/date-util";
 import { FormattedMessage } from "react-intl";
+import searchIcon from "../../img/search.png";
+import arrowIcon from "../../img/arrow.png";
 
 export interface IPatientsProps extends StateProps, DispatchProps {}
 
 export interface IPatientsState {
   query: string;
 }
+
+const TABLE_COLUMNS = (
+  process.env.REACT_APP_FIND_PATIENT_TABLE_COLUMNS || "id,name,gender,age,dob"
+).split(",");
+
+const columnContent = (patient, column) => {
+  switch (column) {
+    case "id":
+      return patient.uuid;
+    case "name":
+      return patient.display;
+    case "gender":
+      return patient.gender;
+    case "age":
+      return dobToAge(patient.birthdate);
+    case "dob":
+      return patient.birthdate && patient.birthdate.split("T")[0];
+    default:
+      return patient[column];
+  }
+};
 
 class FindPatient extends React.Component<IPatientsProps, IPatientsState> {
   state = {
@@ -35,58 +58,53 @@ class FindPatient extends React.Component<IPatientsProps, IPatientsState> {
 
   render() {
     return (
-      <div className="patients">
-        <h2>
+      <div className="find-patient">
+        <h1>
           <FormattedMessage id="findPatient.title" />
-        </h2>
-        <div className="subtitle">
+        </h1>
+        <div className="helper-text">
           <FormattedMessage id="findPatient.subtitle" />
         </div>
         <div className="error">{this.props.error}</div>
         <div className="search-section">
           <Form onSubmit={this.search}>
-            <FormGroup>
+            <FormGroup className="patient-search">
+              <img src={searchIcon} alt="search" className="search-icon" />
               <Input
                 placeholder="Search by ID or name"
                 value={this.state.query}
                 onChange={this.onQueryChange}
-                className="patient-search"
+                className="search-input"
               />
             </FormGroup>
           </Form>
           <div className="patient-table">
-            <Table borderless striped>
+            <Table borderless striped responsive>
               <thead>
                 <tr>
-                  <th>
-                    <FormattedMessage id="findPatient.tableHeader.id" />
-                  </th>
-                  <th>
-                    <FormattedMessage id="findPatient.tableHeader.name" />
-                  </th>
-                  <th>
-                    <FormattedMessage id="findPatient.tableHeader.gender" />
-                  </th>
-                  <th>
-                    <FormattedMessage id="findPatient.tableHeader.age" />
-                  </th>
-                  <th>
-                    <FormattedMessage id="findPatient.tableHeader.dob" />
-                  </th>
+                  {_.map(TABLE_COLUMNS, (column) => (
+                    <th>
+                      <FormattedMessage
+                        id={`findPatient.tableHeader.${column}`}
+                      />
+                    </th>
+                  ))}
                   <th />
                 </tr>
               </thead>
               <tbody>
                 {_.map(this.props.patients, (patient, i) => (
                   <tr key={i}>
-                    <td>{patient.uuid}</td>
-                    <td>{patient.display}</td>
-                    <td>{patient.gender}</td>
-                    <td>{dobToAge(patient.birthdate)}</td>
+                    {_.map(TABLE_COLUMNS, (column) => (
+                      <td>{columnContent(patient, column)}</td>
+                    ))}
                     <td>
-                      {patient.birthdate && patient.birthdate.split("T")[0]}
+                      <img
+                        src={arrowIcon}
+                        alt="details"
+                        className="details-icon"
+                      />
                     </td>
-                    <td></td>
                   </tr>
                 ))}
               </tbody>
