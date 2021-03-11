@@ -10,11 +10,11 @@
     "title": "Find Patient Record",
     "subtitle": "Search for Patient Record below",
     "tableHeader": {
-      "id": "IDENTIFIER",
-      "name": "NAME",
+      "patientIdentifier": "IDENTIFIER",
+      "display": "NAME",
       "gender": "GENDER",
       "age": "AGE",
-      "dob": "BIRTHDATE"
+      "birthdate": "BIRTHDATE"
     }
   },
   "registerPatient": {

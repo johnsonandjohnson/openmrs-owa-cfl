@@ -2,6 +2,17 @@ import axios from "axios";
 
 import { REQUEST, SUCCESS, FAILURE } from "../action-type.util";
 
+export const PATIENT_IDENTIFIER = "patientIdentifier";
+export const DISPLAY = "display";
+export const GENDER = "gender";
+export const AGE = "age";
+export const BIRTHDATE = "birthdate";
+
+const FIND_PATIENT_TABLE_COLUMNS =
+  process.env.REACT_APP_FIND_PATIENT_TABLE_COLUMNS ||
+  `${PATIENT_IDENTIFIER},${DISPLAY},${GENDER},${AGE},${BIRTHDATE}`;
+export const TABLE_COLUMNS = FIND_PATIENT_TABLE_COLUMNS.split(",");
+
 export const ACTION_TYPES = {
   SEARCH_PATIENTS: "patient/SEARCH_PATIENTS",
 };
@@ -33,9 +44,10 @@ const reducer = (state = initialState, action) => {
       return state;
   }
 };
+
 // actions
 export const search = (q) => {
-  const requestUrl = `/openmrs/ws/rest/v1/person?v=full&q=${q}`;
+  const requestUrl = `/openmrs/ws/rest/v1/patient?q=${q || ""}&v=full`;
   return {
     type: ACTION_TYPES.SEARCH_PATIENTS,
     payload: axios.get(requestUrl),

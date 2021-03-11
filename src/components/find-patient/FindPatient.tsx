@@ -1,10 +1,15 @@
 import React from "react";
 import { connect } from "react-redux";
-import { search } from "../../redux/reducers/patient";
+import {
+  BIRTHDATE,
+  DISPLAY,
+  PATIENT_IDENTIFIER,
+  search,
+  TABLE_COLUMNS,
+} from "../../redux/reducers/patient";
 import _ from "lodash";
 import { Form, FormGroup, Input, Table } from "reactstrap";
 import "./FindPatient.scss";
-import { dobToAge } from "../../shared/date-util";
 import { FormattedMessage } from "react-intl";
 import searchIcon from "../../img/search.png";
 import arrowIcon from "../../img/arrow.png";
@@ -15,24 +20,20 @@ export interface IPatientsState {
   query: string;
 }
 
-const TABLE_COLUMNS = (
-  process.env.REACT_APP_FIND_PATIENT_TABLE_COLUMNS || "id,name,gender,age,dob"
-).split(",");
-
 const columnContent = (patient, column) => {
   switch (column) {
-    case "id":
-      return patient.uuid;
-    case "name":
-      return patient.display;
-    case "gender":
-      return patient.gender;
-    case "age":
-      return dobToAge(patient.birthdate);
-    case "dob":
-      return patient.birthdate && patient.birthdate.split("T")[0];
+    case PATIENT_IDENTIFIER:
+      return patient.identifiers && patient.identifiers[0].identifier;
+    case DISPLAY:
+      return patient.person && patient.person.display;
+    case BIRTHDATE:
+      return (
+        patient.person &&
+        patient.person.birthdate &&
+        patient.person.birthdate.split("T")[0]
+      );
     default:
-      return patient[column];
+      return patient[column] || (patient.person && patient.person[column]);
   }
 };
 
