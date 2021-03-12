@@ -2,17 +2,6 @@ import axios from "axios";
 
 import { REQUEST, SUCCESS, FAILURE } from "../action-type.util";
 
-export const PATIENT_IDENTIFIER = "patientIdentifier";
-export const DISPLAY = "display";
-export const GENDER = "gender";
-export const AGE = "age";
-export const BIRTHDATE = "birthdate";
-
-const FIND_PATIENT_TABLE_COLUMNS =
-  process.env.REACT_APP_FIND_PATIENT_TABLE_COLUMNS ||
-  `${PATIENT_IDENTIFIER},${DISPLAY},${GENDER},${AGE},${BIRTHDATE}`;
-export const TABLE_COLUMNS = FIND_PATIENT_TABLE_COLUMNS.split(",");
-
 export const ACTION_TYPES = {
   SEARCH_PATIENTS: "patient/SEARCH_PATIENTS",
 };

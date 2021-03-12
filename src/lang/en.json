@@ -10,11 +10,21 @@
     "title": "Find Patient Record",
     "subtitle": "Search for Patient Record below",
     "tableHeader": {
-      "patientIdentifier": "IDENTIFIER",
-      "display": "NAME",
-      "gender": "GENDER",
-      "age": "AGE",
-      "birthdate": "BIRTHDATE"
+      "patientIdentifier": "Identifier",
+      "display": "Name",
+      "gender": "Gender",
+      "age": "Age",
+      "birthdate": "Birthdate",
+      "birthdateEstimated": "Is birthdate estimated",
+      "birthtime": "Birth time",
+      "causeOfDeath": "Cause of death",
+      "dead": "Is dead",
+      "deathDate": "Death date",
+      "deathDateEstimated": "Is death date estimated",
+      "preferredAddress": "Preferred address",
+      "phoneNumber": "Phone number",
+      "uuid": "ID",
+      "personLanguage": "Language"
     }
   },
   "registerPatient": {

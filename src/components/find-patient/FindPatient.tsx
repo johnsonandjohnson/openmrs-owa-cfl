@@ -1,41 +1,20 @@
 import React from "react";
 import { connect } from "react-redux";
-import {
-  BIRTHDATE,
-  DISPLAY,
-  PATIENT_IDENTIFIER,
-  search,
-  TABLE_COLUMNS,
-} from "../../redux/reducers/patient";
+import { search } from "../../redux/reducers/patient";
 import _ from "lodash";
 import { Form, FormGroup, Input, Table } from "reactstrap";
 import "./FindPatient.scss";
-import { FormattedMessage } from "react-intl";
+import { FormattedDate, FormattedMessage } from "react-intl";
 import searchIcon from "../../img/search.png";
 import arrowIcon from "../../img/arrow.png";
+import { columnContent } from "../../shared/util/patient-util";
+import { TABLE_COLUMNS } from "../../shared/constants/patient";
 
 export interface IPatientsProps extends StateProps, DispatchProps {}
 
 export interface IPatientsState {
   query: string;
 }
-
-const columnContent = (patient, column) => {
-  switch (column) {
-    case PATIENT_IDENTIFIER:
-      return patient.identifiers && patient.identifiers[0].identifier;
-    case DISPLAY:
-      return patient.person && patient.person.display;
-    case BIRTHDATE:
-      return (
-        patient.person &&
-        patient.person.birthdate &&
-        patient.person.birthdate.split("T")[0]
-      );
-    default:
-      return patient[column] || (patient.person && patient.person[column]);
-  }
-};
 
 class FindPatient extends React.Component<IPatientsProps, IPatientsState> {
   state = {
