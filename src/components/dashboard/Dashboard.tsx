@@ -1,5 +1,6 @@
 import "./Dashboard.scss";
 import findPatient from "../../img/find-patient.png";
+import findCaregiver from "../../img/find-caregiver.png";
 import registerPatient from "../../img/register-patient.png";
 
 import { Link } from "react-router-dom";
@@ -19,6 +20,16 @@ const Dashboard = () => {
             </div>
             <div className="item-label">
               <FormattedMessage id="dashboard.findPatient" />
+            </div>
+          </div>
+        </Link>
+        <Link to="/find-caregiver" className="item">
+          <div className="item-content">
+            <div className="item-icon">
+              <img src={findCaregiver} alt="icon" />
+            </div>
+            <div className="item-label">
+              <FormattedMessage id="dashboard.findCaregiver" />
             </div>
           </div>
         </Link>

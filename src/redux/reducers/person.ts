@@ -4,41 +4,41 @@ import { REQUEST, SUCCESS, FAILURE } from "../action-type.util";
 import { DEFAULT_PAGE_SIZE } from "../page.util";
 
 export const ACTION_TYPES = {
-  SEARCH_PATIENTS: "patient/SEARCH_PATIENTS",
-  RESET_PATIENTS: "patient/RESET_PATIENTS",
+  SEARCH_PEOPLE: "person/SEARCH_PEOPLE",
+  RESET_PEOPLE: "person/RESET_PEOPLE",
 };
 
 const initialState = {
   loading: false,
-  patients: [],
+  people: [],
   errorMessage: "",
-  currentPage: 0,
   hasNext: false,
   hasPrev: false,
+  currentPage: 0,
 };
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case REQUEST(ACTION_TYPES.SEARCH_PATIENTS):
+    case REQUEST(ACTION_TYPES.SEARCH_PEOPLE):
       return {
         ...state,
         loading: true,
       };
-    case FAILURE(ACTION_TYPES.SEARCH_PATIENTS):
+    case FAILURE(ACTION_TYPES.SEARCH_PEOPLE):
       return {
         ...initialState,
         errorMessage: action.payload.message,
       };
-    case SUCCESS(ACTION_TYPES.SEARCH_PATIENTS):
+    case SUCCESS(ACTION_TYPES.SEARCH_PEOPLE):
       const links = action.payload.data.links;
       return {
         ...initialState,
-        patients: action.payload.data.results,
+        people: action.payload.data.results,
         hasNext: links && !!links.find((link) => link.rel === "next"),
         hasPrev: links && !!links.find((link) => link.rel === "prev"),
         currentPage: action.meta.currentPage,
       };
-    case ACTION_TYPES.RESET_PATIENTS:
+    case ACTION_TYPES.RESET_PEOPLE:
       return {
         ...initialState,
       };
@@ -49,11 +49,11 @@ const reducer = (state = initialState, action) => {
 
 // actions
 export const search = (q, page = 0, limit = DEFAULT_PAGE_SIZE) => {
-  const requestUrl = `/openmrs/ws/rest/v1/patient?q=${q || ""}&startIndex=${
+  const requestUrl = `/openmrs/ws/rest/v1/person?q=${q || ""}&startIndex=${
     page * limit
   }&limit=${limit}&v=full`;
   return {
-    type: ACTION_TYPES.SEARCH_PATIENTS,
+    type: ACTION_TYPES.SEARCH_PEOPLE,
     payload: axios.get(requestUrl),
     meta: {
       currentPage: page,
@@ -63,7 +63,7 @@ export const search = (q, page = 0, limit = DEFAULT_PAGE_SIZE) => {
 
 export const reset = () => {
   return {
-    type: ACTION_TYPES.RESET_PATIENTS,
+    type: ACTION_TYPES.RESET_PEOPLE,
   };
 };
 

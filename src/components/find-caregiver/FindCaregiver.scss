@@ -1,9 +1,9 @@
-.find-patient {
+.find-caregiver {
   .search-section {
     margin-top: 2rem;
     background-color: white;
     min-height: 400px;
-    .patient-search {
+    .caregiver-search {
       position: relative;
       .search-icon {
         position: absolute;
@@ -17,7 +17,7 @@
         font-style: italic;
       }
     }
-    .patient-table {
+    .caregiver-table {
     }
   }
 }

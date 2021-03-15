@@ -1,27 +1,30 @@
 import React from "react";
 import { connect } from "react-redux";
-import { search, reset } from "../../redux/reducers/patient";
+import { reset, search } from "../../redux/reducers/person";
 import _ from "lodash";
 import { Form, FormGroup, Input } from "reactstrap";
-import "./FindPatient.scss";
+import "./FindCaregiver.scss";
 import { FormattedMessage } from "react-intl";
 import searchIcon from "../../img/search.png";
-import { columnContent } from "../../shared/util/patient-util";
-import { PATIENT_TABLE_COLUMNS } from "../../shared/constants/patient";
+import { columnContent } from "../../shared/util/person-util";
+import { CAREGIVER_TABLE_COLUMNS } from "../../shared/constants/patient";
 import {
   SEARCH_INPUT_DELAY,
   SEARCH_INPUT_MIN_CHARS,
 } from "../../shared/constants/input";
 import PagedTable from "../common/PagedTable";
 
-export interface IPatientsProps extends StateProps, DispatchProps {}
+export interface ICaregiversProps extends StateProps, DispatchProps {}
 
-export interface IPatientsState {
+export interface ICaregiversState {
   query: string;
   page: number;
 }
 
-class FindPatient extends React.Component<IPatientsProps, IPatientsState> {
+class FindCaregiver extends React.Component<
+  ICaregiversProps,
+  ICaregiversState
+> {
   state = {
     query: "",
     page: 0,
@@ -38,7 +41,11 @@ class FindPatient extends React.Component<IPatientsProps, IPatientsState> {
     }
   };
 
-  searchAfterDelay = _.debounce((e) => this.search, SEARCH_INPUT_DELAY);
+  searchAfterDelay = _.debounce((e) => {
+    if (this.state.query.length >= SEARCH_INPUT_MIN_CHARS) {
+      this.props.search(this.state.query, this.state.page);
+    }
+  }, SEARCH_INPUT_DELAY);
 
   onQueryChange = (event) => {
     this.setState({
@@ -65,17 +72,17 @@ class FindPatient extends React.Component<IPatientsProps, IPatientsState> {
 
   render() {
     return (
-      <div className="find-patient">
+      <div className="find-caregiver">
         <h1>
-          <FormattedMessage id="findPatient.title" />
+          <FormattedMessage id="findCaregiver.title" />
         </h1>
         <div className="helper-text">
-          <FormattedMessage id="findPatient.subtitle" />
+          <FormattedMessage id="findCaregiver.subtitle" />
         </div>
         <div className="error">{this.props.error}</div>
         <div className="search-section">
           <Form onSubmit={this.onSearchClick}>
-            <FormGroup className="patient-search">
+            <FormGroup className="caregiver-search">
               <img src={searchIcon} alt="search" className="search-icon" />
               <Input
                 placeholder="Search by ID or name"
@@ -85,10 +92,10 @@ class FindPatient extends React.Component<IPatientsProps, IPatientsState> {
               />
             </FormGroup>
           </Form>
-          <div className="patient-table">
+          <div className="caregiver-table">
             <PagedTable
-              columns={PATIENT_TABLE_COLUMNS}
-              entities={this.props.patients}
+              columns={CAREGIVER_TABLE_COLUMNS}
+              entities={this.props.caregivers}
               columnContent={columnContent}
               hasNext={this.props.hasNext}
               hasPrev={this.props.hasPrev}
@@ -102,13 +109,13 @@ class FindPatient extends React.Component<IPatientsProps, IPatientsState> {
   }
 }
 
-const mapStateToProps = ({ patient }) => ({
-  patients: patient.patients,
-  loading: patient.loading,
-  error: patient.errorMessage,
-  hasNext: patient.hasNext,
-  hasPrev: patient.hasPrev,
-  currentPage: patient.currentPage,
+const mapStateToProps = ({ person }) => ({
+  caregivers: person.people,
+  loading: person.loading,
+  error: person.errorMessage,
+  hasNext: person.hasNext,
+  hasPrev: person.hasPrev,
+  currentPage: person.currentPage,
 });
 
 const mapDispatchToProps = { search, reset };
@@ -116,4 +123,4 @@ const mapDispatchToProps = { search, reset };
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
 
-export default connect(mapStateToProps, mapDispatchToProps)(FindPatient);
+export default connect(mapStateToProps, mapDispatchToProps)(FindCaregiver);
