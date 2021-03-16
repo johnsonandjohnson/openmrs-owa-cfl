@@ -101,6 +101,7 @@ class FindCaregiver extends React.Component<
               hasPrev={this.props.hasPrev}
               currentPage={this.props.currentPage}
               switchPage={this.switchPage}
+              totalCount={this.props.totalCount}
             />
           </div>
         </div>
@@ -116,6 +117,7 @@ const mapStateToProps = ({ person }) => ({
   hasNext: person.hasNext,
   hasPrev: person.hasPrev,
   currentPage: person.currentPage,
+  totalCount: person.totalCount,
 });
 
 const mapDispatchToProps = { search, reset };

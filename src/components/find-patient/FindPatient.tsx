@@ -94,6 +94,7 @@ class FindPatient extends React.Component<IPatientsProps, IPatientsState> {
               hasPrev={this.props.hasPrev}
               currentPage={this.props.currentPage}
               switchPage={this.switchPage}
+              totalCount={this.props.totalCount}
             />
           </div>
         </div>
@@ -109,6 +110,7 @@ const mapStateToProps = ({ patient }) => ({
   hasNext: patient.hasNext,
   hasPrev: patient.hasPrev,
   currentPage: patient.currentPage,
+  totalCount: patient.totalCount,
 });
 
 const mapDispatchToProps = { search, reset };

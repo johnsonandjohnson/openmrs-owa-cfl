@@ -15,6 +15,7 @@ const initialState = {
   hasNext: false,
   hasPrev: false,
   currentPage: 0,
+  totalCount: 0,
 };
 
 const reducer = (state = initialState, action) => {
@@ -36,6 +37,7 @@ const reducer = (state = initialState, action) => {
         people: action.payload.data.results,
         hasNext: links && !!links.find((link) => link.rel === "next"),
         hasPrev: links && !!links.find((link) => link.rel === "prev"),
+        totalCount: action.payload.data.totalCount,
         currentPage: action.meta.currentPage,
       };
     case ACTION_TYPES.RESET_PEOPLE:
@@ -51,7 +53,7 @@ const reducer = (state = initialState, action) => {
 export const search = (q, page = 0, limit = DEFAULT_PAGE_SIZE) => {
   const requestUrl = `/openmrs/ws/rest/v1/person?q=${q || ""}&startIndex=${
     page * limit
-  }&limit=${limit}&v=full`;
+  }&limit=${limit}&v=full&totalCount=true`;
   return {
     type: ACTION_TYPES.SEARCH_PEOPLE,
     payload: axios.get(requestUrl),

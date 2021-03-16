@@ -13,6 +13,7 @@ const initialState = {
   patients: [],
   errorMessage: "",
   currentPage: 0,
+  totalCount: 0,
   hasNext: false,
   hasPrev: false,
 };
@@ -36,6 +37,7 @@ const reducer = (state = initialState, action) => {
         patients: action.payload.data.results,
         hasNext: links && !!links.find((link) => link.rel === "next"),
         hasPrev: links && !!links.find((link) => link.rel === "prev"),
+        totalCount: action.payload.data.totalCount,
         currentPage: action.meta.currentPage,
       };
     case ACTION_TYPES.RESET_PATIENTS:
@@ -51,7 +53,7 @@ const reducer = (state = initialState, action) => {
 export const search = (q, page = 0, limit = DEFAULT_PAGE_SIZE) => {
   const requestUrl = `/openmrs/ws/rest/v1/patient?q=${q || ""}&startIndex=${
     page * limit
-  }&limit=${limit}&v=full`;
+  }&limit=${limit}&v=full&totalCount=true`;
   return {
     type: ACTION_TYPES.SEARCH_PATIENTS,
     payload: axios.get(requestUrl),
