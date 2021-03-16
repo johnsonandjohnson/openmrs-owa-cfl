@@ -1,18 +1,19 @@
 import React from "react";
 import { connect } from "react-redux";
-import { reset, search } from "../../redux/reducers/person";
+import { reset, search } from "../../redux/reducers/cfl-people";
 import _ from "lodash";
 import { Form, FormGroup, Input } from "reactstrap";
 import "./FindCaregiver.scss";
 import { FormattedMessage } from "react-intl";
 import searchIcon from "../../img/search.png";
-import { columnContent } from "../../shared/util/person-util";
+import { columnContent } from "../../shared/util/cfl-person-util";
 import { CAREGIVER_TABLE_COLUMNS } from "../../shared/constants/patient";
 import {
   SEARCH_INPUT_DELAY,
   SEARCH_INPUT_MIN_CHARS,
 } from "../../shared/constants/input";
 import PagedTable from "../common/PagedTable";
+import { DEFAULT_PAGE_SIZE, pageOf } from "../../redux/page.util";
 
 export interface ICaregiversProps extends StateProps, DispatchProps {}
 
@@ -37,13 +38,13 @@ class FindCaregiver extends React.Component<
   search = () => {
     if (this.state.query.length >= SEARCH_INPUT_MIN_CHARS) {
       this.searchAfterDelay.cancel();
-      this.props.search(this.state.query, this.state.page);
+      this.props.search(this.state.query);
     }
   };
 
   searchAfterDelay = _.debounce((e) => {
     if (this.state.query.length >= SEARCH_INPUT_MIN_CHARS) {
-      this.props.search(this.state.query, this.state.page);
+      this.props.search(this.state.query);
     }
   }, SEARCH_INPUT_DELAY);
 
@@ -62,12 +63,9 @@ class FindCaregiver extends React.Component<
   };
 
   switchPage = (page) => {
-    this.setState(
-      {
-        page,
-      },
-      this.search
-    );
+    this.setState({
+      page,
+    });
   };
 
   render() {
@@ -95,11 +93,15 @@ class FindCaregiver extends React.Component<
           <div className="caregiver-table">
             <PagedTable
               columns={CAREGIVER_TABLE_COLUMNS}
-              entities={this.props.caregivers}
+              // frontend paging as the endpoint has no support for it
+              entities={pageOf(this.props.caregivers, this.state.page)}
               columnContent={columnContent}
-              hasNext={this.props.hasNext}
-              hasPrev={this.props.hasPrev}
-              currentPage={this.props.currentPage}
+              hasNext={
+                this.props.totalCount >
+                (this.state.page + 1) * DEFAULT_PAGE_SIZE
+              }
+              hasPrev={this.state.page > 0}
+              currentPage={this.state.page}
               switchPage={this.switchPage}
               totalCount={this.props.totalCount}
             />
@@ -110,14 +112,14 @@ class FindCaregiver extends React.Component<
   }
 }
 
-const mapStateToProps = ({ person }) => ({
-  caregivers: person.people,
-  loading: person.loading,
-  error: person.errorMessage,
-  hasNext: person.hasNext,
-  hasPrev: person.hasPrev,
-  currentPage: person.currentPage,
-  totalCount: person.totalCount,
+const mapStateToProps = ({ cflPeople }) => ({
+  caregivers: cflPeople.people,
+  loading: cflPeople.loading,
+  error: cflPeople.errorMessage,
+  hasNext: cflPeople.hasNext,
+  hasPrev: cflPeople.hasPrev,
+  currentPage: cflPeople.currentPage,
+  totalCount: cflPeople.totalCount,
 });
 
 const mapDispatchToProps = { search, reset };

@@ -25,15 +25,13 @@ const switchPage = (callback, page, enabled) => (evt) => {
 };
 
 const MAX_PAGES_SHOWN = 5;
+const PAGE_DELTA = Math.floor((MAX_PAGES_SHOWN - 1) / 2);
 
 const PagedTable = (props: PagedTableProps) => {
   const pageSize = props.pageSize || DEFAULT_PAGE_SIZE;
   const noPages = Math.ceil(props.totalCount / pageSize);
-  const pageDelta = Math.floor((MAX_PAGES_SHOWN - 1) / 2);
   const startingPage =
-    props.currentPage - pageDelta >= 0
-      ? props.currentPage - pageDelta
-      : props.currentPage;
+    props.currentPage - PAGE_DELTA >= 0 ? props.currentPage - PAGE_DELTA : 0;
   const endingPage =
     startingPage + MAX_PAGES_SHOWN > noPages
       ? noPages
