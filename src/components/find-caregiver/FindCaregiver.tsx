@@ -7,7 +7,7 @@ import "./FindCaregiver.scss";
 import { FormattedMessage } from "react-intl";
 import searchIcon from "../../img/search.png";
 import { columnContent } from "../../shared/util/cfl-person-util";
-import { CAREGIVER_TABLE_COLUMNS } from "../../shared/constants/patient";
+import { DEFAULT_FIND_CAREGIVER_TABLE_COLUMNS } from "../../shared/constants/patient";
 import {
   SEARCH_INPUT_DELAY,
   SEARCH_INPUT_MIN_CHARS,
@@ -92,7 +92,7 @@ class FindCaregiver extends React.Component<
           </Form>
           <div className="caregiver-table">
             <PagedTable
-              columns={CAREGIVER_TABLE_COLUMNS}
+              columns={this.props.tableColumns.split(",")}
               // frontend paging as the endpoint has no support for it
               entities={pageOf(this.props.caregivers, this.state.page)}
               columnContent={columnContent}
@@ -112,7 +112,7 @@ class FindCaregiver extends React.Component<
   }
 }
 
-const mapStateToProps = ({ cflPeople }) => ({
+const mapStateToProps = ({ cflPeople, settings }) => ({
   caregivers: cflPeople.people,
   loading: cflPeople.loading,
   error: cflPeople.errorMessage,
@@ -120,6 +120,10 @@ const mapStateToProps = ({ cflPeople }) => ({
   hasPrev: cflPeople.hasPrev,
   currentPage: cflPeople.currentPage,
   totalCount: cflPeople.totalCount,
+  tableColumns:
+    (settings.findCaregiverTableColumnsSetting &&
+      settings.findCaregiverTableColumnsSetting.value) ||
+    DEFAULT_FIND_CAREGIVER_TABLE_COLUMNS,
 });
 
 const mapDispatchToProps = { search, reset };

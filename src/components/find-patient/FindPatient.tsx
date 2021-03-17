@@ -7,7 +7,7 @@ import "./FindPatient.scss";
 import { FormattedMessage } from "react-intl";
 import searchIcon from "../../img/search.png";
 import { columnContent } from "../../shared/util/patient-util";
-import { PATIENT_TABLE_COLUMNS } from "../../shared/constants/patient";
+import { DEFAULT_FIND_PATIENT_TABLE_COLUMNS } from "../../shared/constants/patient";
 import {
   SEARCH_INPUT_DELAY,
   SEARCH_INPUT_MIN_CHARS,
@@ -87,7 +87,7 @@ class FindPatient extends React.Component<IPatientsProps, IPatientsState> {
           </Form>
           <div className="patient-table">
             <PagedTable
-              columns={PATIENT_TABLE_COLUMNS}
+              columns={this.props.tableColumns.split(",")}
               entities={this.props.patients}
               columnContent={columnContent}
               hasNext={this.props.hasNext}
@@ -103,7 +103,7 @@ class FindPatient extends React.Component<IPatientsProps, IPatientsState> {
   }
 }
 
-const mapStateToProps = ({ patient }) => ({
+const mapStateToProps = ({ patient, settings }) => ({
   patients: patient.patients,
   loading: patient.loading,
   error: patient.errorMessage,
@@ -111,6 +111,10 @@ const mapStateToProps = ({ patient }) => ({
   hasPrev: patient.hasPrev,
   currentPage: patient.currentPage,
   totalCount: patient.totalCount,
+  tableColumns:
+    (settings.findPatientTableColumnsSetting &&
+      settings.findPatientTableColumnsSetting.value) ||
+    DEFAULT_FIND_PATIENT_TABLE_COLUMNS,
 });
 
 const mapDispatchToProps = { search, reset };
