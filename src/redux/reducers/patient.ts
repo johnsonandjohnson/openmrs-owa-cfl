@@ -16,6 +16,7 @@ const initialState = {
   totalCount: 0,
   hasNext: false,
   hasPrev: false,
+  q: "",
 };
 
 const reducer = (state = initialState, action) => {
@@ -24,6 +25,7 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         loading: true,
+        q: action.meta.q,
       };
     case FAILURE(ACTION_TYPES.SEARCH_PATIENTS):
       return {
@@ -32,14 +34,18 @@ const reducer = (state = initialState, action) => {
       };
     case SUCCESS(ACTION_TYPES.SEARCH_PATIENTS):
       const links = action.payload.data.links;
-      return {
-        ...initialState,
-        patients: action.payload.data.results,
-        hasNext: links && !!links.find((link) => link.rel === "next"),
-        hasPrev: links && !!links.find((link) => link.rel === "prev"),
-        totalCount: action.payload.data.totalCount,
-        currentPage: action.meta.currentPage,
-      };
+      if (action.meta.q === state.q) {
+        return {
+          ...initialState,
+          patients: action.payload.data.results,
+          hasNext: links && !!links.find((link) => link.rel === "next"),
+          hasPrev: links && !!links.find((link) => link.rel === "prev"),
+          totalCount: action.payload.data.totalCount,
+          currentPage: action.meta.currentPage,
+        };
+      } else {
+        return { ...state };
+      }
     case ACTION_TYPES.RESET_PATIENTS:
       return {
         ...initialState,
@@ -58,6 +64,7 @@ export const search = (q, page = 0, limit = DEFAULT_PAGE_SIZE) => {
     type: ACTION_TYPES.SEARCH_PATIENTS,
     payload: axios.get(requestUrl),
     meta: {
+      q,
       currentPage: page,
     },
   };

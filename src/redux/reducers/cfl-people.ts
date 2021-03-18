@@ -12,6 +12,7 @@ const initialState = {
   people: [],
   errorMessage: "",
   totalCount: 0,
+  q: "",
 };
 
 const reducer = (state = initialState, action) => {
@@ -20,6 +21,7 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         loading: true,
+        q: action.meta.q,
       };
     case FAILURE(ACTION_TYPES.SEARCH_PEOPLE):
       return {
@@ -28,11 +30,17 @@ const reducer = (state = initialState, action) => {
       };
     case SUCCESS(ACTION_TYPES.SEARCH_PEOPLE):
       const people = action.payload.data.results;
-      return {
-        ...initialState,
-        people,
-        totalCount: people.length,
-      };
+      if (action.meta.q === state.q) {
+        return {
+          ...initialState,
+          people,
+          totalCount: people.length,
+        };
+      } else {
+        return {
+          ...state,
+        };
+      }
     case ACTION_TYPES.RESET_PEOPLE:
       return {
         ...initialState,
@@ -48,6 +56,9 @@ export const search = (q) => {
   return {
     type: ACTION_TYPES.SEARCH_PEOPLE,
     payload: axios.get(requestUrl),
+    meta: {
+      q,
+    },
   };
 };
 
