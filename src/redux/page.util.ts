@@ -1,4 +1,4 @@
-export const DEFAULT_PAGE_SIZE = 10;
+export const DEFAULT_PAGE_SIZE = 100;
 
 export const pageOf = (entities, currentPage, pageSize = DEFAULT_PAGE_SIZE) => {
   return !!entities

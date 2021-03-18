@@ -13,6 +13,7 @@ import {
   DEFAULT_FIND_CAREGIVER_TABLE_COLUMNS,
   DEFAULT_FIND_PATIENT_TABLE_COLUMNS,
 } from "../shared/constants/patient";
+import { TinyButton as ScrollUpButton } from "react-scroll-up-button"; //Add this line Here
 
 export interface IAppProps extends StateProps, DispatchProps {}
 
@@ -48,6 +49,7 @@ class App extends React.Component<IAppProps> {
     return (
       <div className="app">
         <Routes />
+        <ScrollUpButton />
       </div>
     );
   }

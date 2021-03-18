@@ -1,23 +1,26 @@
 .find-caregiver {
   .search-section {
-    margin-top: 2rem;
+    margin-top: 1rem;
     background-color: white;
-    min-height: 400px;
     .caregiver-search {
       position: relative;
       .search-icon {
         position: absolute;
-        top: 1.875em;
+        top: 1.4em;
         left: 2em;
       }
       .search-input {
-        padding: 2.5em 2.5em 2.5em 4em;
+        padding: 2em 2em 2em 4em;
         border-color: #eaeaea;
         font-family: CircularStd-Book;
         font-style: italic;
       }
     }
     .caregiver-table {
+      .helper-text {
+        font-size: 14px;
+        padding: 0 0 0.5rem 2rem;
+      }
     }
   }
 }

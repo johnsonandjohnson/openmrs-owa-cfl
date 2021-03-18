@@ -2,6 +2,11 @@
   "common": {
     "home": "Home"
   },
+  "table": {
+    "enterSearch": "For the search results to appear, enter at least 3 characters.",
+    "noRecords": "No records.",
+    "recordsFound": "records found."
+  },
   "dashboard": {
     "findPatient": "Find Patient Record",
     "registerPatient": "CFL Register Patient",

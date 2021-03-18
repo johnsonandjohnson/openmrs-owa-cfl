@@ -32,19 +32,43 @@
   font-family: "CircularStd", serif;
 
   .header {
-    padding: 0 12% 0 12%;
+    padding: 0 1em 0 1em;
+    @media only screen and (min-width: 576px) {
+      padding: 0 2em 0 2em;
+    }
+    @media only screen and (min-width: 768px) {
+      padding: 0 4em 0 4em;
+    }
+    @media only screen and (min-width: 992px) {
+      padding: 0 6em 0 6em;
+    }
+    @media only screen and (min-width: 1280px) {
+      padding: 0 8em 0 8em;
+    }
   }
   .content {
-    margin: 1rem 12% 0;
+    margin: 1em 1em 0;
+    @media only screen and (min-width: 576px) {
+      margin: 1em 2em 0;
+    }
+    @media only screen and (min-width: 768px) {
+      margin: 1em 4em 0;
+    }
+    @media only screen and (min-width: 992px) {
+      margin: 1em 6em 0;
+    }
+    @media only screen and (min-width: 1280px) {
+      margin: 1em 8em 0;
+    }
   }
 
   h1 {
-    font-size: 40px;
+    font-size: 26px;
     color: #333333;
   }
 
   h2 {
-    font-size: 26px;
+    font-size: 22px;
     color: #333333;
   }
 
@@ -61,7 +85,26 @@
     opacity: 0.5;
   }
 
+  thead tr th,
+  tbody tr td {
+    font-size: 12px;
+    font-weight: normal;
+    padding: 0.2rem;
+    @media only screen and (min-width: 768px) {
+      font-size: 14px;
+      padding: 0.5rem;
+    }
+    @media only screen and (min-width: 1280px) {
+      font-size: 16px;
+      padding: 0.75rem;
+    }
+  }
+
   .error {
     color: #dc3545;
+  }
+
+  .ScrollUpButton__Container {
+    background-color: rgba(0, 0, 0, 0) !important;
   }
 }

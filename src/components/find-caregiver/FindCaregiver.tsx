@@ -14,6 +14,7 @@ import {
 } from "../../shared/constants/input";
 import PagedTable from "../common/PagedTable";
 import { DEFAULT_PAGE_SIZE, pageOf } from "../../redux/page.util";
+import { helperText } from "../../shared/util/table-util";
 
 export interface ICaregiversProps extends StateProps, DispatchProps {}
 
@@ -37,7 +38,6 @@ class FindCaregiver extends React.Component<
 
   search = () => {
     if (this.state.query.length >= SEARCH_INPUT_MIN_CHARS) {
-      this.searchAfterDelay.cancel();
       this.props.search(this.state.query);
     }
   };
@@ -58,7 +58,10 @@ class FindCaregiver extends React.Component<
 
   onSearchClick = (e) => {
     e.preventDefault();
-    this.switchPage(0);
+    this.searchAfterDelay.cancel();
+    this.setState({
+      page: 0,
+    });
     this.search();
   };
 
@@ -71,9 +74,9 @@ class FindCaregiver extends React.Component<
   render() {
     return (
       <div className="find-caregiver">
-        <h1>
+        <h2>
           <FormattedMessage id="findCaregiver.title" />
-        </h1>
+        </h2>
         <div className="helper-text">
           <FormattedMessage id="findCaregiver.subtitle" />
         </div>
@@ -91,20 +94,29 @@ class FindCaregiver extends React.Component<
             </FormGroup>
           </Form>
           <div className="caregiver-table">
-            <PagedTable
-              columns={this.props.tableColumns.split(",")}
-              // frontend paging as the endpoint has no support for it
-              entities={pageOf(this.props.caregivers, this.state.page)}
-              columnContent={columnContent}
-              hasNext={
-                this.props.totalCount >
-                (this.state.page + 1) * DEFAULT_PAGE_SIZE
-              }
-              hasPrev={this.state.page > 0}
-              currentPage={this.state.page}
-              switchPage={this.switchPage}
-              totalCount={this.props.totalCount}
-            />
+            <div className="helper-text">
+              {helperText(
+                this.state.query,
+                this.props.loading,
+                this.props.totalCount
+              )}
+            </div>
+            {this.props.totalCount > 0 && (
+              <PagedTable
+                columns={this.props.tableColumns.split(",")}
+                // frontend paging as the endpoint has no support for it
+                entities={pageOf(this.props.caregivers, this.state.page)}
+                columnContent={columnContent}
+                hasNext={
+                  this.props.totalCount >
+                  (this.state.page + 1) * DEFAULT_PAGE_SIZE
+                }
+                hasPrev={this.state.page > 0}
+                currentPage={this.state.page}
+                switchPage={this.switchPage}
+                totalCount={this.props.totalCount}
+              />
+            )}
           </div>
         </div>
       </div>

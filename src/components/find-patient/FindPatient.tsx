@@ -13,6 +13,7 @@ import {
   SEARCH_INPUT_MIN_CHARS,
 } from "../../shared/constants/input";
 import PagedTable from "../common/PagedTable";
+import { helperText } from "../../shared/util/table-util";
 
 export interface IPatientsProps extends StateProps, DispatchProps {}
 
@@ -33,12 +34,15 @@ class FindPatient extends React.Component<IPatientsProps, IPatientsState> {
 
   search = () => {
     if (this.state.query.length >= SEARCH_INPUT_MIN_CHARS) {
-      this.searchAfterDelay.cancel();
       this.props.search(this.state.query, this.state.page);
     }
   };
 
-  searchAfterDelay = _.debounce((e) => this.search, SEARCH_INPUT_DELAY);
+  searchAfterDelay = _.debounce((e) => {
+    if (this.state.query.length >= SEARCH_INPUT_MIN_CHARS) {
+      this.props.search(this.state.query, this.state.page);
+    }
+  }, SEARCH_INPUT_DELAY);
 
   onQueryChange = (event) => {
     this.setState({
@@ -50,7 +54,10 @@ class FindPatient extends React.Component<IPatientsProps, IPatientsState> {
 
   onSearchClick = (e) => {
     e.preventDefault();
-    this.switchPage(0);
+    this.searchAfterDelay.cancel();
+    this.setState({
+      page: 0,
+    });
     this.search();
   };
 
@@ -66,9 +73,9 @@ class FindPatient extends React.Component<IPatientsProps, IPatientsState> {
   render() {
     return (
       <div className="find-patient">
-        <h1>
+        <h2>
           <FormattedMessage id="findPatient.title" />
-        </h1>
+        </h2>
         <div className="helper-text">
           <FormattedMessage id="findPatient.subtitle" />
         </div>
@@ -86,16 +93,25 @@ class FindPatient extends React.Component<IPatientsProps, IPatientsState> {
             </FormGroup>
           </Form>
           <div className="patient-table">
-            <PagedTable
-              columns={this.props.tableColumns.split(",")}
-              entities={this.props.patients}
-              columnContent={columnContent}
-              hasNext={this.props.hasNext}
-              hasPrev={this.props.hasPrev}
-              currentPage={this.props.currentPage}
-              switchPage={this.switchPage}
-              totalCount={this.props.totalCount}
-            />
+            <div className="helper-text">
+              {helperText(
+                this.state.query,
+                this.props.loading,
+                this.props.totalCount
+              )}
+            </div>
+            {this.props.totalCount > 0 && (
+              <PagedTable
+                columns={this.props.tableColumns.split(",")}
+                entities={this.props.patients}
+                columnContent={columnContent}
+                hasNext={this.props.hasNext}
+                hasPrev={this.props.hasPrev}
+                currentPage={this.props.currentPage}
+                switchPage={this.switchPage}
+                totalCount={this.props.totalCount}
+              />
+            )}
           </div>
         </div>
       </div>

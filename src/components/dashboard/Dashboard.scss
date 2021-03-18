@@ -12,14 +12,16 @@
   }
   .items {
     display: flex;
+    flex-wrap: wrap;
     .item {
       display: flex;
-      width: 235px;
-      height: 235px;
+      width: 150px;
+      height: 150px;
       border: 1px solid #eaeaea;
       background-color: white;
       padding: 1em;
-      margin-right: 1.25em;
+      margin-right: 1em;
+      margin-bottom: 1em;
       div {
         display: flex;
         flex: 1;
@@ -29,14 +31,13 @@
       .item-content {
         flex-direction: column;
         .item-icon {
-          padding-top: 1em;
+          img {
+            height: 50px;
+          }
         }
         .item-label {
-          font-size: 16px;
+          font-size: 14px;
           word-break: break-word;
-          @media only screen and (min-width: 992px) {
-            padding: 0 3em 0 3em;
-          }
         }
         text-align: center;
       }

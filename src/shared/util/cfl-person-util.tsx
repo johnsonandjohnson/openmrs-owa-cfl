@@ -8,6 +8,7 @@ import {
   FAMILY_NAME,
   GIVEN_NAME,
   PATIENT_IDENTIFIER,
+  PERSON_IDENTIFIER,
   PERSON_LANGUAGE,
   PERSON_LANGUAGE_ATTRIBUTE_TYPE,
   PHONE_NUMBER,
@@ -44,6 +45,7 @@ export const columnContent = (person, column) => {
       return names && (names.length > 1 ? names[1] : DEFAULT_COLUMN_VALUE);
     case DISPLAY:
       return person.personName;
+    case PERSON_IDENTIFIER:
     case PATIENT_IDENTIFIER:
       return person && (person.patientIdentifier || person.personIdentifier);
     case PHONE_NUMBER:

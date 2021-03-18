@@ -46,7 +46,6 @@ const PagedTable = (props: PagedTableProps) => {
                 <FormattedMessage id={`columnNames.${column}`} />
               </th>
             ))}
-            <th />
           </tr>
         </thead>
         <tbody>
@@ -55,9 +54,6 @@ const PagedTable = (props: PagedTableProps) => {
               {_.map(props.columns, (column) => (
                 <td>{props.columnContent(entity, column)}</td>
               ))}
-              <td>
-                <img src={arrowIcon} alt="details" className="details-icon" />
-              </td>
             </tr>
           ))}
         </tbody>
