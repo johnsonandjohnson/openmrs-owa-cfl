@@ -2,9 +2,9 @@ import React from "react";
 import { connect } from "react-redux";
 import { search, reset } from "../../redux/reducers/patient";
 import _ from "lodash";
-import { Form, FormGroup, Input } from "reactstrap";
+import { Form, FormGroup, Input, Spinner } from "reactstrap";
 import "./FindPatient.scss";
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, injectIntl } from "react-intl";
 import searchIcon from "../../img/search.png";
 import { columnContent } from "../../shared/util/patient-util";
 import { DEFAULT_FIND_PATIENT_TABLE_COLUMNS } from "../../shared/constants/patient";
@@ -15,7 +15,9 @@ import {
 import PagedTable from "../common/PagedTable";
 import { helperText } from "../../shared/util/table-util";
 
-export interface IPatientsProps extends StateProps, DispatchProps {}
+export interface IPatientsProps extends StateProps, DispatchProps {
+  intl: any;
+}
 
 export interface IPatientsState {
   query: string;
@@ -85,7 +87,9 @@ class FindPatient extends React.Component<IPatientsProps, IPatientsState> {
             <FormGroup className="patient-search">
               <img src={searchIcon} alt="search" className="search-icon" />
               <Input
-                placeholder="Search by ID or name"
+                placeholder={this.props.intl.formatMessage({
+                  id: "findPatient.searchInputPlaceholder",
+                })}
                 value={this.state.query}
                 onChange={this.onQueryChange}
                 className="search-input"
@@ -94,10 +98,14 @@ class FindPatient extends React.Component<IPatientsProps, IPatientsState> {
           </Form>
           <div className="patient-table">
             <div className="helper-text">
-              {helperText(
-                this.state.query,
-                this.props.loading,
-                this.props.totalCount
+              {this.props.loading ? (
+                <Spinner color="dark" size="sm" />
+              ) : (
+                helperText(
+                  this.state.query,
+                  this.props.loading,
+                  this.props.totalCount
+                )
               )}
             </div>
             {this.props.totalCount > 0 && (
@@ -138,4 +146,7 @@ const mapDispatchToProps = { search, reset };
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
 
-export default connect(mapStateToProps, mapDispatchToProps)(FindPatient);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(injectIntl(FindPatient));

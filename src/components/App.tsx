@@ -6,7 +6,9 @@ import { getSession } from "../redux/reducers/session";
 import {
   createSetting,
   FIND_CAREGIVER_TABLE_COLUMNS_SETTING,
+  FIND_CAREGIVER_TABLE_COLUMNS_SETTING_DESCRIPTION,
   FIND_PATIENT_TABLE_COLUMNS_SETTING,
+  FIND_PATIENT_TABLE_COLUMNS_SETTING_DESCRIPTION,
   getSettings,
 } from "../redux/reducers/setttings";
 import {
@@ -33,13 +35,15 @@ class App extends React.Component<IAppProps> {
       if (!this.props.findPatientTableColumnsSetting) {
         this.props.createSetting(
           FIND_PATIENT_TABLE_COLUMNS_SETTING,
-          DEFAULT_FIND_PATIENT_TABLE_COLUMNS
+          DEFAULT_FIND_PATIENT_TABLE_COLUMNS,
+          FIND_PATIENT_TABLE_COLUMNS_SETTING_DESCRIPTION
         );
       }
       if (!this.props.findCaregiverTableColumnsSetting) {
         this.props.createSetting(
           FIND_CAREGIVER_TABLE_COLUMNS_SETTING,
-          DEFAULT_FIND_CAREGIVER_TABLE_COLUMNS
+          DEFAULT_FIND_CAREGIVER_TABLE_COLUMNS,
+          FIND_CAREGIVER_TABLE_COLUMNS_SETTING_DESCRIPTION
         );
       }
     }
