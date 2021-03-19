@@ -8,9 +8,11 @@
   thead tr th:first-of-type {
     padding-left: 2em;
   }
-  tbody tr td {
-    padding-top: 1em;
-    padding-bottom: 1em;
+  @media only screen and (min-width: 1280px) {
+    tbody tr td, thead tr th {
+      font-size: 16px;
+      padding: .5rem;
+    }
   }
   tbody tr:hover {
     cursor: pointer;
