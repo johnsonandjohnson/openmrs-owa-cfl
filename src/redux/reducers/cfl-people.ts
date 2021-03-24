@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { REQUEST, SUCCESS, FAILURE } from "../action-type.util";
+import { FAILURE, REQUEST, SUCCESS } from "../action-type.util";
 
 export const ACTION_TYPES = {
   SEARCH_PEOPLE: "cfl-people/SEARCH_PEOPLE",

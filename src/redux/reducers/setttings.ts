@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { REQUEST, SUCCESS, FAILURE } from "../action-type.util";
+import { FAILURE, REQUEST, SUCCESS } from "../action-type.util";
 
 export const ACTION_TYPES = {
   GET_SETTINGS: "settings/GET_SETTINGS",
@@ -26,6 +26,8 @@ export const FIND_CAREGIVER_TABLE_COLUMNS_SETTING_DESCRIPTION =
   "uuid - ID,\n" +
   "personLanguage - Language";
 export const FIND_PATIENT_TABLE_COLUMNS_SETTING_DESCRIPTION = FIND_CAREGIVER_TABLE_COLUMNS_SETTING_DESCRIPTION;
+export const PERSON_LANGUAGES_SETTING = SETTING_PREFIX + "personLanguages";
+export const PERSON_LANGUAGES_SETTING_DEFAULT = "English,Marathi,Hindi";
 
 const initialState = {
   loading: false,

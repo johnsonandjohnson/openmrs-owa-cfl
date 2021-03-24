@@ -9,7 +9,10 @@ import {
   FIND_CAREGIVER_TABLE_COLUMNS_SETTING_DESCRIPTION,
   FIND_PATIENT_TABLE_COLUMNS_SETTING,
   FIND_PATIENT_TABLE_COLUMNS_SETTING_DESCRIPTION,
+  getSetting,
   getSettings,
+  PERSON_LANGUAGES_SETTING,
+  PERSON_LANGUAGES_SETTING_DEFAULT,
 } from "../redux/reducers/setttings";
 import {
   DEFAULT_FIND_CAREGIVER_TABLE_COLUMNS,
@@ -44,6 +47,12 @@ class App extends React.Component<IAppProps> {
           FIND_CAREGIVER_TABLE_COLUMNS_SETTING,
           DEFAULT_FIND_CAREGIVER_TABLE_COLUMNS,
           FIND_CAREGIVER_TABLE_COLUMNS_SETTING_DESCRIPTION
+        );
+      }
+      if (!getSetting(this.props.settings, PERSON_LANGUAGES_SETTING)) {
+        this.props.createSetting(
+          PERSON_LANGUAGES_SETTING,
+          PERSON_LANGUAGES_SETTING_DEFAULT
         );
       }
     }

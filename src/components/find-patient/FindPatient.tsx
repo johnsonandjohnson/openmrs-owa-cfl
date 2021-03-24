@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { search, reset } from "../../redux/reducers/patient";
+import { reset, search } from "../../redux/reducers/patient";
 import _ from "lodash";
 import { Form, FormGroup, Input, Spinner } from "reactstrap";
 import "./FindPatient.scss";

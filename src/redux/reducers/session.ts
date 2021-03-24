@@ -1,9 +1,11 @@
 import axios from "axios";
 
-import { REQUEST, SUCCESS, FAILURE } from "../action-type.util";
+import { FAILURE, REQUEST, SUCCESS } from "../action-type.util";
 
 export const ACTION_TYPES = {
   GET_SESSION: "session/GET_SESSION",
+  GET_LOGIN_LOCATIONS: "session/GET_LOGIN_LOCATIONS",
+  SET_LOGIN_LOCATION: "session/SET_LOGIN_LOCATION",
   RESET_SESSION: "session/RESET_SESSION",
 };
 
@@ -11,11 +13,14 @@ const initialState = {
   loading: false,
   errorMessage: null,
   session: null,
+  loginLocations: [],
 };
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case REQUEST(ACTION_TYPES.GET_SESSION):
+    case REQUEST(ACTION_TYPES.GET_LOGIN_LOCATIONS):
+    case REQUEST(ACTION_TYPES.SET_LOGIN_LOCATION):
       return {
         ...state,
         loading: true,
@@ -25,10 +30,29 @@ const reducer = (state = initialState, action) => {
         ...initialState,
         errorMessage: action.payload.message,
       };
+    case FAILURE(ACTION_TYPES.GET_LOGIN_LOCATIONS):
+    case FAILURE(ACTION_TYPES.SET_LOGIN_LOCATION):
+      return {
+        ...state,
+        errorMessage: action.payload.message,
+      };
     case SUCCESS(ACTION_TYPES.GET_SESSION):
       return {
         ...initialState,
         session: action.payload.data,
+      };
+    case SUCCESS(ACTION_TYPES.GET_LOGIN_LOCATIONS):
+      return {
+        ...state,
+        loginLocations: action.payload.data,
+        loading: false,
+        errorMessage: null,
+      };
+    case SUCCESS(ACTION_TYPES.SET_LOGIN_LOCATION):
+      return {
+        ...state,
+        loading: false,
+        errorMessage: null,
       };
     case ACTION_TYPES.RESET_SESSION:
       return {
@@ -45,6 +69,22 @@ export const getSession = () => {
   return {
     type: ACTION_TYPES.GET_SESSION,
     payload: axios.get(requestUrl),
+  };
+};
+
+export const getLoginLocations = () => {
+  const requestUrl = `/openmrs/appui/session/getLoginLocations.action`;
+  return {
+    type: ACTION_TYPES.GET_LOGIN_LOCATIONS,
+    payload: axios.get(requestUrl),
+  };
+};
+
+export const setLoginLocation = (locationId) => {
+  const requestUrl = `/openmrs/appui/session/setLocation.action?locationId=${locationId}`;
+  return {
+    type: ACTION_TYPES.SET_LOGIN_LOCATION,
+    payload: axios.post(requestUrl),
   };
 };
 

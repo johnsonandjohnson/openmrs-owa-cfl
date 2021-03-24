@@ -17,3 +17,17 @@ export const columnContent = (patient, column) => {
     }
   }
 };
+
+export const setValue = (patient, prop, callback, value) => {
+  patient[prop] = value;
+  callback(patient);
+};
+
+export const setValueOnChange = (patient, prop, callback) => (event) => {
+  setValue(
+    patient,
+    prop,
+    callback,
+    event && event.target ? event.target.value : event
+  );
+};

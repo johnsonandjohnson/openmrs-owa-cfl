@@ -104,7 +104,18 @@
     color: #dc3545;
   }
 
+  .field-error {
+    font-size: 12px;
+  }
+
   .ScrollUpButton__Container {
     background-color: rgba(0, 0, 0, 0) !important;
+  }
+
+  input::placeholder {
+    font-family: CircularStd-Book;
+    font-size: 14px;
+    color: #333333;
+    opacity: 0.5;
   }
 }

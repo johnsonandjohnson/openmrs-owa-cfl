@@ -45,6 +45,112 @@
   },
   "registerPatient": {
     "title": "Register a Patient",
-    "subtitle": "Register Patient"
+    "subtitle": "Please register patient below.",
+    "steps": {
+      "name": {
+        "label": "Name",
+        "title": "Patient Demographics",
+        "subtitle": "What's the patient's name?"
+      },
+      "gender": {
+        "label": "Gender",
+        "title": "Patient Demographics",
+        "subtitle": "What's the patient's gender?",
+        "male": "Male",
+        "female": "Female"
+      },
+      "birthdate": {
+        "label": "Birthdate",
+        "title": "Patient Demographics",
+        "subtitle": "What's the patient's birth date?",
+        "or": "Or"
+      },
+      "address": {
+        "label": "Address",
+        "title": "Patient Demographics",
+        "subtitle": "What's the patient's address?"
+      },
+      "language": {
+        "label": "Language",
+        "title": "Patient Demographics",
+        "subtitle": "What language does the patient prefer?"
+      },
+      "phoneNumber": {
+        "label": "Phone Number",
+        "title": "Patient Demographics",
+        "subtitle": "What's the patient's phone number?"
+      },
+      "patientLocation": {
+        "label": "Patient Location",
+        "title": "Patient Demographics",
+        "subtitle": "What's the patient's location?"
+      },
+      "aadharNumber": {
+        "label": "Aadhar Number",
+        "title": "Patient Demographics",
+        "subtitle": "What's the patient's Aadhar Number?"
+      },
+      "artNumber": {
+        "label": "ART Number",
+        "title": "Patient Demographics",
+        "subtitle": "What's the patient's ART Number?"
+      },
+      "relatives": {
+        "label": "Relatives",
+        "title": "Patient Demographics",
+        "subtitle": "Who is the patient related to?"
+      },
+      "confirm": {
+        "label": "Confirm",
+        "title": "Patient Demographics",
+        "subtitle": "Confirm the patient details are correct.",
+        "estimated": "Estimated",
+        "years": "Year(s)",
+        "months": "Month(s)"
+      }
+    },
+    "fields": {
+      "givenName": "Given Name",
+      "middleName": "Middle Name",
+      "familyName": "Family Name",
+      "gender": "Gender",
+      "birthdateDay": "Day",
+      "birthdateMonth": "Month",
+      "birthdateYear": "Year",
+      "birthdateYears": "Estimated Years",
+      "birthdateMonths": "Estimated Months",
+      "address1": "Address 1",
+      "address2": "Address 2",
+      "cityVillage": "City/Village",
+      "stateProvince": "State/Province",
+      "country": "Country",
+      "postalCode": "Postal Code",
+      "personLanguage": "Select Language",
+      "phoneNumber": "Phone Number",
+      "patientLocation": "Select Location",
+      "aadharNumber": "AADHAR Number",
+      "artNumber": "ART Number",
+      "relationshipType": "Select Relationship Type",
+      "otherPerson": "Person's Name",
+      "locationId": "Location",
+      "relatives": "Relatives",
+      "language": "Language",
+      "name": "Name",
+      "birthdate": "Birthdate",
+      "address": "Address",
+      "location": "Location",
+      "required": "(Required)"
+    },
+    "success": {
+      "title": "Success",
+      "subtitle": "The Patient has been successfully registered.",
+      "goBack": "Go back"
+    },
+    "unknown": "Unknown",
+    "required": "Required",
+    "invalid": "Invalid",
+    "previous": "Previous",
+    "next": "Next",
+    "confirm": "Confirm"
   }
 }

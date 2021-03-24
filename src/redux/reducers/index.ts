@@ -4,6 +4,9 @@ import person from "./person";
 import cflPeople from "./cfl-people";
 import session from "./session";
 import settings from "./setttings";
+import location from "./location";
+import relationshipType from "./relationship-type";
+import registration from "./registration";
 
 export default combineReducers({
   patient,
@@ -11,4 +14,7 @@ export default combineReducers({
   cflPeople,
   session,
   settings,
+  location,
+  relationshipType,
+  registration,
 });

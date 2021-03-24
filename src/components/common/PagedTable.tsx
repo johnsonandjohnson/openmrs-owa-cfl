@@ -1,6 +1,5 @@
 import "./PagedTable.scss";
 import { FormattedMessage } from "react-intl";
-import arrowIcon from "../../img/arrow.png";
 import { Pagination, PaginationItem, PaginationLink, Table } from "reactstrap";
 import React from "react";
 import _ from "lodash";
