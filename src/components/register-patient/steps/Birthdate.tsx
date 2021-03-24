@@ -4,6 +4,11 @@ import { FormattedMessage, injectIntl } from "react-intl";
 import { FormGroup } from "reactstrap";
 import { IPatient } from "../../../shared/models/patient";
 import _ from "lodash";
+import {
+  getSettingOrDefault,
+  parseJsonSetting,
+} from "../../../shared/util/setting-util";
+import { REGISTRATION_SETTINGS } from "../../../shared/constants/setting";
 
 export interface IBirthdateProps extends StateProps, DispatchProps {
   intl: any;
@@ -17,7 +22,7 @@ export interface IBirthdateState {
   invalidFields: any[];
 }
 
-const fieldsGroup1 = [
+export const defaultFieldsGroup1 = [
   {
     name: "birthdateDay",
     required: true,
@@ -35,15 +40,15 @@ const fieldsGroup1 = [
   },
 ];
 
-const fieldsGroup2 = [
+export const defaultFieldsGroup2 = [
   {
     name: "birthdateYears",
-    required: false,
+    required: true,
     type: "number",
   },
   {
     name: "birthdateMonths",
-    required: false,
+    required: true,
     type: "number",
   },
 ];
@@ -57,16 +62,16 @@ class Birthdate extends React.Component<IBirthdateProps, IBirthdateState> {
 
   validate = () => {
     const invalidFieldsGroup1 = _.filter(
-      fieldsGroup1,
+      this.props.fieldsGroup1,
       (field) => field.required && !this.props.patient[field.name]
     );
     const invalidFieldsGroup2 = _.filter(
-      fieldsGroup2,
-      (field) => !this.props.patient[field.name]
+      this.props.fieldsGroup2,
+      (field) => field.required && !this.props.patient[field.name]
     );
     const usesEstimate =
-      invalidFieldsGroup1.length === fieldsGroup1.length &&
-      invalidFieldsGroup2.length < fieldsGroup2.length;
+      invalidFieldsGroup1.length === this.props.fieldsGroup1.length &&
+      invalidFieldsGroup2.length < this.props.fieldsGroup2.length;
     const invalidFields = usesEstimate
       ? invalidFieldsGroup2
       : invalidFieldsGroup1;
@@ -77,7 +82,7 @@ class Birthdate extends React.Component<IBirthdateProps, IBirthdateState> {
   };
 
   render() {
-    const { intl, patient, onPatientChange } = this.props;
+    const { intl, fieldsGroup1, fieldsGroup2 } = this.props;
     const { invalidFields } = this.state;
     const monthOptions = (
       <>
@@ -87,7 +92,9 @@ class Birthdate extends React.Component<IBirthdateProps, IBirthdateState> {
           })}`}{" "}
           {fieldsGroup1.find((field) => field.name === "birthdateMonth")
             ?.required
-            ? intl.formatMessage({ id: "registerPatient.fields.required" })
+            ? intl.formatMessage({
+                id: "registerPatient.fields.required",
+              })
             : ""}
         </option>
         {_.range(1, 13).map((m) => (
@@ -144,7 +151,14 @@ class Birthdate extends React.Component<IBirthdateProps, IBirthdateState> {
   }
 }
 
-const mapStateToProps = (rootState) => ({});
+const mapStateToProps = ({ settings }) => ({
+  fieldsGroup1: parseJsonSetting(
+    getSettingOrDefault(settings, REGISTRATION_SETTINGS.birthdateFieldsGroup1)
+  ),
+  fieldsGroup2: parseJsonSetting(
+    getSettingOrDefault(settings, REGISTRATION_SETTINGS.birthdateFieldsGroup2)
+  ),
+});
 
 const mapDispatchToProps = {};
 

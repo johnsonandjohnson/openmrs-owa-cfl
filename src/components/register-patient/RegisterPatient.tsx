@@ -103,7 +103,9 @@ class RegisterPatient extends React.Component<IPatientsProps, IPatientsState> {
             id: "registerPatient.fields." + name,
           })} ${
             required
-              ? intl.formatMessage({ id: "registerPatient.fields.required" })
+              ? intl.formatMessage({
+                  id: "registerPatient.fields.required",
+                })
               : ""
           }`}
           value={value != null ? value : patient[name]}

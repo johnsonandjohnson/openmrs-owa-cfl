@@ -4,6 +4,11 @@ import { FormattedMessage, injectIntl } from "react-intl";
 import { FormGroup } from "reactstrap";
 import { IPatient } from "../../../shared/models/patient";
 import _ from "lodash";
+import {
+  getSettingOrDefault,
+  parseJsonSetting,
+} from "../../../shared/util/setting-util";
+import { REGISTRATION_SETTINGS } from "../../../shared/constants/setting";
 
 export interface IAddressProps extends StateProps, DispatchProps {
   intl: any;
@@ -13,7 +18,7 @@ export interface IAddressProps extends StateProps, DispatchProps {
   renderField: any;
 }
 
-const fields = [
+export const defaultFields = [
   {
     name: "address1",
     required: false,
@@ -51,7 +56,7 @@ class Address extends React.Component<IAddressProps, IAddressState> {
 
   validate = () => {
     const invalidFields = _.filter(
-      fields,
+      this.props.fields,
       (field) => field.required && !this.props.patient[field.name]
     );
     this.setState({
@@ -61,7 +66,7 @@ class Address extends React.Component<IAddressProps, IAddressState> {
   };
 
   render() {
-    const { intl, patient, onPatientChange } = this.props;
+    const { fields } = this.props;
     return (
       <>
         <div className="step-fields">
@@ -90,7 +95,11 @@ class Address extends React.Component<IAddressProps, IAddressState> {
   }
 }
 
-const mapStateToProps = (rootState) => ({});
+const mapStateToProps = ({ settings }) => ({
+  fields: parseJsonSetting(
+    getSettingOrDefault(settings, REGISTRATION_SETTINGS.addressFields)
+  ),
+});
 
 const mapDispatchToProps = {};
 

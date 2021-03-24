@@ -1,4 +1,4 @@
-// patient/person's fields
+// patient/person's defaultFields
 export const PATIENT_IDENTIFIER = "patientIdentifier";
 export const DISPLAY = "display";
 export const GENDER = "gender";

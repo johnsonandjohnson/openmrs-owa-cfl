@@ -4,6 +4,11 @@ import { FormattedMessage, injectIntl } from "react-intl";
 import { FormGroup } from "reactstrap";
 import { IPatient } from "../../../shared/models/patient";
 import _ from "lodash";
+import {
+  getSettingOrDefault,
+  parseJsonSetting,
+} from "../../../shared/util/setting-util";
+import { REGISTRATION_SETTINGS } from "../../../shared/constants/setting";
 
 export interface IArtNumberProps extends StateProps, DispatchProps {
   intl: any;
@@ -13,7 +18,7 @@ export interface IArtNumberProps extends StateProps, DispatchProps {
   renderField: any;
 }
 
-const fields = [
+export const defaultFields = [
   {
     name: "artNumber",
     required: false,
@@ -32,7 +37,7 @@ class ArtNumber extends React.Component<IArtNumberProps, IArtNumberState> {
 
   validate = () => {
     const invalidFields = _.filter(
-      fields,
+      this.props.fields,
       (field) => field.required && !this.props.patient[field.name]
     );
     this.setState({
@@ -42,7 +47,7 @@ class ArtNumber extends React.Component<IArtNumberProps, IArtNumberState> {
   };
 
   render() {
-    const { intl, patient, onPatientChange } = this.props;
+    const { fields } = this.props;
     return (
       <>
         <div className="step-fields">
@@ -68,7 +73,11 @@ class ArtNumber extends React.Component<IArtNumberProps, IArtNumberState> {
   }
 }
 
-const mapStateToProps = (rootState) => ({});
+const mapStateToProps = ({ settings }) => ({
+  fields: parseJsonSetting(
+    getSettingOrDefault(settings, REGISTRATION_SETTINGS.artNumberFields)
+  ),
+});
 
 const mapDispatchToProps = {};
 

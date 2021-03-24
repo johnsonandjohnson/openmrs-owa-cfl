@@ -5,6 +5,11 @@ import { FormGroup } from "reactstrap";
 import { IPatient } from "../../../shared/models/patient";
 import _ from "lodash";
 import { isPossiblePhoneNumber } from "react-phone-number-input";
+import {
+  getSettingOrDefault,
+  parseJsonSetting,
+} from "../../../shared/util/setting-util";
+import { REGISTRATION_SETTINGS } from "../../../shared/constants/setting";
 
 export interface IPhoneNumberProps extends StateProps, DispatchProps {
   intl: any;
@@ -14,7 +19,7 @@ export interface IPhoneNumberProps extends StateProps, DispatchProps {
   renderField: any;
 }
 
-const fields = [
+export const defaultFields = [
   {
     name: "phoneNumber",
     required: false,
@@ -44,7 +49,7 @@ class PhoneNumber extends React.Component<
   };
 
   validate = () => {
-    const invalidFields = _.filter(fields, (field) =>
+    const invalidFields = _.filter(this.props.fields, (field) =>
       this.isInvalid(this.props.patient[field.name], field.required)
     );
     this.setState({
@@ -70,7 +75,7 @@ class PhoneNumber extends React.Component<
             </p>
           </div>
           <FormGroup className="d-flex flex-row flex-wrap flex-md-nowrap">
-            {_.map(fields, (field) =>
+            {_.map(this.props.fields, (field) =>
               this.props.renderField(field, this.state.invalidFields)
             )}
           </FormGroup>
@@ -81,7 +86,11 @@ class PhoneNumber extends React.Component<
   }
 }
 
-const mapStateToProps = (rootState) => ({});
+const mapStateToProps = ({ settings }) => ({
+  fields: parseJsonSetting(
+    getSettingOrDefault(settings, REGISTRATION_SETTINGS.phoneNumberFields)
+  ),
+});
 
 const mapDispatchToProps = {};
 

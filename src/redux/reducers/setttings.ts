@@ -1,33 +1,17 @@
 import axios from "axios";
 
 import { FAILURE, REQUEST, SUCCESS } from "../action-type.util";
+import {
+  FIND_CAREGIVER_TABLE_COLUMNS_SETTING,
+  FIND_PATIENT_TABLE_COLUMNS_SETTING,
+  SETTING_PREFIX,
+} from "../../shared/constants/setting";
+import { getSetting } from "../../shared/util/setting-util";
 
 export const ACTION_TYPES = {
   GET_SETTINGS: "settings/GET_SETTINGS",
   CREATE_SETTING: "settings/CREATE_SETTING",
 };
-
-export const SETTING_PREFIX = `cflui.`;
-export const FIND_PATIENT_TABLE_COLUMNS_SETTING =
-  SETTING_PREFIX + "findPatientTableColumns";
-export const FIND_CAREGIVER_TABLE_COLUMNS_SETTING =
-  SETTING_PREFIX + "findCaregiverTableColumns";
-export const FIND_CAREGIVER_TABLE_COLUMNS_SETTING_DESCRIPTION =
-  "A list of possible columns and their labels:\n" +
-  "patientIdentifier - Identifier,\n" +
-  "givenName - First Name,\n" +
-  "familyName - Last Name,\n" +
-  "display - Name,\n" +
-  "gender - Gender,\n" +
-  "age - Age,\n" +
-  "birthdate - Birthdate,\n" +
-  "birthdateEstimated - Is birthdate estimated,\n" +
-  "phoneNumber - Phone number,\n" +
-  "uuid - ID,\n" +
-  "personLanguage - Language";
-export const FIND_PATIENT_TABLE_COLUMNS_SETTING_DESCRIPTION = FIND_CAREGIVER_TABLE_COLUMNS_SETTING_DESCRIPTION;
-export const PERSON_LANGUAGES_SETTING = SETTING_PREFIX + "personLanguages";
-export const PERSON_LANGUAGES_SETTING_DEFAULT = "English,Marathi,Hindi";
 
 const initialState = {
   loading: false,
@@ -35,10 +19,6 @@ const initialState = {
   settings: [],
   findPatientTableColumnsSetting: {},
   findCaregiverTableColumnsSetting: {},
-};
-
-export const getSetting = (settings, property) => {
-  return settings.find((setting) => setting.property === property);
 };
 
 export const getSettingsState = (settings) => {

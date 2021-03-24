@@ -5,6 +5,11 @@ import { FormGroup } from "reactstrap";
 import { IPatient } from "../../../shared/models/patient";
 import _ from "lodash";
 import { search } from "../../../redux/reducers/location";
+import {
+  getSettingOrDefault,
+  parseJsonSetting,
+} from "../../../shared/util/setting-util";
+import { REGISTRATION_SETTINGS } from "../../../shared/constants/setting";
 
 export interface IPatientLocationProps extends StateProps, DispatchProps {
   intl: any;
@@ -14,7 +19,7 @@ export interface IPatientLocationProps extends StateProps, DispatchProps {
   renderField: any;
 }
 
-const fields = [
+export const defaultFields = [
   {
     name: "locationId",
     required: false,
@@ -38,7 +43,7 @@ class PatientLocation extends React.Component<
 
   validate = () => {
     const invalidFields = _.filter(
-      fields,
+      this.props.fields,
       (field) => field.required && !this.props.patient[field.name]
     );
     this.setState({
@@ -79,7 +84,7 @@ class PatientLocation extends React.Component<
             </p>
           </div>
           <FormGroup className="d-flex flex-row flex-wrap flex-md-nowrap">
-            {_.map(fields, (field) =>
+            {_.map(this.props.fields, (field) =>
               this.props.renderField(
                 field,
                 this.state.invalidFields,
@@ -94,10 +99,12 @@ class PatientLocation extends React.Component<
   }
 }
 
-const mapStateToProps = ({ location }) => ({
+const mapStateToProps = ({ location, settings }) => ({
   locations: location.locations,
+  fields: parseJsonSetting(
+    getSettingOrDefault(settings, REGISTRATION_SETTINGS.patientLocationFields)
+  ),
 });
-
 const mapDispatchToProps = {
   search,
 };

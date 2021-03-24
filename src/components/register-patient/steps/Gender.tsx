@@ -5,6 +5,11 @@ import { Button, FormGroup } from "reactstrap";
 import { IPatient } from "../../../shared/models/patient";
 import { setValue } from "../../../shared/util/patient-util";
 import _ from "lodash";
+import {
+  getSettingOrDefault,
+  parseJsonSetting,
+} from "../../../shared/util/setting-util";
+import { REGISTRATION_SETTINGS } from "../../../shared/constants/setting";
 
 export interface IGenderProps extends StateProps, DispatchProps {
   intl: any;
@@ -19,9 +24,11 @@ export interface IGenderState {
   invalidFields: any[];
 }
 
-const fields = [
+const GENDER_FIELD_NAME = "gender";
+
+export const defaultFields = [
   {
-    name: "gender",
+    name: GENDER_FIELD_NAME,
     required: true,
   },
 ];
@@ -40,7 +47,7 @@ class Gender extends React.Component<IGenderProps, IGenderState> {
 
   validate = () => {
     const invalidFields = _.filter(
-      fields,
+      this.props.fields,
       (field) => field.required && !this.props.patient[field.name]
     );
     this.setState({
@@ -70,27 +77,32 @@ class Gender extends React.Component<IGenderProps, IGenderState> {
               <FormattedMessage id={"registerPatient.steps.gender.subtitle"} />
             </p>
           </div>
-          {/*<Input hidden name="gender" value={this.state.gender} readOnly />*/}
-          <FormGroup check inline>
-            <Button
-              onClick={this.onGenderChange("M")}
-              className={`gender-button ${
-                this.state.gender === "M" ? "active" : ""
-              }`}
-            >
-              <FormattedMessage id={"registerPatient.steps.gender.male"} />
-            </Button>
-          </FormGroup>
-          <FormGroup check inline>
-            <Button
-              onClick={this.onGenderChange("F")}
-              className={`gender-button ${
-                this.state.gender === "F" ? "active" : ""
-              }`}
-            >
-              <FormattedMessage id={"registerPatient.steps.gender.female"} />
-            </Button>
-          </FormGroup>
+          {this.props.fields.find((f) => f.name === GENDER_FIELD_NAME) && (
+            <>
+              <FormGroup check inline>
+                <Button
+                  onClick={this.onGenderChange("M")}
+                  className={`gender-button ${
+                    this.state.gender === "M" ? "active" : ""
+                  }`}
+                >
+                  <FormattedMessage id={"registerPatient.steps.gender.male"} />
+                </Button>
+              </FormGroup>
+              <FormGroup check inline>
+                <Button
+                  onClick={this.onGenderChange("F")}
+                  className={`gender-button ${
+                    this.state.gender === "F" ? "active" : ""
+                  }`}
+                >
+                  <FormattedMessage
+                    id={"registerPatient.steps.gender.female"}
+                  />
+                </Button>
+              </FormGroup>
+            </>
+          )}
           {invalidFields.length > 0 && (
             <div className="error field-error mt-1">
               {intl.formatMessage({ id: `registerPatient.required` })}
@@ -103,7 +115,11 @@ class Gender extends React.Component<IGenderProps, IGenderState> {
   }
 }
 
-const mapStateToProps = (rootState) => ({});
+const mapStateToProps = ({ settings }) => ({
+  fields: parseJsonSetting(
+    getSettingOrDefault(settings, REGISTRATION_SETTINGS.genderFields)
+  ),
+});
 
 const mapDispatchToProps = {};
 

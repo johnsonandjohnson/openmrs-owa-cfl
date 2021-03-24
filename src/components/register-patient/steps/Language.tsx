@@ -5,10 +5,10 @@ import { FormGroup } from "reactstrap";
 import { IPatient } from "../../../shared/models/patient";
 import _ from "lodash";
 import {
-  getSetting,
-  PERSON_LANGUAGES_SETTING,
-  PERSON_LANGUAGES_SETTING_DEFAULT,
-} from "../../../redux/reducers/setttings";
+  getSettingOrDefault,
+  parseJsonSetting,
+} from "../../../shared/util/setting-util";
+import { REGISTRATION_SETTINGS } from "../../../shared/constants/setting";
 
 export interface ILanguageProps extends StateProps, DispatchProps {
   intl: any;
@@ -18,7 +18,7 @@ export interface ILanguageProps extends StateProps, DispatchProps {
   renderField: any;
 }
 
-const fields = [
+export const defaultFields = [
   {
     name: "personLanguage",
     required: false,
@@ -37,7 +37,7 @@ class Language extends React.Component<ILanguageProps, ILanguageState> {
 
   validate = () => {
     const invalidFields = _.filter(
-      fields,
+      this.props.fields,
       (field) => field.required && !this.props.patient[field.name]
     );
     this.setState({
@@ -47,7 +47,7 @@ class Language extends React.Component<ILanguageProps, ILanguageState> {
   };
 
   render() {
-    const { intl } = this.props;
+    const { intl, fields } = this.props;
     const languageOptions = (
       <>
         <option value="" disabled selected hidden>{`${intl.formatMessage({
@@ -88,10 +88,13 @@ class Language extends React.Component<ILanguageProps, ILanguageState> {
 }
 
 const mapStateToProps = ({ settings }) => ({
-  languages:
-    (getSetting(settings.settings, PERSON_LANGUAGES_SETTING) &&
-      getSetting(settings.settings, PERSON_LANGUAGES_SETTING).value) ||
-    PERSON_LANGUAGES_SETTING_DEFAULT,
+  languages: getSettingOrDefault(
+    settings,
+    REGISTRATION_SETTINGS.possiblePersonLanguages
+  ),
+  fields: parseJsonSetting(
+    getSettingOrDefault(settings, REGISTRATION_SETTINGS.languageFields)
+  ),
 });
 
 const mapDispatchToProps = {};

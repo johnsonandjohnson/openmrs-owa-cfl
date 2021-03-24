@@ -31,7 +31,7 @@ const otherPersonField = {
   required: false,
 };
 
-const fields = [relationshipTypeField, otherPersonField];
+export const rowFields = [relationshipTypeField, otherPersonField];
 
 const emptyRelative = {
   relationshipType: "",
@@ -59,7 +59,7 @@ class Relatives extends React.Component<IRelativesProps, IRelativesState> {
 
   validate = () => {
     const invalidFields = _.filter(
-      fields,
+      rowFields,
       (field) => field.required && !this.props.patient[field.name]
     );
     this.setState({
@@ -157,7 +157,7 @@ class Relatives extends React.Component<IRelativesProps, IRelativesState> {
   relative = (relative, rowNo) => {
     return (
       <FormGroup className="d-flex flex-row flex-wrap">
-        {fields.includes(relationshipTypeField) &&
+        {rowFields.includes(relationshipTypeField) &&
           this.props.renderField(
             relationshipTypeField,
             this.state.invalidFields,
@@ -166,7 +166,7 @@ class Relatives extends React.Component<IRelativesProps, IRelativesState> {
             relative[relationshipTypeField.name],
             this.onChangeEvent(rowNo, relationshipTypeField.name)
           )}
-        {fields.includes(otherPersonField) && (
+        {rowFields.includes(otherPersonField) && (
           <Select
             options={this.patientOptions(rowNo)}
             onInputChange={this.onChange(rowNo, OTHER_PERSON_NAME)}

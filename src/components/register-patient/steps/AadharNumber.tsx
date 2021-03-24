@@ -4,6 +4,11 @@ import { FormattedMessage, injectIntl } from "react-intl";
 import { FormGroup } from "reactstrap";
 import { IPatient } from "../../../shared/models/patient";
 import _ from "lodash";
+import {
+  getSettingOrDefault,
+  parseJsonSetting,
+} from "../../../shared/util/setting-util";
+import { REGISTRATION_SETTINGS } from "../../../shared/constants/setting";
 
 export interface IAadharNumberProps extends StateProps, DispatchProps {
   intl: any;
@@ -13,7 +18,7 @@ export interface IAadharNumberProps extends StateProps, DispatchProps {
   renderField: any;
 }
 
-const fields = [
+export const defaultFields = [
   {
     name: "aadharNumber",
     required: false,
@@ -35,7 +40,7 @@ class AadharNumber extends React.Component<
 
   validate = () => {
     const invalidFields = _.filter(
-      fields,
+      this.props.fields,
       (field) => field.required && !this.props.patient[field.name]
     );
     this.setState({
@@ -61,7 +66,7 @@ class AadharNumber extends React.Component<
             </p>
           </div>
           <FormGroup className="d-flex flex-row flex-wrap flex-md-nowrap">
-            {_.map(fields, (field) =>
+            {_.map(this.props.fields, (field) =>
               this.props.renderField(field, this.state.invalidFields)
             )}
           </FormGroup>
@@ -72,7 +77,11 @@ class AadharNumber extends React.Component<
   }
 }
 
-const mapStateToProps = (rootState) => ({});
+const mapStateToProps = ({ settings }) => ({
+  fields: parseJsonSetting(
+    getSettingOrDefault(settings, REGISTRATION_SETTINGS.aadharNumberFields)
+  ),
+});
 
 const mapDispatchToProps = {};
 
