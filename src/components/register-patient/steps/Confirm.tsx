@@ -95,9 +95,12 @@ class Confirm extends React.Component<IConfirmProps, IConfirmState> {
       (relationshipType) =>
         relationshipTypeId.indexOf(relationshipType.uuid) >= 0
     );
-    return relationshipTypeId.endsWith("-A")
-      ? relationshipType.displayAIsToB
-      : relationshipType.displayBIsToA;
+    return (
+      relationshipType &&
+      (relationshipTypeId.endsWith("-A")
+        ? relationshipType.displayAIsToB
+        : relationshipType.displayBIsToA)
+    );
   };
 
   relatives = (patient) => {

@@ -10,7 +10,7 @@ const Dashboard = () => {
   return (
     <div className="dashboard">
       <h2 className="title">
-        <FormattedMessage id="common.home" />
+        <FormattedMessage id="home.title" />
       </h2>
       <div className="items">
         <Link to="/find-patient" className="item">

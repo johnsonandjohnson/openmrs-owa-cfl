@@ -1,6 +1,6 @@
 {
-  "common": {
-    "home": "Home"
+  "home": {
+    "title": "Home"
   },
   "table": {
     "enterSearch": "For the search results to appear, enter at least 3 characters.",
@@ -42,6 +42,12 @@
     "phoneNumber": "Phone number",
     "uuid": "ID",
     "personLanguage": "Language"
+  },
+  "editPatient": {
+    "title": "Edit Patient",
+    "success": {
+      "subtitle": "The Patient has been saved successfully."
+    }
   },
   "registerPatient": {
     "title": "Register a Patient",
@@ -144,6 +150,7 @@
     "success": {
       "title": "Success",
       "subtitle": "The Patient has been successfully registered.",
+      "editSubtitle": "The Patient has been saved successfully.",
       "goBack": "Go back"
     },
     "unknown": "Unknown",

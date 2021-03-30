@@ -9,22 +9,23 @@ const Breadcrumbs = () => {
   const breadcrumbs = useBreadcrumbs(routeConfig);
   return (
     <div className="breadcrumbs">
-      {breadcrumbs.map(({ match, key, breadcrumb }, i) => (
-        <span key={key}>
-          <Link to={match.url}>
-            <FormattedMessage
-              id={
-                breadcrumb &&
-                breadcrumb["props"] &&
-                breadcrumb["props"].children
-              }
-            />
-          </Link>
-          <span className="separator">
-            {(breadcrumbs.length === 1 || breadcrumbs.length !== i + 1) && ">>"}
-          </span>
-        </span>
-      ))}
+      {breadcrumbs.map(({ match, key, breadcrumb }, i) => {
+        const id =
+          breadcrumb && breadcrumb["props"] && breadcrumb["props"].children;
+        return (
+          id.indexOf(".") >= 0 && (
+            <span key={key}>
+              <Link to={match.url}>
+                <FormattedMessage id={id} />
+              </Link>
+              <span className="separator">
+                {(breadcrumbs.length === 1 || breadcrumbs.length !== i + 1) &&
+                  ">>"}
+              </span>
+            </span>
+          )
+        );
+      })}
     </div>
   );
 };

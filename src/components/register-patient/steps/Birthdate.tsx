@@ -97,6 +97,7 @@ class Birthdate extends React.Component<IBirthdateProps, IBirthdateState> {
               })
             : ""}
         </option>
+        <option value="" />
         {_.range(1, 13).map((m) => (
           <option value={m}>{m}</option>
         ))}

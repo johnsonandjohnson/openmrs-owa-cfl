@@ -33,6 +33,12 @@ const otherPersonField = {
 
 export const rowFields = [relationshipTypeField, otherPersonField];
 
+export interface IRelative {
+  relationshipType: string;
+  otherPerson: object | null;
+  otherPersonInput: string;
+}
+
 const emptyRelative = {
   relationshipType: "",
   otherPerson: null,
@@ -41,20 +47,36 @@ const emptyRelative = {
 
 export interface IRelativesState {
   invalidFields: any[];
-  relatives: any[];
+  relatives: IRelative[];
   otherPersonInput: string;
 }
 
 class Relatives extends React.Component<IRelativesProps, IRelativesState> {
   state = {
     invalidFields: [],
-    relatives: [{ ...emptyRelative }],
+    relatives: [] as IRelative[],
     otherPersonInput: "",
   };
 
   componentDidMount() {
     this.props.getRelationshipTypes();
     this.props.reset();
+  }
+
+  componentDidUpdate(
+    prevProps: Readonly<IRelativesProps>,
+    prevState: Readonly<IRelativesState>,
+    snapshot?: any
+  ) {
+    const { patient } = this.props;
+    if (prevProps.patient !== patient && !!patient) {
+      this.setState({
+        relatives:
+          patient.relatives && patient.relatives.length > 0
+            ? patient.relatives
+            : [{ ...emptyRelative }],
+      });
+    }
   }
 
   validate = () => {
@@ -176,6 +198,7 @@ class Relatives extends React.Component<IRelativesProps, IRelativesState> {
             placeholder={`${this.props.intl.formatMessage({
               id: "registerPatient.fields.otherPerson",
             })}`}
+            value={relative.otherPerson}
           />
         )}
         <div className="align-items-center justify-content-center d-flex">

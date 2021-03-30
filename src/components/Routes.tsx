@@ -12,38 +12,47 @@ import FindCaregiver from "./find-caregiver/FindCaregiver";
 export const routeConfig = [
   {
     path: "/find-patient",
-    component: <FindPatient />,
+    component: FindPatient,
     breadcrumb: "findPatient.title",
   },
   {
     path: "/find-caregiver",
-    component: <FindCaregiver />,
+    component: FindCaregiver,
     breadcrumb: "findCaregiver.title",
   },
   {
     path: "/register-patient",
-    component: <RegisterPatient />,
+    component: RegisterPatient,
     breadcrumb: "registerPatient.title",
   },
   {
+    path: "/edit-patient/:id",
+    // @ts-ignore
+    component: RegisterPatient,
+    breadcrumb: "editPatient.title",
+  },
+  {
     path: "/",
-    component: <Dashboard />,
-    breadcrumb: "common.home",
+    component: Dashboard,
+    breadcrumb: "home.title",
   },
 ];
 
-const Routes = () => (
+const Routes = ({ ...props }) => (
   <Router>
     <Header />
     <div className="content">
       <Breadcrumbs />
       <ErrorBoundary>
         <Switch>
-          {_.map(routeConfig, (route) => (
-            <Route path={route.path} key={route.path}>
-              {route.component}
-            </Route>
-          ))}
+          {_.map(routeConfig, (route) => {
+            const Component = route.component;
+            return (
+              <Route path={route.path} key={route.path}>
+                <Component {...props} />
+              </Route>
+            );
+          })}
         </Switch>
       </ErrorBoundary>
     </div>

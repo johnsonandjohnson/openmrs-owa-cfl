@@ -83,7 +83,7 @@ class Gender extends React.Component<IGenderProps, IGenderState> {
                 <Button
                   onClick={this.onGenderChange("M")}
                   className={`gender-button ${
-                    this.state.gender === "M" ? "active" : ""
+                    this.props.patient.gender === "M" ? "active" : ""
                   }`}
                 >
                   <FormattedMessage id={"registerPatient.steps.gender.male"} />
@@ -93,7 +93,7 @@ class Gender extends React.Component<IGenderProps, IGenderState> {
                 <Button
                   onClick={this.onGenderChange("F")}
                   className={`gender-button ${
-                    this.state.gender === "F" ? "active" : ""
+                    this.props.patient.gender === "F" ? "active" : ""
                   }`}
                 >
                   <FormattedMessage

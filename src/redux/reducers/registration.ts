@@ -5,6 +5,8 @@ import querystring from "querystring";
 
 export const ACTION_TYPES = {
   REGISTER: "registration/REGISTER",
+  UPDATE_RELATIONSHIPS: "registration/UPDATE_RELATIONSHIPS",
+  EDIT_SECTION: "registration/EDIT_SECTION",
 };
 
 const initialState = {
@@ -24,23 +26,38 @@ const fieldErrors = (response) => {
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case REQUEST(ACTION_TYPES.REGISTER):
+    case REQUEST(ACTION_TYPES.EDIT_SECTION):
       return {
         ...state,
         loading: true,
       };
     case FAILURE(ACTION_TYPES.REGISTER):
+    case FAILURE(ACTION_TYPES.EDIT_SECTION):
       const resp = action.payload.response.data;
       return {
         ...initialState,
         errors: (resp.globalErrors || []).concat(fieldErrors(resp)),
       };
     case SUCCESS(ACTION_TYPES.REGISTER):
+    case SUCCESS(ACTION_TYPES.EDIT_SECTION):
+      const { data } = action.payload;
+      // edit section returns errors both in json and in html responses, despite success response code
+      const error = data
+        .toString()
+        .match(/<p>Validation errors found(.*)<\/p>/)
+        ?.pop();
+      const isSuccess = !data.stackTrace && !data.fullStackTrace && !error;
       return {
-        ...initialState,
-        success: true,
+        ...state,
+        success: isSuccess,
+        errors: isSuccess
+          ? state.errors
+          : [error || data.message || data.fullStacktrace],
+        loading: false,
       };
-    default:
+    default: {
       return state;
+    }
   }
 };
 
@@ -48,7 +65,7 @@ const extractFormData = (patient) => {
   const validRelatives = patient.relatives?.filter(
     (relative) => !!relative.relationshipType && !!relative.otherPerson
   );
-  return {
+  const formData = {
     ...patient,
     relationship_type: validRelatives?.map(
       (relative) => relative.relationshipType
@@ -59,6 +76,16 @@ const extractFormData = (patient) => {
     "ART Number": patient.artNumber,
     "Aadhar Number": patient.aadharNumber,
   };
+  if (
+    !formData.birthdateYear &&
+    !formData.birthdateMonth &&
+    !formData.birthdateDay
+  ) {
+    formData.birthdate = null;
+  } else {
+    formData.birthdateEstimated = false;
+  }
+  return formData;
 };
 
 // actions
@@ -67,6 +94,24 @@ export const register = (patient) => {
   const formData = extractFormData(patient);
   return {
     type: ACTION_TYPES.REGISTER,
+    payload: axios.post(requestUrl, querystring.stringify(formData)),
+  };
+};
+
+export const editPatient = (patient) => {
+  const requestUrl = `/openmrs/registrationapp/editSection.page?patientId=${patient.patientId}&appId=cfl.registerPatient&sectionId=demographics&returnUrl=/`;
+  const formData = extractFormData(patient);
+  return {
+    type: ACTION_TYPES.EDIT_SECTION,
+    payload: axios.post(requestUrl, querystring.stringify(formData)),
+  };
+};
+
+export const updateRelationships = (patient) => {
+  const requestUrl = `/openmrs/cfl/field/personRelationship/updateRelationships.action`;
+  const formData = extractFormData(patient);
+  return {
+    type: ACTION_TYPES.UPDATE_RELATIONSHIPS,
     payload: axios.post(requestUrl, querystring.stringify(formData)),
   };
 };

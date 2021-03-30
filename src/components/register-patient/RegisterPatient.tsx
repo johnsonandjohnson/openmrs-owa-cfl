@@ -14,14 +14,29 @@ import {
 import _ from "lodash";
 import { getStepCount, steps } from "./steps";
 import { IPatient } from "../../shared/models/patient";
-import { setValueOnChange } from "../../shared/util/patient-util";
+import {
+  extractPatientData,
+  extractPatientRelationships,
+  setValueOnChange,
+} from "../../shared/util/patient-util";
 import Check from "../../img/check.svg";
 import CheckCircle from "../../img/check-circle.svg";
 import PhoneInput from "react-phone-number-input/input";
-import { register } from "../../redux/reducers/registration";
-import { Link } from "react-router-dom";
+import {
+  editPatient,
+  register,
+  updateRelationships,
+} from "../../redux/reducers/registration";
+import { Link, RouteComponentProps, withRouter } from "react-router-dom";
+import {
+  getPatient,
+  getPatientRelationships,
+} from "../../redux/reducers/patient";
 
-export interface IPatientsProps extends StateProps, DispatchProps {
+export interface IPatientsProps
+  extends StateProps,
+    DispatchProps,
+    RouteComponentProps<{ id?: string }> {
   intl: any;
 }
 
@@ -29,6 +44,7 @@ export interface IPatientsState {
   step: number;
   patient: IPatient;
   validSteps: number[];
+  success: boolean;
 }
 
 class RegisterPatient extends React.Component<IPatientsProps, IPatientsState> {
@@ -36,7 +52,60 @@ class RegisterPatient extends React.Component<IPatientsProps, IPatientsState> {
     step: 0,
     patient: {} as IPatient,
     validSteps: [] as number[],
+    success: false,
   };
+
+  componentDidMount() {
+    if (this.isEdit()) {
+      this.props.getPatient(this.props.match.params.id);
+      this.props.getPatientRelationships(this.props.match.params.id);
+    }
+  }
+
+  componentDidUpdate(
+    prevProps: Readonly<IPatientsProps>,
+    prevState: Readonly<IPatientsState>,
+    snapshot?: any
+  ) {
+    if (this.isEdit()) {
+      if (prevProps.patient !== this.props.patient && !!this.props.patient) {
+        const patient = {
+          relatives: this.state.patient?.relatives || [],
+          ...extractPatientData(this.props.patient),
+        };
+        this.setState({
+          patient,
+          validSteps: _.map(Object.getOwnPropertyNames(steps), (stepName, i) =>
+            steps[stepName] !== steps.confirm ? i : null
+          ),
+        });
+      } else if (
+        prevProps.patientRelationships !== this.props.patientRelationships &&
+        this.props.patientRelationships != null
+      ) {
+        const patient = {
+          ...this.state.patient,
+          relatives: extractPatientRelationships(
+            this.props.match.params.id,
+            this.props.patientRelationships
+          ),
+        };
+        this.setState({
+          patient,
+        });
+      }
+    }
+    if (!prevProps.success && this.props.success) {
+      this.setState({
+        success: true,
+      });
+    }
+  }
+
+  isEdit() {
+    const { match } = this.props;
+    return match && match.params.id;
+  }
 
   setStep = (step) => {
     this.setState({
@@ -170,8 +239,16 @@ class RegisterPatient extends React.Component<IPatientsProps, IPatientsState> {
   };
 
   onConfirmClick = (e) => {
-    if (!this.props.loading) {
-      this.props.register(this.state.patient);
+    if (
+      !this.props.loading &&
+      this.state.validSteps.length >=
+        Object.getOwnPropertyNames(steps).length - 1
+    ) {
+      if (this.isEdit()) {
+        this.props.editPatient(this.state.patient);
+      } else {
+        this.props.register(this.state.patient);
+      }
     }
   };
 
@@ -198,7 +275,11 @@ class RegisterPatient extends React.Component<IPatientsProps, IPatientsState> {
           <Button
             onClick={this.onConfirmClick}
             className="next"
-            disabled={this.props.loading}
+            disabled={
+              this.props.loading ||
+              this.state.validSteps.length <
+                Object.getOwnPropertyNames(steps).length - 1
+            }
           >
             <FormattedMessage id="registerPatient.confirm" />
           </Button>
@@ -231,13 +312,18 @@ class RegisterPatient extends React.Component<IPatientsProps, IPatientsState> {
   };
 
   success = () => {
+    const isEdit = this.isEdit();
     return (
       <div className="ml-3 mt-2">
         <h1 className="text-success">
           <FormattedMessage id="registerPatient.success.title" />
         </h1>
         <div className="helper-text">
-          <FormattedMessage id="registerPatient.success.subtitle" />
+          <FormattedMessage
+            id={`${
+              isEdit ? "editPatient" : "registerPatient"
+            }.success.subtitle`}
+          />
         </div>
         <p>
           <Link to={"/"}>
@@ -251,7 +337,7 @@ class RegisterPatient extends React.Component<IPatientsProps, IPatientsState> {
   render() {
     return (
       <div className="register-patient">
-        {this.props.success ? (
+        {this.state.success ? (
           this.success()
         ) : (
           <>
@@ -276,12 +362,20 @@ class RegisterPatient extends React.Component<IPatientsProps, IPatientsState> {
   }
 }
 
-const mapStateToProps = ({ registration }) => ({
+const mapStateToProps = ({ registration, patient }) => ({
   loading: registration.loading,
   success: registration.success,
+  patient: patient.patient,
+  patientRelationships: patient.patientRelationships,
 });
 
-const mapDispatchToProps = { register };
+const mapDispatchToProps = {
+  register,
+  getPatient,
+  editPatient,
+  updateRelationships,
+  getPatientRelationships,
+};
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
@@ -289,4 +383,4 @@ type DispatchProps = typeof mapDispatchToProps;
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(injectIntl(RegisterPatient));
+)(injectIntl(withRouter(RegisterPatient)));

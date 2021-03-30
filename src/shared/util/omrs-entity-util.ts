@@ -23,3 +23,15 @@ export const extractAttribute = (entity, type) => {
     );
   return (attr && attr.value) || DEFAULT_COLUMN_VALUE;
 };
+
+export const extractIdentifier = (entity, type) => {
+  if (!entity) {
+    return DEFAULT_COLUMN_VALUE;
+  }
+  const id =
+    entity.identifiers &&
+    entity.identifiers.find(
+      (id) => id.identifierType[DISPLAY].toLowerCase() === type.toLowerCase()
+    );
+  return (id && id.identifier) || DEFAULT_COLUMN_VALUE;
+};

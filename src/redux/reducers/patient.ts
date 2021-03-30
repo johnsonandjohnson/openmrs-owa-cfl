@@ -5,12 +5,16 @@ import { DEFAULT_PAGE_SIZE } from "../page.util";
 
 export const ACTION_TYPES = {
   SEARCH_PATIENTS: "patient/SEARCH_PATIENTS",
+  GET_PATIENT: "patient/GET_PATIENT",
   RESET_PATIENTS: "patient/RESET_PATIENTS",
+  GET_PATIENT_RELATIONSHIPS: "patient/GET_PATIENT_RELATIONSHIPS",
 };
 
 const initialState = {
   loading: false,
   patients: [],
+  patient: null,
+  patientRelationships: null,
   errorMessage: "",
   currentPage: 0,
   totalCount: 0,
@@ -21,6 +25,11 @@ const initialState = {
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.GET_PATIENT_RELATIONSHIPS):
+      return {
+        ...state,
+        patientRelationships: null,
+      };
     case REQUEST(ACTION_TYPES.SEARCH_PATIENTS):
       return {
         ...state,
@@ -46,6 +55,16 @@ const reducer = (state = initialState, action) => {
       } else {
         return { ...state };
       }
+    case SUCCESS(ACTION_TYPES.GET_PATIENT):
+      return {
+        ...state,
+        patient: action.payload.data,
+      };
+    case SUCCESS(ACTION_TYPES.GET_PATIENT_RELATIONSHIPS):
+      return {
+        ...state,
+        patientRelationships: action.payload.data.results,
+      };
     case ACTION_TYPES.RESET_PATIENTS:
       return {
         ...initialState,
@@ -67,6 +86,24 @@ export const search = (q, page = 0, limit = DEFAULT_PAGE_SIZE) => {
       q,
       currentPage: page,
     },
+  };
+};
+
+const PATIENT_CUSTOM_V = `patientId,uuid,identifiers,person:(gender,age,birthdate,birthdateEstimated,preferredAddress,preferredName,attributes),attributes:(value,attributeType:(name))`;
+
+export const getPatient = (id) => {
+  const requestUrl = `/openmrs/ws/rest/v1/patient/${id}?v=custom:(${PATIENT_CUSTOM_V})`;
+  return {
+    type: ACTION_TYPES.GET_PATIENT,
+    payload: axios.get(requestUrl),
+  };
+};
+
+export const getPatientRelationships = (id) => {
+  const requestUrl = `/openmrs/ws/rest/v1/relationship?v=default&person=${id}`;
+  return {
+    type: ACTION_TYPES.GET_PATIENT_RELATIONSHIPS,
+    payload: axios.get(requestUrl),
   };
 };
 
