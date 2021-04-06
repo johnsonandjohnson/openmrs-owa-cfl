@@ -1,3 +1,4 @@
 #!/bin/bash
 
-zip -r -j cfl-ui.zip build/*
+rm -f cfl-ui.zip
+cd build; zip -r ../cfl-ui.zip *

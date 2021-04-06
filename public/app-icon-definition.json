@@ -7,9 +7,25 @@
       "id": "demoapp.homepageLink",
       "extensionPointId": "org.openmrs.referenceapplication.homepageLink",
       "type": "link",
-      "label": "CFL UI",
-      "url": "owa/cfl-ui/index.html",
-      "icon": "icon-globe"
+      "label": "Find Patient Record",
+      "url": "owa/cfl-ui/index.html#/find-patient",
+      "icon": "cfl-find-patient"
+    },
+    {
+      "id": "demoapp.homepageLink",
+      "extensionPointId": "org.openmrs.referenceapplication.homepageLink",
+      "type": "link",
+      "label": "Find Caregiver Record",
+      "url": "owa/cfl-ui/index.html#/find-caregiver",
+      "icon": "cfl-find-caregiver"
+    },
+    {
+      "id": "demoapp.homepageLink",
+      "extensionPointId": "org.openmrs.referenceapplication.homepageLink",
+      "type": "link",
+      "label": "CFL Register Patient",
+      "url": "owa/cfl-ui/index.html#/register-patient",
+      "icon": "cfl-register-patient"
     }
   ]
 }

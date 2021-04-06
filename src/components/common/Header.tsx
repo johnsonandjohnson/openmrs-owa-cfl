@@ -1,13 +1,13 @@
 import logo from "../../img/logo.png";
 import "./Header.scss";
-import { Link } from "react-router-dom";
+import { ROOT_URL } from "../../shared/constants/openmrs";
 
 const Header = () => {
   return (
     <header className="header">
-      <Link to={"/"}>
+      <a href={ROOT_URL}>
         <img src={logo} alt="logo" className="logo" />
-      </Link>
+      </a>
     </header>
   );
 };

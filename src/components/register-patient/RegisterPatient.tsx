@@ -27,11 +27,12 @@ import {
   register,
   updateRelationships,
 } from "../../redux/reducers/registration";
-import { Link, RouteComponentProps, withRouter } from "react-router-dom";
+import { RouteComponentProps, withRouter } from "react-router-dom";
 import {
   getPatient,
   getPatientRelationships,
 } from "../../redux/reducers/patient";
+import { ROOT_URL } from "../../shared/constants/openmrs";
 
 export interface IPatientsProps
   extends StateProps,
@@ -326,9 +327,9 @@ class RegisterPatient extends React.Component<IPatientsProps, IPatientsState> {
           />
         </div>
         <p>
-          <Link to={"/"}>
+          <a href={ROOT_URL}>
             <FormattedMessage id="registerPatient.success.goBack" />
-          </Link>
+          </a>
         </p>
       </div>
     );

@@ -1,0 +1,150 @@
+@font-face {
+    font-family: "CircularStd";
+    font-style: normal;
+    font-weight: normal;
+    src: url("font/CircularStd-Medium.otf") format("opentype");
+}
+
+@font-face {
+    font-family: "CircularStd";
+    font-style: normal;
+    font-weight: bold;
+    src: url("font/CircularStd-Bold.otf") format("opentype");
+}
+
+@font-face {
+    font-family: "CircularStd-Book";
+    font-style: normal;
+    font-weight: normal;
+    src: url("font/CircularStd-Book.otf") format("opentype");
+}
+
+@font-face {
+    font-family: "CircularStd-Book";
+    font-style: italic;
+    font-weight: normal;
+    src: url("font/CircularStd-BookItalic.otf") format("opentype");
+}
+
+body {
+    background-color: #fafafa !important;
+    max-width: none !important;
+    width: auto !important;
+    margin-top: 0 !important;
+    font-family: "CircularStd", serif !important;
+}
+
+header {
+    border-radius: 0 !important;
+    padding: 0 1em 0 1em;
+}
+
+header .logo {
+    margin: 5px 0 !important;
+}
+
+header .logo img {
+    content: url("img/logo.png");
+    height: 30px !important;
+    width: auto !important;
+}
+
+header nav.navbar {
+    padding: 0 !important;
+}
+
+header .user-options li {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+}
+
+header #user-account-menu li a {
+    padding: 0 !important;
+}
+
+div#content {
+    padding: 0;
+}
+
+p {
+    font-family: CircularStd-Book;
+}
+
+div#body-wrapper {
+    padding: 1em 1em 0;
+    margin: 0;
+    background-color: transparent !important;
+}
+
+#apps > a.button {
+    background: white !important;
+    border-color: #eaeaea !important;
+    height: 140px;
+    font-family: CircularStd-Book !important;
+    color: black !important;
+    font-size: 14px !important;
+}
+
+#apps i {
+    margin: 0 auto 15px auto !important;
+    color: #7F7F7F !important;
+}
+
+i[class^='cfl-'] {
+    height: 50px;
+    padding: 0 !important;
+}
+
+i.cfl-find-patient {
+    content: url("img/find-patient.png");
+}
+
+i.cfl-find-caregiver {
+    content: url("img/find-caregiver.png");
+}
+
+i.cfl-register-patient {
+    content: url("img/register-patient.png");
+}
+
+form#login-form {
+    display: flex;
+    justify-content: center;
+}
+
+ul#breadcrumbs {
+    padding: 1em 1em 0;
+}
+
+@media only screen and (min-width: 576px) {
+    header {
+        padding: 0 2em 0 2em;
+    }
+    div#body-wrapper, ul#breadcrumbs {
+        padding: 1em 2em 0;
+    }
+}
+@media only screen and (min-width: 768px) {
+    header {
+        padding: 0 4em 0 4em;
+    }
+    div#body-wrapper, ul#breadcrumbs {
+        padding: 1em 4em 0;
+    }
+}
+@media only screen and (min-width: 992px) {
+    header {
+        padding: 0 6em 0 6em;
+    }
+    div#body-wrapper, ul#breadcrumbs {
+        padding: 1em 6em 0;
+    }
+}
+@media only screen and (min-width: 1280px) {
+    header {
+        padding: 0 8em 0 8em;
+    }
+    div#body-wrapper, ul#breadcrumbs {
+        padding: 1em 8em 0;
+    }
+}
