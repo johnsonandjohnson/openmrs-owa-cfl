@@ -76,7 +76,7 @@ div#body-wrapper {
     background-color: transparent !important;
 }
 
-#apps > a.button {
+.homeList > a.button {
     background: white !important;
     border-color: #eaeaea !important;
     height: 140px;
@@ -85,7 +85,7 @@ div#body-wrapper {
     font-size: 14px !important;
 }
 
-#apps i {
+.homeList i {
     margin: 0 auto 15px auto !important;
     color: #7F7F7F !important;
 }
