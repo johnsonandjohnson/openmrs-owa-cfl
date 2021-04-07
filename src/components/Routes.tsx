@@ -8,28 +8,35 @@ import Header from "./common/Header";
 import ErrorBoundary from "./common/ErrorBoundary";
 import RegisterPatient from "./register-patient/RegisterPatient";
 import FindCaregiver from "./find-caregiver/FindCaregiver";
+import { connect } from "react-redux";
+import Unauthorized from "./common/Unauthorized";
+import { PRIVILEGES } from "../shared/constants/privilege";
+import { Spinner } from "reactstrap";
 
 export const routeConfig = [
   {
     path: "/find-patient",
     component: FindPatient,
     breadcrumb: "findPatient.title",
+    requiredPrivilege: PRIVILEGES.GET_PATIENTS,
   },
   {
     path: "/find-caregiver",
     component: FindCaregiver,
     breadcrumb: "findCaregiver.title",
+    requiredPrivilege: PRIVILEGES.GET_PEOPLE,
   },
   {
     path: "/register-patient",
     component: RegisterPatient,
     breadcrumb: "registerPatient.title",
+    requiredPrivilege: PRIVILEGES.ADD_PATIENTS,
   },
   {
     path: "/edit-patient/:id",
-    // @ts-ignore
     component: RegisterPatient,
     breadcrumb: "editPatient.title",
+    requiredPrivilege: PRIVILEGES.EDIT_PATIENTS,
   },
   {
     path: "/",
@@ -38,25 +45,55 @@ export const routeConfig = [
   },
 ];
 
-const Routes = ({ ...props }) => (
-  <Router>
-    <Header />
-    <div className="content">
-      <Breadcrumbs />
-      <ErrorBoundary>
-        <Switch>
-          {_.map(routeConfig, (route) => {
-            const Component = route.component;
-            return (
-              <Route path={route.path} key={route.path}>
-                <Component {...props} />
-              </Route>
-            );
-          })}
-        </Switch>
-      </ErrorBoundary>
-    </div>
-  </Router>
-);
+export interface IRoutesProps extends StateProps, DispatchProps {}
 
-export default Routes;
+class Routes extends React.Component<IRoutesProps> {
+  renderComponent = (route) => {
+    const { authenticated, privileges, loading } = this.props;
+    if (route.requiredPrivilege) {
+      if (loading) {
+        return <Spinner />;
+      } else if (
+        !authenticated ||
+        !privileges.includes(route.requiredPrivilege)
+      ) {
+        return <Unauthorized />;
+      }
+    }
+    const Component = route.component;
+    return <Component {...this.props} />;
+  };
+
+  render = () => (
+    <Router>
+      <Header />
+      <div className="content">
+        <Breadcrumbs />
+        <ErrorBoundary>
+          <Switch>
+            {_.map(routeConfig, (route) => {
+              return (
+                <Route path={route.path} key={route.path}>
+                  {this.renderComponent(route)}
+                </Route>
+              );
+            })}
+          </Switch>
+        </ErrorBoundary>
+      </div>
+    </Router>
+  );
+}
+
+const mapStateToProps = ({ session }) => ({
+  authenticated: session.authenticated,
+  loading: session.loading,
+  privileges: session.privileges,
+});
+
+const mapDispatchToProps = {};
+
+type StateProps = ReturnType<typeof mapStateToProps>;
+type DispatchProps = typeof mapDispatchToProps;
+
+export default connect(mapStateToProps, mapDispatchToProps)(Routes);

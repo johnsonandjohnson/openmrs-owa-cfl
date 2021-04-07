@@ -1,0 +1,46 @@
+.unauthorized {
+  &.page-container {
+    position: relative;
+    text-align: center;
+  }
+
+  .page-content {
+    display: flex;
+  }
+
+  &.page-container .page {
+    text-align: left;
+    width: 100%;
+    padding: 10px;
+    margin: 10px auto;
+    display: inline-block;
+    overflow: hidden;
+    clear: both;
+    position: relative;
+    border-radius: 3px;
+    color: red;
+    background: #fffdf0;
+    border: 1px solid red;
+  }
+
+  .toast-item-image {
+    width: initial;
+    height: initial;
+    position: initial !important;
+    top: initial;
+    margin-top: initial;
+    left: initial;
+    margin-right: 10px;
+  }
+
+  .toast-item-image-alert {
+    top: 30% !important;
+    color: red !important;
+  }
+
+  .message {
+    color: red;
+    align-items: center;
+    display: flex;
+  }
+}

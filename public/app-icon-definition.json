@@ -9,7 +9,8 @@
       "type": "link",
       "label": "Find Patient Record",
       "url": "owa/cfl-ui/index.html#/find-patient",
-      "icon": "cfl-find-patient"
+      "icon": "cfl-find-patient",
+      "requiredPrivilege": "App: coreapps.findPatient"
     },
     {
       "id": "demoapp.homepageLink",
@@ -17,7 +18,8 @@
       "type": "link",
       "label": "Find Caregiver Record",
       "url": "owa/cfl-ui/index.html#/find-caregiver",
-      "icon": "cfl-find-caregiver"
+      "icon": "cfl-find-caregiver",
+      "requiredPrivilege": "App: coreapps.findPerson"
     },
     {
       "id": "demoapp.homepageLink",
@@ -25,7 +27,8 @@
       "type": "link",
       "label": "CFL Register Patient",
       "url": "owa/cfl-ui/index.html#/register-patient",
-      "icon": "cfl-register-patient"
+      "icon": "cfl-register-patient",
+      "requiredPrivilege": "App: registrationapp.registerPatient"
     }
   ]
 }

@@ -14,6 +14,8 @@ const initialState = {
   errorMessage: null,
   session: null,
   loginLocations: [],
+  authenticated: false,
+  privileges: [],
 };
 
 const reducer = (state = initialState, action) => {
@@ -37,8 +39,15 @@ const reducer = (state = initialState, action) => {
         errorMessage: action.payload.message,
       };
     case SUCCESS(ACTION_TYPES.GET_SESSION):
+      const authenticated = action.payload.data.authenticated;
       return {
         ...initialState,
+        authenticated,
+        privileges: authenticated
+          ? action.payload.data.user.privileges.map((p: any) =>
+              p.name ? p.name : p.display
+            )
+          : [],
         session: action.payload.data,
       };
     case SUCCESS(ACTION_TYPES.GET_LOGIN_LOCATIONS):
