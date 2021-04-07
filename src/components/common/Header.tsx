@@ -1,15 +1,8 @@
-import logo from "../../img/logo.png";
 import "./Header.scss";
-import { ROOT_URL } from "../../shared/constants/openmrs";
+import { Header as OpenMRSHeader } from "@openmrs/react-components";
 
 const Header = () => {
-  return (
-    <header className="header">
-      <a href={ROOT_URL}>
-        <img src={logo} alt="logo" className="logo" />
-      </a>
-    </header>
-  );
+  return <OpenMRSHeader />;
 };
 
 export default Header;

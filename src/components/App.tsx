@@ -16,10 +16,11 @@ import {
   FIND_PATIENT_TABLE_COLUMNS_SETTING,
   FIND_PATIENT_TABLE_COLUMNS_SETTING_DESCRIPTION,
   getDefaultValue,
-  REGISTRATION_SETTING_PREFIX,
   REGISTRATION_SETTINGS,
 } from "../shared/constants/setting";
 import { getSetting } from "../shared/util/setting-util"; //Add this line Here
+import "bootstrap/dist/css/bootstrap.min.css";
+import "../assets/css/font-awesome-3.0.2.min.css";
 
 export interface IAppProps extends StateProps, DispatchProps {}
 
@@ -65,7 +66,7 @@ class App extends React.Component<IAppProps> {
 
   render() {
     return (
-      <div className="app">
+      <div id="app" className="app">
         <Routes />
         <ScrollUpButton />
       </div>

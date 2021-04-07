@@ -7,6 +7,8 @@ import settings from "./setttings";
 import location from "./location";
 import relationshipType from "./relationship-type";
 import registration from "./registration";
+import { reducers as openmrsReducers } from "@openmrs/react-components";
+import { reducer as reduxFormReducer } from "redux-form";
 
 export default combineReducers({
   patient,
@@ -17,4 +19,6 @@ export default combineReducers({
   location,
   relationshipType,
   registration,
+  openmrs: openmrsReducers,
+  form: reduxFormReducer,
 });

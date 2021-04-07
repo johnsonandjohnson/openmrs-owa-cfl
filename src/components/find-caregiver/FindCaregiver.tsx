@@ -5,7 +5,7 @@ import _ from "lodash";
 import { Form, FormGroup, Input, Spinner } from "reactstrap";
 import "./FindCaregiver.scss";
 import { FormattedMessage, injectIntl } from "react-intl";
-import searchIcon from "../../img/search.png";
+import searchIcon from "../../assets/img/search.png";
 import { columnContent } from "../../shared/util/cfl-person-util";
 import { DEFAULT_FIND_CAREGIVER_TABLE_COLUMNS } from "../../shared/constants/patient";
 import {

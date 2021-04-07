@@ -19,8 +19,8 @@ import {
   extractPatientRelationships,
   setValueOnChange,
 } from "../../shared/util/patient-util";
-import Check from "../../img/check.svg";
-import CheckCircle from "../../img/check-circle.svg";
+import Check from "../../assets/img/check.svg";
+import CheckCircle from "../../assets/img/check-circle.svg";
 import PhoneInput from "react-phone-number-input/input";
 import {
   editPatient,

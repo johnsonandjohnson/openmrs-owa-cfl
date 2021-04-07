@@ -1,7 +1,7 @@
 import "./Dashboard.scss";
-import findPatient from "../../img/find-patient.png";
-import findCaregiver from "../../img/find-caregiver.png";
-import registerPatient from "../../img/register-patient.png";
+import findPatient from "../../assets/img/find-patient.png";
+import findCaregiver from "../../assets/img/find-caregiver.png";
+import registerPatient from "../../assets/img/register-patient.png";
 
 import { Link } from "react-router-dom";
 import { FormattedMessage } from "react-intl";
