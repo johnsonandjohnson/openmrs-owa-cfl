@@ -15,6 +15,7 @@ export interface PagedTableProps {
   switchPage: any;
   totalCount: number;
   pageSize?: number;
+  getRecordLink?: any;
 }
 
 const switchPage = (callback, page, enabled) => (evt) => {
@@ -27,6 +28,11 @@ const MAX_PAGES_SHOWN = 5;
 const PAGE_DELTA = Math.floor((MAX_PAGES_SHOWN - 1) / 2);
 
 const PagedTable = (props: PagedTableProps) => {
+  const handleRowClick = (entity) => {
+    if (!!props.getRecordLink) {
+      window.location.href = props.getRecordLink(entity);
+    }
+  };
   const pageSize = props.pageSize || DEFAULT_PAGE_SIZE;
   const noPages = Math.ceil(props.totalCount / pageSize);
   const startingPage =
@@ -49,7 +55,7 @@ const PagedTable = (props: PagedTableProps) => {
         </thead>
         <tbody>
           {_.map(props.entities, (entity, i) => (
-            <tr key={i}>
+            <tr key={i} onClick={() => handleRowClick(entity)}>
               {_.map(props.columns, (column) => (
                 <td>{props.columnContent(entity, column)}</td>
               ))}

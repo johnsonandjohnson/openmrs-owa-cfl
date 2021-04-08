@@ -15,6 +15,7 @@ import {
 import PagedTable from "../common/PagedTable";
 import { DEFAULT_PAGE_SIZE, pageOf } from "../../redux/page.util";
 import { helperText } from "../../shared/util/table-util";
+import { PATIENT_PAGE_URL } from "../../shared/constants/openmrs";
 
 export interface ICaregiversProps extends StateProps, DispatchProps {
   intl: any;
@@ -73,6 +74,10 @@ class FindCaregiver extends React.Component<
     });
   };
 
+  getRecordLink = (entity) => {
+    return `${PATIENT_PAGE_URL}?patientId=${entity.uuid}&dashboard=person`;
+  };
+
   render() {
     return (
       <div className="find-caregiver">
@@ -123,6 +128,7 @@ class FindCaregiver extends React.Component<
                 currentPage={this.state.page}
                 switchPage={this.switchPage}
                 totalCount={this.props.totalCount}
+                getRecordLink={this.getRecordLink}
               />
             )}
           </div>

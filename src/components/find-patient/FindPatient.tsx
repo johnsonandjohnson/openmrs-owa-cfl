@@ -14,6 +14,7 @@ import {
 } from "../../shared/constants/input";
 import PagedTable from "../common/PagedTable";
 import { helperText } from "../../shared/util/table-util";
+import { PATIENT_PAGE_URL } from "../../shared/constants/openmrs";
 
 export interface IPatientsProps extends StateProps, DispatchProps {
   intl: any;
@@ -72,6 +73,10 @@ class FindPatient extends React.Component<IPatientsProps, IPatientsState> {
     );
   };
 
+  getRecordLink = (entity) => {
+    return `${PATIENT_PAGE_URL}?patientId=${entity.uuid}`;
+  };
+
   render() {
     return (
       <div className="find-patient">
@@ -118,6 +123,7 @@ class FindPatient extends React.Component<IPatientsProps, IPatientsState> {
                 currentPage={this.props.currentPage}
                 switchPage={this.switchPage}
                 totalCount={this.props.totalCount}
+                getRecordLink={this.getRecordLink}
               />
             )}
           </div>
