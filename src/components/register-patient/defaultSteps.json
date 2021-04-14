@@ -1,0 +1,243 @@
+[
+  {
+    "label": "Name",
+    "title": "Patient Demographics",
+    "subtitle": "What's the patient's name?",
+    "fields": [
+      {
+        "name": "givenName",
+        "required": true
+      },
+      {
+        "name": "middleName",
+        "required": false
+      },
+      {
+        "name": "familyName",
+        "required": true
+      }
+    ]
+  },
+  {
+    "label": "Gender",
+    "title": "Patient Demographics",
+    "subtitle": "What's the patient's gender?",
+    "fields": [
+      {
+        "name": "gender",
+        "required": true,
+        "type": "buttons",
+        "options": [
+          {
+            "label": "Male",
+            "value": "M"
+          },
+          {
+            "label": "Female",
+            "value": "F"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "label": "Birthdate",
+    "title": "Patient Demographics",
+    "subtitle": "What's the patient's birth date?",
+    "fields": [
+      {
+        "name": "birthdateDay",
+        "required": true,
+        "type": "number"
+      },
+      {
+        "name": "birthdateMonth",
+        "label": "Birthdate Month",
+        "required": true,
+        "type": "select",
+        "options": [
+          {
+            "value": "0",
+            "label": "1"
+          },
+          {
+            "value": "1",
+            "label": "2"
+          },
+          {
+            "value": "2",
+            "label": "3"
+          },
+          {
+            "value": "3",
+            "label": "4"
+          },
+          {
+            "value": "4",
+            "label": "5"
+          },
+          {
+            "value": "5",
+            "label": "6"
+          },
+          {
+            "value": "6",
+            "label": "7"
+          },
+          {
+            "value": "7",
+            "label": "8"
+          },
+          {
+            "value": "8",
+            "label": "9"
+          },
+          {
+            "value": "9",
+            "label": "10"
+          },
+          {
+            "value": "10",
+            "label": "11"
+          },
+          {
+            "value": "11",
+            "label": "12"
+          }
+        ]
+      },
+      {
+        "name": "birthdateYear",
+        "required": true,
+        "type": "number"
+      },
+      {
+        "label": "Or",
+        "type": "separator"
+      },
+      {
+        "name": "birthdateYears",
+        "required": false,
+        "type": "number"
+      },
+      {
+        "name": "birthdateMonths",
+        "required": false,
+        "type": "number"
+      }
+    ]
+  },
+  {
+    "label": "Address",
+    "title": "Patient Demographics",
+    "subtitle": "What's the patient's address?",
+    "columns": 2,
+    "fields": [
+      {
+        "name": "address1",
+        "required": false
+      },
+      {
+        "name": "address2",
+        "required": false
+      },
+      {
+        "name": "cityVillage",
+        "required": false
+      },
+      {
+        "name": "stateProvince",
+        "required": false
+      },
+      {
+        "name": "country",
+        "required": false
+      },
+      {
+        "name": "postalCode",
+        "required": false
+      }
+    ]
+  },
+  {
+    "label": "Language",
+    "title": "Patient Demographics",
+    "subtitle": "What language does the patient prefer?",
+    "fields": [
+      {
+        "name": "personLanguage",
+        "required": false,
+        "type": "select",
+        "options": [
+          "English",
+          "Marathi",
+          "Hindi"
+        ]
+      }
+    ]
+  },
+  {
+    "label": "Phone Number",
+    "title": "Patient Demographics",
+    "subtitle": "What's the patient's phone number?",
+    "fields": [
+      {
+        "name": "phoneNumber",
+        "required": false,
+        "type": "phone"
+      }
+    ]
+  },
+  {
+    "label": "Patient Location",
+    "title": "Patient Demographics",
+    "subtitle": "What's the patient's location?",
+    "fields": [
+      {
+        "name": "locationId",
+        "label": "Patient Location",
+        "required": false,
+        "type": "select",
+        "optionSource": "locations"
+      }
+    ]
+  },
+  {
+    "label": "Aadhar Number",
+    "title": "Patient Demographics",
+    "subtitle": "What's the patient's Aadhar Number?",
+    "fields": [
+      {
+        "name": "Aadhar Number",
+        "label": "Aadhar Number",
+        "required": false,
+        "type": "number"
+      }
+    ]
+  },
+  {
+    "label": "ART Number",
+    "title": "Patient Demographics",
+    "subtitle": "What's the patient's ART Number?",
+    "fields": [
+      {
+        "name": "ART Number",
+        "label": "ART Number",
+        "required": false,
+        "type": "number"
+      }
+    ]
+  },
+  {
+    "label": "Relatives",
+    "title": "Patient Demographics",
+    "subtitle": "Who is the patient related to?",
+    "fields": [
+      {
+        "name": "relatives",
+        "required": false,
+        "type": "relatives"
+      }
+    ]
+  }
+]

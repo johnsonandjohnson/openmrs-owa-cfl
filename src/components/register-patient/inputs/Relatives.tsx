@@ -2,20 +2,19 @@ import React from "react";
 import { connect } from "react-redux";
 import { FormattedMessage, injectIntl } from "react-intl";
 import { FormGroup } from "reactstrap";
-import { IPatient } from "../../../shared/models/patient";
 import _ from "lodash";
 import Plus from "../../../assets/img/plus.png";
 import Minus from "../../../assets/img/minus.png";
 import { getRelationshipTypes } from "../../../redux/reducers/relationship-type";
 import Select from "react-select";
 import { reset, search } from "../../../redux/reducers/patient";
+import Field, { IFieldProps } from "./Field";
 
-export interface IRelativesProps extends StateProps, DispatchProps {
+export interface IRelativesProps
+  extends StateProps,
+    DispatchProps,
+    IFieldProps {
   intl: any;
-  patient: IPatient;
-  onPatientChange: any;
-  stepButtons: any;
-  renderField: any;
 }
 
 const OTHER_PERSON_NAME = "otherPersonInput";
@@ -79,17 +78,6 @@ class Relatives extends React.Component<IRelativesProps, IRelativesState> {
     }
   }
 
-  validate = () => {
-    const invalidFields = _.filter(
-      rowFields,
-      (field) => field.required && !this.props.patient[field.name]
-    );
-    this.setState({
-      invalidFields,
-    });
-    return invalidFields.length === 0;
-  };
-
   addRelative = () => {
     const { relatives } = this.state;
     relatives.push({ ...emptyRelative });
@@ -99,30 +87,18 @@ class Relatives extends React.Component<IRelativesProps, IRelativesState> {
   };
 
   relationshipTypeOptions = () => {
-    return (
-      <>
-        <option
-          value=""
-          disabled
-          selected
-          hidden
-        >{`${this.props.intl.formatMessage({
-          id: "registerPatient.fields.relationshipType",
-        })}`}</option>
-        {this.props.relationshipTypes
-          .filter((relationshipType) => !relationshipType.retired)
-          .map((relationshipType) => (
-            <>
-              <option value={relationshipType.uuid + "-A"}>
-                {relationshipType.displayAIsToB}
-              </option>
-              <option value={relationshipType.uuid + "-B"}>
-                {relationshipType.displayBIsToA}
-              </option>
-            </>
-          ))}
-      </>
-    );
+    return this.props.relationshipTypes
+      .filter((relationshipType) => !relationshipType.retired)
+      .flatMap((relationshipType) => [
+        {
+          value: relationshipType.uuid + "-A",
+          label: relationshipType.displayAIsToB,
+        },
+        {
+          value: relationshipType.uuid + "-B",
+          label: relationshipType.displayBIsToA,
+        },
+      ]);
   };
 
   removeRelative = (rowNo) => () => {
@@ -178,16 +154,17 @@ class Relatives extends React.Component<IRelativesProps, IRelativesState> {
 
   relative = (relative, rowNo) => {
     return (
-      <FormGroup className="d-flex flex-row flex-wrap">
-        {rowFields.includes(relationshipTypeField) &&
-          this.props.renderField(
-            relationshipTypeField,
-            this.state.invalidFields,
-            this.relationshipTypeOptions(),
-            "col-sm-4",
-            relative[relationshipTypeField.name],
-            this.onChangeEvent(rowNo, relationshipTypeField.name)
-          )}
+      <FormGroup className="d-flex flex-row flex-wrap w-100">
+        {rowFields.includes(relationshipTypeField) && (
+          <Field
+            {...this.props}
+            field={relationshipTypeField}
+            invalidFields={this.state.invalidFields}
+            selectOptions={this.relationshipTypeOptions()}
+            value={relative[relationshipTypeField.name]}
+            onChange={this.onChangeEvent(rowNo, relationshipTypeField.name)}
+          />
+        )}
         {rowFields.includes(otherPersonField) && (
           <Select
             options={this.patientOptions(rowNo)}
@@ -217,22 +194,9 @@ class Relatives extends React.Component<IRelativesProps, IRelativesState> {
   render() {
     return (
       <>
-        <div className="step-fields relatives">
-          <div className="step-title">
-            <h2>
-              <FormattedMessage id={"registerPatient.steps.relatives.title"} />
-            </h2>
-            <p>
-              <FormattedMessage
-                id={"registerPatient.steps.relatives.subtitle"}
-              />
-            </p>
-          </div>
-          {_.map(this.state.relatives, (relative, i) =>
-            this.relative(relative, i)
-          )}
-        </div>
-        {this.props.stepButtons(this.validate)}
+        {_.map(this.state.relatives, (relative, i) =>
+          this.relative(relative, i)
+        )}
       </>
     );
   }

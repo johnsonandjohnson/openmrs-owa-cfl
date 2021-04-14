@@ -6,22 +6,19 @@ import {
   Button,
   Col,
   Form,
-  Input,
   ListGroup,
   ListGroupItem,
   Row,
+  Spinner,
 } from "reactstrap";
 import _ from "lodash";
-import { getStepCount, steps } from "./steps";
 import { IPatient } from "../../shared/models/patient";
 import {
   extractPatientData,
   extractPatientRelationships,
-  setValueOnChange,
 } from "../../shared/util/patient-util";
 import Check from "../../assets/img/check.svg";
 import CheckCircle from "../../assets/img/check-circle.svg";
-import PhoneInput from "react-phone-number-input/input";
 import {
   editPatient,
   register,
@@ -33,6 +30,14 @@ import {
   getPatientRelationships,
 } from "../../redux/reducers/patient";
 import { ROOT_URL } from "../../shared/constants/openmrs";
+import defaultSteps from "./defaultSteps.json";
+import Step from "./Step";
+import Confirm from "./Confirm";
+import {
+  getSettingValue,
+  parseJsonSetting,
+} from "../../shared/util/setting-util";
+import { REGISTRATION_STEPS_SETTING } from "../../shared/constants/setting";
 
 export interface IPatientsProps
   extends StateProps,
@@ -76,9 +81,7 @@ class RegisterPatient extends React.Component<IPatientsProps, IPatientsState> {
         };
         this.setState({
           patient,
-          validSteps: _.map(Object.getOwnPropertyNames(steps), (stepName, i) =>
-            steps[stepName] !== steps.confirm ? i : null
-          ),
+          validSteps: _.map(this.props.steps, (stepDefinition, i) => i),
         });
       } else if (
         prevProps.patientRelationships !== this.props.patientRelationships &&
@@ -127,7 +130,7 @@ class RegisterPatient extends React.Component<IPatientsProps, IPatientsState> {
     const { validSteps } = this.state;
     return (
       <ListGroup>
-        {_.map(Object.getOwnPropertyNames(steps), (stepName, i) => {
+        {_.map(this.props.steps, (stepDefinition, i) => {
           const isValid = validSteps.findIndex((s) => s === i) >= 0;
           const isActive = i === this.state.step;
           const icon = isValid ? (isActive ? CheckCircle : Check) : null;
@@ -139,77 +142,25 @@ class RegisterPatient extends React.Component<IPatientsProps, IPatientsState> {
               className={isValid ? "valid" : ""}
             >
               {icon && <img src={icon} alt="step" className="step-icon" />}
-              {this.props.intl.formatMessage({
-                id: `registerPatient.steps.${stepName}.label`,
-              })}
+              {stepDefinition.label}
             </ListGroupItem>
           );
         })}
-      </ListGroup>
-    );
-  };
-
-  renderField = (
-    field,
-    invalidFields,
-    selectOptions = null,
-    className = "",
-    value = null,
-    onChange = null
-  ) => {
-    const { intl } = this.props;
-    const { patient } = this.state;
-    const { name, required, type } = field;
-    const InputElement = type === "phone" ? PhoneInput : Input;
-    const isInvalid =
-      invalidFields.filter((field) => field["name"] === name).length > 0;
-    const hasValue = !!patient[field.name];
-    return (
-      <div className={`${className}`}>
-        <InputElement
-          name={name}
-          id={name}
-          placeholder={`${intl.formatMessage({
-            id: "registerPatient.fields." + name,
-          })} ${
-            required
-              ? intl.formatMessage({
-                  id: "registerPatient.fields.required",
-                })
-              : ""
-          }`}
-          value={value != null ? value : patient[name]}
-          onChange={
-            onChange || setValueOnChange(patient, name, this.onPatientChange)
-          }
-          required={required}
-          className={
-            "form-control " +
-            (isInvalid ? "invalid " : " ") +
-            (type === "select" && !value && !patient[name] ? "placeholder" : "")
-          }
-          type={type || "text"}
+        <ListGroupItem
+          active={this.props.steps.length === this.state.step}
+          onClick={this.onStepClick(this.props.steps.length)}
+          key={`step-${this.props.steps.length}`}
         >
-          {selectOptions}
-        </InputElement>
-        {isInvalid && (
-          <span className="error field-error">
-            {intl.formatMessage({
-              id: hasValue
-                ? `registerPatient.invalid`
-                : `registerPatient.required`,
-            })}
-          </span>
-        )}
-      </div>
+          <FormattedMessage id={`registerPatient.steps.confirm.label`} />
+        </ListGroupItem>
+      </ListGroup>
     );
   };
 
   stepForm = () => {
     return (
       <Form className="h-100 w-100">
-        {_.map(Object.getOwnPropertyNames(steps), (stepName, i) => {
-          const Component = steps[stepName];
+        {_.map(this.props.steps, (stepDefinition, i) => {
           return (
             <div
               className={`step-content ${
@@ -217,16 +168,28 @@ class RegisterPatient extends React.Component<IPatientsProps, IPatientsState> {
               }`}
               key={`step-${i}`}
             >
-              <Component
+              <Step
                 patient={this.state.patient}
-                intl={this.props.intl}
                 onPatientChange={this.onPatientChange}
                 stepButtons={this.stepButtons(i)}
-                renderField={this.renderField}
+                stepDefinition={stepDefinition}
               />
             </div>
           );
         })}
+        <div
+          className={`step-content ${
+            this.props.steps.length === this.state.step ? "" : "d-none"
+          }`}
+          key={`step-${this.props.steps.length}`}
+        >
+          <Confirm
+            patient={this.state.patient}
+            onPatientChange={this.onPatientChange}
+            stepButtons={this.stepButtons(this.props.steps.length)}
+            steps={this.props.steps}
+          />
+        </div>
       </Form>
     );
   };
@@ -242,8 +205,7 @@ class RegisterPatient extends React.Component<IPatientsProps, IPatientsState> {
   onConfirmClick = (e) => {
     if (
       !this.props.loading &&
-      this.state.validSteps.length >=
-        Object.getOwnPropertyNames(steps).length - 1
+      this.state.validSteps.length >= this.props.steps.length
     ) {
       if (this.isEdit()) {
         this.props.editPatient(this.state.patient);
@@ -254,7 +216,7 @@ class RegisterPatient extends React.Component<IPatientsProps, IPatientsState> {
   };
 
   stepButtons = (stepNumber) => (validate) => {
-    const stepCount = getStepCount();
+    const stepCount = this.props.steps.length;
     return (
       <div className="step-buttons">
         {stepNumber > 0 ? (
@@ -264,7 +226,7 @@ class RegisterPatient extends React.Component<IPatientsProps, IPatientsState> {
         ) : (
           <div />
         )}
-        {stepNumber + 1 < stepCount ? (
+        {stepNumber < stepCount ? (
           <Button
             onClick={this.onNextClick(validate)}
             disabled={stepNumber >= stepCount + 1}
@@ -278,8 +240,7 @@ class RegisterPatient extends React.Component<IPatientsProps, IPatientsState> {
             className="next"
             disabled={
               this.props.loading ||
-              this.state.validSteps.length <
-                Object.getOwnPropertyNames(steps).length - 1
+              this.state.validSteps.length < this.props.steps.length
             }
           >
             <FormattedMessage id="registerPatient.confirm" />
@@ -336,6 +297,9 @@ class RegisterPatient extends React.Component<IPatientsProps, IPatientsState> {
   };
 
   render() {
+    if (this.props.settingsLoading) {
+      return <Spinner />;
+    }
     return (
       <div className="register-patient">
         {this.state.success ? (
@@ -363,11 +327,13 @@ class RegisterPatient extends React.Component<IPatientsProps, IPatientsState> {
   }
 }
 
-const mapStateToProps = ({ registration, patient }) => ({
+const mapStateToProps = ({ registration, patient, settings }) => ({
   loading: registration.loading,
   success: registration.success,
   patient: patient.patient,
   patientRelationships: patient.patientRelationships,
+  steps: settings.registrationSteps || defaultSteps,
+  settingsLoading: settings.loading,
 });
 
 const mapDispatchToProps = {

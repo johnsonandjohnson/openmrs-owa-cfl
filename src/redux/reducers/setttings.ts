@@ -4,9 +4,14 @@ import { FAILURE, REQUEST, SUCCESS } from "../action-type.util";
 import {
   FIND_CAREGIVER_TABLE_COLUMNS_SETTING,
   FIND_PATIENT_TABLE_COLUMNS_SETTING,
+  REGISTRATION_STEPS_SETTING,
   SETTING_PREFIX,
 } from "../../shared/constants/setting";
-import { getSetting } from "../../shared/util/setting-util";
+import {
+  getSetting,
+  getSettingValue,
+  parseJsonSetting,
+} from "../../shared/util/setting-util";
 
 export const ACTION_TYPES = {
   GET_SETTINGS: "settings/GET_SETTINGS",
@@ -19,6 +24,7 @@ const initialState = {
   settings: [],
   findPatientTableColumnsSetting: {},
   findCaregiverTableColumnsSetting: {},
+  registrationSteps: null,
 };
 
 export const getSettingsState = (settings) => {
@@ -31,6 +37,10 @@ export const getSettingsState = (settings) => {
     findCaregiverTableColumnsSetting: getSetting(
       settings,
       FIND_CAREGIVER_TABLE_COLUMNS_SETTING
+    ),
+    registrationSteps: parseJsonSetting(
+      getSettingValue(settings, REGISTRATION_STEPS_SETTING),
+      null
     ),
   };
 };

@@ -9,18 +9,17 @@ import {
   DEFAULT_FIND_PATIENT_TABLE_COLUMNS,
 } from "../shared/constants/patient";
 import { TinyButton as ScrollUpButton } from "react-scroll-up-button";
-import _ from "lodash";
 import {
   FIND_CAREGIVER_TABLE_COLUMNS_SETTING,
   FIND_CAREGIVER_TABLE_COLUMNS_SETTING_DESCRIPTION,
   FIND_PATIENT_TABLE_COLUMNS_SETTING,
   FIND_PATIENT_TABLE_COLUMNS_SETTING_DESCRIPTION,
-  getDefaultValue,
-  REGISTRATION_SETTINGS,
+  REGISTRATION_STEPS_SETTING,
+  REGISTRATION_STEPS_SETTING_DESCRIPTION,
 } from "../shared/constants/setting";
-import { getSetting } from "../shared/util/setting-util"; //Add this line Here
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../assets/css/font-awesome-3.0.2.min.css";
+import defaultSteps from "./register-patient/defaultSteps.json";
 
 export interface IAppProps extends StateProps, DispatchProps {}
 
@@ -51,16 +50,13 @@ class App extends React.Component<IAppProps> {
           FIND_CAREGIVER_TABLE_COLUMNS_SETTING_DESCRIPTION
         );
       }
-      _.each(Object.getOwnPropertyNames(REGISTRATION_SETTINGS), (s) => {
-        const setting = REGISTRATION_SETTINGS[s];
-        if (!getSetting(this.props.settings, setting.name)) {
-          this.props.createSetting(
-            setting.name,
-            getDefaultValue(setting.name),
-            setting.description
-          );
-        }
-      });
+      if (!this.props.registrationStepsSetting) {
+        this.props.createSetting(
+          REGISTRATION_STEPS_SETTING,
+          JSON.stringify(defaultSteps, null, 2),
+          REGISTRATION_STEPS_SETTING_DESCRIPTION
+        );
+      }
     }
   }
 
@@ -79,6 +75,7 @@ const mapStateToProps = ({ session, settings }) => ({
   settings: settings.settings,
   findPatientTableColumnsSetting: settings.findPatientTableColumnsSetting,
   findCaregiverTableColumnsSetting: settings.findCaregiverTableColumnsSetting,
+  registrationStepsSetting: settings.registrationStepsSetting,
 });
 
 const mapDispatchToProps = { getSession, getSettings, createSetting };

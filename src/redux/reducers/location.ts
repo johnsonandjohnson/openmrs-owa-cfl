@@ -40,7 +40,7 @@ const reducer = (state = initialState, action) => {
 };
 
 // actions
-export const search = (q) => {
+export const searchLocations = (q) => {
   const requestUrl = `/openmrs/ws/rest/v1/location${!!q ? "?q=" + q : ""}`;
   return {
     type: ACTION_TYPES.SEARCH_LOCATIONS,

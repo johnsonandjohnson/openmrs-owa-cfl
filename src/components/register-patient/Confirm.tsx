@@ -1,16 +1,23 @@
 import React from "react";
 import { connect } from "react-redux";
 import { FormattedMessage, injectIntl } from "react-intl";
-import { IPatient } from "../../../shared/models/patient";
+import { IPatient } from "../../shared/models/patient";
 import { Alert } from "reactstrap";
 import _ from "lodash";
+import {
+  BIRTHDATE_FIELDS,
+  ESTIMATED_BIRTHDATE_FIELDS,
+  LOCATIONS_OPTION_SOURCE,
+  NAME_FIELDS,
+  RELATIVES_FIELD_TYPE,
+} from "./Step";
 
 export interface IConfirmProps extends StateProps, DispatchProps {
   intl: any;
   patient: IPatient;
   onPatientChange: any;
   stepButtons: any;
-  renderField: any;
+  steps: any[];
 }
 
 export interface IConfirmState {}
@@ -20,20 +27,7 @@ class Confirm extends React.Component<IConfirmProps, IConfirmState> {
 
   componentDidMount() {}
 
-  validate = () => {
-    return true;
-  };
-
-  gender = (patient) => {
-    const { intl } = this.props;
-    if (patient.gender === "M") {
-      return intl.formatMessage({ id: `registerPatient.steps.gender.male` });
-    } else if (patient.gender === "F") {
-      return intl.formatMessage({ id: `registerPatient.steps.gender.female` });
-    } else {
-      return intl.formatMessage({ id: `registerPatient.unknown` });
-    }
-  };
+  validate = () => true;
 
   birthdate = (patient) => {
     const { intl } = this.props;
@@ -68,19 +62,6 @@ class Confirm extends React.Component<IConfirmProps, IConfirmState> {
         .filter(Boolean)
         .join(" ");
     }
-  };
-
-  address = (patient) => {
-    return [
-      patient.address1,
-      patient.address2,
-      patient.cityVillage,
-      patient.stateProvince,
-      patient.country,
-      patient.postalCode,
-    ]
-      .filter(Boolean)
-      .join(", ");
   };
 
   location = (patient) => {
@@ -120,30 +101,70 @@ class Confirm extends React.Component<IConfirmProps, IConfirmState> {
     );
   };
 
-  fields = (patient) => {
-    return {
-      name: [patient.givenName, patient.middleName, patient.familyName]
-        .filter(Boolean)
-        .join(" "),
-      gender: this.gender(patient),
-      birthdate: this.birthdate(patient),
-      address: this.address(patient),
-      language: patient.personLanguage,
-      phoneNumber: patient.phoneNumber,
-      location: this.location(patient),
-      aadharNumber: patient.aadharNumber,
-      artNumber: patient.artNumber,
-      relatives: this.relatives(patient),
-    };
+  getFieldValue = (patient, field) => {
+    const val = patient[field.name];
+    if (!!field.options) {
+      const option = field.options.find(
+        (opt) => opt.value === val || opt === val
+      );
+      if (!!option) {
+        return option.label || option;
+      }
+    }
+    return val;
   };
 
-  renderField = (key, value) => {
+  getSeparator = (step) => {
+    if (step.fields.find((field) => NAME_FIELDS.includes(field.name))) {
+      return " ";
+    }
+    return ", ";
+  };
+
+  sections = (patient) => {
+    const { steps } = this.props;
+    const sections = [] as any[];
+    steps.forEach((step) => {
+      let value;
+      const separator = this.getSeparator(step);
+      if (
+        step.fields.find(
+          (field) =>
+            BIRTHDATE_FIELDS.includes(field.name) ||
+            ESTIMATED_BIRTHDATE_FIELDS.includes(field.name)
+        )
+      ) {
+        value = this.birthdate(patient);
+      } else if (
+        step.fields.find((field) => field.type === RELATIVES_FIELD_TYPE)
+      ) {
+        value = this.relatives(patient);
+      } else if (
+        step.fields.find(
+          (field) => field.optionSource === LOCATIONS_OPTION_SOURCE
+        )
+      ) {
+        value = this.location(patient);
+      } else {
+        value = step.fields
+          .filter((field) => !!field.name)
+          .map((field) => this.getFieldValue(patient, field))
+          .filter(Boolean)
+          .join(separator);
+      }
+      sections.push({
+        label: step.label,
+        value,
+      });
+    });
+    return sections;
+  };
+
+  renderField = (field) => {
     return (
       <div className="mb-3">
-        <span className="helper-text mr-3">
-          <FormattedMessage id={"registerPatient.fields." + key} />:
-        </span>
-        <span>{value}</span>
+        <span className="helper-text mr-3">{field.label}</span>
+        <span>{field.value}</span>
       </div>
     );
   };
@@ -160,9 +181,8 @@ class Confirm extends React.Component<IConfirmProps, IConfirmState> {
   };
 
   render() {
-    const fields = this.fields(this.props.patient);
-    const fieldKeys = Object.getOwnPropertyNames(fields);
-    const itemsPerColumn = Math.floor(fieldKeys.length / 2);
+    const fields = this.sections(this.props.patient);
+    const itemsPerColumn = Math.floor(fields.length / 2);
     const { errors } = this.props;
     return (
       <>
@@ -178,14 +198,14 @@ class Confirm extends React.Component<IConfirmProps, IConfirmState> {
           </div>
           <div className="row">
             <div className="col-sm-6">
-              {fieldKeys
+              {fields
                 .slice(0, itemsPerColumn)
-                .map((key) => this.renderField(key, fields[key]))}
+                .map((field) => this.renderField(field))}
             </div>
             <div className="col-sm-6">
-              {fieldKeys
+              {fields
                 .slice(itemsPerColumn)
-                .map((key) => this.renderField(key, fields[key]))}
+                .map((field) => this.renderField(field))}
             </div>
           </div>
         </div>

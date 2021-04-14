@@ -73,8 +73,6 @@ const extractFormData = (patient) => {
     other_person_uuid: validRelatives?.map(
       (relative) => relative.otherPerson.value
     ),
-    "ART Number": patient.artNumber,
-    "Aadhar Number": patient.aadharNumber,
   };
   if (
     !formData.birthdateYear &&
@@ -84,6 +82,11 @@ const extractFormData = (patient) => {
     formData.birthdate = null;
   } else {
     formData.birthdateEstimated = false;
+    formData.birthdate = [
+      formData.birthdateYear,
+      formData.birthdateMonth,
+      formData.birthdateDay,
+    ].join("-");
   }
   return formData;
 };

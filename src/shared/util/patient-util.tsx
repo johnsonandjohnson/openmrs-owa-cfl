@@ -8,7 +8,9 @@ import {
 } from "../constants/patient";
 import {
   extractAttribute,
+  extractAttributes,
   extractIdentifier,
+  extractIdentifiers,
   extractValue,
 } from "./omrs-entity-util";
 import { columnContent as personColumnContent } from "./person-util";
@@ -83,9 +85,11 @@ export const extractPatientData = (patient) => {
     personLanguage: extractAttribute(person, PERSON_LANGUAGE_ATTRIBUTE_TYPE),
     phoneNumber: extractAttribute(person, TELEPHONE_NUMBER_ATTRIBUTE_TYPE),
     locationId: extractAttribute(person, LOCATION_ATTRIBUTE_TYPE),
-    aadharNumber: extractIdentifier(patient, AADHAR_NUMBER_IDENTIFIER),
-    artNumber: extractIdentifier(patient, ART_NUMBER_IDENTIFIER),
+    ...extractAttributes(person),
+    ...extractIdentifiers(person),
   } as IPatient;
+  // patientData[AADHAR_NUMBER_IDENTIFIER] = extractIdentifier(patient, AADHAR_NUMBER_IDENTIFIER);
+  // patientData[ART_NUMBER_IDENTIFIER] = extractIdentifier(patient, ART_NUMBER_IDENTIFIER);
   return patientData;
 };
 

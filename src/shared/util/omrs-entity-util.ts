@@ -24,6 +24,19 @@ export const extractAttribute = (entity, type) => {
   return (attr && attr.value) || DEFAULT_COLUMN_VALUE;
 };
 
+export const extractAttributes = (entity) => {
+  const attributes = {};
+  return (
+    entity &&
+    entity.attributes &&
+    entity.attributes.forEach(
+      (attr) =>
+        (attributes[attr.attributeType[DISPLAY]] =
+          attr.value || DEFAULT_COLUMN_VALUE)
+    )
+  );
+};
+
 export const extractIdentifier = (entity, type) => {
   if (!entity) {
     return DEFAULT_COLUMN_VALUE;
@@ -34,4 +47,16 @@ export const extractIdentifier = (entity, type) => {
       (id) => id.identifierType[DISPLAY].toLowerCase() === type.toLowerCase()
     );
   return (id && id.identifier) || DEFAULT_COLUMN_VALUE;
+};
+
+export const extractIdentifiers = (entity) => {
+  const identifiers = {};
+  entity &&
+    entity.identifiers &&
+    entity.identifiers.forEach(
+      (id) =>
+        (identifiers[id.identifierType[DISPLAY]] =
+          id.identifier || DEFAULT_COLUMN_VALUE)
+    );
+  return identifiers;
 };
