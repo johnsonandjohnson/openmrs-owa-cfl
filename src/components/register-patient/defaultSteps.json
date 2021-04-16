@@ -168,11 +168,7 @@
         "name": "personLanguage",
         "required": false,
         "type": "select",
-        "options": [
-          "English",
-          "Marathi",
-          "Hindi"
-        ]
+        "options": ["English", "Marathi", "Hindi"]
       }
     ]
   },

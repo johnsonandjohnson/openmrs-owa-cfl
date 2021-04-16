@@ -1,3 +1,4 @@
+/** Fonts **/
 @font-face {
     font-family: "CircularStd";
     font-style: normal;
@@ -26,14 +27,7 @@
     src: url("font/CircularStd-BookItalic.otf") format("opentype");
 }
 
-body {
-    background-color: #fafafa !important;
-    max-width: none !important;
-    width: auto !important;
-    margin-top: 0 !important;
-    font-family: "CircularStd", serif !important;
-}
-
+/** Header **/
 header {
     border-radius: 0 !important;
     padding: 0 1em 0 1em;
@@ -62,20 +56,7 @@ header #user-account-menu li a {
     padding: 0 !important;
 }
 
-div#content {
-    padding: 0;
-}
-
-p {
-    font-family: CircularStd-Book;
-}
-
-div#body-wrapper {
-    padding: 1em 1em 0;
-    margin: 0;
-    background-color: transparent !important;
-}
-
+/** Apps **/
 .homeList > a.button {
     background: white !important;
     border-color: #eaeaea !important;
@@ -111,15 +92,153 @@ i.cfl-register-patient {
     content: url("img/register-patient.png");
 }
 
-form#login-form {
-    display: flex;
-    justify-content: center;
+#apps {
+    padding-left: 0 !important;
 }
 
+/** Home **/
+#content h4 {
+    font-family: CircularStd-Book !important;
+    font-size: 16px !important;
+    color: #333333 !important;
+    opacity: 0.5 !important;
+    font-weight: normal !important;
+    margin-left: 0 !important;
+    margin-top: 0 !important;
+}
+
+/** Breadcrumbs **/
 ul#breadcrumbs {
     padding: 0 1rem 0;
     margin-top: 1rem;
     margin-bottom: .5rem;
+}
+
+#breadcrumbs {
+    border-bottom: none !important;
+    color: #4e5155 !important;
+    font-size: 12px !important;
+}
+
+#breadcrumbs a {
+    font-size: 12px !important;
+    color: black !important;
+}
+
+#breadcrumbs .separator {
+    margin: 0 .5em !important;
+}
+
+/** Patient Dashboard **/
+@media only screen and (min-width: 576px) {
+    .container .dashboard .info-container:not(:first-of-type) {
+        margin-left: 200px !important;
+    }
+    .info-container {
+        max-width: calc(100% - 200px) !important;
+    }
+}
+
+.patient-header {
+    background: none !important;
+    border: none !important;
+}
+
+.info-container, .info-container > [privilege] {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: auto !important;
+    margin: 0 !important;
+    order: 2;
+}
+
+.container {
+    position: relative;
+    max-width: none !important;
+    padding: 0 !important;
+}
+
+.action-section {
+    margin-top: 10px !important;
+}
+
+.action-container {
+    order: 1;
+    width: 200px !important;
+    margin: 0 !important;
+}
+
+.dashboard {
+    background-color: inherit !important;
+    display: flex;
+    flex-flow: row;
+    flex-wrap: wrap;
+    margin-left: -15px;
+}
+
+.info-section {
+    width: 280px !important;
+    min-height: 260px;
+    background-color: white !important;
+    margin-left: 15px !important;
+    margin-bottom: 15px !important;
+}
+
+.info-header {
+    border-bottom: 4px solid #00455C !important;
+    min-height: 34px;
+    margin: 5px 10px 0;
+    padding-bottom: 5px;
+}
+
+.info-header h3 {
+    text-transform: lowercase !important;
+}
+.info-header h3::first-letter {
+    text-transform: capitalize !important;
+}
+
+.info-body {
+    background: none !important;
+    background-color: inherit !important;
+    border: none !important;
+}
+
+.dashboard .action-section h3 {
+    border: none !important;
+}
+
+.dashboard .action-section h3::before {
+    content: none !important;
+}
+
+/** Common **/
+body {
+    background-color: #fafafa !important;
+    max-width: none !important;
+    width: auto !important;
+    margin-top: 0 !important;
+    font-family: "CircularStd", serif !important;
+}
+
+div#content {
+    padding: 0;
+}
+
+p {
+    font-family: CircularStd-Book;
+}
+
+div#body-wrapper {
+    padding: 1em 1em 0;
+    margin: 0;
+    background-color: transparent !important;
+}
+
+form#login-form {
+    display: flex;
+    justify-content: center;
 }
 
 @media only screen and (min-width: 576px) {
@@ -129,6 +248,10 @@ ul#breadcrumbs {
     div#body-wrapper, ul#breadcrumbs {
         padding: 0 2rem 0;
     }
+    .container > .dashboard {
+        margin-right: -2rem;
+        max-width: 500px;
+    }
 }
 @media only screen and (min-width: 768px) {
     header {
@@ -136,6 +259,9 @@ ul#breadcrumbs {
     }
     div#body-wrapper, ul#breadcrumbs {
         padding: 0 4rem 0;
+    }
+    .container > .dashboard {
+        margin-right: -4rem;
     }
 }
 @media only screen and (min-width: 992px) {
@@ -154,32 +280,19 @@ ul#breadcrumbs {
         padding: 0 8rem 0;
     }
 }
-
-#content h4 {
-    font-family: CircularStd-Book !important;
-    font-size: 16px !important;
-    color: #333333 !important;
-    opacity: 0.5 !important;
-    font-weight: normal !important;
-    margin-left: 0 !important;
-    margin-top: 0 !important;
+/** Patient Dashboard cols **/
+@media only screen and (min-width: 860px) {
+    .container > .dashboard {
+        max-width: 800px;
+    }
 }
-
-#breadcrumbs {
-    border-bottom: none !important;
-    color: #4e5155 !important;
-    font-size: 12px !important;
+@media only screen and (min-width: 1200px) {
+    .container > .dashboard {
+        max-width: 1100px;
+    }
 }
-
-#breadcrumbs a {
-    font-size: 12px !important;
-    color: black !important;
-}
-
-#breadcrumbs .separator {
-    margin: 0 .5em !important;
-}
-
-#apps {
-    padding-left: 0 !important;
+@media only screen and (min-width: 1580px) {
+    .container > .dashboard {
+        max-width: 1400px;
+    }
 }
