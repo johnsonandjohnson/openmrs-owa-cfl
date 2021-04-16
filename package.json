@@ -4,6 +4,7 @@
   "private": true,
   "homepage": "./",
   "dependencies": {
+    "@bit/soldevelo-omrs.cfl-components.customize": "^1.0.5",
     "@babel/core": "7.12.3",
     "@openmrs/react-components": "^1.5.2",
     "@pmmmwh/react-refresh-webpack-plugin": "0.4.3",

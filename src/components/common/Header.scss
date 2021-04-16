@@ -1,5 +1,5 @@
-// default header css
-header {
+// default #app header css
+#app header {
   position: relative;
   background-color: #00473f;
   color: #ccc;
@@ -11,7 +11,7 @@ header {
   border-radius: 5px;
 }
 
-header .app-title {
+#app header .app-title {
   display: block;
   float: right;
   color: #eeeeee;
@@ -22,53 +22,53 @@ header .app-title {
   padding-right: 5px;
 }
 
-header:before,
-header:after {
+#app header:before,
+#app header:after {
   content: " ";
   display: table;
 }
 
-header:after {
+#app header:after {
   clear: both;
 }
 
-header a,
-header a:visited,
-header a:hover,
-header a:link {
+#app header a,
+#app header a:visited,
+#app header a:hover,
+#app header a:link {
   color: white;
 }
 
-header h1 {
+#app header h1 {
   color: #fff;
   margin: 0;
   padding: 10px;
 }
 
-header .logo {
+#app header .logo {
   float: left;
   margin: 4px;
 }
 
-header .logo img {
+#app header .logo img {
   width: 120px;
 }
 
-header .user-options {
+#app header .user-options {
   text-align: right;
 }
 
-header .user-options li {
+#app header .user-options li {
   display: inline-block;
   margin: 10px 0 10px 20px;
 }
 
-header .user-options li.change-location,
-header .user-options li.logout {
+#app header .user-options li.change-location,
+#app header .user-options li.logout {
   color: white;
 }
 
-header .user-options li.change-location {
+#app header .user-options li.change-location {
   border: 1px solid #006056;
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
@@ -77,21 +77,21 @@ header .user-options li.change-location {
   border-radius: 3px;
 }
 
-header .user-options li.change-location a {
+#app header .user-options li.change-location a {
   display: block;
 }
 
-header .user-options li.change-location:hover,
-header .user-options li.change-location .focus {
+#app header .user-options li.change-location:hover,
+#app header .user-options li.change-location .focus {
   background: #006056;
 }
 
-header .user-options li.change-location:hover a:hover,
-header .user-options li.change-location .focus a:hover {
+#app header .user-options li.change-location:hover a:hover,
+#app header .user-options li.change-location .focus a:hover {
   text-decoration: none;
 }
 
-header #session-location {
+#app header #session-location {
   position: absolute;
   display: none;
   top: 60px;
@@ -108,11 +108,11 @@ header #session-location {
   z-index: 1;
 }
 
-header #session-location .select {
+#app header #session-location .select {
   font-size: 1em;
 }
 
-header #session-location li {
+#app header #session-location li {
   width: 239px;
 }
 
@@ -120,30 +120,30 @@ i.link {
   font-size: 0.7em;
 }
 
-// CFL's header css
-header {
+// CFL's #app header css
+#app header {
   background-color: #00455c;
   color: white;
 }
 
-header .navbar {
+#app header .navbar {
   height: auto;
 }
 
-header .user-options li.change-location {
+#app header .user-options li.change-location {
   border: none;
 }
 
-header .user-options li.change-location:hover,
-header .user-options li.change-location .focus {
+#app header .user-options li.change-location:hover,
+#app header .user-options li.change-location .focus {
   background: #10708e;
 }
 
-header #session-location {
+#app header #session-location {
   border: 2px solid #10708e;
 }
 
-header a:active,
+#app header a:active,
 a:hover {
   text-decoration: none;
 }
@@ -152,7 +152,7 @@ a:hover {
   color: #fff !important;
 }
 
-header {
+#app header {
   background-color: #00455c;
   padding-bottom: 8px;
   padding-left: 16px;
@@ -160,28 +160,28 @@ header {
   padding-top: 8px;
 }
 
-header .logo {
+#app header .logo {
   max-height: initial;
   margin: 4px;
 }
 
-header .user-options {
+#app header .user-options {
   margin-top: 10px;
   margin-right: 0;
 }
 
-header .location-container {
+#app header .location-container {
   border: 2px solid #10708e;
   padding: 0 20px;
   font-size: 0.8em;
 }
 
-header .location-container li {
+#app header .location-container li {
   width: 30%;
   margin: 0 10px !important;
 }
 
-header #user-account-menu li a:hover,
+#app header #user-account-menu li a:hover,
 .location-container li.selected,
 .location-container li:hover,
 #session-location li:hover,
@@ -190,7 +190,7 @@ header #user-account-menu li a:hover,
   color: #fff;
 }
 
-header #user-account-menu {
+#app header #user-account-menu {
   position: absolute;
   background: #fff;
   color: #10708e;
@@ -199,48 +199,48 @@ header #user-account-menu {
   padding: 5px 10px 5px 10px;
 }
 
-header #user-account-menu li {
+#app header #user-account-menu li {
   margin: 10px;
   padding: 0;
 }
 
-header #user-account-menu li a {
+#app header #user-account-menu li a {
   padding: 5px;
   background: #fff;
   color: #10708e;
 }
 
-header .location-container li,
+#app header .location-container li,
 #session-location li {
   color: #10708e;
 }
 
 // overrides
-header {
+#app header {
   border-radius: 0 !important;
-  padding: 0 1em 0 1em;
+  padding: 0 1em 0 1em !important;
 }
 
-header .logo {
+#app header .logo {
   margin: 5px 0 !important;
 }
 
-header .logo img {
+#app header .logo img {
   content: url("../../assets/img/logo.png");
   height: 30px !important;
   width: auto !important;
 }
 
-header nav.navbar {
+#app header nav.navbar {
   padding: 0 !important;
 }
 
-header .user-options li {
+#app header .user-options li {
   margin-top: 7px !important;
   margin-bottom: 0 !important;
 }
 
-header .user-options li i {
+#app header .user-options li i {
   display: inline-block;
   width: 1.25em;
   text-align: center;
@@ -249,36 +249,36 @@ header .user-options li i {
   margin-left: 0.4em;
 }
 
-header i.small {
+#app header i.small {
   font-size: 1.2em !important;
 }
 
-header #user-account-menu li a {
+#app header #user-account-menu li a {
   padding: 0 !important;
 }
 
 @media only screen and (min-width: 576px) {
-  header {
-    padding: 0 2em 0 2em;
+  #app header {
+    padding: 0 2em 0 2em !important;
   }
 }
 @media only screen and (min-width: 768px) {
-  header {
-    padding: 0 4em 0 4em;
+  #app header {
+    padding: 0 4em 0 4em !important;
   }
 }
 @media only screen and (min-width: 992px) {
-  header {
-    padding: 0 6em 0 6em;
+  #app header {
+    padding: 0 6em 0 6em !important;
   }
 }
 @media only screen and (min-width: 1280px) {
-  header {
-    padding: 0 8em 0 8em;
+  #app header {
+    padding: 0 8em 0 8em !important;
   }
 }
 
-header .user-options {
+#app header .user-options {
   margin-top: 0 !important;
   margin-bottom: 0 !important;
 }

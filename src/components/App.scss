@@ -118,4 +118,15 @@
     color: #333333;
     opacity: 0.5;
   }
+
+  .form-control {
+    border: 1px solid #ced4da !important;
+    outline: none !important;
+  }
+
+  input:focus,
+  textarea:focus,
+  select:focus {
+    outline: none !important;
+  }
 }

@@ -12,6 +12,7 @@ import { connect } from "react-redux";
 import Unauthorized from "./common/Unauthorized";
 import { PRIVILEGES } from "../shared/constants/privilege";
 import { Spinner } from "reactstrap";
+import Customize from "@bit/soldevelo-omrs.cfl-components.customize";
 
 export const routeConfig = [
   {
@@ -66,6 +67,7 @@ class Routes extends React.Component<IRoutesProps> {
 
   render = () => (
     <Router>
+      <Customize />
       <Header />
       <div className="content">
         <Breadcrumbs />
