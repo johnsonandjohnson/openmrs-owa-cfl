@@ -11,9 +11,7 @@ $(function () {
   // move all the widgets to the first column
   const firstInfoContainer = $(".info-container:first-of-type");
   if (!firstInfoContainer.is(":empty")) {
-    const remainingContainersChildren = $(
-      ".info-container:not(:first-of-type) > [privilege] > *, .info-container:not(:first-of-type) > *"
-    );
+    const remainingContainersChildren = $(".info-container .info-section");
     remainingContainersChildren.detach().appendTo(firstInfoContainer);
   }
   // re-design Patient header
@@ -77,7 +75,10 @@ $(function () {
   }
   // replace 'None' with '-NO DATA-' in each widget
   $(".info-body").each(function (index) {
-    const text = $(this).find("li").text().trim() || $(this).text().trim();
+    const text =
+      $(this).find("li").text().trim() ||
+      $(this).find("p").text().trim() ||
+      $(this).text().trim();
     if (text === "None" || text === "Unknown" || text.length === 0) {
       $(this).replaceWith(
         "<div class='info-body empty'><span class='label'>-NO DATA-</span></div>"
