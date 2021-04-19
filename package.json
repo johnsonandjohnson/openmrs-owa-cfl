@@ -110,7 +110,7 @@
     "postbuild": "./postbuild.sh",
     "build:dev": "node scripts/build.js && ./deploy-dev.sh",
     "test": "node scripts/test.js",
-    "prettier:format": "prettier --write \"src/**/*.{json,ts,tsx,css,scss}\""
+    "prettier:format": "prettier --write \"(src|public)/**/*.{json,ts,tsx,css,scss,js}\""
   },
   "eslintConfig": {
     "extends": [

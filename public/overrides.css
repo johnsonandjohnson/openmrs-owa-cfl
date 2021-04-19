@@ -1,298 +1,343 @@
 /** Fonts **/
 @font-face {
-    font-family: "CircularStd";
-    font-style: normal;
-    font-weight: normal;
-    src: url("font/CircularStd-Medium.otf") format("opentype");
+  font-family: "CircularStd";
+  font-style: normal;
+  font-weight: normal;
+  src: url("font/CircularStd-Medium.otf") format("opentype");
 }
 
 @font-face {
-    font-family: "CircularStd";
-    font-style: normal;
-    font-weight: bold;
-    src: url("font/CircularStd-Bold.otf") format("opentype");
+  font-family: "CircularStd";
+  font-style: normal;
+  font-weight: bold;
+  src: url("font/CircularStd-Bold.otf") format("opentype");
 }
 
 @font-face {
-    font-family: "CircularStd-Book";
-    font-style: normal;
-    font-weight: normal;
-    src: url("font/CircularStd-Book.otf") format("opentype");
+  font-family: "CircularStd-Book";
+  font-style: normal;
+  font-weight: normal;
+  src: url("font/CircularStd-Book.otf") format("opentype");
 }
 
 @font-face {
-    font-family: "CircularStd-Book";
-    font-style: italic;
-    font-weight: normal;
-    src: url("font/CircularStd-BookItalic.otf") format("opentype");
+  font-family: "CircularStd-Book";
+  font-style: italic;
+  font-weight: normal;
+  src: url("font/CircularStd-BookItalic.otf") format("opentype");
 }
 
 /** Header **/
 header {
-    border-radius: 0 !important;
-    padding: 0 1em 0 1em;
+  border-radius: 0 !important;
+  padding: 0 1em 0 1em;
 }
 
 header .logo {
-    margin: 5px 0 !important;
+  margin: 5px 0 !important;
 }
 
 header .logo img {
-    content: url("img/logo.png");
-    height: 30px !important;
-    width: auto !important;
+  content: url("img/logo.png");
+  height: 30px !important;
+  width: auto !important;
 }
 
 header nav.navbar {
-    padding: 0 !important;
+  padding: 0 !important;
 }
 
 header .user-options li {
-    margin-top: 0 !important;
-    margin-bottom: 0 !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
 }
 
 header #user-account-menu li a {
-    padding: 0 !important;
+  padding: 0 !important;
 }
 
 /** Apps **/
 .homeList > a.button {
-    background: white !important;
-    border-color: #eaeaea !important;
-    font-family: CircularStd-Book !important;
-    color: black !important;
-    font-size: 14px !important;
-    padding: 0 25px 10px 25px !important;
-    height: 145px !important;
+  background: white !important;
+  border-color: #eaeaea !important;
+  font-family: CircularStd-Book !important;
+  color: black !important;
+  font-size: 14px !important;
+  padding: 0 25px 10px 25px !important;
+  height: 145px !important;
 }
 
 .homeList > a.button > i {
-    margin: 25px auto 15px auto !important;
-    color: #7F7F7F !important;
-    height: 45px !important;
-    font-size: 40px !important;
-    padding: 0 !important;
-    line-height: normal !important;
+  margin: 25px auto 15px auto !important;
+  color: #7f7f7f !important;
+  height: 45px !important;
+  font-size: 40px !important;
+  padding: 0 !important;
+  line-height: normal !important;
 }
 
-i[class^='cfl-'] {
-    padding: 0 !important;
+i[class^="cfl-"] {
+  padding: 0 !important;
 }
 
 i.cfl-find-patient {
-    content: url("img/find-patient.png");
+  content: url("img/find-patient.png");
 }
 
 i.cfl-find-caregiver {
-    content: url("img/find-caregiver.png");
+  content: url("img/find-caregiver.png");
 }
 
 i.cfl-register-patient {
-    content: url("img/register-patient.png");
+  content: url("img/register-patient.png");
 }
 
 #apps {
-    padding-left: 0 !important;
+  padding-left: 0 !important;
 }
 
 /** Home **/
 #content h4 {
-    font-family: CircularStd-Book !important;
-    font-size: 16px !important;
-    color: #333333 !important;
-    opacity: 0.5 !important;
-    font-weight: normal !important;
-    margin-left: 0 !important;
-    margin-top: 0 !important;
+  font-family: CircularStd-Book !important;
+  font-size: 16px !important;
+  color: #333333 !important;
+  opacity: 0.5 !important;
+  font-weight: normal !important;
+  margin-left: 0 !important;
+  margin-top: 0 !important;
 }
 
 /** Breadcrumbs **/
 ul#breadcrumbs {
-    padding: 0 1rem 0;
-    margin-top: 1rem;
-    margin-bottom: .5rem;
+  padding: 0 1rem 0;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
 }
 
 #breadcrumbs {
-    border-bottom: none !important;
-    color: #4e5155 !important;
-    font-size: 12px !important;
+  border-bottom: none !important;
+  color: #4e5155 !important;
+  font-size: 12px !important;
 }
 
 #breadcrumbs a {
-    font-size: 12px !important;
-    color: black !important;
+  font-size: 12px !important;
+  color: black !important;
 }
 
 #breadcrumbs .separator {
-    margin: 0 .5em !important;
+  margin: 0 0.5em !important;
 }
 
 /** Patient Dashboard **/
 @media only screen and (min-width: 576px) {
-    .container .dashboard .info-container:not(:first-of-type) {
-        margin-left: 200px !important;
-    }
-    .info-container {
-        max-width: calc(100% - 200px) !important;
-    }
+  .container .dashboard .info-container:not(:first-of-type) {
+    margin-left: 200px !important;
+  }
+  .info-container {
+    max-width: calc(100% - 200px) !important;
+  }
 }
 
 .patient-header {
-    background: none !important;
-    border: none !important;
+  background: none !important;
+  border: none !important;
+  font-size: 14px;
 }
 
-.info-container, .info-container > [privilege] {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    width: auto !important;
-    margin: 0 !important;
-    order: 2;
+.patient-header .label,
+.dashboard .label {
+  font-family: CircularStd-Book;
+  color: #333333;
+  opacity: 0.5;
+  display: inline-block;
+}
+
+.patient-header .label {
+  min-width: 125px;
+}
+
+.patient-header h1 {
+  font-size: 2em !important;
+  margin: 10px 0 5px 0 !important;
+}
+
+.info-container,
+.info-container > [privilege] {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: auto !important;
+  margin: 0 !important;
+  order: 2;
 }
 
 .container {
-    position: relative;
-    max-width: none !important;
-    padding: 0 !important;
+  position: relative;
+  max-width: none !important;
+  padding: 0 !important;
 }
 
 .action-section {
-    margin-top: 10px !important;
+  margin-top: 10px !important;
+  border: none !important;
+}
+
+.action-section h3 {
+  margin-left: 5px !important;
+}
+
+.action-section i {
+  margin-left: 0 !important;
 }
 
 .action-container {
-    order: 1;
-    width: 200px !important;
-    margin: 0 !important;
+  order: 1;
+  width: 200px !important;
+  margin: 0 !important;
 }
 
 .dashboard {
-    background-color: inherit !important;
-    display: flex;
-    flex-flow: row;
-    flex-wrap: wrap;
-    margin-left: -15px;
+  background-color: inherit !important;
+  display: flex;
+  flex-flow: row;
+  flex-wrap: wrap;
+  margin-left: -15px;
 }
 
 .info-section {
-    width: 280px !important;
-    min-height: 260px;
-    background-color: white !important;
-    margin-left: 15px !important;
-    margin-bottom: 15px !important;
+  width: 280px !important;
+  min-height: 260px;
+  background-color: white !important;
+  margin-left: 15px !important;
+  margin-bottom: 15px !important;
+  display: inline-flex !important;
+  flex-direction: column;
+  font-size: 14px;
 }
 
 .info-header {
-    border-bottom: 4px solid #00455C !important;
-    min-height: 34px;
-    margin: 5px 10px 0;
-    padding-bottom: 5px;
+  border-bottom: 3px solid #00455c !important;
+  min-height: 34px;
+  margin: 5px 10px 0;
+  padding-bottom: 5px;
 }
 
 .info-header h3 {
-    text-transform: lowercase !important;
+  text-transform: lowercase !important;
 }
 .info-header h3::first-letter {
-    text-transform: capitalize !important;
+  text-transform: capitalize !important;
 }
 
 .info-body {
-    background: none !important;
-    background-color: inherit !important;
-    border: none !important;
+  background: none !important;
+  background-color: inherit !important;
+  border: none !important;
+  flex: 1;
+}
+
+.info-body.empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px !important;
 }
 
 .dashboard .action-section h3 {
-    border: none !important;
+  border: none !important;
 }
 
 .dashboard .action-section h3::before {
-    content: none !important;
+  content: none !important;
 }
 
 /** Common **/
 body {
-    background-color: #fafafa !important;
-    max-width: none !important;
-    width: auto !important;
-    margin-top: 0 !important;
-    font-family: "CircularStd", serif !important;
+  background-color: #fafafa !important;
+  max-width: none !important;
+  width: auto !important;
+  margin-top: 0 !important;
+  font-family: "CircularStd", serif !important;
 }
 
 div#content {
-    padding: 0;
+  padding: 0;
 }
 
 p {
-    font-family: CircularStd-Book;
+  font-family: CircularStd-Book;
 }
 
 div#body-wrapper {
-    padding: 1em 1em 0;
-    margin: 0;
-    background-color: transparent !important;
+  padding: 1em 1em 0;
+  margin: 0;
+  background-color: transparent !important;
 }
 
 form#login-form {
-    display: flex;
-    justify-content: center;
+  display: flex;
+  justify-content: center;
 }
 
 @media only screen and (min-width: 576px) {
-    header {
-        padding: 0 2rem 0 2rem;
-    }
-    div#body-wrapper, ul#breadcrumbs {
-        padding: 0 2rem 0;
-    }
-    .container > .dashboard {
-        margin-right: -2rem;
-        max-width: 500px;
-    }
+  header {
+    padding: 0 2rem 0 2rem;
+  }
+  div#body-wrapper,
+  ul#breadcrumbs {
+    padding: 0 2rem 0;
+  }
+  .container > .dashboard {
+    margin-right: -2rem;
+    max-width: 500px;
+  }
 }
 @media only screen and (min-width: 768px) {
-    header {
-        padding: 0 4rem 0 4rem;
-    }
-    div#body-wrapper, ul#breadcrumbs {
-        padding: 0 4rem 0;
-    }
-    .container > .dashboard {
-        margin-right: -4rem;
-    }
+  header {
+    padding: 0 4rem 0 4rem;
+  }
+  div#body-wrapper,
+  ul#breadcrumbs {
+    padding: 0 4rem 0;
+  }
+  .container > .dashboard {
+    margin-right: -4rem;
+  }
 }
 @media only screen and (min-width: 992px) {
-    header {
-        padding: 0 6rem 0 6rem;
-    }
-    div#body-wrapper, ul#breadcrumbs {
-        padding: 0 6rem 0;
-    }
+  header {
+    padding: 0 6rem 0 6rem;
+  }
+  div#body-wrapper,
+  ul#breadcrumbs {
+    padding: 0 6rem 0;
+  }
 }
 @media only screen and (min-width: 1280px) {
-    header {
-        padding: 0 8rem 0 8rem;
-    }
-    div#body-wrapper, ul#breadcrumbs {
-        padding: 0 8rem 0;
-    }
+  header {
+    padding: 0 8rem 0 8rem;
+  }
+  div#body-wrapper,
+  ul#breadcrumbs {
+    padding: 0 8rem 0;
+  }
 }
 /** Patient Dashboard cols **/
 @media only screen and (min-width: 860px) {
-    .container > .dashboard {
-        max-width: 800px;
-    }
+  .container > .dashboard {
+    max-width: 800px;
+  }
 }
 @media only screen and (min-width: 1200px) {
-    .container > .dashboard {
-        max-width: 1100px;
-    }
+  .container > .dashboard {
+    max-width: 1100px;
+  }
 }
 @media only screen and (min-width: 1580px) {
-    .container > .dashboard {
-        max-width: 1400px;
-    }
+  .container > .dashboard {
+    /* max-width: 1400px; */
+    /* allow for unlimited number of widgets per row */
+    max-width: none;
+  }
 }
