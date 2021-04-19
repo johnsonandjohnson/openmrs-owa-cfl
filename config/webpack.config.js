@@ -395,7 +395,8 @@ module.exports = function (webpackEnv) {
               test: /\.(js|mjs|jsx|ts|tsx)$/,
               include: [
                 paths.appSrc,
-                path.resolve(__dirname, "../node_modules/@bit/soldevelo-omrs.cfl-components")
+                path.resolve(__dirname, "../node_modules/@bit/soldevelo-omrs.cfl-components"),
+                path.resolve(__dirname, "../node_modules/@bit/soldevelo-cfl.omrs-components")
               ],
               loader: require.resolve('babel-loader'),
               options: {

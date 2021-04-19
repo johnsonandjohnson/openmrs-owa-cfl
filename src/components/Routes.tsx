@@ -12,7 +12,7 @@ import { connect } from "react-redux";
 import Unauthorized from "./common/Unauthorized";
 import { PRIVILEGES } from "../shared/constants/privilege";
 import { Spinner } from "reactstrap";
-import Customize from "@bit/soldevelo-omrs.cfl-components.customize";
+import Customize from "@bit/soldevelo-cfl.omrs-components.customize";
 
 export const routeConfig = [
   {
