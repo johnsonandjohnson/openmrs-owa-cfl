@@ -4,8 +4,8 @@
   "private": true,
   "homepage": "./",
   "dependencies": {
-    "@bit/soldevelo-cfl.omrs-components.customize": "^1.0.6",
     "@babel/core": "7.12.3",
+    "@bit/soldevelo-cfl.omrs-components.customize": "^1.0.6",
     "@openmrs/react-components": "^1.5.2",
     "@pmmmwh/react-refresh-webpack-plugin": "0.4.3",
     "@svgr/webpack": "5.5.0",
@@ -67,6 +67,7 @@
     "postcss-safe-parser": "5.0.2",
     "prettier": "^2.2.1",
     "prompts": "2.4.0",
+    "query-string": "^7.0.0",
     "querystring": "^0.2.1",
     "react": "^16.14.0",
     "react-app-polyfill": "^2.0.0",

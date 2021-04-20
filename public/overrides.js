@@ -15,19 +15,6 @@ $(function () {
     const remainingContainersChildren = $(".info-container .info-section");
     remainingContainersChildren.detach().appendTo(firstInfoContainer);
   }
-  // replace the url of 'Patient profile'
-  const patientProfileAnchor = $("a#cfl\\.patientProfile");
-  if (!patientProfileAnchor.is(":empty")) {
-    const searchParams = new URLSearchParams(window.location.search);
-    if (searchParams.has("patientId")) {
-      patientProfileAnchor.prop(
-        "href",
-        `${CFL_UI_ROOT}index.html#/edit-patient/${searchParams.get(
-          "patientId"
-        )}`
-      );
-    }
-  }
   // re-design Patient header
   const patientHeader = $(".patient-header");
   if (!patientHeader.is(":empty")) {
@@ -86,6 +73,20 @@ $(function () {
     // append the detached status along with dialog element
     $(".patient-status .value").append(personStatusDialog);
     $(".patient-status .value").append(personStatus);
+
+    // replace the url of 'Patient profile'
+    const patientProfileAnchor = $("a#cfl\\.patientProfile");
+    if (!patientProfileAnchor.is(":empty")) {
+      const searchParams = new URLSearchParams(window.location.search);
+      if (searchParams.has("patientId")) {
+        patientProfileAnchor.prop(
+          "href",
+          `${CFL_UI_ROOT}index.html#/edit-patient/${searchParams.get(
+            "patientId"
+          )}?redirect=${window.location.href}&name=${fullName}`
+        );
+      }
+    }
   }
   // replace 'None' with '-NO DATA-' in each widget
   $(".info-body").each(function (index) {

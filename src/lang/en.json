@@ -44,7 +44,8 @@
     "personLanguage": "Language"
   },
   "editPatient": {
-    "title": "Edit Patient",
+    "title": "Patient Profile",
+    "subtitle": "Please edit Patient profile below",
     "success": {
       "subtitle": "The Patient has been saved successfully."
     }

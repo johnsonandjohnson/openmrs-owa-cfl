@@ -33,11 +33,8 @@ import { ROOT_URL } from "../../shared/constants/openmrs";
 import defaultSteps from "./defaultSteps.json";
 import Step from "./Step";
 import Confirm from "./Confirm";
-import {
-  getSettingValue,
-  parseJsonSetting,
-} from "../../shared/util/setting-util";
-import { REGISTRATION_STEPS_SETTING } from "../../shared/constants/setting";
+import queryString from "query-string";
+import { redirectUrl } from "../../shared/util/url-util";
 
 export interface IPatientsProps
   extends StateProps,
@@ -275,6 +272,7 @@ class RegisterPatient extends React.Component<IPatientsProps, IPatientsState> {
 
   success = () => {
     const isEdit = this.isEdit();
+
     return (
       <div className="ml-3 mt-2">
         <h1 className="text-success">
@@ -288,7 +286,11 @@ class RegisterPatient extends React.Component<IPatientsProps, IPatientsState> {
           />
         </div>
         <p>
-          <a href={ROOT_URL}>
+          <a
+            href={queryString.stringifyUrl({
+              url: redirectUrl(this.props.location.search),
+            })}
+          >
             <FormattedMessage id="registerPatient.success.goBack" />
           </a>
         </p>
@@ -300,6 +302,7 @@ class RegisterPatient extends React.Component<IPatientsProps, IPatientsState> {
     if (this.props.settingsLoading) {
       return <Spinner />;
     }
+    const isEdit = this.isEdit();
     return (
       <div className="register-patient">
         {this.state.success ? (
@@ -307,10 +310,14 @@ class RegisterPatient extends React.Component<IPatientsProps, IPatientsState> {
         ) : (
           <>
             <h1>
-              <FormattedMessage id="registerPatient.title" />
+              <FormattedMessage
+                id={`${isEdit ? "editPatient" : "registerPatient"}.title`}
+              />
             </h1>
             <div className="helper-text">
-              <FormattedMessage id="registerPatient.subtitle" />
+              <FormattedMessage
+                id={`${isEdit ? "editPatient" : "registerPatient"}.subtitle`}
+              />
             </div>
             <Row className="mt-2">
               <Col xs={4} sm={3} className="step-list">

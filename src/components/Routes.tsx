@@ -1,5 +1,10 @@
 import React from "react";
-import { HashRouter as Router, Route, Switch } from "react-router-dom";
+import {
+  HashRouter as Router,
+  Route,
+  RouteComponentProps,
+  Switch,
+} from "react-router-dom";
 import FindPatient from "./find-patient/FindPatient";
 import Dashboard from "./dashboard/Dashboard";
 import Breadcrumbs from "./common/Breadcrumbs";

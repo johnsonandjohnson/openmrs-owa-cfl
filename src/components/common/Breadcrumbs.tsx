@@ -1,12 +1,12 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import useBreadcrumbs from "use-react-router-breadcrumbs";
 import "./Breadcrumbs.scss";
 import { routeConfig } from "../Routes";
 import { FormattedMessage } from "react-intl";
-import { ROOT_URL } from "../../shared/constants/openmrs";
+import { nameParam, redirectUrl } from "../../shared/util/url-util";
 
-const Breadcrumbs = () => {
+const Breadcrumbs = (props) => {
   const breadcrumbs = useBreadcrumbs(routeConfig);
   return (
     <div className="breadcrumbs">
@@ -17,8 +17,10 @@ const Breadcrumbs = () => {
           id.indexOf(".") >= 0 && (
             <span key={key}>
               {i === 0 ? (
-                <a href={ROOT_URL}>
-                  <FormattedMessage id={"home.title"} />
+                <a href={redirectUrl(props.location.search)}>
+                  {nameParam(props.location.search) || (
+                    <FormattedMessage id={"home.title"} />
+                  )}
                 </a>
               ) : (
                 <Link to={match.url}>
@@ -37,4 +39,4 @@ const Breadcrumbs = () => {
   );
 };
 
-export default Breadcrumbs;
+export default withRouter(Breadcrumbs);
