@@ -37,7 +37,8 @@ conf.plugins = conf
         !(plugin instanceof ReactRefreshPlugin)
     )
 
-conf.output.path = path.join(require('os').homedir(), '.cfl-dev/owa/cfl-ui');
+const OUTPUT_PATH = path.join(require('os').homedir(), '.cfl-dev/owa/cfl-ui');
+conf.output.path = OUTPUT_PATH;
 
 conf.output.publicPath = process.env.PUBLIC_URL;
 
@@ -46,6 +47,7 @@ webpack(conf).watch({}, (err, stats) => {
         console.error(err);
     } else {
         copyPublicFolder();
+        copyPublicFolder(OUTPUT_PATH);
     }
     console.error(stats.toString({
         chunks: false,
@@ -53,8 +55,8 @@ webpack(conf).watch({}, (err, stats) => {
     }));
 });
 
-function copyPublicFolder() {
-    fs.copySync(paths.appPublic, paths.appBuild, {
+function copyPublicFolder(path = paths.appBuild) {
+    fs.copySync(paths.appPublic, path, {
         dereference: true,
         filter: file => file !== paths.appHtml
     });
