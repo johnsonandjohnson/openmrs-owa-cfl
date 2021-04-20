@@ -1,4 +1,5 @@
 $(function () {
+  const CFL_UI_ROOT = "/openmrs/owa/cfl-ui/";
   /** Home **/
   // add missing breadcrumb for the Homepage
   const breadcrumbs = $("#breadcrumbs");
@@ -13,6 +14,19 @@ $(function () {
   if (!firstInfoContainer.is(":empty")) {
     const remainingContainersChildren = $(".info-container .info-section");
     remainingContainersChildren.detach().appendTo(firstInfoContainer);
+  }
+  // replace the url of 'Patient profile'
+  const patientProfileAnchor = $("a#cfl\\.patientProfile");
+  if (!patientProfileAnchor.is(":empty")) {
+    const searchParams = new URLSearchParams(window.location.search);
+    if (searchParams.has("patientId")) {
+      patientProfileAnchor.prop(
+        "href",
+        `${CFL_UI_ROOT}index.html#/edit-patient/${searchParams.get(
+          "patientId"
+        )}`
+      );
+    }
   }
   // re-design Patient header
   const patientHeader = $(".patient-header");
