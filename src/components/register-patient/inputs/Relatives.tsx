@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { FormattedMessage, injectIntl } from "react-intl";
+import { injectIntl } from "react-intl";
 import { FormGroup } from "reactstrap";
 import _ from "lodash";
 import Plus from "../../../assets/img/plus.png";

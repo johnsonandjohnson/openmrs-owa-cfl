@@ -1,6 +1,4 @@
 import {
-  AADHAR_NUMBER_IDENTIFIER,
-  ART_NUMBER_IDENTIFIER,
   LOCATION_ATTRIBUTE_TYPE,
   PATIENT_IDENTIFIER,
   PERSON_LANGUAGE_ATTRIBUTE_TYPE,
@@ -9,7 +7,6 @@ import {
 import {
   extractAttribute,
   extractAttributes,
-  extractIdentifier,
   extractIdentifiers,
   extractValue,
 } from "./omrs-entity-util";

@@ -29,7 +29,6 @@ import {
   getPatient,
   getPatientRelationships,
 } from "../../redux/reducers/patient";
-import { ROOT_URL } from "../../shared/constants/openmrs";
 import defaultSteps from "./defaultSteps.json";
 import Step from "./Step";
 import Confirm from "./Confirm";

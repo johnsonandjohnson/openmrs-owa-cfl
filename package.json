@@ -110,6 +110,7 @@
     "build": "node scripts/build.js",
     "postbuild": "./postbuild.sh",
     "build:dev": "node scripts/build.js && ./deploy-dev.sh",
+    "watch": "node scripts/watch.js",
     "test": "node scripts/test.js",
     "prettier:format": "prettier --write \"(src|public)/**/*.{json,ts,tsx,css,scss,js}\""
   },
