@@ -1,5 +1,8 @@
 $(function () {
   const CFL_UI_ROOT = "/openmrs/owa/cfl-ui/";
+  /** Common **/
+  // replace the logo src
+  $("header .logo img").prop("src", `${CFL_UI_ROOT}img/logo.png`);
   /** Home **/
   // add missing breadcrumb for the Homepage
   const breadcrumbs = $("#breadcrumbs");
