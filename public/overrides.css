@@ -75,6 +75,11 @@ header #user-account-menu li a {
   padding: 0 !important;
 }
 
+header #session-location {
+  top: 40px !important;
+  left: calc(100vw - 853px) !important;
+}
+
 /** Apps **/
 .homeList > a.button {
   background: white !important;
