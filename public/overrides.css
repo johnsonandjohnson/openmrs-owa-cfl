@@ -27,6 +27,11 @@
   src: url("font/CircularStd-BookItalic.otf") format("opentype");
 }
 
+/** Common **/
+html {
+  font-size: 16px;
+}
+
 /** Header **/
 header {
   border-radius: 0 !important;
@@ -122,7 +127,7 @@ i.cfl-register-patient {
 }
 
 /** Breadcrumbs **/
-ul#breadcrumbs {
+#breadcrumbs {
   padding: 0 1rem 0;
   margin-top: 1rem;
   margin-bottom: 0.5rem;
@@ -283,7 +288,8 @@ p {
   font-family: CircularStd-Book;
 }
 
-div#body-wrapper {
+div#body-wrapper,
+div.body-wrapper {
   padding: 1em 1em 0;
   margin: 0;
   background-color: transparent !important;
@@ -299,7 +305,8 @@ form#login-form {
     padding: 0 2em 0 2em !important;
   }
   div#body-wrapper,
-  ul#breadcrumbs {
+  div.body-wrapper,
+  #breadcrumbs {
     padding: 0 2rem 0;
   }
   .container > .dashboard {
@@ -312,7 +319,8 @@ form#login-form {
     padding: 0 4em 0 4em !important;
   }
   div#body-wrapper,
-  ul#breadcrumbs {
+  div.body-wrapper,
+  #breadcrumbs {
     padding: 0 4rem 0;
   }
   .container > .dashboard {
@@ -324,7 +332,8 @@ form#login-form {
     padding: 0 6em 0 6em !important;
   }
   div#body-wrapper,
-  ul#breadcrumbs {
+  div.body-wrapper,
+  #breadcrumbs {
     padding: 0 6rem 0;
   }
 }
@@ -333,7 +342,8 @@ form#login-form {
     padding: 0 8em 0 8em !important;
   }
   div#body-wrapper,
-  ul#breadcrumbs {
+  div.body-wrapper,
+  #breadcrumbs {
     padding: 0 8rem 0;
   }
 }
