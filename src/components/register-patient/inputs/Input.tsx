@@ -29,6 +29,11 @@ class Input extends React.Component<IInputProps, IInputState> {
     const { name, required, type, label } = field;
     const InputElement = type === "phone" ? PhoneInput : ReactstrapInput;
     const hasValue = !!patient[field.name];
+    const additionalProps = {};
+    if (type === "number") {
+      // Firefox doesn't support number inputs
+      additionalProps["pattern"] = "[1-9]";
+    }
     return (
       <div className={`${className}`}>
         <InputElement
@@ -54,6 +59,7 @@ class Input extends React.Component<IInputProps, IInputState> {
           required={required}
           className={"form-control " + (isDirty && isInvalid ? "invalid" : "")}
           type={type || "text"}
+          {...additionalProps}
         />
         {isDirty && isInvalid && <ValidationError hasValue={hasValue} />}
       </div>

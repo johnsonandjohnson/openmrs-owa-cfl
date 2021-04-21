@@ -52,7 +52,7 @@
   },
   "registerPatient": {
     "title": "Register a Patient",
-    "subtitle": "Please register patient below.",
+    "subtitle": "Please register patient below",
     "steps": {
       "name": {
         "label": "Name",
