@@ -162,7 +162,7 @@ class Confirm extends React.Component<IConfirmProps, IConfirmState> {
 
   renderField = (field) => {
     return (
-      <div className="mb-3">
+      <div className="mb-3" key={`field-${field.label}`}>
         <span className="helper-text mr-3">{field.label}</span>
         <span>{field.value}</span>
       </div>

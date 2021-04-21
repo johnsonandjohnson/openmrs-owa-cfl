@@ -10,13 +10,16 @@ const DEFAULT_INPUT = Input;
 export interface IFieldProps {
   patient: any;
   field: any;
-  invalidFields: any;
   className?: any;
   value?: any;
   onChange?: any;
   onPatientChange: any;
   selectOptions?: any[];
+  isInvalid: boolean;
+  isDirty: boolean;
 }
+
+export interface IFieldState {}
 
 export const inputsByType = {
   buttons: Buttons,

@@ -3,16 +3,23 @@ import { connect } from "react-redux";
 import { injectIntl } from "react-intl";
 import { Input as ReactstrapInput } from "reactstrap";
 import { setValueOnChange } from "../../../shared/util/patient-util";
-import { IFieldProps } from "./Field";
+import { IFieldProps, IFieldState } from "./Field";
 import ValidationError from "./ValidationError";
 
 export interface ISelectProps extends StateProps, DispatchProps, IFieldProps {
   intl: any;
 }
 
-export interface ISelectState {}
+export interface ISelectState extends IFieldState {}
 
 class Select extends React.Component<ISelectProps, ISelectState> {
+  setDirty = (callback) => {
+    this.setState({
+      isDirty: true,
+    });
+    callback();
+  };
+
   getSelectOptions = (fieldDefinition) => {
     const { intl, selectOptions } = this.props;
     const { name, options, required, label } = fieldDefinition;
@@ -37,7 +44,10 @@ class Select extends React.Component<ISelectProps, ISelectState> {
             </option>
           }
           {opts.map((option) => (
-            <option value={option.value || option}>
+            <option
+              value={option.value || option}
+              key={`option-${option.value || option}`}
+            >
               {option.label || option}
             </option>
           ))}
@@ -49,7 +59,8 @@ class Select extends React.Component<ISelectProps, ISelectState> {
   render = () => {
     const {
       field,
-      invalidFields,
+      isInvalid,
+      isDirty,
       className,
       value,
       onChange,
@@ -57,8 +68,6 @@ class Select extends React.Component<ISelectProps, ISelectState> {
       onPatientChange,
     } = this.props;
     const { name, required } = field;
-    const isInvalid =
-      invalidFields.filter((field) => field["name"] === name).length > 0;
     const hasValue = !!patient[field.name];
     return (
       <div className={`${className}`}>
@@ -72,14 +81,14 @@ class Select extends React.Component<ISelectProps, ISelectState> {
           required={required}
           className={
             "form-control " +
-            (isInvalid ? "invalid " : " ") +
+            (isDirty && isInvalid ? "invalid " : " ") +
             (!value && !patient[name] ? "placeholder" : "")
           }
           type="select"
         >
           {this.getSelectOptions(field)}
         </ReactstrapInput>
-        {isInvalid && <ValidationError hasValue={hasValue} />}
+        {isDirty && isInvalid && <ValidationError hasValue={hasValue} />}
       </div>
     );
   };

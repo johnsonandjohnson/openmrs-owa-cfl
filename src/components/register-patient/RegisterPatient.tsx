@@ -45,7 +45,8 @@ export interface IPatientsProps
 export interface IPatientsState {
   step: number;
   patient: IPatient;
-  validSteps: number[];
+  stepValidity: object;
+  visitedSteps: number[];
   success: boolean;
 }
 
@@ -53,7 +54,8 @@ class RegisterPatient extends React.Component<IPatientsProps, IPatientsState> {
   state = {
     step: 0,
     patient: {} as IPatient,
-    validSteps: [] as number[],
+    stepValidity: {},
+    visitedSteps: [0] as number[],
     success: false,
   };
 
@@ -77,7 +79,8 @@ class RegisterPatient extends React.Component<IPatientsProps, IPatientsState> {
         };
         this.setState({
           patient,
-          validSteps: _.map(this.props.steps, (stepDefinition, i) => i),
+          stepValidity: {},
+          visitedSteps: _.map(this.props.steps, (stepDefinition, i) => i),
         });
       } else if (
         prevProps.patientRelationships !== this.props.patientRelationships &&
@@ -110,24 +113,28 @@ class RegisterPatient extends React.Component<IPatientsProps, IPatientsState> {
   setStep = (step) => {
     this.setState({
       step,
+      visitedSteps: [...this.state.visitedSteps, step],
     });
   };
 
   onStepClick = (step) => (e) => {
     if (
-      this.state.validSteps.includes(step) ||
-      this.state.validSteps.includes(step - 1)
+      this.state.visitedSteps.indexOf(step) >= 0 ||
+      (this.state.stepValidity[step - 1]?.isValid &&
+        this.state.visitedSteps.indexOf(step - 1) >= 0)
     ) {
       this.setStep(step);
     }
   };
 
   stepList = () => {
-    const { validSteps } = this.state;
+    const { stepValidity, visitedSteps } = this.state;
+    const isConfirmActive = this.props.steps.length === this.state.step;
     return (
       <ListGroup>
         {_.map(this.props.steps, (stepDefinition, i) => {
-          const isValid = validSteps.findIndex((s) => s === i) >= 0;
+          const isValid = stepValidity[i]?.isValid;
+          const isVisited = visitedSteps.indexOf(i) >= 0;
           const isActive = i === this.state.step;
           const icon = isValid ? (isActive ? CheckCircle : Check) : null;
           return (
@@ -135,7 +142,7 @@ class RegisterPatient extends React.Component<IPatientsProps, IPatientsState> {
               active={i === this.state.step}
               onClick={this.onStepClick(i)}
               key={`step-${i}`}
-              className={isValid ? "valid" : ""}
+              className={isValid && isVisited ? "valid" : ""}
             >
               {icon && <img src={icon} alt="step" className="step-icon" />}
               {stepDefinition.label}
@@ -143,7 +150,7 @@ class RegisterPatient extends React.Component<IPatientsProps, IPatientsState> {
           );
         })}
         <ListGroupItem
-          active={this.props.steps.length === this.state.step}
+          active={isConfirmActive}
           onClick={this.onStepClick(this.props.steps.length)}
           key={`step-${this.props.steps.length}`}
         >
@@ -169,6 +176,7 @@ class RegisterPatient extends React.Component<IPatientsProps, IPatientsState> {
                 onPatientChange={this.onPatientChange}
                 stepButtons={this.stepButtons(i)}
                 stepDefinition={stepDefinition}
+                setValidity={this.setValidity(i)}
               />
             </div>
           );
@@ -190,19 +198,17 @@ class RegisterPatient extends React.Component<IPatientsProps, IPatientsState> {
     );
   };
 
-  onNextClick = (validate) => (e) => {
-    const valid = validate();
-    if (valid) {
+  onNextClick = (isValid) => (e) => {
+    if (isValid) {
       this.setStep(this.state.step + 1);
     }
-    this.setValidity(this.state.step, valid);
   };
 
+  isFormValid = () =>
+    _.isEmpty(_.pickBy(this.state.stepValidity, (step) => !step.isValid));
+
   onConfirmClick = (e) => {
-    if (
-      !this.props.loading &&
-      this.state.validSteps.length >= this.props.steps.length
-    ) {
+    if (!this.props.loading && this.isFormValid()) {
       if (this.isEdit()) {
         this.props.editPatient(this.state.patient);
       } else {
@@ -211,7 +217,7 @@ class RegisterPatient extends React.Component<IPatientsProps, IPatientsState> {
     }
   };
 
-  stepButtons = (stepNumber) => (validate) => {
+  stepButtons = (stepNumber) => (isValid) => {
     const stepCount = this.props.steps.length;
     return (
       <div className="step-buttons">
@@ -224,8 +230,8 @@ class RegisterPatient extends React.Component<IPatientsProps, IPatientsState> {
         )}
         {stepNumber < stepCount ? (
           <Button
-            onClick={this.onNextClick(validate)}
-            disabled={stepNumber >= stepCount + 1}
+            onClick={this.onNextClick(isValid)}
+            disabled={!isValid || stepNumber >= stepCount + 1}
             className="next"
           >
             <FormattedMessage id="registerPatient.next" />
@@ -234,10 +240,7 @@ class RegisterPatient extends React.Component<IPatientsProps, IPatientsState> {
           <Button
             onClick={this.onConfirmClick}
             className="next"
-            disabled={
-              this.props.loading ||
-              this.state.validSteps.length < this.props.steps.length
-            }
+            disabled={this.props.loading || !this.isFormValid()}
           >
             <FormattedMessage id="registerPatient.confirm" />
           </Button>
@@ -252,20 +255,14 @@ class RegisterPatient extends React.Component<IPatientsProps, IPatientsState> {
     });
   };
 
-  setValidity = (step, isValid) => {
-    const { validSteps } = this.state;
-    const existingStepIdx = validSteps.findIndex((s) => s === step);
-    if (isValid) {
-      if (existingStepIdx < 0) {
-        validSteps.push(step);
-      }
-    } else {
-      if (existingStepIdx >= 0) {
-        validSteps.splice(existingStepIdx, 1);
-      }
-    }
+  setValidity = (step) => (isValid, isDirty) => {
+    const { stepValidity } = this.state;
+    stepValidity[step] = {
+      isValid,
+      isDirty,
+    };
     this.setState({
-      validSteps,
+      stepValidity,
     });
   };
 

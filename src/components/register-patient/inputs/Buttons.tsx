@@ -3,13 +3,13 @@ import { connect } from "react-redux";
 import { injectIntl } from "react-intl";
 import { Button, FormGroup } from "reactstrap";
 import { setValue } from "../../../shared/util/patient-util";
-import { IFieldProps } from "./Field";
+import { IFieldProps, IFieldState } from "./Field";
 
 export interface IButtonsProps extends StateProps, DispatchProps, IFieldProps {
   intl: any;
 }
 
-export interface IButtonsState {}
+export interface IButtonsState extends IFieldState {}
 
 class Buttons extends React.Component<IButtonsProps, IButtonsState> {
   onChange = (value) => (evt) => {
@@ -22,10 +22,8 @@ class Buttons extends React.Component<IButtonsProps, IButtonsState> {
   };
 
   render = () => {
-    const { intl, field, invalidFields, className, patient } = this.props;
-    const { name, options } = field;
-    const isInvalid =
-      invalidFields.filter((field) => field["name"] === name).length > 0;
+    const { intl, field, isInvalid, className, patient, isDirty } = this.props;
+    const { options } = field;
     const hasValue = !!patient[field.name];
     return (
       <div className={`${className}`}>
@@ -34,7 +32,7 @@ class Buttons extends React.Component<IButtonsProps, IButtonsState> {
             const value = option.value || option;
             const label = option.label || option;
             return (
-              <FormGroup check inline>
+              <FormGroup check inline key={`button-${value}`}>
                 <Button
                   onClick={this.onChange(value)}
                   className={`gender-button ${
@@ -47,7 +45,7 @@ class Buttons extends React.Component<IButtonsProps, IButtonsState> {
             );
           })}
         </>
-        {isInvalid && (
+        {isDirty && isInvalid && (
           <span className="error field-error">
             {intl.formatMessage({
               id: hasValue

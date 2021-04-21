@@ -159,7 +159,6 @@ class Relatives extends React.Component<IRelativesProps, IRelativesState> {
           <Field
             {...this.props}
             field={relationshipTypeField}
-            invalidFields={this.state.invalidFields}
             selectOptions={this.relationshipTypeOptions()}
             value={relative[relationshipTypeField.name]}
             onChange={this.onChangeEvent(rowNo, relationshipTypeField.name)}

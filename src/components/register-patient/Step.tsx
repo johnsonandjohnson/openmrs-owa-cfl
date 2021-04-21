@@ -14,10 +14,12 @@ export interface IStepProps extends StateProps, DispatchProps {
   onPatientChange: any;
   stepButtons: any;
   stepDefinition: any;
+  setValidity: any;
 }
 
 export interface IStepState {
   invalidFields: any[];
+  dirtyFields: any[];
 }
 
 export const LOCATIONS_OPTION_SOURCE = "locations";
@@ -33,10 +35,14 @@ export const ESTIMATED_BIRTHDATE_FIELDS = ["birthdateYears", "birthdateMonths"];
 export const NAME_FIELDS = ["givenName", "middleName", "familyName"];
 
 class Step extends React.Component<IStepProps, IStepState> {
-  state = { invalidFields: [] };
+  state = {
+    invalidFields: [] as any[],
+    dirtyFields: [] as any[],
+  };
 
   componentDidMount() {
     this.fetchOptionSources();
+    this.validate();
   }
 
   componentDidUpdate(
@@ -47,9 +53,9 @@ class Step extends React.Component<IStepProps, IStepState> {
     if (prevProps.stepDefinition !== this.props.stepDefinition) {
       this.fetchOptionSources();
     }
-    // re-validate invalid fields
+    // re-validate fields
     if (prevProps.patient !== this.props.patient) {
-      this.validate(this.state.invalidFields);
+      this.validate();
     }
   }
 
@@ -115,42 +121,59 @@ class Step extends React.Component<IStepProps, IStepState> {
     return isInvalid;
   };
 
+  isFieldNonEmpty = (field) => {
+    const { patient } = this.props;
+    return !!patient[field.name];
+  };
+
   validate = (fields = this.props.stepDefinition.fields) => {
     const invalidFields = _.filter(fields, this.validateField);
+    const nonEmptyFields = _.filter(fields, this.isFieldNonEmpty);
+    const dirtyFields = [...this.state.dirtyFields, ...nonEmptyFields];
     this.setState({
       invalidFields,
+      dirtyFields,
     });
-    return invalidFields.length === 0;
+    const isStepValid = invalidFields.length === 0;
+    const isStepDirty = dirtyFields.length > 0;
+    this.props.setValidity(isStepValid, isStepDirty);
+    return isStepValid;
   };
 
   render() {
     const { stepDefinition } = this.props;
-    const { invalidFields } = this.state;
+    const { invalidFields, dirtyFields } = this.state;
     return (
       <>
-        <div className="step-fields">
+        <div className="step-fields" key={stepDefinition.name}>
           <div className="step-title">
             <h2>{stepDefinition.title}</h2>
             <p>{stepDefinition.subtitle}</p>
           </div>
           <FormGroup className="d-flex flex-row flex-wrap">
-            {_.map(stepDefinition.fields, (field) => {
+            {_.map(stepDefinition.fields, (field, i) => {
               const selectOptions = this.getOptions(field);
               return field.type === SEPARATOR_FIELD_TYPE ? (
-                <div className="col-12 m-5 text-center">{field.label}</div>
+                <div className="col-12 m-5 text-center" key={`field-${i}`}>
+                  {field.label}
+                </div>
               ) : (
                 <Field
                   {...this.props}
                   field={field}
-                  invalidFields={invalidFields}
+                  isInvalid={
+                    !!invalidFields.find((f) => f["name"] === field.name)
+                  }
+                  isDirty={!!dirtyFields.find((f) => f["name"] === field.name)}
                   className={this.getClassName(field)}
                   selectOptions={selectOptions}
+                  key={`field-${i}`}
                 />
               );
             })}
           </FormGroup>
         </div>
-        {this.props.stepButtons(this.validate)}
+        {this.props.stepButtons(invalidFields.length === 0)}
       </>
     );
   }

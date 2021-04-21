@@ -4,21 +4,22 @@ import { injectIntl } from "react-intl";
 import { Input as ReactstrapInput } from "reactstrap";
 import { setValueOnChange } from "../../../shared/util/patient-util";
 import PhoneInput from "react-phone-number-input/input";
-import { IFieldProps } from "./Field";
+import { IFieldProps, IFieldState } from "./Field";
 import ValidationError from "./ValidationError";
 
 export interface IInputProps extends StateProps, DispatchProps, IFieldProps {
   intl: any;
 }
 
-export interface IInputState {}
+export interface IInputState extends IFieldState {}
 
 class Input extends React.Component<IInputProps, IInputState> {
   render = () => {
     const {
       intl,
       field,
-      invalidFields,
+      isInvalid,
+      isDirty,
       className,
       value,
       onChange,
@@ -27,8 +28,6 @@ class Input extends React.Component<IInputProps, IInputState> {
     } = this.props;
     const { name, required, type, label } = field;
     const InputElement = type === "phone" ? PhoneInput : ReactstrapInput;
-    const isInvalid =
-      invalidFields.filter((field) => field["name"] === name).length > 0;
     const hasValue = !!patient[field.name];
     return (
       <div className={`${className}`}>
@@ -53,10 +52,10 @@ class Input extends React.Component<IInputProps, IInputState> {
             onChange || setValueOnChange(patient, name, onPatientChange)
           }
           required={required}
-          className={"form-control " + (isInvalid ? "invalid" : "")}
+          className={"form-control " + (isDirty && isInvalid ? "invalid" : "")}
           type={type || "text"}
         />
-        {isInvalid && <ValidationError hasValue={hasValue} />}
+        {isDirty && isInvalid && <ValidationError hasValue={hasValue} />}
       </div>
     );
   };
