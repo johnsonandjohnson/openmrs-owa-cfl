@@ -11,6 +11,8 @@ import {
   NAME_FIELDS,
   RELATIVES_FIELD_TYPE,
 } from "./Step";
+import { formatDate } from "../../shared/util/date-util";
+import { formatPhoneNumberIntl } from "react-phone-number-input";
 
 export interface IConfirmProps extends StateProps, DispatchProps {
   intl: any;
@@ -36,7 +38,8 @@ class Confirm extends React.Component<IConfirmProps, IConfirmState> {
       !!patient.birthdateMonth &&
       !!patient.birthdateYear
     ) {
-      return intl.formatDate(
+      return formatDate(
+        intl,
         new Date(
           patient.birthdateYear,
           patient.birthdateMonth,
@@ -110,6 +113,9 @@ class Confirm extends React.Component<IConfirmProps, IConfirmState> {
       if (!!option) {
         return option.label || option;
       }
+    }
+    if (field.type === "phone" && !!val) {
+      return formatPhoneNumberIntl(val);
     }
     return val;
   };

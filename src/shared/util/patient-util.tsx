@@ -13,9 +13,10 @@ import {
 import { columnContent as personColumnContent } from "./person-util";
 import { IPatient } from "../models/patient";
 
-export const columnContent = (patient, column) => {
+export const columnContent = (patient, column, intl) => {
   // extract the value from person first
-  const content = patient.person && personColumnContent(patient.person, column);
+  const content =
+    patient.person && personColumnContent(patient.person, column, intl);
   if (!!content) {
     return content;
   } else {

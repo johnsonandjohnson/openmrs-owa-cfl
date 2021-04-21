@@ -6,3 +6,12 @@ export const dobToAge = (dob) => {
 
   return Math.abs(age.getUTCFullYear() - 1970);
 };
+
+export const formatDate = (intl, date) => {
+  console.log(date);
+  return intl.formatDate(date, {
+    year: "numeric",
+    month: "long",
+    day: "2-digit",
+  });
+};
