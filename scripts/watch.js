@@ -6,6 +6,7 @@ const webpack = require('webpack');
 const ReactRefreshPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 const config = require('../config/webpack.config');
 const path = require('path');
+const WatchExternalFilesPlugin = require('webpack-watch-files-plugin');
 
 const conf = config('development');
 
@@ -37,16 +38,23 @@ conf.plugins = conf
         !(plugin instanceof ReactRefreshPlugin)
     )
 
+conf.plugins.push(new WatchExternalFilesPlugin.default({
+    files: [
+        './public/overrides.css',
+        './public/overrides.js'
+    ]
+}));
+
 const OUTPUT_PATH = path.join(require('os').homedir(), '.cfl-dev/owa/cfl-ui');
 conf.output.path = OUTPUT_PATH;
 
 conf.output.publicPath = process.env.PUBLIC_URL;
 
-webpack(conf).watch({}, (err, stats) => {
+webpack(conf).watch({
+}, (err, stats) => {
     if (err) {
         console.error(err);
     } else {
-        copyPublicFolder();
         copyPublicFolder(OUTPUT_PATH);
     }
     console.error(stats.toString({

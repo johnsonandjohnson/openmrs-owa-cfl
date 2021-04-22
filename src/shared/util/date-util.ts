@@ -8,7 +8,6 @@ export const dobToAge = (dob) => {
 };
 
 export const formatDate = (intl, date) => {
-  console.log(date);
   return intl.formatDate(date, {
     year: "numeric",
     month: "long",

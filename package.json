@@ -188,5 +188,8 @@
     "presets": [
       "react-app"
     ]
+  },
+  "devDependencies": {
+    "webpack-watch-files-plugin": "^1.1.0"
   }
 }
