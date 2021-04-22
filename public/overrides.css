@@ -142,15 +142,73 @@ i.cfl-register-patient {
   border-bottom: none !important;
   color: #4e5155 !important;
   font-size: 12px !important;
+  background-color: transparent;
 }
 
-#breadcrumbs a {
+#breadcrumbs a,
+#breadcrumbs li,
+#breadcrumbs span {
   font-size: 12px !important;
   color: black !important;
+  font-family: CircularStd !important;
+  font-weight: normal !important;
+  text-decoration: none !important;
 }
 
 #breadcrumbs .separator {
-  margin: 0 0.5em !important;
+  margin: 0 0.35em !important;
+  color: #4e5155 !important;
+}
+
+#breadcrumbs li:first-child a i {
+  display: none;
+}
+
+#breadcrumbs li:first-child a::after {
+  content: "Home";
+}
+
+#breadcrumbs li i {
+  display: none;
+}
+
+#breadcrumbs li::after {
+  content: ">>";
+  color: #4e5155 !important;
+  margin: 0 0.1em !important;
+}
+
+#breadcrumbs li:last-child::after {
+  content: none;
+}
+
+/** Breadcrumbs - Visits **/
+#breadcrumbs > a:first-child::after {
+  content: "Home";
+}
+
+#breadcrumbs a:first-child {
+  margin-left: 0;
+  padding: 0;
+}
+
+#breadcrumbs a:first-child svg {
+  display: none;
+}
+
+#breadcrumbs.breadcrumb a,
+#breadcrumbs.breadcrumb span {
+  margin-left: 0.35em !important;
+}
+
+#breadcrumbs span::after {
+  content: ">>";
+  color: #4e5155 !important;
+}
+
+#breadcrumbs span svg,
+#breadcrumbs span:last-child::after {
+  display: none;
 }
 
 /** Patient Dashboard **/
