@@ -37,7 +37,7 @@ header {
   border-radius: 0 !important;
   padding: 0 1em 0 1em !important;
   min-height: auto !important;
-  display: flex;
+  display: flex !important;
 }
 
 header .user-options {
@@ -55,7 +55,7 @@ header .logo {
   margin: 5px 0 !important;
 }
 
-header .logo img {
+header .logo a {
   content: url("img/logo.png");
   height: 30px !important;
   width: auto !important;
