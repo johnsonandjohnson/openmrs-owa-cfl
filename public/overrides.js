@@ -1,4 +1,4 @@
-$(function () {
+typeof $ === 'function' && $(function () {
   const CFL_UI_ROOT = "/openmrs/owa/cfl-ui/";
   /** Common **/
   // replace the logo src

@@ -5,7 +5,7 @@
   "homepage": "./",
   "dependencies": {
     "@babel/core": "7.12.3",
-    "@bit/soldevelo-cfl.omrs-components.customize": "^1.0.6",
+    "@bit/soldevelo-cfl.omrs-components.customize": "^1.0.8",
     "@openmrs/react-components": "^1.5.2",
     "@pmmmwh/react-refresh-webpack-plugin": "0.4.3",
     "@svgr/webpack": "5.5.0",
