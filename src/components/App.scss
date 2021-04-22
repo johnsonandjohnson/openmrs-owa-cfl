@@ -129,4 +129,17 @@
   select:focus {
     outline: none !important;
   }
+
+  .input-container {
+    position: relative;
+    span.placeholder {
+      font-family: CircularStd;
+      position: absolute;
+      top: 1em;
+      left: 1em;
+      font-size: 10px;
+      text-transform: uppercase;
+      opacity: 0.65;
+    }
+  }
 }

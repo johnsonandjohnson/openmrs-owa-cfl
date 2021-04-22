@@ -62,8 +62,8 @@
       }
     }
     .form-group > div {
-      padding-left: 0.5em;
-      padding-right: 0.5em;
+      padding-left: 0;
+      padding-right: 1em;
       padding-bottom: 0.5em;
     }
     input,
@@ -75,6 +75,7 @@
         border: 1px red solid;
       }
       text-align: center;
+      text-align-last: center;
       &::placeholder {
         text-align: start;
       }
@@ -90,8 +91,21 @@
         }
       }
       div[class*="__single-value"] {
-        margin-top: 5px;
+        margin-top: 3em;
+        position: initial;
+        margin-left: auto;
+        margin-right: auto;
       }
+      div[class*="-Input"] {
+        position: absolute;
+        left: 45%;
+        margin-left: auto;
+        margin-right: auto;
+      }
+    }
+    input:not(:placeholder-shown),
+    select:not(.placeholder) {
+      padding-top: 2rem;
     }
     /* style react-select to resemble a regular input */
     div[class*="__value-container"] {

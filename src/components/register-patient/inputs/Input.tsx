@@ -6,6 +6,7 @@ import { setValueOnChange } from "../../../shared/util/patient-util";
 import PhoneInput from "react-phone-number-input/input";
 import { IFieldProps, IFieldState } from "./Field";
 import ValidationError from "./ValidationError";
+import { getPlaceholder } from "../../../shared/util/form-util";
 
 export interface IInputProps extends StateProps, DispatchProps, IFieldProps {
   intl: any;
@@ -28,30 +29,19 @@ class Input extends React.Component<IInputProps, IInputState> {
     } = this.props;
     const { name, required, type, label } = field;
     const InputElement = type === "phone" ? PhoneInput : ReactstrapInput;
-    const hasValue = !!patient[field.name];
+    const hasValue = !!value || !!patient[field.name];
     const additionalProps = {};
     if (type === "number") {
       // Firefox doesn't support number inputs
       additionalProps["pattern"] = "[1-9]";
     }
+    const placeholder = getPlaceholder(intl, label, name, required);
     return (
-      <div className={`${className}`}>
+      <div className={`${className} input-container`}>
         <InputElement
           name={name}
           id={name}
-          placeholder={`${
-            label ||
-            intl.formatMessage({
-              id: "registerPatient.fields." + name,
-            }) ||
-            name
-          } ${
-            required
-              ? intl.formatMessage({
-                  id: "registerPatient.fields.required",
-                })
-              : ""
-          }`}
+          placeholder={placeholder}
           value={value != null ? value : patient[name]}
           onChange={
             onChange || setValueOnChange(patient, name, onPatientChange)
@@ -61,6 +51,7 @@ class Input extends React.Component<IInputProps, IInputState> {
           type={type || "text"}
           {...additionalProps}
         />
+        {hasValue && <span className="placeholder">{placeholder}</span>}
         {isDirty && isInvalid && <ValidationError hasValue={hasValue} />}
       </div>
     );

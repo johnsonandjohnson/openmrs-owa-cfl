@@ -5,6 +5,7 @@ import { Input as ReactstrapInput } from "reactstrap";
 import { setValueOnChange } from "../../../shared/util/patient-util";
 import { IFieldProps, IFieldState } from "./Field";
 import ValidationError from "./ValidationError";
+import { getPlaceholder } from "../../../shared/util/form-util";
 
 export interface ISelectProps extends StateProps, DispatchProps, IFieldProps {
   intl: any;
@@ -20,27 +21,16 @@ class Select extends React.Component<ISelectProps, ISelectState> {
     callback();
   };
 
-  getSelectOptions = (fieldDefinition) => {
-    const { intl, selectOptions } = this.props;
-    const { name, options, required, label } = fieldDefinition;
+  getSelectOptions = (fieldDefinition, placeholder) => {
+    const { selectOptions } = this.props;
+    const { options } = fieldDefinition;
     const opts = selectOptions || options;
     if (!!opts) {
       return (
         <>
           {
             <option value="" disabled selected hidden>
-              {`${
-                label ||
-                intl.formatMessage({
-                  id: "registerPatient.fields." + name,
-                }) ||
-                name
-              }`}{" "}
-              {required
-                ? intl.formatMessage({
-                    id: "registerPatient.fields.required",
-                  })
-                : ""}
+              {placeholder}
             </option>
           }
           {opts.map((option) => (
@@ -66,11 +56,13 @@ class Select extends React.Component<ISelectProps, ISelectState> {
       onChange,
       patient,
       onPatientChange,
+      intl,
     } = this.props;
-    const { name, required } = field;
-    const hasValue = !!patient[field.name];
+    const { name, required, label } = field;
+    const hasValue = !!value || !!patient[field.name];
+    const placeholder = getPlaceholder(intl, label, name, required);
     return (
-      <div className={`${className}`}>
+      <div className={`${className} input-container`}>
         <ReactstrapInput
           name={name}
           id={name}
@@ -86,8 +78,9 @@ class Select extends React.Component<ISelectProps, ISelectState> {
           }
           type="select"
         >
-          {this.getSelectOptions(field)}
+          {this.getSelectOptions(field, placeholder)}
         </ReactstrapInput>
+        {hasValue && <span className="placeholder">{placeholder}</span>}
         {isDirty && isInvalid && <ValidationError hasValue={hasValue} />}
       </div>
     );

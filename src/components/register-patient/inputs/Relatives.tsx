@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { injectIntl } from "react-intl";
-import { FormGroup } from "reactstrap";
+import { FormGroup, Input as ReactstrapInput } from "reactstrap";
 import _ from "lodash";
 import Plus from "../../../assets/img/plus.png";
 import Minus from "../../../assets/img/minus.png";
@@ -153,6 +153,9 @@ class Relatives extends React.Component<IRelativesProps, IRelativesState> {
   };
 
   relative = (relative, rowNo) => {
+    const otherPersonPlaceholder = this.props.intl.formatMessage({
+      id: "registerPatient.fields.otherPerson",
+    });
     return (
       <FormGroup className="d-flex flex-row flex-wrap w-100">
         {rowFields.includes(relationshipTypeField) && (
@@ -165,17 +168,20 @@ class Relatives extends React.Component<IRelativesProps, IRelativesState> {
           />
         )}
         {rowFields.includes(otherPersonField) && (
-          <Select
-            options={this.patientOptions(rowNo)}
-            onInputChange={this.onChange(rowNo, OTHER_PERSON_NAME)}
-            onChange={this.onChange(rowNo, otherPersonField.name)}
-            className="flex-fill other-person"
-            classNamePrefix="other-person"
-            placeholder={`${this.props.intl.formatMessage({
-              id: "registerPatient.fields.otherPerson",
-            })}`}
-            value={relative.otherPerson}
-          />
+          <div className={`input-container flex-fill`}>
+            <Select
+              options={this.patientOptions(rowNo)}
+              onInputChange={this.onChange(rowNo, OTHER_PERSON_NAME)}
+              onChange={this.onChange(rowNo, otherPersonField.name)}
+              className="flex-fill other-person"
+              classNamePrefix="other-person"
+              placeholder={otherPersonPlaceholder}
+              value={relative.otherPerson}
+            />
+            {!!relative.otherPerson && (
+              <span className="placeholder">{otherPersonPlaceholder}</span>
+            )}
+          </div>
         )}
         <div className="align-items-center justify-content-center d-flex">
           <img
