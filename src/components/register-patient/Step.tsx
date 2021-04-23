@@ -4,7 +4,7 @@ import { injectIntl } from "react-intl";
 import { FormGroup } from "reactstrap";
 import { IPatient } from "../../shared/models/patient";
 import _ from "lodash";
-import Field from "./inputs/Field";
+import Field, { IFieldProps } from "./inputs/Field";
 import { isPossiblePhoneNumber } from "react-phone-number-input";
 import { searchLocations } from "../../redux/reducers/location";
 
@@ -15,6 +15,8 @@ export interface IStepProps extends StateProps, DispatchProps {
   stepButtons: any;
   stepDefinition: any;
   setValidity: any;
+  setStep: any;
+  stepNumber: number;
 }
 
 export interface IStepState {
@@ -126,9 +128,11 @@ class Step extends React.Component<IStepProps, IStepState> {
     return !!patient[field.name];
   };
 
-  validate = (fields = this.props.stepDefinition.fields) => {
+  validate = (
+    fields = this.props.stepDefinition.fields,
+    nonEmptyFields = _.filter(fields, this.isFieldNonEmpty)
+  ) => {
     const invalidFields = _.filter(fields, this.validateField);
-    const nonEmptyFields = _.filter(fields, this.isFieldNonEmpty);
     const dirtyFields = [...this.state.dirtyFields, ...nonEmptyFields];
     this.setState({
       invalidFields,
@@ -138,6 +142,17 @@ class Step extends React.Component<IStepProps, IStepState> {
     const isStepDirty = dirtyFields.length > 0;
     this.props.setValidity(isStepValid, isStepDirty);
     return isStepValid;
+  };
+
+  handleLastFieldKeyDown = (e) => {
+    const { fields } = this.props.stepDefinition;
+    if (e.key === "Tab") {
+      const isValid = this.validate(fields, fields);
+      e.preventDefault();
+      if (isValid) {
+        this.props.setStep(this.props.stepNumber + 1);
+      }
+    }
   };
 
   render() {
@@ -153,6 +168,10 @@ class Step extends React.Component<IStepProps, IStepState> {
           <FormGroup className="d-flex flex-row flex-wrap">
             {_.map(stepDefinition.fields, (field, i) => {
               const selectOptions = this.getOptions(field);
+              const additionalProps = {} as any;
+              if (i === stepDefinition.fields.length - 1) {
+                additionalProps.onKeyDown = this.handleLastFieldKeyDown;
+              }
               return field.type === SEPARATOR_FIELD_TYPE ? (
                 <div className="col-12 m-5 text-center" key={`field-${i}`}>
                   {field.label}
@@ -168,6 +187,7 @@ class Step extends React.Component<IStepProps, IStepState> {
                   className={this.getClassName(field)}
                   selectOptions={selectOptions}
                   key={`field-${i}`}
+                  {...additionalProps}
                 />
               );
             })}

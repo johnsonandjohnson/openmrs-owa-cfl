@@ -57,6 +57,7 @@ class Select extends React.Component<ISelectProps, ISelectState> {
       patient,
       onPatientChange,
       intl,
+      onKeyDown,
     } = this.props;
     const { name, required, label } = field;
     const hasValue = !!value || !!patient[field.name];
@@ -77,6 +78,7 @@ class Select extends React.Component<ISelectProps, ISelectState> {
             (!value && !patient[name] ? "placeholder" : "")
           }
           type="select"
+          onKeyDown={!!onKeyDown && onKeyDown}
         >
           {this.getSelectOptions(field, placeholder)}
         </ReactstrapInput>

@@ -165,6 +165,7 @@ class Relatives extends React.Component<IRelativesProps, IRelativesState> {
             selectOptions={this.relationshipTypeOptions()}
             value={relative[relationshipTypeField.name]}
             onChange={this.onChangeEvent(rowNo, relationshipTypeField.name)}
+            onKeyDown={null}
           />
         )}
         {rowFields.includes(otherPersonField) && (
@@ -177,6 +178,11 @@ class Relatives extends React.Component<IRelativesProps, IRelativesState> {
               classNamePrefix="other-person"
               placeholder={otherPersonPlaceholder}
               value={relative.otherPerson}
+              onKeyDown={
+                rowNo + 1 === this.state.relatives.length
+                  ? this.props.onKeyDown
+                  : null
+              }
             />
             {!!relative.otherPerson && (
               <span className="placeholder">{otherPersonPlaceholder}</span>

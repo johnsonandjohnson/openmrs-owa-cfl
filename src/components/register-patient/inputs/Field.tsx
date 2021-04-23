@@ -17,6 +17,7 @@ export interface IFieldProps {
   selectOptions?: any[];
   isInvalid: boolean;
   isDirty: boolean;
+  onKeyDown?: any;
 }
 
 export interface IFieldState {}

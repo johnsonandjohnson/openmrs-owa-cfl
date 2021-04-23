@@ -181,6 +181,8 @@ class RegisterPatient extends React.Component<IPatientsProps, IPatientsState> {
                 stepButtons={this.stepButtons(i)}
                 stepDefinition={stepDefinition}
                 setValidity={this.setValidity(i)}
+                setStep={this.setStep}
+                stepNumber={i}
               />
             </div>
           );
