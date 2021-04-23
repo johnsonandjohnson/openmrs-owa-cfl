@@ -230,6 +230,12 @@ i.cfl-register-patient {
   background: none !important;
   border: none !important;
   font-size: 14px;
+  line-height: 1;
+}
+
+.patient-header > .patient-id,
+.patient-header > .patient-location {
+  margin-bottom: 0.35em;
 }
 
 .patient-header .label,

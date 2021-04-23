@@ -50,15 +50,10 @@ typeof $ === "function" &&
         .find("#person-status-update-dialog")
         .detach();
       // construct a new header
+      const ageAndGender = " (" + age.split(" ")[0] + "/" + gender[0] + ")";
       var html = [
         '<div class="patient-header">',
-        "<h1>" +
-          fullName +
-          " (" +
-          age.split(" ")[0] +
-          "/" +
-          gender[0] +
-          ")</h1>",
+        "<h1>" + fullName + ageAndGender + "</h1>",
         (!!patientId
           ? '<div class="patient-id"><span class="label">Patient ID: </span><span class="value">' +
             patientId +
@@ -82,6 +77,15 @@ typeof $ === "function" &&
       // append the detached status along with dialog element
       $(".patient-status .value").append(personStatusDialog);
       $(".patient-status .value").append(personStatus);
+
+      // add (age/gender) to the breadcrumb
+      elementReady("#breadcrumbs li:last-child").then((breadcrumb) => {
+        $(breadcrumb).text(function () {
+          return $(this)
+            .text()
+            .replace(fullName, fullName + ageAndGender);
+        });
+      });
 
       // replace the url of 'Patient profile'
       const patientProfileAnchor = $("a#cfl\\.patientProfile");
@@ -110,3 +114,33 @@ typeof $ === "function" &&
       }
     });
   });
+
+// MIT Licensed
+// Author: jwilson8767
+
+/**
+ * Waits for an element satisfying selector to exist, then resolves promise with the element.
+ * Useful for resolving race conditions.
+ *
+ * @param selector
+ * @returns {Promise}
+ */
+function elementReady(selector) {
+  return new Promise((resolve, reject) => {
+    let el = document.querySelector(selector);
+    if (el) {
+      resolve(el);
+    }
+    new MutationObserver((mutationRecords, observer) => {
+      // Query for elements matching the specified selector
+      Array.from(document.querySelectorAll(selector)).forEach((element) => {
+        resolve(element);
+        //Once we have resolved we don't need the observer anymore.
+        observer.disconnect();
+      });
+    }).observe(document.documentElement, {
+      childList: true,
+      subtree: true,
+    });
+  });
+}
