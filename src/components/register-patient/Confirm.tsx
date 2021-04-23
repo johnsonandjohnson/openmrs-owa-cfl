@@ -1,5 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
+import "./Confirm.scss";
 import { FormattedMessage, injectIntl } from "react-intl";
 import { IPatient } from "../../shared/models/patient";
 import { Alert } from "reactstrap";
@@ -167,10 +168,15 @@ class Confirm extends React.Component<IConfirmProps, IConfirmState> {
   };
 
   renderField = (field) => {
+    const COLON = ":";
     return (
-      <div className="mb-3" key={`field-${field.label}`}>
-        <span className="helper-text mr-3">{field.label}</span>
-        <span>{field.value}</span>
+      <div className="mb-3 col-confirm" key={`field-${field.label}`}>
+        <div className="col-sm-6 col-confirm-label">
+          <span className="helper-text">{field.label}{COLON}</span>
+        </div>
+        <div className="col-sm-6">
+          <span>{field.value}</span>
+        </div>
       </div>
     );
   };
