@@ -10,6 +10,8 @@ import {
   PERSON_LANGUAGE_ATTRIBUTE_TYPE,
   PHONE_NUMBER,
   TELEPHONE_NUMBER_ATTRIBUTE_TYPE,
+  GENDER,
+  GENDER_DICT,
 } from "../constants/patient";
 import { extractAttribute, extractValue } from "./omrs-entity-util";
 import { formatDate } from "./date-util";
@@ -46,6 +48,8 @@ export const columnContent = (person, column, intl) => {
     }
     case PERSON_LANGUAGE:
       return extractAttribute(person, PERSON_LANGUAGE_ATTRIBUTE_TYPE);
+    case GENDER:
+      return person && (GENDER_DICT[person.gender] || person.gender);
     default:
       return extractValue(person && person[column]);
   }
