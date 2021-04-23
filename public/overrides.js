@@ -3,6 +3,14 @@ document.addEventListener("DOMContentLoaded", function (event) {});
 typeof $ === "function" &&
   $(function () {
     const CFL_UI_ROOT = "/openmrs/owa/cfl-ui/";
+    /** General **/
+    // OpenMRS bug: remove occasional (/undefined) from the System Administration breadcrumbs
+    setTimeout(function(){ elementReady("#breadcrumbs li:last-child:not(:empty)").then((element) => {
+      element.textContent = element.textContent.replace(
+          "(/undefined)",
+          ""
+      );
+    }); }, 100);
     /** Home **/
     // add missing breadcrumb for the Homepage
     const breadcrumbs = $("#breadcrumbs");
