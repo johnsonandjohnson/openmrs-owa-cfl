@@ -32,7 +32,9 @@ typeof $ === "function" &&
       const givenName = patientHeader.find(".PersonName-givenName").text();
       const middleName = patientHeader.find(".PersonName-middleName").text();
       const familyName = patientHeader.find(".PersonName-familyName").text();
-      const fullName = [givenName, middleName, familyName].join(" ");
+      const fullName = [givenName, middleName, familyName]
+        .join(" ")
+        .replace("  ", " ");
       const gender = patientHeader
         .find(".gender-age:first-of-type > span:nth-child(1)")
         .text()
@@ -79,12 +81,11 @@ typeof $ === "function" &&
       $(".patient-status .value").append(personStatus);
 
       // add (age/gender) to the breadcrumb
-      elementReady("#breadcrumbs li:last-child").then((breadcrumb) => {
-        $(breadcrumb).text(function () {
-          return $(this)
-            .text()
-            .replace(fullName, fullName + ageAndGender);
-        });
+      elementReady("#breadcrumbs li:last-child:not(:empty)").then((element) => {
+        element.textContent = element.textContent.replace(
+          fullName,
+          fullName + ageAndGender
+        );
       });
 
       // replace the url of 'Patient profile'

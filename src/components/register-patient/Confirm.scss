@@ -1,7 +1,7 @@
 .col-confirm {
+  display: flex;
+  .col-confirm-label {
     display: flex;
-    .col-confirm-label {
-        display: flex;
-        justify-content: end;
-    }
+    justify-content: end;
+  }
 }

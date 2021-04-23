@@ -172,7 +172,10 @@ class Confirm extends React.Component<IConfirmProps, IConfirmState> {
     return (
       <div className="mb-3 col-confirm" key={`field-${field.label}`}>
         <div className="col-sm-6 col-confirm-label">
-          <span className="helper-text">{field.label}{COLON}</span>
+          <span className="helper-text">
+            {field.label}
+            {COLON}
+          </span>
         </div>
         <div className="col-sm-6">
           <span>{field.value}</span>
