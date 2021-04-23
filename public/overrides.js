@@ -26,7 +26,7 @@ typeof $ === "function" &&
         .text()
         .trim();
       const patientLocation = patientHeader
-        .find(".patientLocation:nth-of-type(3) > span")
+        .find(".patientLocation:not(:empty) > span")
         .text()
         .trim();
       const givenName = patientHeader.find(".PersonName-givenName").text();
