@@ -120,6 +120,11 @@ i.cfl-register-patient {
   padding-left: 0 !important;
 }
 
+/** disable CFL Register Patient **/
+#cfl-registrationapp-registerPatient-homepageLink-cfl-registrationapp-registerPatient-homepageLink-extension {
+  display: none;
+}
+
 /** Home **/
 #content h4 {
   font-family: CircularStd-Book !important;
