@@ -2,6 +2,7 @@ import axios from "axios";
 
 import { FAILURE, REQUEST, SUCCESS } from "../action-type.util";
 import querystring from "querystring";
+import { DEFAULT_REGISTRATION_APP } from "../../shared/constants/patient";
 
 export const ACTION_TYPES = {
   REGISTER: "registration/REGISTER",
@@ -92,8 +93,8 @@ const extractFormData = (patient) => {
 };
 
 // actions
-export const register = (patient) => {
-  const requestUrl = `/openmrs/registrationapp/registerPatient/submit.action?appId=cfl.registerPatient`;
+export const register = (patient, app = DEFAULT_REGISTRATION_APP) => {
+  const requestUrl = `/openmrs/registrationapp/registerPatient/submit.action?appId=${app}`;
   const formData = extractFormData(patient);
   return {
     type: ACTION_TYPES.REGISTER,
@@ -101,8 +102,8 @@ export const register = (patient) => {
   };
 };
 
-export const editPatient = (patient) => {
-  const requestUrl = `/openmrs/registrationapp/editSection.page?patientId=${patient.patientId}&appId=cfl.registerPatient&sectionId=demographics&returnUrl=/`;
+export const editPatient = (patient, app = DEFAULT_REGISTRATION_APP) => {
+  const requestUrl = `/openmrs/registrationapp/editSection.page?patientId=${patient.patientId}&appId=${app}&sectionId=demographics&returnUrl=/`;
   const formData = extractFormData(patient);
   return {
     type: ACTION_TYPES.EDIT_SECTION,

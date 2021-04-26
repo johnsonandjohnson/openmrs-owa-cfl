@@ -7,6 +7,7 @@ import { createSetting, getSettings } from "../redux/reducers/setttings";
 import {
   DEFAULT_FIND_CAREGIVER_TABLE_COLUMNS,
   DEFAULT_FIND_PATIENT_TABLE_COLUMNS,
+  DEFAULT_REGISTRATION_APP,
 } from "../shared/constants/patient";
 import { TinyButton as ScrollUpButton } from "react-scroll-up-button";
 import {
@@ -14,6 +15,8 @@ import {
   FIND_CAREGIVER_TABLE_COLUMNS_SETTING_DESCRIPTION,
   FIND_PATIENT_TABLE_COLUMNS_SETTING,
   FIND_PATIENT_TABLE_COLUMNS_SETTING_DESCRIPTION,
+  REGISTRATION_APP_SETTING,
+  REGISTRATION_APP_SETTING_DESCRIPTION,
   REGISTRATION_STEPS_SETTING,
   REGISTRATION_STEPS_SETTING_DESCRIPTION,
 } from "../shared/constants/setting";
@@ -50,11 +53,18 @@ class App extends React.Component<IAppProps> {
           FIND_CAREGIVER_TABLE_COLUMNS_SETTING_DESCRIPTION
         );
       }
-      if (!this.props.registrationStepsSetting) {
+      if (!this.props.registrationSteps) {
         this.props.createSetting(
           REGISTRATION_STEPS_SETTING,
           JSON.stringify(defaultSteps, null, 2),
           REGISTRATION_STEPS_SETTING_DESCRIPTION
+        );
+      }
+      if (!this.props.registrationAppSetting) {
+        this.props.createSetting(
+          REGISTRATION_APP_SETTING,
+          DEFAULT_REGISTRATION_APP,
+          REGISTRATION_APP_SETTING_DESCRIPTION
         );
       }
     }
@@ -75,7 +85,8 @@ const mapStateToProps = ({ session, settings }) => ({
   settings: settings.settings,
   findPatientTableColumnsSetting: settings.findPatientTableColumnsSetting,
   findCaregiverTableColumnsSetting: settings.findCaregiverTableColumnsSetting,
-  registrationStepsSetting: settings.registrationStepsSetting,
+  registrationSteps: settings.registrationSteps,
+  registrationAppSetting: settings.registrationAppSetting,
 });
 
 const mapDispatchToProps = { getSession, getSettings, createSetting };

@@ -29,3 +29,6 @@ export const DEFAULT_FIND_CAREGIVER_TABLE_COLUMNS = `${PATIENT_IDENTIFIER},${DIS
 export const GENDER_DICT = { M: "Male", F: "Female" };
 
 export const DEFAULT_COLUMN_VALUE = "";
+
+// registration defaults
+export const DEFAULT_REGISTRATION_APP = "cfl.registerPatient";

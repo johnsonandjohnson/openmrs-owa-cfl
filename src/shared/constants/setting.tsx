@@ -22,3 +22,6 @@ export const REGISTRATION_SETTING_PREFIX = SETTING_PREFIX + "registration.";
 export const REGISTRATION_STEPS_SETTING = REGISTRATION_SETTING_PREFIX + "steps";
 export const REGISTRATION_STEPS_SETTING_DESCRIPTION =
   "A JSON representation of Registration steps and fields.";
+export const REGISTRATION_APP_SETTING = REGISTRATION_SETTING_PREFIX + "app";
+export const REGISTRATION_APP_SETTING_DESCRIPTION =
+  "The registration app used by the form. The default one is cfl.registerPatient";

@@ -4,6 +4,7 @@ import { FAILURE, REQUEST, SUCCESS } from "../action-type.util";
 import {
   FIND_CAREGIVER_TABLE_COLUMNS_SETTING,
   FIND_PATIENT_TABLE_COLUMNS_SETTING,
+  REGISTRATION_APP_SETTING,
   REGISTRATION_STEPS_SETTING,
   SETTING_PREFIX,
 } from "../../shared/constants/setting";
@@ -25,6 +26,7 @@ const initialState = {
   findPatientTableColumnsSetting: {},
   findCaregiverTableColumnsSetting: {},
   registrationSteps: null,
+  registrationAppSetting: {},
 };
 
 export const getSettingsState = (settings) => {
@@ -42,6 +44,7 @@ export const getSettingsState = (settings) => {
       getSettingValue(settings, REGISTRATION_STEPS_SETTING),
       null
     ),
+    registrationAppSetting: getSetting(settings, REGISTRATION_APP_SETTING),
   };
 };
 

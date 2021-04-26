@@ -34,6 +34,10 @@ import Step from "./Step";
 import Confirm from "./Confirm";
 import queryString from "query-string";
 import { redirectUrl } from "../../shared/util/url-util";
+import {
+  DEFAULT_FIND_PATIENT_TABLE_COLUMNS,
+  DEFAULT_REGISTRATION_APP,
+} from "../../shared/constants/patient";
 
 export interface IPatientsProps
   extends StateProps,
@@ -210,9 +214,9 @@ class RegisterPatient extends React.Component<IPatientsProps, IPatientsState> {
   onConfirmClick = (e) => {
     if (!this.props.loading && this.isFormValid()) {
       if (this.isEdit()) {
-        this.props.editPatient(this.state.patient);
+        this.props.editPatient(this.state.patient, this.props.registrationApp);
       } else {
-        this.props.register(this.state.patient);
+        this.props.register(this.state.patient, this.props.registrationApp);
       }
     }
   };
@@ -336,6 +340,10 @@ const mapStateToProps = ({ registration, patient, settings }) => ({
   patient: patient.patient,
   patientRelationships: patient.patientRelationships,
   steps: settings.registrationSteps || defaultSteps,
+  registrationApp:
+    (settings.registrationAppSetting &&
+      settings.registrationAppSetting.value) ||
+    DEFAULT_REGISTRATION_APP,
   settingsLoading: settings.loading,
 });
 

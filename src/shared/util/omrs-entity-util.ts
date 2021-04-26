@@ -26,15 +26,14 @@ export const extractAttribute = (entity, type) => {
 
 export const extractAttributes = (entity) => {
   const attributes = {};
-  return (
-    entity &&
+  entity &&
     entity.attributes &&
     entity.attributes.forEach(
       (attr) =>
         (attributes[attr.attributeType[DISPLAY]] =
           attr.value || DEFAULT_COLUMN_VALUE)
-    )
-  );
+    );
+  return attributes;
 };
 
 export const extractIdentifier = (entity, type) => {
