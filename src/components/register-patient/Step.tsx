@@ -4,7 +4,7 @@ import { injectIntl } from "react-intl";
 import { FormGroup } from "reactstrap";
 import { IPatient } from "../../shared/models/patient";
 import _ from "lodash";
-import Field, { IFieldProps } from "./inputs/Field";
+import Field from "./inputs/Field";
 import { isPossiblePhoneNumber } from "react-phone-number-input";
 import { searchLocations } from "../../redux/reducers/location";
 
@@ -28,11 +28,7 @@ export const LOCATIONS_OPTION_SOURCE = "locations";
 export const SEPARATOR_FIELD_TYPE = "separator";
 export const RELATIVES_FIELD_TYPE = "relatives";
 export const PHONE_FIELD_TYPE = "phone";
-export const BIRTHDATE_FIELDS = [
-  "birthdateDay",
-  "birthdateMonth",
-  "birthdateYear",
-];
+export const BIRTHDATE_FIELD = "birthdate";
 export const ESTIMATED_BIRTHDATE_FIELDS = ["birthdateYears", "birthdateMonths"];
 export const NAME_FIELDS = ["givenName", "middleName", "familyName"];
 
@@ -109,7 +105,7 @@ class Step extends React.Component<IStepProps, IStepState> {
       isInvalid = !isPossiblePhoneNumber(value);
     }
     if (
-      BIRTHDATE_FIELDS.includes(field.name) ||
+      BIRTHDATE_FIELD === field.name ||
       ESTIMATED_BIRTHDATE_FIELDS.includes(field.name)
     ) {
       // if estimation was made, don't require exact birthdate
@@ -173,7 +169,10 @@ class Step extends React.Component<IStepProps, IStepState> {
                 additionalProps.onKeyDown = this.handleLastFieldKeyDown;
               }
               return field.type === SEPARATOR_FIELD_TYPE ? (
-                <div className="col-12 m-5 text-center" key={`field-${i}`}>
+                <div
+                  className="col-7 offset-5 col-sm-10 offset-sm-2 mb-5 mt-5"
+                  key={`field-${i}`}
+                >
                   {field.label}
                 </div>
               ) : (

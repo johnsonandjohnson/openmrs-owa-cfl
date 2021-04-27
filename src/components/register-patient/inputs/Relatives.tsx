@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { injectIntl } from "react-intl";
-import { FormGroup, Input as ReactstrapInput } from "reactstrap";
+import { FormGroup } from "reactstrap";
 import _ from "lodash";
 import Plus from "../../../assets/img/plus.png";
 import Minus from "../../../assets/img/minus.png";

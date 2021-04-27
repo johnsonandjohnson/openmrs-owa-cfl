@@ -75,19 +75,11 @@ const extractFormData = (patient) => {
       (relative) => relative.otherPerson.value
     ),
   };
-  if (
-    !formData.birthdateYear &&
-    !formData.birthdateMonth &&
-    !formData.birthdateDay
-  ) {
+  if (!formData.birthdate) {
     formData.birthdate = null;
   } else {
     formData.birthdateEstimated = false;
-    formData.birthdate = [
-      formData.birthdateYear,
-      formData.birthdateMonth,
-      formData.birthdateDay,
-    ].join("-");
+    formData.birthdate = formData.birthdate.toISOString().split("T")[0];
   }
   return formData;
 };

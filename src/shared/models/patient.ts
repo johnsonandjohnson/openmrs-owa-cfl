@@ -5,10 +5,7 @@ export interface IPatient {
   preferred: boolean;
   gender: string;
   unknown: boolean;
-  birthdateDay: number;
-  birthdateMonth: number;
-  birthdateYear: number;
-  birthdate: string;
+  birthdate?: any;
   address1: string;
   address2: string;
   cityVillage: string;

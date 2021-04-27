@@ -2,26 +2,21 @@ import React from "react";
 import { connect } from "react-redux";
 import { injectIntl } from "react-intl";
 import { setValueOnChange } from "../../../shared/util/patient-util";
-import PhoneInput from "react-phone-number-input/input";
+import DatePicker from "react-datepicker";
 import { IFieldProps, IFieldState } from "./Field";
 import ValidationError from "./ValidationError";
 import { getPlaceholder } from "../../../shared/util/form-util";
-import { BIRTHDATE_FIELD, ESTIMATED_BIRTHDATE_FIELDS } from "../Step";
 
-export interface IInputProps extends StateProps, DispatchProps, IFieldProps {
+export interface IDateInputProps
+  extends StateProps,
+    DispatchProps,
+    IFieldProps {
   intl: any;
 }
 
-export interface IInputState extends IFieldState {}
+export interface IDateInputState extends IFieldState {}
 
-class Input extends React.Component<IInputProps, IInputState> {
-  isDisabled = (patient, fieldName) => {
-    if (ESTIMATED_BIRTHDATE_FIELDS.includes(fieldName)) {
-      return !!patient[BIRTHDATE_FIELD];
-    }
-    return false;
-  };
-
+class DateInput extends React.Component<IDateInputProps, IDateInputState> {
   render = () => {
     const {
       intl,
@@ -41,22 +36,23 @@ class Input extends React.Component<IInputProps, IInputState> {
     const props = {
       name: name,
       id: name,
-      placeholder: placeholder,
-      value: value != null ? value : patient[name],
+      placeholderText: placeholder,
+      selected: value != null ? value : patient[name],
       onChange: onChange || setValueOnChange(patient, name, onPatientChange),
       required: required,
       className: "form-control " + (isDirty && isInvalid ? "invalid" : ""),
       type: type || "text",
       onKeyDown: !!onKeyDown && onKeyDown,
-      disabled: this.isDisabled(patient, name),
     };
-    if (type === "number") {
-      // Firefox doesn't support number inputs
-      props["pattern"] = "[1-9]";
-    }
     return (
       <div className={`${className} input-container`}>
-        {type === "phone" ? <PhoneInput {...props} /> : <input {...props} />}
+        <DatePicker
+          {...props}
+          peekNextMonth
+          showMonthDropdown
+          showYearDropdown
+          dropdownMode="select"
+        />
         {hasValue && <span className="placeholder">{placeholder}</span>}
         {isDirty && isInvalid && <ValidationError hasValue={hasValue} />}
       </div>
@@ -71,4 +67,7 @@ const mapDispatchToProps = {};
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
 
-export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(Input));
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(injectIntl(DateInput));

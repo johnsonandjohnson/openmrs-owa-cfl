@@ -6,7 +6,7 @@ import { IPatient } from "../../shared/models/patient";
 import { Alert } from "reactstrap";
 import _ from "lodash";
 import {
-  BIRTHDATE_FIELDS,
+  BIRTHDATE_FIELD,
   ESTIMATED_BIRTHDATE_FIELDS,
   LOCATIONS_OPTION_SOURCE,
   NAME_FIELDS,
@@ -34,19 +34,8 @@ class Confirm extends React.Component<IConfirmProps, IConfirmState> {
 
   birthdate = (patient) => {
     const { intl } = this.props;
-    if (
-      !!patient.birthdateDay &&
-      !!patient.birthdateMonth &&
-      !!patient.birthdateYear
-    ) {
-      return formatDate(
-        intl,
-        new Date(
-          patient.birthdateYear,
-          patient.birthdateMonth,
-          patient.birthdateDay
-        )
-      );
+    if (!!patient.birthdate) {
+      return formatDate(intl, new Date(patient.birthdate));
     } else if (!!patient.birthdateYears || !!patient.birthdateMonths) {
       const yearPart =
         !!patient.birthdateYears &&
@@ -137,7 +126,7 @@ class Confirm extends React.Component<IConfirmProps, IConfirmState> {
       if (
         step.fields.find(
           (field) =>
-            BIRTHDATE_FIELDS.includes(field.name) ||
+            BIRTHDATE_FIELD === field.name ||
             ESTIMATED_BIRTHDATE_FIELDS.includes(field.name)
         )
       ) {

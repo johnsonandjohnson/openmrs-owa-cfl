@@ -44,17 +44,6 @@ export const setValueOnChange = (patient, prop, callback) => (event) => {
   );
 };
 
-const extractBirthdate = (person) => {
-  if (person.birthdate) {
-    const bd = new Date(person.birthdate);
-    const birthdateMonth = bd.getUTCMonth() + 1;
-    const birthdateDay = bd.getUTCDate();
-    const birthdateYear = bd.getUTCFullYear();
-    return { birthdateDay, birthdateMonth, birthdateYear };
-  }
-  return {};
-};
-
 export const extractPatientData = (patient) => {
   const { person } = patient;
   const { preferredName, preferredAddress, gender } = person;
@@ -73,7 +62,7 @@ export const extractPatientData = (patient) => {
     middleName,
     familyName,
     gender,
-    ...extractBirthdate(person),
+    birthdate: !!person.birthdate ? new Date(person.birthdate) : null,
     address1,
     address2,
     cityVillage,
