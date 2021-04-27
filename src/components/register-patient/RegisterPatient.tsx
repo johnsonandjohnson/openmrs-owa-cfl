@@ -34,10 +34,7 @@ import Step from "./Step";
 import Confirm from "./Confirm";
 import queryString from "query-string";
 import { redirectUrl } from "../../shared/util/url-util";
-import {
-  DEFAULT_FIND_PATIENT_TABLE_COLUMNS,
-  DEFAULT_REGISTRATION_APP,
-} from "../../shared/constants/patient";
+import { DEFAULT_REGISTRATION_APP } from "../../shared/constants/patient";
 
 export interface IPatientsProps
   extends StateProps,
@@ -115,18 +112,37 @@ class RegisterPatient extends React.Component<IPatientsProps, IPatientsState> {
   }
 
   setStep = (step) => {
+    const highestVisitedStep = Math.max(
+      step,
+      Math.max.apply(Math, this.state.visitedSteps)
+    );
     this.setState({
       step,
-      visitedSteps: [...this.state.visitedSteps, step],
+      visitedSteps: [...Array(highestVisitedStep + 1)].map(
+        (_, stepNumber) => stepNumber
+      ),
     });
   };
 
-  onStepClick = (step) => (e) => {
+  canVisitStep = (step) => {
+    const highestVisitedStep = Math.max.apply(Math, this.state.visitedSteps);
+    if (highestVisitedStep >= step) {
+      // if a step (or any of the following steps) has already been visited, return true regardless of validation errors
+      return true;
+    }
     if (
-      this.state.visitedSteps.indexOf(step) >= 0 ||
-      (this.state.stepValidity[step - 1]?.isValid &&
-        this.state.visitedSteps.indexOf(step - 1) >= 0)
+      [...Array(step)].every(
+        (_, stepNumber) => this.state.stepValidity[stepNumber]?.isValid
+      )
     ) {
+      // if every preceding step is valid (or non-required), return true
+      return true;
+    }
+    return false;
+  };
+
+  onStepClick = (step) => (e) => {
+    if (this.canVisitStep(step)) {
       this.setStep(step);
     }
   };
