@@ -1,20 +1,17 @@
-import React from "react";
-import { connect } from "react-redux";
-import { reset, search } from "../../redux/reducers/patient";
-import _ from "lodash";
-import { Form, FormGroup, Input, Spinner } from "reactstrap";
-import "./FindPatient.scss";
-import { FormattedMessage, injectIntl } from "react-intl";
-import searchIcon from "../../assets/img/search.png";
-import { columnContent } from "../../shared/util/patient-util";
-import { DEFAULT_FIND_PATIENT_TABLE_COLUMNS } from "../../shared/constants/patient";
-import {
-  SEARCH_INPUT_DELAY,
-  SEARCH_INPUT_MIN_CHARS,
-} from "../../shared/constants/input";
-import PagedTable from "../common/PagedTable";
-import { helperText } from "../../shared/util/table-util";
-import { PATIENT_PAGE_URL } from "../../shared/constants/openmrs";
+import React from 'react';
+import { connect } from 'react-redux';
+import { reset, search } from '../../redux/reducers/patient';
+import _ from 'lodash';
+import { Form, FormGroup, Input, Spinner } from 'reactstrap';
+import './FindPatient.scss';
+import { FormattedMessage, injectIntl } from 'react-intl';
+import searchIcon from '../../assets/img/search.png';
+import { columnContent } from '../../shared/util/patient-util';
+import { DEFAULT_FIND_PATIENT_TABLE_COLUMNS } from '../../shared/constants/patient';
+import { SEARCH_INPUT_DELAY, SEARCH_INPUT_MIN_CHARS } from '../../shared/constants/input';
+import PagedTable from '../common/PagedTable';
+import { helperText } from '../../shared/util/table-util';
+import { PATIENT_PAGE_URL } from '../../shared/constants/openmrs';
 
 export interface IPatientsProps extends StateProps, DispatchProps {
   intl: any;
@@ -27,9 +24,15 @@ export interface IPatientsState {
 
 class FindPatient extends React.Component<IPatientsProps, IPatientsState> {
   state = {
-    query: "",
-    page: 0,
+    query: '',
+    page: 0
   };
+
+  searchAfterDelay = _.debounce(e => {
+    if (this.state.query.length >= SEARCH_INPUT_MIN_CHARS) {
+      this.props.search(this.state.query, this.state.page);
+    }
+  }, SEARCH_INPUT_DELAY);
 
   componentDidMount() {
     this.props.reset();
@@ -41,41 +44,32 @@ class FindPatient extends React.Component<IPatientsProps, IPatientsState> {
     }
   };
 
-  searchAfterDelay = _.debounce((e) => {
-    if (this.state.query.length >= SEARCH_INPUT_MIN_CHARS) {
-      this.props.search(this.state.query, this.state.page);
-    }
-  }, SEARCH_INPUT_DELAY);
-
-  onQueryChange = (event) => {
+  onQueryChange = event => {
     this.setState({
       query: event.target.value,
-      page: 0,
+      page: 0
     });
     this.searchAfterDelay();
   };
 
-  onSearchClick = (e) => {
+  onSearchClick = e => {
     e.preventDefault();
     this.searchAfterDelay.cancel();
     this.setState({
-      page: 0,
+      page: 0
     });
     this.search();
   };
 
-  switchPage = (page) => {
+  switchPage = page =>
     this.setState(
       {
-        page,
+        page
       },
       this.search
     );
-  };
 
-  getRecordLink = (entity) => {
-    return `${PATIENT_PAGE_URL}?patientId=${entity.uuid}`;
-  };
+  getRecordLink = entity => `${PATIENT_PAGE_URL}?patientId=${entity.uuid}`;
 
   render() {
     return (
@@ -93,7 +87,7 @@ class FindPatient extends React.Component<IPatientsProps, IPatientsState> {
               <img src={searchIcon} alt="search" className="search-icon" />
               <Input
                 placeholder={this.props.intl.formatMessage({
-                  id: "findPatient.searchInputPlaceholder",
+                  id: 'findPatient.searchInputPlaceholder'
                 })}
                 value={this.state.query}
                 onChange={this.onQueryChange}
@@ -106,16 +100,12 @@ class FindPatient extends React.Component<IPatientsProps, IPatientsState> {
               {this.props.loading ? (
                 <Spinner color="dark" size="sm" />
               ) : (
-                helperText(
-                  this.state.query,
-                  this.props.loading,
-                  this.props.totalCount
-                )
+                helperText(this.state.query, this.props.loading, this.props.totalCount)
               )}
             </div>
             {this.props.totalCount > 0 && (
               <PagedTable
-                columns={this.props.tableColumns.split(",")}
+                columns={this.props.tableColumns.split(',')}
                 entities={this.props.patients}
                 columnContent={columnContent}
                 hasNext={this.props.hasNext}
@@ -142,9 +132,7 @@ const mapStateToProps = ({ patient, settings }) => ({
   currentPage: patient.currentPage,
   totalCount: patient.totalCount,
   tableColumns:
-    (settings.findPatientTableColumnsSetting &&
-      settings.findPatientTableColumnsSetting.value) ||
-    DEFAULT_FIND_PATIENT_TABLE_COLUMNS,
+    (settings.findPatientTableColumnsSetting && settings.findPatientTableColumnsSetting.value) || DEFAULT_FIND_PATIENT_TABLE_COLUMNS
 });
 
 const mapDispatchToProps = { search, reset };
@@ -152,7 +140,4 @@ const mapDispatchToProps = { search, reset };
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(injectIntl(FindPatient));
+export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(FindPatient));

@@ -1,11 +1,11 @@
-import Buttons from "./Buttons";
-import Input from "./Input";
-import React from "react";
-import Select from "./Select";
-import Relatives from "./Relatives";
-import DateInput from "./DateInput";
+import Buttons from './Buttons';
+import Input from './Input';
+import React from 'react';
+import Select from './Select';
+import Relatives from './Relatives';
+import DateInput from './DateInput';
 
-const DEFAULT_FIELD_TYPE = "text";
+const DEFAULT_FIELD_TYPE = 'text';
 const DEFAULT_INPUT = Input;
 
 export interface IFieldProps {
@@ -21,6 +21,7 @@ export interface IFieldProps {
   onKeyDown?: any;
 }
 
+// tslint:disable-next-line:no-empty-interface
 export interface IFieldState {}
 
 export const inputsByType = {
@@ -30,7 +31,7 @@ export const inputsByType = {
   text: Input,
   phone: Input,
   date: DateInput,
-  relatives: Relatives,
+  relatives: Relatives
 };
 
 function Field(props: IFieldProps) {

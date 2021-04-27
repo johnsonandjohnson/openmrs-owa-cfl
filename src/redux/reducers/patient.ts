@@ -1,13 +1,13 @@
-import axios from "axios";
+import axios from 'axios';
 
-import { FAILURE, REQUEST, SUCCESS } from "../action-type.util";
-import { DEFAULT_PAGE_SIZE } from "../page.util";
+import { FAILURE, REQUEST, SUCCESS } from '../action-type.util';
+import { DEFAULT_PAGE_SIZE } from '../page.util';
 
 export const ACTION_TYPES = {
-  SEARCH_PATIENTS: "patient/SEARCH_PATIENTS",
-  GET_PATIENT: "patient/GET_PATIENT",
-  RESET_PATIENTS: "patient/RESET_PATIENTS",
-  GET_PATIENT_RELATIONSHIPS: "patient/GET_PATIENT_RELATIONSHIPS",
+  SEARCH_PATIENTS: 'patient/SEARCH_PATIENTS',
+  GET_PATIENT: 'patient/GET_PATIENT',
+  RESET_PATIENTS: 'patient/RESET_PATIENTS',
+  GET_PATIENT_RELATIONSHIPS: 'patient/GET_PATIENT_RELATIONSHIPS'
 };
 
 const initialState = {
@@ -15,12 +15,12 @@ const initialState = {
   patients: [],
   patient: null,
   patientRelationships: null,
-  errorMessage: "",
+  errorMessage: '',
   currentPage: 0,
   totalCount: 0,
   hasNext: false,
   hasPrev: false,
-  q: "",
+  q: ''
 };
 
 const reducer = (state = initialState, action) => {
@@ -28,18 +28,18 @@ const reducer = (state = initialState, action) => {
     case REQUEST(ACTION_TYPES.GET_PATIENT_RELATIONSHIPS):
       return {
         ...state,
-        patientRelationships: null,
+        patientRelationships: null
       };
     case REQUEST(ACTION_TYPES.SEARCH_PATIENTS):
       return {
         ...state,
         loading: true,
-        q: action.meta.q,
+        q: action.meta.q
       };
     case FAILURE(ACTION_TYPES.SEARCH_PATIENTS):
       return {
         ...initialState,
-        errorMessage: action.payload.message,
+        errorMessage: action.payload.message
       };
     case SUCCESS(ACTION_TYPES.SEARCH_PATIENTS):
       const links = action.payload.data.links;
@@ -47,10 +47,10 @@ const reducer = (state = initialState, action) => {
         return {
           ...initialState,
           patients: action.payload.data.results,
-          hasNext: links && !!links.find((link) => link.rel === "next"),
-          hasPrev: links && !!links.find((link) => link.rel === "prev"),
+          hasNext: links && !!links.find(link => link.rel === 'next'),
+          hasPrev: links && !!links.find(link => link.rel === 'prev'),
           totalCount: action.payload.data.totalCount,
-          currentPage: action.meta.currentPage,
+          currentPage: action.meta.currentPage
         };
       } else {
         return { ...state };
@@ -58,16 +58,16 @@ const reducer = (state = initialState, action) => {
     case SUCCESS(ACTION_TYPES.GET_PATIENT):
       return {
         ...state,
-        patient: action.payload.data,
+        patient: action.payload.data
       };
     case SUCCESS(ACTION_TYPES.GET_PATIENT_RELATIONSHIPS):
       return {
         ...state,
-        patientRelationships: action.payload.data.results,
+        patientRelationships: action.payload.data.results
       };
     case ACTION_TYPES.RESET_PATIENTS:
       return {
-        ...initialState,
+        ...initialState
       };
     default:
       return state;
@@ -76,41 +76,37 @@ const reducer = (state = initialState, action) => {
 
 // actions
 export const search = (q, page = 0, limit = DEFAULT_PAGE_SIZE) => {
-  const requestUrl = `/openmrs/ws/rest/v1/patient?q=${q || ""}&startIndex=${
-    page * limit
-  }&limit=${limit}&v=full&totalCount=true`;
+  const requestUrl = `/openmrs/ws/rest/v1/patient?q=${q || ''}&startIndex=${page * limit}&limit=${limit}&v=full&totalCount=true`;
   return {
     type: ACTION_TYPES.SEARCH_PATIENTS,
     payload: axios.get(requestUrl),
     meta: {
       q,
-      currentPage: page,
-    },
+      currentPage: page
+    }
   };
 };
 
 const PATIENT_CUSTOM_V = `patientId,uuid,identifiers,person:(gender,age,birthdate,birthdateEstimated,preferredAddress,preferredName,attributes),attributes:(value,attributeType:(name))`;
 
-export const getPatient = (id) => {
+export const getPatient = id => {
   const requestUrl = `/openmrs/ws/rest/v1/patient/${id}?v=custom:(${PATIENT_CUSTOM_V})`;
   return {
     type: ACTION_TYPES.GET_PATIENT,
-    payload: axios.get(requestUrl),
+    payload: axios.get(requestUrl)
   };
 };
 
-export const getPatientRelationships = (id) => {
+export const getPatientRelationships = id => {
   const requestUrl = `/openmrs/ws/rest/v1/relationship?v=default&person=${id}`;
   return {
     type: ACTION_TYPES.GET_PATIENT_RELATIONSHIPS,
-    payload: axios.get(requestUrl),
+    payload: axios.get(requestUrl)
   };
 };
 
-export const reset = () => {
-  return {
-    type: ACTION_TYPES.RESET_PATIENTS,
-  };
-};
+export const reset = () => ({
+  type: ACTION_TYPES.RESET_PATIENTS
+});
 
 export default reducer;

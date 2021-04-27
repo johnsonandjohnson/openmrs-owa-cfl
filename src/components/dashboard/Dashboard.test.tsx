@@ -1,9 +1,9 @@
-import React from "react";
-import { render, screen } from "@testing-library/react";
-import { IntlProvider } from "react-intl";
-import App from "../App";
+import React from 'react';
+import { render, screen } from '@testing-library/react';
+import { IntlProvider } from 'react-intl';
+import App from '../App';
 
-test("renders", () => {
+test('renders', () => {
   render(
     <IntlProvider locale="en">
       <App />

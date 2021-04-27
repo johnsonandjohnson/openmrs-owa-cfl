@@ -24,7 +24,7 @@
 
 #app header:before,
 #app header:after {
-  content: " ";
+  content: ' ';
   display: table;
 }
 
@@ -226,7 +226,7 @@ a:hover {
 }
 
 #app header .logo img {
-  content: url("../../assets/img/logo.png");
+  content: url('../../assets/img/logo.png');
   height: 30px !important;
   width: auto !important;
 }

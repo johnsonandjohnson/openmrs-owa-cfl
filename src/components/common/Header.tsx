@@ -1,8 +1,7 @@
-import "./Header.scss";
-import { Header as OpenMRSHeader } from "@openmrs/react-components";
+import React from 'react';
+import './Header.scss';
+import { Header as OpenMRSHeader } from '@openmrs/react-components';
 
-const Header = () => {
-  return <OpenMRSHeader />;
-};
+const Header = () => <OpenMRSHeader />;
 
 export default Header;

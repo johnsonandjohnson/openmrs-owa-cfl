@@ -1,33 +1,30 @@
-import React from "react";
-import { connect } from "react-redux";
-import { injectIntl } from "react-intl";
-import { FormGroup } from "reactstrap";
-import _ from "lodash";
-import Plus from "../../../assets/img/plus.png";
-import Minus from "../../../assets/img/minus.png";
-import { getRelationshipTypes } from "../../../redux/reducers/relationship-type";
-import Select from "react-select";
-import { reset, search } from "../../../redux/reducers/patient";
-import Field, { IFieldProps } from "./Field";
+import React from 'react';
+import { connect } from 'react-redux';
+import { injectIntl } from 'react-intl';
+import { FormGroup } from 'reactstrap';
+import _ from 'lodash';
+import Plus from '../../../assets/img/plus.png';
+import Minus from '../../../assets/img/minus.png';
+import { getRelationshipTypes } from '../../../redux/reducers/relationship-type';
+import Select from 'react-select';
+import { reset, search } from '../../../redux/reducers/patient';
+import Field, { IFieldProps } from './Field';
 
-export interface IRelativesProps
-  extends StateProps,
-    DispatchProps,
-    IFieldProps {
+export interface IRelativesProps extends StateProps, DispatchProps, IFieldProps {
   intl: any;
 }
 
-const OTHER_PERSON_NAME = "otherPersonInput";
+const OTHER_PERSON_NAME = 'otherPersonInput';
 
 const relationshipTypeField = {
-  name: "relationshipType",
+  name: 'relationshipType',
   required: false,
-  type: "select",
+  type: 'select'
 };
 
 const otherPersonField = {
-  name: "otherPerson",
-  required: false,
+  name: 'otherPerson',
+  required: false
 };
 
 export const rowFields = [relationshipTypeField, otherPersonField];
@@ -39,9 +36,9 @@ export interface IRelative {
 }
 
 const emptyRelative = {
-  relationshipType: "",
+  relationshipType: '',
   otherPerson: null,
-  otherPersonInput: "",
+  otherPersonInput: ''
 };
 
 export interface IRelativesState {
@@ -54,26 +51,21 @@ class Relatives extends React.Component<IRelativesProps, IRelativesState> {
   state = {
     invalidFields: [],
     relatives: [] as IRelative[],
-    otherPersonInput: "",
+    otherPersonInput: ''
   };
+
+  loadOptions = _.debounce(e => this.props.search(this.state.otherPersonInput), 500);
 
   componentDidMount() {
     this.props.getRelationshipTypes();
     this.props.reset();
   }
 
-  componentDidUpdate(
-    prevProps: Readonly<IRelativesProps>,
-    prevState: Readonly<IRelativesState>,
-    snapshot?: any
-  ) {
+  componentDidUpdate(prevProps: Readonly<IRelativesProps>, prevState: Readonly<IRelativesState>, snapshot?: any) {
     const { patient } = this.props;
     if (prevProps.patient !== patient && !!patient) {
       this.setState({
-        relatives:
-          patient.relatives && patient.relatives.length > 0
-            ? patient.relatives
-            : [{ ...emptyRelative }],
+        relatives: patient.relatives && patient.relatives.length > 0 ? patient.relatives : [{ ...emptyRelative }]
       });
     }
   }
@@ -82,71 +74,64 @@ class Relatives extends React.Component<IRelativesProps, IRelativesState> {
     const { relatives } = this.state;
     relatives.push({ ...emptyRelative });
     this.setState({
-      relatives,
+      relatives
     });
   };
 
-  relationshipTypeOptions = () => {
-    return this.props.relationshipTypes
-      .filter((relationshipType) => !relationshipType.retired)
-      .flatMap((relationshipType) => [
+  relationshipTypeOptions = () =>
+    this.props.relationshipTypes
+      .filter(relationshipType => !relationshipType.retired)
+      .flatMap(relationshipType => [
         {
-          value: relationshipType.uuid + "-A",
-          label: relationshipType.displayAIsToB,
+          value: relationshipType.uuid + '-A',
+          label: relationshipType.displayAIsToB
         },
         {
-          value: relationshipType.uuid + "-B",
-          label: relationshipType.displayBIsToA,
-        },
+          value: relationshipType.uuid + '-B',
+          label: relationshipType.displayBIsToA
+        }
       ]);
-  };
 
-  removeRelative = (rowNo) => () => {
+  removeRelative = rowNo => () => {
     const { relatives } = this.state;
     if (relatives.length > 1) {
       relatives.splice(rowNo, 1);
     }
     this.setState({
-      relatives,
+      relatives
     });
   };
 
-  onChangeEvent = (rowNo, fieldName) => (event) => {
-    this.onChange(rowNo, fieldName)(event.target.value);
-  };
+  onChangeEvent = (rowNo, fieldName) => event => this.onChange(rowNo, fieldName)(event.target.value);
 
-  onChange = (rowNo, fieldName) => (value) => {
+  onChange = (rowNo, fieldName) => value => {
     const { relatives } = this.state;
     const { patient, onPatientChange } = this.props;
     if (fieldName === OTHER_PERSON_NAME) {
       relatives[rowNo].otherPersonInput = value;
       this.setState({
         relatives,
-        otherPersonInput: value,
+        otherPersonInput: value
       });
       this.loadOptions();
     } else {
       relatives[rowNo][fieldName] = value;
       this.setState({
-        relatives,
+        relatives
       });
     }
     patient.relatives = relatives;
     onPatientChange(patient);
   };
 
-  loadOptions = _.debounce((e) => {
-    this.props.search(this.state.otherPersonInput);
-  }, 500);
-
-  patientOptions = (rowNo) => {
+  patientOptions = rowNo => {
     const { relatives } = this.state;
     const name = relatives[rowNo].otherPersonInput;
     const options =
       name && name.length >= 3
-        ? this.props.patients.map((patient) => ({
+        ? this.props.patients.map(patient => ({
             value: patient.uuid,
-            label: patient.person.display,
+            label: patient.person.display
           }))
         : [];
     return options;
@@ -154,7 +139,7 @@ class Relatives extends React.Component<IRelativesProps, IRelativesState> {
 
   relative = (relative, rowNo) => {
     const otherPersonPlaceholder = this.props.intl.formatMessage({
-      id: "registerPatient.fields.otherPerson",
+      id: 'registerPatient.fields.otherPerson'
     });
     return (
       <FormGroup className="d-flex flex-row flex-wrap w-100">
@@ -178,24 +163,13 @@ class Relatives extends React.Component<IRelativesProps, IRelativesState> {
               classNamePrefix="other-person"
               placeholder={otherPersonPlaceholder}
               value={relative.otherPerson}
-              onKeyDown={
-                rowNo + 1 === this.state.relatives.length
-                  ? this.props.onKeyDown
-                  : null
-              }
+              onKeyDown={rowNo + 1 === this.state.relatives.length ? this.props.onKeyDown : null}
             />
-            {!!relative.otherPerson && (
-              <span className="placeholder">{otherPersonPlaceholder}</span>
-            )}
+            {!!relative.otherPerson && <span className="placeholder">{otherPersonPlaceholder}</span>}
           </div>
         )}
         <div className="align-items-center justify-content-center d-flex">
-          <img
-            src={Plus}
-            alt="add"
-            className="mx-2"
-            onClick={this.addRelative}
-          />
+          <img src={Plus} alt="add" className="mx-2" onClick={this.addRelative} />
           <img src={Minus} alt="remove" onClick={this.removeRelative(rowNo)} />
         </div>
       </FormGroup>
@@ -203,31 +177,22 @@ class Relatives extends React.Component<IRelativesProps, IRelativesState> {
   };
 
   render() {
-    return (
-      <>
-        {_.map(this.state.relatives, (relative, i) =>
-          this.relative(relative, i)
-        )}
-      </>
-    );
+    return <>{_.map(this.state.relatives, (relative, i) => this.relative(relative, i))}</>;
   }
 }
 
 const mapStateToProps = ({ relationshipType, patient }) => ({
   relationshipTypes: relationshipType.relationshipTypes,
-  patients: patient.patients || [],
+  patients: patient.patients || []
 });
 
 const mapDispatchToProps = {
   getRelationshipTypes,
   search,
-  reset,
+  reset
 };
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(injectIntl(Relatives));
+export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(Relatives));

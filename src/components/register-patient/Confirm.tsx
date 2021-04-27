@@ -1,19 +1,13 @@
-import React from "react";
-import { connect } from "react-redux";
-import "./Confirm.scss";
-import { FormattedMessage, injectIntl } from "react-intl";
-import { IPatient } from "../../shared/models/patient";
-import { Alert } from "reactstrap";
-import _ from "lodash";
-import {
-  BIRTHDATE_FIELD,
-  ESTIMATED_BIRTHDATE_FIELDS,
-  LOCATIONS_OPTION_SOURCE,
-  NAME_FIELDS,
-  RELATIVES_FIELD_TYPE,
-} from "./Step";
-import { formatDate } from "../../shared/util/date-util";
-import { formatPhoneNumberIntl } from "react-phone-number-input";
+import React from 'react';
+import { connect } from 'react-redux';
+import './Confirm.scss';
+import { FormattedMessage, injectIntl } from 'react-intl';
+import { IPatient } from '../../shared/models/patient';
+import { Alert } from 'reactstrap';
+import _ from 'lodash';
+import { BIRTHDATE_FIELD, ESTIMATED_BIRTHDATE_FIELDS, LOCATIONS_OPTION_SOURCE, NAME_FIELDS, RELATIVES_FIELD_TYPE } from './Step';
+import { formatDate } from '../../shared/util/date-util';
+import { formatPhoneNumberIntl } from 'react-phone-number-input';
 
 export interface IConfirmProps extends StateProps, DispatchProps {
   intl: any;
@@ -23,141 +17,94 @@ export interface IConfirmProps extends StateProps, DispatchProps {
   steps: any[];
 }
 
-export interface IConfirmState {}
-
-class Confirm extends React.Component<IConfirmProps, IConfirmState> {
+class Confirm extends React.Component<IConfirmProps> {
   state = {};
 
   componentDidMount() {}
 
   validate = () => true;
 
-  birthdate = (patient) => {
+  birthdate = patient => {
     const { intl } = this.props;
     if (!!patient.birthdate) {
       return formatDate(intl, new Date(patient.birthdate));
     } else if (!!patient.birthdateYears || !!patient.birthdateMonths) {
       const yearPart =
-        !!patient.birthdateYears &&
-        patient.birthdateYears +
-          " " +
-          intl.formatMessage({ id: "registerPatient.steps.confirm.years" });
+        !!patient.birthdateYears && patient.birthdateYears + ' ' + intl.formatMessage({ id: 'registerPatient.steps.confirm.years' });
       const monthPart =
-        !!patient.birthdateMonths &&
-        patient.birthdateMonths +
-          " " +
-          intl.formatMessage({ id: "registerPatient.steps.confirm.months" });
-      return [
-        intl.formatMessage({ id: "registerPatient.steps.confirm.estimated" }),
-        yearPart,
-        monthPart,
-      ]
-        .filter(Boolean)
-        .join(" ");
+        !!patient.birthdateMonths && patient.birthdateMonths + ' ' + intl.formatMessage({ id: 'registerPatient.steps.confirm.months' });
+      return [intl.formatMessage({ id: 'registerPatient.steps.confirm.estimated' }), yearPart, monthPart].filter(Boolean).join(' ');
     }
   };
 
-  location = (patient) => {
+  location = patient => {
     if (patient.locationId) {
-      return this.props.locations.find((loc) => loc.uuid === patient.locationId)
-        ?.display;
+      return this.props.locations.find(loc => loc.uuid === patient.locationId)?.display;
     }
   };
 
-  relationshipType = (relationshipTypeId) => {
-    const relationshipType = this.props.relationshipTypes.find(
-      (relationshipType) =>
-        relationshipTypeId.indexOf(relationshipType.uuid) >= 0
-    );
-    return (
-      relationshipType &&
-      (relationshipTypeId.endsWith("-A")
-        ? relationshipType.displayAIsToB
-        : relationshipType.displayBIsToA)
-    );
+  relationshipType = relationshipTypeId => {
+    const relationshipType = this.props.relationshipTypes.find(type => relationshipTypeId.indexOf(type.uuid) >= 0);
+    return relationshipType && (relationshipTypeId.endsWith('-A') ? relationshipType.displayAIsToB : relationshipType.displayBIsToA);
   };
 
-  relatives = (patient) => {
-    return (
-      patient.relatives &&
-      patient.relatives
-        .filter(
-          (relative) => !!relative.relationshipType && !!relative.otherPerson
-        )
-        .map((relative) =>
-          [
-            this.relationshipType(relative.relationshipType),
-            relative.otherPerson.label,
-          ].join(" - ")
-        )
-        .join(", ")
-    );
-  };
+  relatives = patient =>
+    patient.relatives &&
+    patient.relatives
+      .filter(relative => !!relative.relationshipType && !!relative.otherPerson)
+      .map(relative => [this.relationshipType(relative.relationshipType), relative.otherPerson.label].join(' - '))
+      .join(', ');
 
   getFieldValue = (patient, field) => {
     const val = patient[field.name];
     if (!!field.options) {
-      const option = field.options.find(
-        (opt) => opt.value === val || opt === val
-      );
+      const option = field.options.find(opt => opt.value === val || opt === val);
       if (!!option) {
         return option.label || option;
       }
     }
-    if (field.type === "phone" && !!val) {
+    if (field.type === 'phone' && !!val) {
       return formatPhoneNumberIntl(val);
     }
     return val;
   };
 
-  getSeparator = (step) => {
-    if (step.fields.find((field) => NAME_FIELDS.includes(field.name))) {
-      return " ";
+  getSeparator = step => {
+    if (step.fields.find(field => NAME_FIELDS.includes(field.name))) {
+      return ' ';
     }
-    return ", ";
+    return ', ';
   };
 
-  sections = (patient) => {
+  sections = patient => {
     const { steps } = this.props;
     const sections = [] as any[];
-    steps.forEach((step) => {
+    steps.forEach(step => {
       let value;
       const separator = this.getSeparator(step);
-      if (
-        step.fields.find(
-          (field) =>
-            BIRTHDATE_FIELD === field.name ||
-            ESTIMATED_BIRTHDATE_FIELDS.includes(field.name)
-        )
-      ) {
+      if (step.fields.find(field => BIRTHDATE_FIELD === field.name || ESTIMATED_BIRTHDATE_FIELDS.includes(field.name))) {
         value = this.birthdate(patient);
-      } else if (
-        step.fields.find((field) => field.type === RELATIVES_FIELD_TYPE)
-      ) {
+      } else if (step.fields.find(field => field.type === RELATIVES_FIELD_TYPE)) {
         value = this.relatives(patient);
-      } else if (
-        step.fields.find(
-          (field) => field.optionSource === LOCATIONS_OPTION_SOURCE
-        )
-      ) {
+      } else if (step.fields.find(field => field.optionSource === LOCATIONS_OPTION_SOURCE)) {
         value = this.location(patient);
       } else {
         value = step.fields
-          .filter((field) => !!field.name)
-          .map((field) => this.getFieldValue(patient, field))
+          .filter(field => !!field.name)
+          .map(field => this.getFieldValue(patient, field))
           .filter(Boolean)
           .join(separator);
       }
       sections.push({
         label: step.label,
-        value,
+        value
       });
     });
     return sections;
   };
 
-  renderField = (field) => {
-    const COLON = ":";
+  renderField = field => {
+    const COLON = ':';
     return (
       <div className="mb-3 col-confirm" key={`field-${field.label}`}>
         <div className="col-sm-4 col-confirm-label">
@@ -173,16 +120,7 @@ class Confirm extends React.Component<IConfirmProps, IConfirmState> {
     );
   };
 
-  errors = (errors) => {
-    return (
-      errors &&
-      _.map(errors, (err) => (
-        <Alert color="danger">
-          {err && err.replace(/<\/?[^>]+(>|$)/g, "")}
-        </Alert>
-      ))
-    );
-  };
+  errors = errors => errors && _.map(errors, err => <Alert color="danger">{err && err.replace(/<\/?[^>]+(>|$)/g, '')}</Alert>);
 
   render() {
     const fields = this.sections(this.props.patient);
@@ -194,23 +132,15 @@ class Confirm extends React.Component<IConfirmProps, IConfirmState> {
           {this.errors(errors)}
           <div className="step-title">
             <h2>
-              <FormattedMessage id={"registerPatient.steps.confirm.title"} />
+              <FormattedMessage id={'registerPatient.steps.confirm.title'} />
             </h2>
             <p>
-              <FormattedMessage id={"registerPatient.steps.confirm.subtitle"} />
+              <FormattedMessage id={'registerPatient.steps.confirm.subtitle'} />
             </p>
           </div>
           <div className="row">
-            <div className="col-sm-6">
-              {fields
-                .slice(0, itemsPerColumn)
-                .map((field) => this.renderField(field))}
-            </div>
-            <div className="col-sm-6">
-              {fields
-                .slice(itemsPerColumn)
-                .map((field) => this.renderField(field))}
-            </div>
+            <div className="col-sm-6">{fields.slice(0, itemsPerColumn).map(field => this.renderField(field))}</div>
+            <div className="col-sm-6">{fields.slice(itemsPerColumn).map(field => this.renderField(field))}</div>
           </div>
         </div>
         {this.props.stepButtons(this.validate)}
@@ -222,7 +152,7 @@ class Confirm extends React.Component<IConfirmProps, IConfirmState> {
 const mapStateToProps = ({ relationshipType, location, registration }) => ({
   relationshipTypes: relationshipType.relationshipTypes,
   locations: location.locations,
-  errors: registration.errors,
+  errors: registration.errors
 });
 
 const mapDispatchToProps = {};
@@ -230,7 +160,4 @@ const mapDispatchToProps = {};
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(injectIntl(Confirm));
+export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(Confirm));

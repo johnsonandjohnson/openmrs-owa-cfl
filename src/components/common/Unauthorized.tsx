@@ -1,5 +1,5 @@
-import React from "react";
-import "./Unauthorized.scss";
+import React from 'react';
+import './Unauthorized.scss';
 
 const Unauthorized = () => (
   <div className="page-container unauthorized">

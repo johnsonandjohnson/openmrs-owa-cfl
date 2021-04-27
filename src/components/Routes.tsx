@@ -1,63 +1,60 @@
-import React from "react";
-import { HashRouter as Router, Route, Switch } from "react-router-dom";
-import FindPatient from "./find-patient/FindPatient";
-import Dashboard from "./dashboard/Dashboard";
-import Breadcrumbs from "./common/Breadcrumbs";
-import _ from "lodash";
-import Header from "./common/Header";
-import ErrorBoundary from "./common/ErrorBoundary";
-import RegisterPatient from "./register-patient/RegisterPatient";
-import FindCaregiver from "./find-caregiver/FindCaregiver";
-import { connect } from "react-redux";
-import Unauthorized from "./common/Unauthorized";
-import { PRIVILEGES } from "../shared/constants/privilege";
-import { Spinner } from "reactstrap";
-import Customize from "@bit/soldevelo-cfl.omrs-components.customize";
+import React from 'react';
+import { HashRouter as Router, Route, Switch } from 'react-router-dom';
+import FindPatient from './find-patient/FindPatient';
+import Dashboard from './dashboard/Dashboard';
+import Breadcrumbs from './common/Breadcrumbs';
+import _ from 'lodash';
+import Header from './common/Header';
+import ErrorBoundary from './common/ErrorBoundary';
+import RegisterPatient from './register-patient/RegisterPatient';
+import FindCaregiver from './find-caregiver/FindCaregiver';
+import { connect } from 'react-redux';
+import Unauthorized from './common/Unauthorized';
+import { PRIVILEGES } from '../shared/constants/privilege';
+import { Spinner } from 'reactstrap';
+import Customize from '@bit/soldevelo-cfl.omrs-components.customize';
 
 export const routeConfig = [
   {
-    path: "/find-patient",
+    path: '/find-patient',
     component: FindPatient,
-    breadcrumb: "findPatient.title",
-    requiredPrivilege: PRIVILEGES.GET_PATIENTS,
+    breadcrumb: 'findPatient.title',
+    requiredPrivilege: PRIVILEGES.GET_PATIENTS
   },
   {
-    path: "/find-caregiver",
+    path: '/find-caregiver',
     component: FindCaregiver,
-    breadcrumb: "findCaregiver.title",
-    requiredPrivilege: PRIVILEGES.GET_PEOPLE,
+    breadcrumb: 'findCaregiver.title',
+    requiredPrivilege: PRIVILEGES.GET_PEOPLE
   },
   {
-    path: "/register-patient",
+    path: '/register-patient',
     component: RegisterPatient,
-    breadcrumb: "registerPatient.title",
-    requiredPrivilege: PRIVILEGES.ADD_PATIENTS,
+    breadcrumb: 'registerPatient.title',
+    requiredPrivilege: PRIVILEGES.ADD_PATIENTS
   },
   {
-    path: "/edit-patient/:id",
+    path: '/edit-patient/:id',
     component: RegisterPatient,
-    breadcrumb: "editPatient.title",
-    requiredPrivilege: PRIVILEGES.EDIT_PATIENTS,
+    breadcrumb: 'editPatient.title',
+    requiredPrivilege: PRIVILEGES.EDIT_PATIENTS
   },
   {
-    path: "/",
+    path: '/',
     component: Dashboard,
-    breadcrumb: "home.title",
-  },
+    breadcrumb: 'home.title'
+  }
 ];
 
 export interface IRoutesProps extends StateProps, DispatchProps {}
 
 class Routes extends React.Component<IRoutesProps> {
-  renderComponent = (route) => {
+  renderComponent = route => {
     const { authenticated, privileges, loading } = this.props;
     if (route.requiredPrivilege) {
       if (loading) {
         return <Spinner />;
-      } else if (
-        !authenticated ||
-        !privileges.includes(route.requiredPrivilege)
-      ) {
+      } else if (!authenticated || !privileges.includes(route.requiredPrivilege)) {
         return <Unauthorized />;
       }
     }
@@ -73,13 +70,11 @@ class Routes extends React.Component<IRoutesProps> {
         <Breadcrumbs />
         <ErrorBoundary>
           <Switch>
-            {_.map(routeConfig, (route) => {
-              return (
-                <Route path={route.path} key={route.path}>
-                  {this.renderComponent(route)}
-                </Route>
-              );
-            })}
+            {_.map(routeConfig, route => (
+              <Route path={route.path} key={route.path}>
+                {this.renderComponent(route)}
+              </Route>
+            ))}
           </Switch>
         </ErrorBoundary>
       </div>
@@ -90,7 +85,7 @@ class Routes extends React.Component<IRoutesProps> {
 const mapStateToProps = ({ session }) => ({
   authenticated: session.authenticated,
   loading: session.loading,
-  privileges: session.privileges,
+  privileges: session.privileges
 });
 
 const mapDispatchToProps = {};

@@ -1,30 +1,30 @@
 /** Fonts **/
 @font-face {
-  font-family: "CircularStd";
+  font-family: 'CircularStd';
   font-style: normal;
   font-weight: normal;
-  src: url("font/CircularStd-Medium.otf") format("opentype");
+  src: url('font/CircularStd-Medium.otf') format('opentype');
 }
 
 @font-face {
-  font-family: "CircularStd";
+  font-family: 'CircularStd';
   font-style: normal;
   font-weight: bold;
-  src: url("font/CircularStd-Bold.otf") format("opentype");
+  src: url('font/CircularStd-Bold.otf') format('opentype');
 }
 
 @font-face {
-  font-family: "CircularStd-Book";
+  font-family: 'CircularStd-Book';
   font-style: normal;
   font-weight: normal;
-  src: url("font/CircularStd-Book.otf") format("opentype");
+  src: url('font/CircularStd-Book.otf') format('opentype');
 }
 
 @font-face {
-  font-family: "CircularStd-Book";
+  font-family: 'CircularStd-Book';
   font-style: italic;
   font-weight: normal;
-  src: url("font/CircularStd-BookItalic.otf") format("opentype");
+  src: url('font/CircularStd-BookItalic.otf') format('opentype');
 }
 
 /** Common **/
@@ -56,7 +56,7 @@ header .logo {
 }
 
 header .logo a {
-  content: url("img/logo.png");
+  content: url('img/logo.png');
   height: 30px !important;
   width: auto !important;
 }
@@ -100,20 +100,20 @@ header #session-location {
   line-height: normal !important;
 }
 
-i[class^="cfl-"] {
+i[class^='cfl-'] {
   padding: 0 !important;
 }
 
 i.cfl-find-patient {
-  content: url("img/find-patient.png");
+  content: url('img/find-patient.png');
 }
 
 i.cfl-find-caregiver {
-  content: url("img/find-caregiver.png");
+  content: url('img/find-caregiver.png');
 }
 
 i.cfl-register-patient {
-  content: url("img/register-patient.png");
+  content: url('img/register-patient.png');
 }
 
 #apps {
@@ -170,7 +170,7 @@ i.cfl-register-patient {
 }
 
 #breadcrumbs li:first-child a::after {
-  content: "Home";
+  content: 'Home';
 }
 
 #breadcrumbs li i {
@@ -178,7 +178,7 @@ i.cfl-register-patient {
 }
 
 #breadcrumbs li::after {
-  content: ">>";
+  content: '>>';
   color: #4e5155 !important;
   margin: 0 0.1em !important;
 }
@@ -189,7 +189,7 @@ i.cfl-register-patient {
 
 /** Breadcrumbs - Visits **/
 #breadcrumbs > a:first-child::after {
-  content: "Home";
+  content: 'Home';
 }
 
 #breadcrumbs a:first-child {
@@ -207,7 +207,7 @@ i.cfl-register-patient {
 }
 
 #breadcrumbs span::after {
-  content: ">>";
+  content: '>>';
   color: #4e5155 !important;
 }
 
@@ -351,7 +351,7 @@ body {
   max-width: none !important;
   width: auto !important;
   margin-top: 0 !important;
-  font-family: "CircularStd", serif !important;
+  font-family: 'CircularStd', serif !important;
 }
 
 div#content {

@@ -1,16 +1,16 @@
-import axios from "axios";
+import axios from 'axios';
 
-import { FAILURE, REQUEST, SUCCESS } from "../action-type.util";
+import { FAILURE, REQUEST, SUCCESS } from '../action-type.util';
 
 export const ACTION_TYPES = {
-  SEARCH_LOCATIONS: "person/SEARCH_LOCATIONS",
-  RESET_LOCATIONS: "person/RESET_LOCATIONS",
+  SEARCH_LOCATIONS: 'person/SEARCH_LOCATIONS',
+  RESET_LOCATIONS: 'person/RESET_LOCATIONS'
 };
 
 const initialState = {
   loading: false,
   locations: [],
-  errorMessage: "",
+  errorMessage: ''
 };
 
 const reducer = (state = initialState, action) => {
@@ -18,21 +18,21 @@ const reducer = (state = initialState, action) => {
     case REQUEST(ACTION_TYPES.SEARCH_LOCATIONS):
       return {
         ...state,
-        loading: true,
+        loading: true
       };
     case FAILURE(ACTION_TYPES.SEARCH_LOCATIONS):
       return {
         ...initialState,
-        errorMessage: action.payload.message,
+        errorMessage: action.payload.message
       };
     case SUCCESS(ACTION_TYPES.SEARCH_LOCATIONS):
       return {
         ...initialState,
-        locations: action.payload.data.results,
+        locations: action.payload.data.results
       };
     case ACTION_TYPES.RESET_LOCATIONS:
       return {
-        ...initialState,
+        ...initialState
       };
     default:
       return state;
@@ -40,18 +40,16 @@ const reducer = (state = initialState, action) => {
 };
 
 // actions
-export const searchLocations = (q) => {
-  const requestUrl = `/openmrs/ws/rest/v1/location${!!q ? "?q=" + q : ""}`;
+export const searchLocations = q => {
+  const requestUrl = `/openmrs/ws/rest/v1/location${!!q ? '?q=' + q : ''}`;
   return {
     type: ACTION_TYPES.SEARCH_LOCATIONS,
-    payload: axios.get(requestUrl),
+    payload: axios.get(requestUrl)
   };
 };
 
-export const reset = () => {
-  return {
-    type: ACTION_TYPES.RESET_LOCATIONS,
-  };
-};
+export const reset = () => ({
+  type: ACTION_TYPES.RESET_LOCATIONS
+});
 
 export default reducer;

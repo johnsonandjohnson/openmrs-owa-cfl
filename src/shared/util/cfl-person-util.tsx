@@ -12,39 +12,27 @@ import {
   PHONE_NUMBER,
   TELEPHONE_NUMBER_ATTRIBUTE_TYPE,
   GENDER,
-  GENDER_DICT,
-} from "../constants/patient";
-import { extractValue } from "./omrs-entity-util";
-import { formatDate } from "./date-util";
-import { formatPhoneNumberIntl } from "react-phone-number-input";
+  GENDER_DICT
+} from '../constants/patient';
+import { extractValue } from './omrs-entity-util';
+import { formatDate } from './date-util';
+import { formatPhoneNumberIntl } from 'react-phone-number-input';
 
 export const extractAttribute = (entity, type) => {
   if (!entity) {
     return DEFAULT_COLUMN_VALUE;
   }
-  const attr =
-    entity.attributes &&
-    entity.attributes.find(
-      (attr) => attr.name.toLowerCase() === type.toLowerCase()
-    );
+  const attr = entity.attributes && entity.attributes.find(a => a.name.toLowerCase() === type.toLowerCase());
   return (attr && attr.value) || DEFAULT_COLUMN_VALUE;
 };
 
 export const columnContent = (person, column, intl) => {
-  const names = person.personName && person.personName.split(" ");
+  const names = person.personName && person.personName.split(' ');
   switch (column) {
     case BIRTHDATE:
-      return (
-        person &&
-        person.birthdate &&
-        formatDate(intl, new Date(person.birthdate))
-      );
+      return person && person.birthdate && formatDate(intl, new Date(person.birthdate));
     case DEATH_DATE:
-      return (
-        person &&
-        person.deathDate &&
-        formatDate(intl, new Date(person.deathDate))
-      );
+      return person && person.deathDate && formatDate(intl, new Date(person.deathDate));
     case GIVEN_NAME:
       return names && names[0];
     case FAMILY_NAME:
@@ -55,10 +43,7 @@ export const columnContent = (person, column, intl) => {
     case PATIENT_IDENTIFIER:
       return person && (person.patientIdentifier || person.personIdentifier);
     case PHONE_NUMBER: {
-      const phoneNumber = extractAttribute(
-        person,
-        TELEPHONE_NUMBER_ATTRIBUTE_TYPE
-      );
+      const phoneNumber = extractAttribute(person, TELEPHONE_NUMBER_ATTRIBUTE_TYPE);
       return formatPhoneNumberIntl(phoneNumber) || phoneNumber;
     }
     case PERSON_LANGUAGE:

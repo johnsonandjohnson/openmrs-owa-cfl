@@ -1,9 +1,9 @@
-import "./PagedTable.scss";
-import { FormattedMessage, useIntl } from "react-intl";
-import { Pagination, PaginationItem, PaginationLink, Table } from "reactstrap";
-import React from "react";
-import _ from "lodash";
-import { DEFAULT_PAGE_SIZE } from "../../redux/page.util";
+import './PagedTable.scss';
+import { FormattedMessage, useIntl } from 'react-intl';
+import { Pagination, PaginationItem, PaginationLink, Table } from 'reactstrap';
+import React from 'react';
+import _ from 'lodash';
+import { DEFAULT_PAGE_SIZE } from '../../redux/page.util';
 
 export interface PagedTableProps {
   columns: string[];
@@ -18,7 +18,7 @@ export interface PagedTableProps {
   getRecordLink?: any;
 }
 
-const switchPage = (callback, page, enabled) => (evt) => {
+const switchPage = (callback, page, enabled) => evt => {
   if (enabled) {
     callback(page);
   }
@@ -29,25 +29,21 @@ const PAGE_DELTA = Math.floor((MAX_PAGES_SHOWN - 1) / 2);
 
 const PagedTable = (props: PagedTableProps) => {
   const intl = useIntl();
-  const handleRowClick = (entity) => {
+  const handleRowClick = entity => {
     if (!!props.getRecordLink) {
       window.location.href = props.getRecordLink(entity);
     }
   };
   const pageSize = props.pageSize || DEFAULT_PAGE_SIZE;
   const noPages = Math.ceil(props.totalCount / pageSize);
-  const startingPage =
-    props.currentPage - PAGE_DELTA >= 0 ? props.currentPage - PAGE_DELTA : 0;
-  const endingPage =
-    startingPage + MAX_PAGES_SHOWN > noPages
-      ? noPages
-      : startingPage + MAX_PAGES_SHOWN;
+  const startingPage = props.currentPage - PAGE_DELTA >= 0 ? props.currentPage - PAGE_DELTA : 0;
+  const endingPage = startingPage + MAX_PAGES_SHOWN > noPages ? noPages : startingPage + MAX_PAGES_SHOWN;
   return (
     <>
       <Table borderless striped responsive className="paged-table">
         <thead>
           <tr>
-            {_.map(props.columns, (column) => (
+            {_.map(props.columns, column => (
               <th>
                 <FormattedMessage id={`columnNames.${column}`} />
               </th>
@@ -57,7 +53,7 @@ const PagedTable = (props: PagedTableProps) => {
         <tbody>
           {_.map(props.entities, (entity, i) => (
             <tr key={i} onClick={() => handleRowClick(entity)}>
-              {_.map(props.columns, (column) => (
+              {_.map(props.columns, column => (
                 <td>{props.columnContent(entity, column, intl)}</td>
               ))}
             </tr>
@@ -66,48 +62,25 @@ const PagedTable = (props: PagedTableProps) => {
       </Table>
       {props.currentPage !== 0 || props.hasNext ? (
         <Pagination size="sm" className="pagination">
-          <PaginationItem
-            disabled={!props.hasPrev}
-            onClick={switchPage(props.switchPage, 0, props.hasPrev)}
-          >
+          <PaginationItem disabled={!props.hasPrev} onClick={switchPage(props.switchPage, 0, props.hasPrev)}>
             <PaginationLink first />
           </PaginationItem>
-          <PaginationItem
-            disabled={!props.hasPrev}
-            onClick={switchPage(
-              props.switchPage,
-              props.currentPage - 1,
-              props.hasPrev
-            )}
-          >
+          <PaginationItem disabled={!props.hasPrev} onClick={switchPage(props.switchPage, props.currentPage - 1, props.hasPrev)}>
             <PaginationLink previous />
           </PaginationItem>
-          {_.range(startingPage, endingPage).map((page) => (
+          {_.range(startingPage, endingPage).map(page => (
             <PaginationItem
               disabled={props.currentPage === page}
-              onClick={switchPage(
-                props.switchPage,
-                page,
-                props.currentPage !== page
-              )}
+              onClick={switchPage(props.switchPage, page, props.currentPage !== page)}
+              key={`page-${page}`}
             >
               <PaginationLink>{page + 1}</PaginationLink>
             </PaginationItem>
           ))}
-          <PaginationItem
-            disabled={!props.hasNext}
-            onClick={switchPage(
-              props.switchPage,
-              props.currentPage + 1,
-              props.hasNext
-            )}
-          >
+          <PaginationItem disabled={!props.hasNext} onClick={switchPage(props.switchPage, props.currentPage + 1, props.hasNext)}>
             <PaginationLink next />
           </PaginationItem>
-          <PaginationItem
-            disabled={!props.hasNext}
-            onClick={switchPage(props.switchPage, noPages - 1, props.hasNext)}
-          >
+          <PaginationItem disabled={!props.hasNext} onClick={switchPage(props.switchPage, noPages - 1, props.hasNext)}>
             <PaginationLink last />
           </PaginationItem>
         </Pagination>

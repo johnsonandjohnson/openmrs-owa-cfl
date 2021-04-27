@@ -1,5 +1,5 @@
-import { FormattedMessage } from "react-intl";
-import React from "react";
+import { FormattedMessage } from 'react-intl';
+import React from 'react';
 
 export const helperText = (query, loading, totalCount) => {
   if (totalCount > 0) {

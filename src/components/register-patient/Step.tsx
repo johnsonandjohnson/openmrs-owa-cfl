@@ -1,12 +1,12 @@
-import React from "react";
-import { connect } from "react-redux";
-import { injectIntl } from "react-intl";
-import { FormGroup } from "reactstrap";
-import { IPatient } from "../../shared/models/patient";
-import _ from "lodash";
-import Field from "./inputs/Field";
-import { isPossiblePhoneNumber } from "react-phone-number-input";
-import { searchLocations } from "../../redux/reducers/location";
+import React from 'react';
+import { connect } from 'react-redux';
+import { injectIntl } from 'react-intl';
+import { FormGroup } from 'reactstrap';
+import { IPatient } from '../../shared/models/patient';
+import _ from 'lodash';
+import Field from './inputs/Field';
+import { isPossiblePhoneNumber } from 'react-phone-number-input';
+import { searchLocations } from '../../redux/reducers/location';
 
 export interface IStepProps extends StateProps, DispatchProps {
   intl: any;
@@ -24,18 +24,18 @@ export interface IStepState {
   dirtyFields: any[];
 }
 
-export const LOCATIONS_OPTION_SOURCE = "locations";
-export const SEPARATOR_FIELD_TYPE = "separator";
-export const RELATIVES_FIELD_TYPE = "relatives";
-export const PHONE_FIELD_TYPE = "phone";
-export const BIRTHDATE_FIELD = "birthdate";
-export const ESTIMATED_BIRTHDATE_FIELDS = ["birthdateYears", "birthdateMonths"];
-export const NAME_FIELDS = ["givenName", "middleName", "familyName"];
+export const LOCATIONS_OPTION_SOURCE = 'locations';
+export const SEPARATOR_FIELD_TYPE = 'separator';
+export const RELATIVES_FIELD_TYPE = 'relatives';
+export const PHONE_FIELD_TYPE = 'phone';
+export const BIRTHDATE_FIELD = 'birthdate';
+export const ESTIMATED_BIRTHDATE_FIELDS = ['birthdateYears', 'birthdateMonths'];
+export const NAME_FIELDS = ['givenName', 'middleName', 'familyName'];
 
 class Step extends React.Component<IStepProps, IStepState> {
   state = {
     invalidFields: [] as any[],
-    dirtyFields: [] as any[],
+    dirtyFields: [] as any[]
   };
 
   componentDidMount() {
@@ -43,11 +43,7 @@ class Step extends React.Component<IStepProps, IStepState> {
     this.validate();
   }
 
-  componentDidUpdate(
-    prevProps: Readonly<IStepProps>,
-    prevState: Readonly<IStepState>,
-    snapshot?: any
-  ) {
+  componentDidUpdate(prevProps: Readonly<IStepProps>, prevState: Readonly<IStepState>, snapshot?: any) {
     if (prevProps.stepDefinition !== this.props.stepDefinition) {
       this.fetchOptionSources();
     }
@@ -59,59 +55,50 @@ class Step extends React.Component<IStepProps, IStepState> {
 
   fetchOptionSources = () => {
     const { stepDefinition } = this.props;
-    const optionSources = stepDefinition.fields
-      ? stepDefinition.fields
-          .map((field) => field.optionSource)
-          .filter((os) => !!os)
-      : [];
+    const optionSources = stepDefinition.fields ? stepDefinition.fields.map(field => field.optionSource).filter(os => !!os) : [];
     if (optionSources.includes(LOCATIONS_OPTION_SOURCE)) {
-      this.props.searchLocations("");
+      this.props.searchLocations('');
     }
   };
 
-  getOptions = (field) => {
+  getOptions = field => {
     const { optionSource } = field;
     const { locations } = this.props;
     if (optionSource === LOCATIONS_OPTION_SOURCE && locations) {
-      return locations.map((l) => ({
+      return locations.map(l => ({
         value: l.uuid,
-        label: l.display,
+        label: l.display
       }));
     }
     return field.options || [];
   };
 
-  getClassName = (field) => {
+  getClassName = field => {
     const { stepDefinition } = this.props;
     const columns = stepDefinition.columns && stepDefinition.columns.toString();
-    if (columns === "1") {
-      return "col-sm-12";
-    } else if (columns === "2") {
-      return "col-sm-6";
-    } else if (columns === "3") {
-      return "col-sm-4";
-    } else if (columns === "4") {
-      return "col-sm-3";
+    if (columns === '1') {
+      return 'col-sm-12';
+    } else if (columns === '2') {
+      return 'col-sm-6';
+    } else if (columns === '3') {
+      return 'col-sm-4';
+    } else if (columns === '4') {
+      return 'col-sm-3';
     }
-    return "col-sm-4";
+    return 'col-sm-4';
   };
 
   // return true if invalid
-  validateField = (field) => {
+  validateField = field => {
     const { patient } = this.props;
     const value = patient[field.name];
     let isInvalid = field.required && !value;
     if (field.type === PHONE_FIELD_TYPE && !!value) {
       isInvalid = !isPossiblePhoneNumber(value);
     }
-    if (
-      BIRTHDATE_FIELD === field.name ||
-      ESTIMATED_BIRTHDATE_FIELDS.includes(field.name)
-    ) {
+    if (BIRTHDATE_FIELD === field.name || ESTIMATED_BIRTHDATE_FIELDS.includes(field.name)) {
       // if estimation was made, don't require exact birthdate
-      const usesEstimate = ESTIMATED_BIRTHDATE_FIELDS.every(
-        (fieldName) => !!this.props.patient[fieldName]
-      );
+      const usesEstimate = ESTIMATED_BIRTHDATE_FIELDS.every(fieldName => !!this.props.patient[fieldName]);
       if (usesEstimate) {
         return false;
       }
@@ -119,20 +106,17 @@ class Step extends React.Component<IStepProps, IStepState> {
     return isInvalid;
   };
 
-  isFieldNonEmpty = (field) => {
+  isFieldNonEmpty = field => {
     const { patient } = this.props;
     return !!patient[field.name];
   };
 
-  validate = (
-    fields = this.props.stepDefinition.fields,
-    nonEmptyFields = _.filter(fields, this.isFieldNonEmpty)
-  ) => {
+  validate = (fields = this.props.stepDefinition.fields, nonEmptyFields = _.filter(fields, this.isFieldNonEmpty)) => {
     const invalidFields = _.filter(fields, this.validateField);
     const dirtyFields = [...this.state.dirtyFields, ...nonEmptyFields];
     this.setState({
       invalidFields,
-      dirtyFields,
+      dirtyFields
     });
     const isStepValid = invalidFields.length === 0;
     const isStepDirty = dirtyFields.length > 0;
@@ -140,9 +124,9 @@ class Step extends React.Component<IStepProps, IStepState> {
     return isStepValid;
   };
 
-  handleLastFieldKeyDown = (e) => {
+  handleLastFieldKeyDown = e => {
     const { fields } = this.props.stepDefinition;
-    if (e.key === "Tab") {
+    if (e.key === 'Tab') {
       const isValid = this.validate(fields, fields);
       e.preventDefault();
       if (isValid) {
@@ -169,20 +153,15 @@ class Step extends React.Component<IStepProps, IStepState> {
                 additionalProps.onKeyDown = this.handleLastFieldKeyDown;
               }
               return field.type === SEPARATOR_FIELD_TYPE ? (
-                <div
-                  className="col-7 offset-5 col-sm-10 offset-sm-2 mb-5 mt-5"
-                  key={`field-${i}`}
-                >
+                <div className="col-7 offset-5 col-sm-10 offset-sm-2 mb-5 mt-5" key={`field-${i}`}>
                   {field.label}
                 </div>
               ) : (
                 <Field
                   {...this.props}
                   field={field}
-                  isInvalid={
-                    !!invalidFields.find((f) => f["name"] === field.name)
-                  }
-                  isDirty={!!dirtyFields.find((f) => f["name"] === field.name)}
+                  isInvalid={!!invalidFields.find(f => f['name'] === field.name)}
+                  isDirty={!!dirtyFields.find(f => f['name'] === field.name)}
                   className={this.getClassName(field)}
                   selectOptions={selectOptions}
                   key={`field-${i}`}
@@ -199,11 +178,11 @@ class Step extends React.Component<IStepProps, IStepState> {
 }
 
 const mapStateToProps = ({ settings, location }) => ({
-  locations: location.locations,
+  locations: location.locations
 });
 
 const mapDispatchToProps = {
-  searchLocations: searchLocations,
+  searchLocations
 };
 
 type StateProps = ReturnType<typeof mapStateToProps>;

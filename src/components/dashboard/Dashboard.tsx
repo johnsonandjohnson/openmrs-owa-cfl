@@ -1,51 +1,50 @@
-import "./Dashboard.scss";
-import findPatient from "../../assets/img/find-patient.png";
-import findCaregiver from "../../assets/img/find-caregiver.png";
-import registerPatient from "../../assets/img/register-patient.png";
+import React from 'react';
+import './Dashboard.scss';
+import findPatient from '../../assets/img/find-patient.png';
+import findCaregiver from '../../assets/img/find-caregiver.png';
+import registerPatient from '../../assets/img/register-patient.png';
 
-import { Link } from "react-router-dom";
-import { FormattedMessage } from "react-intl";
+import { Link } from 'react-router-dom';
+import { FormattedMessage } from 'react-intl';
 
-const Dashboard = () => {
-  return (
-    <div className="dashboard">
-      <h2 className="title">
-        <FormattedMessage id="home.title" />
-      </h2>
-      <div className="items">
-        <Link to="/find-patient" className="item">
-          <div className="item-content">
-            <div className="item-icon">
-              <img src={findPatient} alt="icon" />
-            </div>
-            <div className="item-label">
-              <FormattedMessage id="dashboard.findPatient" />
-            </div>
+const Dashboard = () => (
+  <div className="dashboard">
+    <h2 className="title">
+      <FormattedMessage id="home.title" />
+    </h2>
+    <div className="items">
+      <Link to="/find-patient" className="item">
+        <div className="item-content">
+          <div className="item-icon">
+            <img src={findPatient} alt="icon" />
           </div>
-        </Link>
-        <Link to="/find-caregiver" className="item">
-          <div className="item-content">
-            <div className="item-icon">
-              <img src={findCaregiver} alt="icon" />
-            </div>
-            <div className="item-label">
-              <FormattedMessage id="dashboard.findCaregiver" />
-            </div>
+          <div className="item-label">
+            <FormattedMessage id="dashboard.findPatient" />
           </div>
-        </Link>
-        <Link to="/register-patient" className="item">
-          <div className="item-content">
-            <div className="item-icon">
-              <img src={registerPatient} alt="icon" />
-            </div>
-            <div className="item-label">
-              <FormattedMessage id="dashboard.registerPatient" />
-            </div>
+        </div>
+      </Link>
+      <Link to="/find-caregiver" className="item">
+        <div className="item-content">
+          <div className="item-icon">
+            <img src={findCaregiver} alt="icon" />
           </div>
-        </Link>
-      </div>
+          <div className="item-label">
+            <FormattedMessage id="dashboard.findCaregiver" />
+          </div>
+        </div>
+      </Link>
+      <Link to="/register-patient" className="item">
+        <div className="item-content">
+          <div className="item-icon">
+            <img src={registerPatient} alt="icon" />
+          </div>
+          <div className="item-label">
+            <FormattedMessage id="dashboard.registerPatient" />
+          </div>
+        </div>
+      </Link>
     </div>
-  );
-};
+  </div>
+);
 
 export default Dashboard;

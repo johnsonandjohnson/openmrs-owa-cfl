@@ -1,15 +1,15 @@
-import React from "react";
-import "./App.scss";
-import Routes from "./Routes";
-import { connect } from "react-redux";
-import { getSession } from "../redux/reducers/session";
-import { createSetting, getSettings } from "../redux/reducers/setttings";
+import React from 'react';
+import './App.scss';
+import Routes from './Routes';
+import { connect } from 'react-redux';
+import { getSession } from '../redux/reducers/session';
+import { createSetting, getSettings } from '../redux/reducers/setttings';
 import {
   DEFAULT_FIND_CAREGIVER_TABLE_COLUMNS,
   DEFAULT_FIND_PATIENT_TABLE_COLUMNS,
-  DEFAULT_REGISTRATION_APP,
-} from "../shared/constants/patient";
-import { TinyButton as ScrollUpButton } from "react-scroll-up-button";
+  DEFAULT_REGISTRATION_APP
+} from '../shared/constants/patient';
+import { TinyButton as ScrollUpButton } from 'react-scroll-up-button';
 import {
   FIND_CAREGIVER_TABLE_COLUMNS_SETTING,
   FIND_CAREGIVER_TABLE_COLUMNS_SETTING_DESCRIPTION,
@@ -18,11 +18,11 @@ import {
   REGISTRATION_APP_SETTING,
   REGISTRATION_APP_SETTING_DESCRIPTION,
   REGISTRATION_STEPS_SETTING,
-  REGISTRATION_STEPS_SETTING_DESCRIPTION,
-} from "../shared/constants/setting";
-import "bootstrap/dist/css/bootstrap.min.css";
-import "../assets/css/font-awesome-3.0.2.min.css";
-import defaultSteps from "./register-patient/defaultSteps.json";
+  REGISTRATION_STEPS_SETTING_DESCRIPTION
+} from '../shared/constants/setting';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import '../assets/css/font-awesome-3.0.2.min.css';
+import defaultSteps from './register-patient/defaultSteps.json';
 
 export interface IAppProps extends StateProps, DispatchProps {}
 
@@ -32,11 +32,7 @@ class App extends React.Component<IAppProps> {
     this.props.getSettings();
   }
 
-  componentDidUpdate(
-    prevProps: Readonly<IAppProps>,
-    prevState: Readonly<{}>,
-    snapshot?: any
-  ) {
+  componentDidUpdate(prevProps: Readonly<IAppProps>, prevState: Readonly<{}>, snapshot?: any) {
     if (prevProps.settings !== this.props.settings) {
       // initialize the non-existent settings
       if (!this.props.findPatientTableColumnsSetting) {
@@ -54,18 +50,10 @@ class App extends React.Component<IAppProps> {
         );
       }
       if (!this.props.registrationSteps) {
-        this.props.createSetting(
-          REGISTRATION_STEPS_SETTING,
-          JSON.stringify(defaultSteps, null, 2),
-          REGISTRATION_STEPS_SETTING_DESCRIPTION
-        );
+        this.props.createSetting(REGISTRATION_STEPS_SETTING, JSON.stringify(defaultSteps, null, 2), REGISTRATION_STEPS_SETTING_DESCRIPTION);
       }
       if (!this.props.registrationAppSetting) {
-        this.props.createSetting(
-          REGISTRATION_APP_SETTING,
-          DEFAULT_REGISTRATION_APP,
-          REGISTRATION_APP_SETTING_DESCRIPTION
-        );
+        this.props.createSetting(REGISTRATION_APP_SETTING, DEFAULT_REGISTRATION_APP, REGISTRATION_APP_SETTING_DESCRIPTION);
       }
     }
   }
@@ -86,7 +74,7 @@ const mapStateToProps = ({ session, settings }) => ({
   findPatientTableColumnsSetting: settings.findPatientTableColumnsSetting,
   findCaregiverTableColumnsSetting: settings.findCaregiverTableColumnsSetting,
   registrationSteps: settings.registrationSteps,
-  registrationAppSetting: settings.registrationAppSetting,
+  registrationAppSetting: settings.registrationAppSetting
 });
 
 const mapDispatchToProps = { getSession, getSettings, createSetting };

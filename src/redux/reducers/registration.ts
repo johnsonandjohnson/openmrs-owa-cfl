@@ -1,28 +1,23 @@
-import axios from "axios";
+import axios from 'axios';
 
-import { FAILURE, REQUEST, SUCCESS } from "../action-type.util";
-import querystring from "querystring";
-import { DEFAULT_REGISTRATION_APP } from "../../shared/constants/patient";
+import { FAILURE, REQUEST, SUCCESS } from '../action-type.util';
+import querystring from 'querystring';
+import { DEFAULT_REGISTRATION_APP } from '../../shared/constants/patient';
 
 export const ACTION_TYPES = {
-  REGISTER: "registration/REGISTER",
-  UPDATE_RELATIONSHIPS: "registration/UPDATE_RELATIONSHIPS",
-  EDIT_SECTION: "registration/EDIT_SECTION",
+  REGISTER: 'registration/REGISTER',
+  UPDATE_RELATIONSHIPS: 'registration/UPDATE_RELATIONSHIPS',
+  EDIT_SECTION: 'registration/EDIT_SECTION'
 };
 
 const initialState = {
   loading: false,
   success: false,
-  errors: [],
+  errors: []
 };
 
-const fieldErrors = (response) => {
-  return response.fieldErrors
-    ? Object.keys(response.fieldErrors).map(
-        (k) => `${k}: ${response.fieldErrors[k]}`
-      )
-    : [];
-};
+const fieldErrors = response =>
+  response.fieldErrors ? Object.keys(response.fieldErrors).map(k => `${k}: ${response.fieldErrors[k]}`) : [];
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
@@ -30,14 +25,14 @@ const reducer = (state = initialState, action) => {
     case REQUEST(ACTION_TYPES.EDIT_SECTION):
       return {
         ...state,
-        loading: true,
+        loading: true
       };
     case FAILURE(ACTION_TYPES.REGISTER):
     case FAILURE(ACTION_TYPES.EDIT_SECTION):
       const resp = action.payload.response.data;
       return {
         ...initialState,
-        errors: (resp.globalErrors || []).concat(fieldErrors(resp)),
+        errors: (resp.globalErrors || []).concat(fieldErrors(resp))
       };
     case SUCCESS(ACTION_TYPES.REGISTER):
     case SUCCESS(ACTION_TYPES.EDIT_SECTION):
@@ -51,10 +46,8 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         success: isSuccess,
-        errors: isSuccess
-          ? state.errors
-          : [error || data.message || data.fullStacktrace],
-        loading: false,
+        errors: isSuccess ? state.errors : [error || data.message || data.fullStacktrace],
+        loading: false
       };
     default: {
       return state;
@@ -62,24 +55,18 @@ const reducer = (state = initialState, action) => {
   }
 };
 
-const extractFormData = (patient) => {
-  const validRelatives = patient.relatives?.filter(
-    (relative) => !!relative.relationshipType && !!relative.otherPerson
-  );
+const extractFormData = patient => {
+  const validRelatives = patient.relatives?.filter(relative => !!relative.relationshipType && !!relative.otherPerson);
   const formData = {
     ...patient,
-    relationship_type: validRelatives?.map(
-      (relative) => relative.relationshipType
-    ),
-    other_person_uuid: validRelatives?.map(
-      (relative) => relative.otherPerson.value
-    ),
+    relationship_type: validRelatives?.map(relative => relative.relationshipType),
+    other_person_uuid: validRelatives?.map(relative => relative.otherPerson.value)
   };
   if (!formData.birthdate) {
     formData.birthdate = null;
   } else {
     formData.birthdateEstimated = false;
-    formData.birthdate = formData.birthdate.toISOString().split("T")[0];
+    formData.birthdate = formData.birthdate.toISOString().split('T')[0];
   }
   return formData;
 };
@@ -90,7 +77,7 @@ export const register = (patient, app = DEFAULT_REGISTRATION_APP) => {
   const formData = extractFormData(patient);
   return {
     type: ACTION_TYPES.REGISTER,
-    payload: axios.post(requestUrl, querystring.stringify(formData)),
+    payload: axios.post(requestUrl, querystring.stringify(formData))
   };
 };
 
@@ -99,16 +86,16 @@ export const editPatient = (patient, app = DEFAULT_REGISTRATION_APP) => {
   const formData = extractFormData(patient);
   return {
     type: ACTION_TYPES.EDIT_SECTION,
-    payload: axios.post(requestUrl, querystring.stringify(formData)),
+    payload: axios.post(requestUrl, querystring.stringify(formData))
   };
 };
 
-export const updateRelationships = (patient) => {
+export const updateRelationships = patient => {
   const requestUrl = `/openmrs/cfl/field/personRelationship/updateRelationships.action`;
   const formData = extractFormData(patient);
   return {
     type: ACTION_TYPES.UPDATE_RELATIONSHIPS,
-    payload: axios.post(requestUrl, querystring.stringify(formData)),
+    payload: axios.post(requestUrl, querystring.stringify(formData))
   };
 };
 

@@ -1,21 +1,18 @@
-import React from "react";
-import { connect } from "react-redux";
-import { reset, search } from "../../redux/reducers/cfl-people";
-import _ from "lodash";
-import { Form, FormGroup, Input, Spinner } from "reactstrap";
-import "./FindCaregiver.scss";
-import { FormattedMessage, injectIntl } from "react-intl";
-import searchIcon from "../../assets/img/search.png";
-import { columnContent } from "../../shared/util/cfl-person-util";
-import { DEFAULT_FIND_CAREGIVER_TABLE_COLUMNS } from "../../shared/constants/patient";
-import {
-  SEARCH_INPUT_DELAY,
-  SEARCH_INPUT_MIN_CHARS,
-} from "../../shared/constants/input";
-import PagedTable from "../common/PagedTable";
-import { DEFAULT_PAGE_SIZE, pageOf } from "../../redux/page.util";
-import { helperText } from "../../shared/util/table-util";
-import { PATIENT_PAGE_URL } from "../../shared/constants/openmrs";
+import React from 'react';
+import { connect } from 'react-redux';
+import { reset, search } from '../../redux/reducers/cfl-people';
+import _ from 'lodash';
+import { Form, FormGroup, Input, Spinner } from 'reactstrap';
+import './FindCaregiver.scss';
+import { FormattedMessage, injectIntl } from 'react-intl';
+import searchIcon from '../../assets/img/search.png';
+import { columnContent } from '../../shared/util/cfl-person-util';
+import { DEFAULT_FIND_CAREGIVER_TABLE_COLUMNS } from '../../shared/constants/patient';
+import { SEARCH_INPUT_DELAY, SEARCH_INPUT_MIN_CHARS } from '../../shared/constants/input';
+import PagedTable from '../common/PagedTable';
+import { DEFAULT_PAGE_SIZE, pageOf } from '../../redux/page.util';
+import { helperText } from '../../shared/util/table-util';
+import { PATIENT_PAGE_URL } from '../../shared/constants/openmrs';
 
 export interface ICaregiversProps extends StateProps, DispatchProps {
   intl: any;
@@ -26,14 +23,17 @@ export interface ICaregiversState {
   page: number;
 }
 
-class FindCaregiver extends React.Component<
-  ICaregiversProps,
-  ICaregiversState
-> {
+class FindCaregiver extends React.Component<ICaregiversProps, ICaregiversState> {
   state = {
-    query: "",
-    page: 0,
+    query: '',
+    page: 0
   };
+
+  searchAfterDelay = _.debounce(e => {
+    if (this.state.query.length >= SEARCH_INPUT_MIN_CHARS) {
+      this.props.search(this.state.query);
+    }
+  }, SEARCH_INPUT_DELAY);
 
   componentDidMount() {
     this.props.reset();
@@ -45,38 +45,29 @@ class FindCaregiver extends React.Component<
     }
   };
 
-  searchAfterDelay = _.debounce((e) => {
-    if (this.state.query.length >= SEARCH_INPUT_MIN_CHARS) {
-      this.props.search(this.state.query);
-    }
-  }, SEARCH_INPUT_DELAY);
-
-  onQueryChange = (event) => {
+  onQueryChange = event => {
     this.setState({
       query: event.target.value,
-      page: 0,
+      page: 0
     });
     this.searchAfterDelay();
   };
 
-  onSearchClick = (e) => {
+  onSearchClick = e => {
     e.preventDefault();
     this.searchAfterDelay.cancel();
     this.setState({
-      page: 0,
+      page: 0
     });
     this.search();
   };
 
-  switchPage = (page) => {
+  switchPage = page =>
     this.setState({
-      page,
+      page
     });
-  };
 
-  getRecordLink = (entity) => {
-    return `${PATIENT_PAGE_URL}?patientId=${entity.uuid}&dashboard=person`;
-  };
+  getRecordLink = entity => `${PATIENT_PAGE_URL}?patientId=${entity.uuid}&dashboard=person`;
 
   render() {
     return (
@@ -94,7 +85,7 @@ class FindCaregiver extends React.Component<
               <img src={searchIcon} alt="search" className="search-icon" />
               <Input
                 placeholder={this.props.intl.formatMessage({
-                  id: "findCaregiver.searchInputPlaceholder",
+                  id: 'findCaregiver.searchInputPlaceholder'
                 })}
                 value={this.state.query}
                 onChange={this.onQueryChange}
@@ -107,23 +98,16 @@ class FindCaregiver extends React.Component<
               {this.props.loading ? (
                 <Spinner color="dark" size="sm" />
               ) : (
-                helperText(
-                  this.state.query,
-                  this.props.loading,
-                  this.props.totalCount
-                )
+                helperText(this.state.query, this.props.loading, this.props.totalCount)
               )}
             </div>
             {this.props.totalCount > 0 && (
               <PagedTable
-                columns={this.props.tableColumns.split(",")}
+                columns={this.props.tableColumns.split(',')}
                 // frontend paging as the endpoint has no support for it
                 entities={pageOf(this.props.caregivers, this.state.page)}
                 columnContent={columnContent}
-                hasNext={
-                  this.props.totalCount >
-                  (this.state.page + 1) * DEFAULT_PAGE_SIZE
-                }
+                hasNext={this.props.totalCount > (this.state.page + 1) * DEFAULT_PAGE_SIZE}
                 hasPrev={this.state.page > 0}
                 currentPage={this.state.page}
                 switchPage={this.switchPage}
@@ -147,9 +131,7 @@ const mapStateToProps = ({ cflPeople, settings }) => ({
   currentPage: cflPeople.currentPage,
   totalCount: cflPeople.totalCount,
   tableColumns:
-    (settings.findCaregiverTableColumnsSetting &&
-      settings.findCaregiverTableColumnsSetting.value) ||
-    DEFAULT_FIND_CAREGIVER_TABLE_COLUMNS,
+    (settings.findCaregiverTableColumnsSetting && settings.findCaregiverTableColumnsSetting.value) || DEFAULT_FIND_CAREGIVER_TABLE_COLUMNS
 });
 
 const mapDispatchToProps = { search, reset };
@@ -157,7 +139,4 @@ const mapDispatchToProps = { search, reset };
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(injectIntl(FindCaregiver));
+export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(FindCaregiver));

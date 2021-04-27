@@ -1,8 +1,8 @@
-import React from "react";
+import React from 'react';
 
 class ErrorBoundary extends React.Component {
   state = {
-    hasError: false,
+    hasError: false
   };
 
   static getDerivedStateFromError(error) {

@@ -1,35 +1,35 @@
 @font-face {
-  font-family: "CircularStd";
+  font-family: 'CircularStd';
   font-style: normal;
   font-weight: normal;
-  src: url("../assets/font/CircularStd-Medium.otf") format("opentype");
+  src: url('../assets/font/CircularStd-Medium.otf') format('opentype');
 }
 
 @font-face {
-  font-family: "CircularStd";
+  font-family: 'CircularStd';
   font-style: normal;
   font-weight: bold;
-  src: url("../assets/font/CircularStd-Bold.otf") format("opentype");
+  src: url('../assets/font/CircularStd-Bold.otf') format('opentype');
 }
 
 @font-face {
-  font-family: "CircularStd-Book";
+  font-family: 'CircularStd-Book';
   font-style: normal;
   font-weight: normal;
-  src: url("../assets/font/CircularStd-Book.otf") format("opentype");
+  src: url('../assets/font/CircularStd-Book.otf') format('opentype');
 }
 
 @font-face {
-  font-family: "CircularStd-Book";
+  font-family: 'CircularStd-Book';
   font-style: italic;
   font-weight: normal;
-  src: url("../assets/font/CircularStd-BookItalic.otf") format("opentype");
+  src: url('../assets/font/CircularStd-BookItalic.otf') format('opentype');
 }
 
 .app {
   min-height: 100vh;
   background-color: #fafafa;
-  font-family: "CircularStd", serif;
+  font-family: 'CircularStd', serif;
 
   .header {
     padding: 0 1em 0 1em;

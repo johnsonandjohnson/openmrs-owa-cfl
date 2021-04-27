@@ -1,22 +1,20 @@
-import React from "react";
-import { connect } from "react-redux";
-import { injectIntl } from "react-intl";
-import { Input as ReactstrapInput } from "reactstrap";
-import { setValueOnChange } from "../../../shared/util/patient-util";
-import { IFieldProps, IFieldState } from "./Field";
-import ValidationError from "./ValidationError";
-import { getPlaceholder } from "../../../shared/util/form-util";
+import React from 'react';
+import { connect } from 'react-redux';
+import { injectIntl } from 'react-intl';
+import { Input as ReactstrapInput } from 'reactstrap';
+import { setValueOnChange } from '../../../shared/util/patient-util';
+import { IFieldProps, IFieldState } from './Field';
+import ValidationError from './ValidationError';
+import { getPlaceholder } from '../../../shared/util/form-util';
 
 export interface ISelectProps extends StateProps, DispatchProps, IFieldProps {
   intl: any;
 }
 
-export interface ISelectState extends IFieldState {}
-
-class Select extends React.Component<ISelectProps, ISelectState> {
-  setDirty = (callback) => {
+class Select extends React.Component<ISelectProps, IFieldState> {
+  setDirty = callback => {
     this.setState({
-      isDirty: true,
+      isDirty: true
     });
     callback();
   };
@@ -33,11 +31,8 @@ class Select extends React.Component<ISelectProps, ISelectState> {
               {placeholder}
             </option>
           }
-          {opts.map((option) => (
-            <option
-              value={option.value || option}
-              key={`option-${option.value || option}`}
-            >
+          {opts.map(option => (
+            <option value={option.value || option} key={`option-${option.value || option}`}>
               {option.label || option}
             </option>
           ))}
@@ -47,18 +42,7 @@ class Select extends React.Component<ISelectProps, ISelectState> {
   };
 
   render = () => {
-    const {
-      field,
-      isInvalid,
-      isDirty,
-      className,
-      value,
-      onChange,
-      patient,
-      onPatientChange,
-      intl,
-      onKeyDown,
-    } = this.props;
+    const { field, isInvalid, isDirty, className, value, onChange, patient, onPatientChange, intl, onKeyDown } = this.props;
     const { name, required, label } = field;
     const hasValue = !!value || !!patient[field.name];
     const placeholder = getPlaceholder(intl, label, name, required);
@@ -68,15 +52,9 @@ class Select extends React.Component<ISelectProps, ISelectState> {
           name={name}
           id={name}
           value={value != null ? value : patient[name]}
-          onChange={
-            onChange || setValueOnChange(patient, name, onPatientChange)
-          }
+          onChange={onChange || setValueOnChange(patient, name, onPatientChange)}
           required={required}
-          className={
-            "form-control " +
-            (isDirty && isInvalid ? "invalid " : " ") +
-            (!value && !patient[name] ? "placeholder" : "")
-          }
+          className={'form-control ' + (isDirty && isInvalid ? 'invalid ' : ' ') + (!value && !patient[name] ? 'placeholder' : '')}
           type="select"
           onKeyDown={!!onKeyDown && onKeyDown}
         >

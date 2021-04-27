@@ -11,26 +11,18 @@ import {
   PHONE_NUMBER,
   TELEPHONE_NUMBER_ATTRIBUTE_TYPE,
   GENDER,
-  GENDER_DICT,
-} from "../constants/patient";
-import { extractAttribute, extractValue } from "./omrs-entity-util";
-import { formatDate } from "./date-util";
-import { formatPhoneNumberIntl } from "react-phone-number-input";
+  GENDER_DICT
+} from '../constants/patient';
+import { extractAttribute, extractValue } from './omrs-entity-util';
+import { formatDate } from './date-util';
+import { formatPhoneNumberIntl } from 'react-phone-number-input';
 
 export const columnContent = (person, column, intl) => {
   switch (column) {
     case BIRTHDATE:
-      return (
-        person &&
-        person.birthdate &&
-        formatDate(intl, new Date(person.birthdate))
-      );
+      return person && person.birthdate && formatDate(intl, new Date(person.birthdate));
     case DEATH_DATE:
-      return (
-        person &&
-        person.deathDate &&
-        formatDate(intl, new Date(person.deathDate))
-      );
+      return person && person.deathDate && formatDate(intl, new Date(person.deathDate));
     case GIVEN_NAME:
       return person.preferredName && person.preferredName.givenName;
     case MIDDLE_NAME:
@@ -40,10 +32,7 @@ export const columnContent = (person, column, intl) => {
     case PERSON_IDENTIFIER:
       return extractAttribute(person, PERSON_IDENTIFIER_ATTRIBUTE_TYPE);
     case PHONE_NUMBER: {
-      const phoneNumber = extractAttribute(
-        person,
-        TELEPHONE_NUMBER_ATTRIBUTE_TYPE
-      );
+      const phoneNumber = extractAttribute(person, TELEPHONE_NUMBER_ATTRIBUTE_TYPE);
       return formatPhoneNumberIntl(phoneNumber) || phoneNumber;
     }
     case PERSON_LANGUAGE:
