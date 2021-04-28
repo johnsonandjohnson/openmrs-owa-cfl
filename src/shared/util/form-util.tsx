@@ -1,3 +1,6 @@
+import { IFieldProps } from '../../components/register-patient/inputs/Field';
+import { setValueOnChange } from './patient-util';
+
 export const getPlaceholder = (intl, label, fieldName, required) => {
   let placeholder =
     label ||
@@ -14,4 +17,20 @@ export const getPlaceholder = (intl, label, fieldName, required) => {
     ].join(' ');
   }
   return placeholder;
+};
+
+export const getCommonInputProps = (props: IFieldProps, placeholder) => {
+  const { field, isInvalid, isDirty, value, onChange, patient, onPatientChange, onKeyDown } = props;
+  const { name, required, type } = field;
+  return {
+    name,
+    id: name,
+    placeholder,
+    value: value != null ? value : patient[name],
+    onChange: onChange || setValueOnChange(patient, name, onPatientChange),
+    required,
+    className: 'form-control ' + (isDirty && isInvalid ? 'invalid' : ''),
+    type: type || 'text',
+    onKeyDown: !!onKeyDown && onKeyDown
+  };
 };

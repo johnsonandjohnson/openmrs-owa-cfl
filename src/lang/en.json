@@ -159,6 +159,7 @@
     "invalid": "Invalid",
     "previous": "Previous",
     "next": "Next",
-    "confirm": "Confirm"
+    "confirm": "Confirm",
+    "invalidPhoneNumber": "Please provide a valid phone number including the country code. Example: +1 555 555 1234"
   }
 }

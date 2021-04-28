@@ -4,6 +4,7 @@ import React from 'react';
 import Select from './Select';
 import Relatives from './Relatives';
 import DateInput from './DateInput';
+import PhoneInput from './PhoneInput';
 
 const DEFAULT_FIELD_TYPE = 'text';
 const DEFAULT_INPUT = Input;
@@ -29,7 +30,7 @@ export const inputsByType = {
   select: Select,
   number: Input,
   text: Input,
-  phone: Input,
+  phone: PhoneInput,
   date: DateInput,
   relatives: Relatives
 };

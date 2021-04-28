@@ -1,39 +1,37 @@
-import React from 'react';
+import React, { RefObject } from 'react';
 import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
+import PhoneInput from 'react-phone-number-input/input';
 import { IFieldProps, IFieldState } from './Field';
 import ValidationError from './ValidationError';
 import { getCommonInputProps, getPlaceholder } from '../../../shared/util/form-util';
-import { BIRTHDATE_FIELD, ESTIMATED_BIRTHDATE_FIELDS } from '../Step';
+import { isPossiblePhoneNumber } from 'react-phone-number-input';
 
 export interface IInputProps extends StateProps, DispatchProps, IFieldProps {
   intl: any;
 }
 
 class Input extends React.Component<IInputProps, IFieldState> {
-  isDisabled = (patient, fieldName) => {
-    if (ESTIMATED_BIRTHDATE_FIELDS.includes(fieldName)) {
-      return !!patient[BIRTHDATE_FIELD];
+  private inputRef = React.createRef() as RefObject<HTMLInputElement>;
+
+  getErrorMessage = inputValue => {
+    if (inputValue.length > 0 && !isPossiblePhoneNumber(inputValue)) {
+      return 'registerPatient.invalidPhoneNumber';
     }
-    return false;
   };
 
   render = () => {
     const { intl, field, isInvalid, isDirty, className, value, patient } = this.props;
-    const { name, required, type, label } = field;
-    const hasValue = !!value || !!patient[field.name];
+    const { name, required, label } = field;
+    const inputValue = value || patient[field.name] || '';
     const placeholder = getPlaceholder(intl, label, name, required);
     const props = getCommonInputProps(this.props, placeholder);
-    props['disabled'] = this.isDisabled(patient, name);
-    if (type === 'number') {
-      // Firefox doesn't support number inputs
-      props['pattern'] = '[1-9]';
-    }
+    const errorMessage = this.getErrorMessage(inputValue);
     return (
       <div className={`${className} input-container`}>
-        <input {...props} />
-        {hasValue && <span className="placeholder">{placeholder}</span>}
-        {isDirty && isInvalid && <ValidationError hasValue={hasValue} />}
+        <PhoneInput {...props} ref={this.inputRef} />
+        {inputValue.length > 0 && <span className="placeholder">{placeholder}</span>}
+        {((isDirty && isInvalid) || errorMessage) && <ValidationError hasValue={inputValue.length > 0} message={errorMessage} />}
       </div>
     );
   };

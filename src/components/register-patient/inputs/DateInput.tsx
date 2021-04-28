@@ -1,11 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
-import { setValueOnChange } from '../../../shared/util/patient-util';
 import DatePicker from 'react-datepicker';
 import { IFieldProps, IFieldState } from './Field';
 import ValidationError from './ValidationError';
-import { getPlaceholder } from '../../../shared/util/form-util';
+import { getCommonInputProps, getPlaceholder } from '../../../shared/util/form-util';
 
 export interface IDateInputProps extends StateProps, DispatchProps, IFieldProps {
   intl: any;
@@ -13,20 +12,14 @@ export interface IDateInputProps extends StateProps, DispatchProps, IFieldProps 
 
 class DateInput extends React.Component<IDateInputProps, IFieldState> {
   render = () => {
-    const { intl, field, isInvalid, isDirty, className, value, onChange, patient, onPatientChange, onKeyDown } = this.props;
-    const { name, required, type, label } = field;
+    const { intl, field, isInvalid, isDirty, className, value, patient } = this.props;
+    const { name, required, label } = field;
     const hasValue = !!value || !!patient[field.name];
     const placeholder = getPlaceholder(intl, label, name, required);
     const props = {
-      name,
-      id: name,
+      ...getCommonInputProps(this.props, placeholder),
       placeholderText: placeholder,
-      selected: value != null ? value : patient[name],
-      onChange: onChange || setValueOnChange(patient, name, onPatientChange),
-      required,
-      className: 'form-control ' + (isDirty && isInvalid ? 'invalid' : ''),
-      type: type || 'text',
-      onKeyDown: !!onKeyDown && onKeyDown
+      selected: value != null ? value : patient[name]
     };
     return (
       <div className={`${className} input-container`}>

@@ -7,7 +7,6 @@ import _ from 'lodash';
 import Field from './inputs/Field';
 import { isPossiblePhoneNumber } from 'react-phone-number-input';
 import { searchLocations } from '../../redux/reducers/location';
-import patient from '../../redux/reducers/patient';
 
 export interface IStepProps extends StateProps, DispatchProps {
   intl: any;

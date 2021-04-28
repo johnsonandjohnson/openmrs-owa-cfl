@@ -2,10 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
 import { Input as ReactstrapInput } from 'reactstrap';
-import { setValueOnChange } from '../../../shared/util/patient-util';
 import { IFieldProps, IFieldState } from './Field';
 import ValidationError from './ValidationError';
-import { getPlaceholder } from '../../../shared/util/form-util';
+import { getCommonInputProps, getPlaceholder } from '../../../shared/util/form-util';
 
 export interface ISelectProps extends StateProps, DispatchProps, IFieldProps {
   intl: any;
@@ -42,21 +41,17 @@ class Select extends React.Component<ISelectProps, IFieldState> {
   };
 
   render = () => {
-    const { field, isInvalid, isDirty, className, value, onChange, patient, onPatientChange, intl, onKeyDown } = this.props;
+    const { field, isInvalid, isDirty, className, value, patient, intl } = this.props;
     const { name, required, label } = field;
     const hasValue = !!value || !!patient[field.name];
     const placeholder = getPlaceholder(intl, label, name, required);
+    const props = getCommonInputProps(this.props, placeholder);
     return (
       <div className={`${className} input-container`}>
         <ReactstrapInput
-          name={name}
-          id={name}
-          value={value != null ? value : patient[name]}
-          onChange={onChange || setValueOnChange(patient, name, onPatientChange)}
-          required={required}
+          {...props}
           className={'form-control ' + (isDirty && isInvalid ? 'invalid ' : ' ') + (!value && !patient[name] ? 'placeholder' : '')}
           type="select"
-          onKeyDown={!!onKeyDown && onKeyDown}
         >
           {this.getSelectOptions(field, placeholder)}
         </ReactstrapInput>
