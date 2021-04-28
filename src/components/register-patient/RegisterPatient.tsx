@@ -17,6 +17,7 @@ import Confirm from './Confirm';
 import queryString from 'query-string';
 import { redirectUrl } from '../../shared/util/url-util';
 import { DEFAULT_REGISTRATION_APP } from '../../shared/constants/patient';
+import { ROOT_URL } from '../../shared/constants/openmrs';
 
 export interface IPatientsProps extends StateProps, DispatchProps, RouteComponentProps<{ id?: string }> {
   intl: any;
@@ -226,27 +227,13 @@ class RegisterPatient extends React.Component<IPatientsProps, IPatientsState> {
   };
 
   success = () => {
-    const isEdit = this.isEdit();
-
-    return (
-      <div className="ml-3 mt-2">
-        <h1 className="text-success">
-          <FormattedMessage id="registerPatient.success.title" />
-        </h1>
-        <div className="helper-text">
-          <FormattedMessage id={`${isEdit ? 'editPatient' : 'registerPatient'}.success.subtitle`} />
-        </div>
-        <p>
-          <a
-            href={queryString.stringifyUrl({
-              url: redirectUrl(this.props.location.search)
-            })}
-          >
-            <FormattedMessage id="registerPatient.success.goBack" />
-          </a>
-        </p>
-      </div>
-    );
+    const { location, message } = this.props;
+    window.location.href = message
+      ? `${ROOT_URL}${message}`
+      : queryString.stringifyUrl({
+          url: redirectUrl(location.search)
+        });
+    return null;
   };
 
   render() {
@@ -284,6 +271,7 @@ class RegisterPatient extends React.Component<IPatientsProps, IPatientsState> {
 const mapStateToProps = ({ registration, patient, settings }) => ({
   loading: registration.loading,
   success: registration.success,
+  message: registration.message,
   patient: patient.patient,
   patientRelationships: patient.patientRelationships,
   steps: settings.registrationSteps || defaultSteps,

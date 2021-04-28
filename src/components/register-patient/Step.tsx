@@ -7,6 +7,7 @@ import _ from 'lodash';
 import Field from './inputs/Field';
 import { isPossiblePhoneNumber } from 'react-phone-number-input';
 import { searchLocations } from '../../redux/reducers/location';
+import patient from '../../redux/reducers/patient';
 
 export interface IStepProps extends StateProps, DispatchProps {
   intl: any;
@@ -136,7 +137,7 @@ class Step extends React.Component<IStepProps, IStepState> {
   };
 
   render() {
-    const { stepDefinition } = this.props;
+    const { stepDefinition, patient } = this.props;
     const { invalidFields, dirtyFields } = this.state;
     return (
       <>
@@ -149,7 +150,7 @@ class Step extends React.Component<IStepProps, IStepState> {
             {_.map(stepDefinition.fields, (field, i) => {
               const selectOptions = this.getOptions(field);
               const additionalProps = {} as any;
-              if (i === stepDefinition.fields.length - 1) {
+              if (i === stepDefinition.fields.length - 1 || (field.name === BIRTHDATE_FIELD && !!patient[BIRTHDATE_FIELD])) {
                 additionalProps.onKeyDown = this.handleLastFieldKeyDown;
               }
               return field.type === SEPARATOR_FIELD_TYPE ? (

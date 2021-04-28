@@ -13,6 +13,7 @@ export const ACTION_TYPES = {
 const initialState = {
   loading: false,
   success: false,
+  message: null,
   errors: []
 };
 
@@ -46,6 +47,7 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         success: isSuccess,
+        message: data.message,
         errors: isSuccess ? state.errors : [error || data.message || data.fullStacktrace],
         loading: false
       };
