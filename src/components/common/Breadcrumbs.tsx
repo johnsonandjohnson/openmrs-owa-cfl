@@ -32,9 +32,7 @@ const Breadcrumbs = props => {
                       {separator()}
                     </>
                   )}
-                  <a href={window.location.href}>
-                    <FormattedMessage id={id} />
-                  </a>
+                  <FormattedMessage id={id} />
                 </>
               ) : (
                 <>
