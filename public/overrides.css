@@ -468,3 +468,10 @@ form#login-form {
     max-width: none;
   }
 }
+
+/** Hamburger menu **/
+.navbar-toggler {
+  background: unset !important;
+  padding: 0 !important;
+  border: unset !important;
+}
