@@ -241,6 +241,9 @@ i.cfl-register-patient {
   border: none !important;
   font-size: 14px;
   line-height: 1;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
 }
 
 .patient-header > .patient-id,
@@ -263,6 +266,22 @@ i.cfl-register-patient {
 .patient-header h1 {
   font-size: 2em !important;
   margin: 10px 0 5px 0 !important;
+}
+
+.patient-header .patient-data {
+}
+
+.patient-header .header-buttons {
+  margin-top: 0.5rem;
+}
+
+.patient-header .header-buttons button {
+  padding: 0.5rem 1.25rem;
+  font-size: 11px;
+  text-transform: uppercase;
+  background-color: #00455c !important;
+  background-image: none !important;
+  margin-bottom: 0.25rem;
 }
 
 .info-container,

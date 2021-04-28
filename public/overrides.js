@@ -46,9 +46,14 @@ typeof $ === 'function' &&
       const personStatusDialog = patientHeader.find('#person-status-update-dialog').detach();
       // construct a new header
       const ageAndGender = ' (' + age.split(' ')[0] + '/' + gender[0] + ')';
-      var html = [
+      // extract the status out of status: <status>
+      const status = personStatus.text().split(':');
+      if (status.length > 1) {
+        personStatus.text(status[1]);
+      }
+      var htmlLines = [
         '<div class="patient-header">',
-        '<h1>' + fullName + ageAndGender + '</h1>',
+        '<div class="patient-data"><h1>' + fullName + ageAndGender + '</h1>',
         (!!patientId
           ? '<div class="patient-id"><span class="label">Patient ID: </span><span class="value">' + patientId + '</span></div>'
           : '') +
@@ -58,18 +63,49 @@ typeof $ === 'function' &&
           '<div class="phone-number"><span class="label">Phone number: </span><span class="value">' +
           telephoneNumber +
           '</span></div>' +
-          '<div class="patient-status"><span class="label">Status: </span><span class="value"></span></div>' +
-          '</div>'
-      ].join('\n');
-      patientHeader.replaceWith(html);
-      // extract the status out of status: <status>
-      const status = personStatus.text().split(':');
-      if (status.length > 1) {
-        personStatus.text(status[1]);
+          '<div class="patient-status"><span class="label">Status: </span><span class="value">' +
+          personStatus.text() +
+          '</span></div>' +
+          '</div>' +
+          '<div class="header-buttons">'
+      ];
+      // add buttons on the right side of patient header
+      const note = $('.note.warning');
+      if (!note.is(':empty')) {
+        const buttons = patientHeader.find('.header-buttons');
+        const link = note.find('a');
+        if (link.length) {
+          const href = link.attr('href');
+          htmlLines = htmlLines.concat([
+            '<button class="btn btn-secondary" onclick="location.href=\'' + href + '\'">',
+            link.text().replace('See the', ''),
+            '</button>'
+          ]);
+        }
+        const deletePatient = $('#org\\.openmrs\\.module\\.coreapps\\.deletePatient');
+        if (deletePatient.length) {
+          const href = deletePatient.attr('href');
+          htmlLines = htmlLines.concat(['<button class="btn btn-secondary" onclick="' + href + '">', deletePatient.text(), '</button>']);
+        }
+        const deleteCaregiver = $('#cfl\\.personDashboard\\.deletePerson');
+        if (deleteCaregiver.length) {
+          const href = deleteCaregiver.attr('href');
+          htmlLines = htmlLines.concat(['<button class="btn btn-secondary" onclick="' + href + '">', deleteCaregiver.text(), '</button>']);
+        }
+        note.remove();
+        if (personStatusDialog.length && personStatus.length) {
+          htmlLines = htmlLines.concat([
+            personStatusDialog[0].outerHTML,
+            '<button class="btn btn-secondary" onclick="' +
+              personStatus[0].getAttribute('onclick') +
+              '">' +
+              'Update the status' +
+              '</button>'
+          ]);
+        }
       }
-      // append the detached status along with dialog element
-      $('.patient-status .value').append(personStatusDialog);
-      $('.patient-status .value').append(personStatus);
+      htmlLines.push('</div></div>');
+      patientHeader.replaceWith(htmlLines.join('\n'));
 
       // add (age/gender) to the breadcrumb
       elementReady('#breadcrumbs li:last-child:not(:empty)').then(element => {
