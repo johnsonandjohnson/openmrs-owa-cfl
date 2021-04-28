@@ -24,10 +24,10 @@ class Buttons extends React.Component<IButtonsProps, IFieldState> {
             const value = option.value || option;
             const label = option.label || option;
             return (
-              <FormGroup check inline key={`button-${value}`}>
+              <FormGroup check inline key={`button-${value}`} className="mb-2">
                 <Button
                   onClick={this.onChange(value)}
-                  className={`gender-button ${this.props.patient.gender === value ? 'active' : ''}`}
+                  className={`gender-button w-100 ${this.props.patient.gender === value ? 'active' : ''}`}
                   onKeyDown={!!onKeyDown && i === options.length - 1 && onKeyDown}
                 >
                   {label}

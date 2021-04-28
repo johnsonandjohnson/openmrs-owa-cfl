@@ -85,6 +85,9 @@ class Step extends React.Component<IStepProps, IStepState> {
     } else if (columns === '4') {
       return 'col-sm-3';
     }
+    if (field.type === 'buttons') {
+      return 'col-sm-12';
+    }
     return 'col-sm-4';
   };
 

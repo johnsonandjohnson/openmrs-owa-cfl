@@ -54,7 +54,9 @@ class Relatives extends React.Component<IRelativesProps, IRelativesState> {
     otherPersonInput: ''
   };
 
-  loadOptions = _.debounce(e => this.props.search(this.state.otherPersonInput), 500);
+  loadOptions = _.debounce(e => {
+    this.props.search(this.state.otherPersonInput);
+  }, 500);
 
   componentDidMount() {
     this.props.getRelationshipTypes();
@@ -104,15 +106,19 @@ class Relatives extends React.Component<IRelativesProps, IRelativesState> {
 
   onChangeEvent = (rowNo, fieldName) => event => this.onChange(rowNo, fieldName)(event.target.value);
 
+  setOtherPersonInput = (rowNo, value, relatives) => {
+    relatives[rowNo].otherPersonInput = value;
+    this.setState({
+      relatives,
+      otherPersonInput: value
+    });
+  };
+
   onChange = (rowNo, fieldName) => value => {
     const { relatives } = this.state;
     const { patient, onPatientChange } = this.props;
     if (fieldName === OTHER_PERSON_NAME) {
-      relatives[rowNo].otherPersonInput = value;
-      this.setState({
-        relatives,
-        otherPersonInput: value
-      });
+      this.setOtherPersonInput(rowNo, value, relatives);
       this.loadOptions();
     } else {
       relatives[rowNo][fieldName] = value;
@@ -122,6 +128,15 @@ class Relatives extends React.Component<IRelativesProps, IRelativesState> {
     }
     patient.relatives = relatives;
     onPatientChange(patient);
+  };
+
+  onFocus = rowNo => e => {
+    const { relatives } = this.state;
+    const selectedOpt = relatives[rowNo][otherPersonField.name];
+    if (selectedOpt) {
+      this.setOtherPersonInput(rowNo, selectedOpt.label, relatives);
+      this.props.search(selectedOpt.label);
+    }
   };
 
   patientOptions = rowNo => {
@@ -163,9 +178,11 @@ class Relatives extends React.Component<IRelativesProps, IRelativesState> {
               classNamePrefix="other-person"
               placeholder={otherPersonPlaceholder}
               value={relative.otherPerson}
+              inputValue={relative.otherPersonInput}
               onKeyDown={rowNo + 1 === this.state.relatives.length ? this.props.onKeyDown : null}
+              onFocus={this.onFocus(rowNo)}
             />
-            {!!relative.otherPerson && <span className="placeholder">{otherPersonPlaceholder}</span>}
+            {(!!relative.otherPerson || !!relative.otherPersonInput) && <span className="placeholder">{otherPersonPlaceholder}</span>}
           </div>
         )}
         <div className="align-items-center justify-content-center d-flex">
