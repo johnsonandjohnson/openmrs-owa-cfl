@@ -120,6 +120,10 @@ i.cfl-register-patient {
   padding-left: 0 !important;
 }
 
+#tasks > div {
+  padding-left: 0 !important;
+}
+
 /** disable CFL Register Patient **/
 #cfl-registrationapp-registerPatient-homepageLink-cfl-registrationapp-registerPatient-homepageLink-extension {
   display: none;
@@ -134,6 +138,12 @@ i.cfl-register-patient {
   font-weight: normal !important;
   margin-left: 0 !important;
   margin-top: 0 !important;
+}
+
+.homepage-heading {
+  font-size: 40px;
+  color: #333333;
+  padding-top: 1rem;
 }
 
 /** Breadcrumbs **/

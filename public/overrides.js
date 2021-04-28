@@ -14,7 +14,14 @@ typeof $ === 'function' &&
     // add missing breadcrumb for the Homepage
     const breadcrumbs = $('#breadcrumbs');
     if (breadcrumbs.is(':empty')) {
-      $('#breadcrumbs').append('<span><a href="/openmrs/">Home</a><span class="separator">&gt;&gt;</span></span>');
+      $('#breadcrumbs').append('<span>Home</span>');
+    }
+    // add heading for the Home/System Administration dashboard
+    const dashboard = $('#body-wrapper > #content');
+    if (!!dashboard.has('.row > #apps').length) {
+      dashboard.prepend('<div class="homepage-heading">Home</div>');
+    } else if (!!dashboard.has('#tasks.row').length) {
+      dashboard.prepend('<div class="homepage-heading">System Administration</div>');
     }
     /** Patient Dashboard **/
     // move all the widgets to the first column
