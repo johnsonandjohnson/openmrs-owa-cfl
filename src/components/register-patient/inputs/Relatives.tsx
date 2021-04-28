@@ -181,6 +181,7 @@ class Relatives extends React.Component<IRelativesProps, IRelativesState> {
               inputValue={relative.otherPersonInput}
               onKeyDown={rowNo + 1 === this.state.relatives.length ? this.props.onKeyDown : null}
               onFocus={this.onFocus(rowNo)}
+              isFocused
             />
             {(!!relative.otherPerson || !!relative.otherPersonInput) && <span className="placeholder">{otherPersonPlaceholder}</span>}
           </div>

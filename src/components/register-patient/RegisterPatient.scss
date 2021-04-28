@@ -90,18 +90,6 @@
           color: black;
         }
       }
-      div[class*='__single-value'] {
-        margin-top: 3em;
-        position: initial;
-        margin-left: auto;
-        margin-right: auto;
-      }
-      div[class*='-Input'] {
-        position: absolute;
-        width: 100%;
-        margin-left: auto;
-        margin-right: auto;
-      }
     }
     input:not(:placeholder-shown),
     select:not(.placeholder):not([class*='react-datepicker__']) {
@@ -116,7 +104,17 @@
         font-size: 14px;
         font-family: CircularStd-Book;
       }
-      div[class*='-Input'] {
+      div[class*='__single-value'] {
+        margin-top: 3em;
+        position: initial;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      div[class*='css-']:not([class*='__single-value']) {
+        position: absolute;
+        width: 100%;
+        margin-left: auto;
+        margin-right: auto;
         padding-top: 0;
       }
     }
