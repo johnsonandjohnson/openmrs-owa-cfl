@@ -7,9 +7,11 @@ export const dobToAge = dob => {
   return Math.abs(age.getUTCFullYear() - 1970);
 };
 
+export const DATE_FORMAT = 'dd MMM yyyy';
+
 export const formatDate = (intl, date) =>
-  intl.formatDate(date, {
-    year: 'numeric',
-    month: 'long',
-    day: '2-digit'
-  });
+  new Intl.DateTimeFormat('en-GB', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric'
+  }).format(date);

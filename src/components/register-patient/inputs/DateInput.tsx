@@ -5,6 +5,7 @@ import DatePicker from 'react-datepicker';
 import { IFieldProps, IFieldState } from './Field';
 import ValidationError from './ValidationError';
 import { getCommonInputProps, getPlaceholder } from '../../../shared/util/form-util';
+import { DATE_FORMAT } from '../../../shared/util/date-util';
 
 export interface IDateInputProps extends StateProps, DispatchProps, IFieldProps {
   intl: any;
@@ -23,7 +24,7 @@ class DateInput extends React.Component<IDateInputProps, IFieldState> {
     };
     return (
       <div className={`${className} input-container`}>
-        <DatePicker {...props} peekNextMonth showMonthDropdown showYearDropdown dropdownMode="select" />
+        <DatePicker {...props} peekNextMonth showMonthDropdown showYearDropdown dropdownMode="select" dateFormat={DATE_FORMAT} />
         {hasValue && <span className="placeholder">{placeholder}</span>}
         {isDirty && isInvalid && <ValidationError hasValue={hasValue} />}
       </div>

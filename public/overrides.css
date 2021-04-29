@@ -283,8 +283,12 @@ button.btn {
   padding: 0.5rem 1.25rem;
   font-size: 11px;
   text-transform: uppercase;
-  background-color: #00455c !important;
+  background-color: #00455c;
   background-image: none !important;
+}
+
+button.btn:hover {
+  background-color: #00455c;
 }
 
 .info-container,
@@ -396,6 +400,7 @@ button.btn {
 .general-actions-toggle .navbar-toggler {
   color: white !important;
   padding: 0.5rem 1.25rem !important;
+  background-color: #00455c !important;
 }
 
 .general-actions-toggle .navbar-toggler[aria-expanded='true'] {
