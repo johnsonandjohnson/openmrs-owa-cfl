@@ -77,9 +77,6 @@ class FindPatient extends React.Component<IPatientsProps, IPatientsState> {
         <h2>
           <FormattedMessage id="findPatient.title" />
         </h2>
-        <div className="helper-text">
-          <FormattedMessage id="findPatient.subtitle" />
-        </div>
         <div className="error">{this.props.error}</div>
         <div className="search-section">
           <Form onSubmit={this.onSearchClick}>

@@ -14,12 +14,10 @@
   },
   "findPatient": {
     "title": "Find Patient Record",
-    "subtitle": "Search for Patient Record below",
     "searchInputPlaceholder": "Search by Id, name or phone number"
   },
   "findCaregiver": {
     "title": "Find Caregiver Record",
-    "subtitle": "Search for Caregiver Record below",
     "searchInputPlaceholder": "Search by Id, name or phone number"
   },
   "columnNames": {

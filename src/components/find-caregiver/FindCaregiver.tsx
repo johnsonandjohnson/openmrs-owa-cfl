@@ -75,9 +75,6 @@ class FindCaregiver extends React.Component<ICaregiversProps, ICaregiversState> 
         <h2>
           <FormattedMessage id="findCaregiver.title" />
         </h2>
-        <div className="helper-text">
-          <FormattedMessage id="findCaregiver.subtitle" />
-        </div>
         <div className="error">{this.props.error}</div>
         <div className="search-section">
           <Form onSubmit={this.onSearchClick}>
