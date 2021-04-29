@@ -276,12 +276,15 @@ i.cfl-register-patient {
 }
 
 .patient-header .header-buttons button {
+  margin-bottom: 0.25rem;
+}
+
+button.btn {
   padding: 0.5rem 1.25rem;
   font-size: 11px;
   text-transform: uppercase;
   background-color: #00455c !important;
   background-image: none !important;
-  margin-bottom: 0.25rem;
 }
 
 .info-container,
@@ -374,6 +377,53 @@ i.cfl-register-patient {
   content: none !important;
 }
 
+.action-container .float-left {
+  float: none !important;
+  width: auto !important;
+}
+
+#generalActions {
+  background-color: #00455c;
+  padding: 0.1em;
+}
+
+.general-actions-toggle {
+  margin-left: 15px;
+  margin-bottom: 5px;
+  width: 280px;
+}
+
+.general-actions-toggle .navbar-toggler {
+  color: white !important;
+  padding: 0.5rem 1.25rem !important;
+}
+
+.general-actions-toggle .navbar-toggler[aria-expanded='true'] {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.5) !important;
+}
+
+#generalActions > div {
+  padding-left: 0.5em;
+}
+
+#generalActions > div > a {
+  font-size: 0.9em;
+  color: white;
+}
+
+#generalActions .float-left {
+  float: none !important;
+  width: auto !important;
+}
+
+.general-actions-toggle button.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 /** Common **/
 body {
   background-color: #fafafa !important;
@@ -393,7 +443,7 @@ p {
 
 div#body-wrapper,
 div.body-wrapper {
-  padding: 1em 1em 0;
+  padding: 0 1em 0 1em;
   margin: 0;
   background-color: transparent !important;
 }
@@ -403,6 +453,22 @@ form#login-form {
   justify-content: center;
 }
 
+@media only screen and (max-width: 575px) {
+  .action-container,
+  .action-section ul {
+    display: none !important;
+  }
+  .patient-header {
+    margin: -10px -15px 0 -10px !important;
+  }
+  .header-buttons .btn,
+  .general-actions-toggle .btn,
+  .header-buttons {
+    display: block;
+    width: 100%;
+    max-width: 280px;
+  }
+}
 @media only screen and (min-width: 576px) {
   header {
     padding: 0 2em 0 2em !important;
@@ -415,6 +481,9 @@ form#login-form {
   .container > .dashboard {
     margin-right: -2rem;
     max-width: 500px;
+  }
+  .general-actions-toggle {
+    display: none;
   }
 }
 @media only screen and (min-width: 768px) {

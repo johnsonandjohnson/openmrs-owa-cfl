@@ -131,6 +131,26 @@ typeof $ === 'function' &&
         $(this).replaceWith("<div class='info-body empty'><span class='label'>-NO DATA-</span></div>");
       }
     });
+    // Add hamburger menu for general actions (visible on smaller screens)
+    const actionContainer = $('.action-container');
+    if (actionContainer.length) {
+      const actions = actionContainer.find('.action-section ul li');
+      actionContainer.before(
+        [
+          '<div class="general-actions-toggle navbar-dark">',
+          '<button class="navbar-toggler btn btn-secondary" type="button" data-toggle="collapse" data-target="#generalActions" aria-controls="generalActions" aria-expanded="false" aria-label="Toggle general actions">',
+          '<span class="navbar-toggler-icon mr-1"></span><span>General Actions</span>',
+          '</button>',
+          '<div class="collapse navbar-collapse" id="generalActions">',
+          actions
+            .toArray()
+            .map(action => '<div>' + action.innerHTML + '</div>')
+            .join('\n'),
+          '</div>',
+          '</div>'
+        ].join('\n')
+      );
+    }
   });
 
 // MIT Licensed
