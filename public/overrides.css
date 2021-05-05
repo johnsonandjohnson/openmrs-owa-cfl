@@ -465,3 +465,72 @@ div.body-wrapper {
   padding: 0 !important;
   border: unset !important;
 }
+
+/** Header collapse **/
+.navbar-collapse.show,
+.navbar-collapse.collapsing,
+header > .user-options.show {
+  position: absolute;
+  top: 43px;
+  right: 0;
+  background-color: rgb(0, 69, 92);
+  padding-inline-start: 0;
+  padding-right: 25px;
+  padding-bottom: 5px;
+  padding-top: 5px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  z-index: 99;
+}
+
+.navbar-collapse.show li,
+.navbar-collapse.collapsing li,
+header > .user-options.show li {
+  padding: 0.15em;
+}
+
+.navbar-collapse.show li:not(:last-of-type),
+.navbar-collapse.collapsing li:not(:last-of-type),
+header > .user-options.show li:not(:last-of-type) {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.5) !important;
+}
+
+nav.navbar {
+  position: initial;
+}
+
+/** Header overrides for React apps **/
+#app header .navbar-nav li a {
+  line-height: normal;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+#app header .navbar-nav {
+  align-items: flex-end;
+}
+
+#app header .user-options li i {
+  padding: 0.2em 0.35em;
+}
+
+.toggler-icon-container {
+  align-items: center;
+  flex: 1;
+  justify-content: flex-end;
+  display: flex;
+}
+
+@media only screen and (max-width: 991px) {
+  header > .user-options:not(.show) {
+    display: none;
+  }
+  header > .user-options {
+    display: flex;
+    flex-direction: column;
+  }
+}
+@media only screen and (min-width: 992px) {
+  .toggler-icon-container {
+    display: none;
+  }
+}

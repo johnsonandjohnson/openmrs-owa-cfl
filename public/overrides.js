@@ -1,4 +1,23 @@
-document.addEventListener('DOMContentLoaded', function (event) {});
+window.addEventListener('load', function () {
+  // Add collapse to the Header
+  elementReady('.user-options').then(userOptions => {
+    const collapse = window.document.getElementById('navbarSupportedContent');
+    const header = document.getElementsByTagName('header');
+    if (!collapse && header.length) {
+      header[0].appendChild(
+        ...htmlToElements(
+          [
+            '<nav class="navbar-dark toggler-icon-container">' +
+              '<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" onclick="document.getElementsByClassName(\'user-options\')[0].classList.toggle(\'show\')">' +
+              '<span class="navbar-toggler-icon"></span>' +
+              '</button>' +
+              '</nav>'
+          ].join('\n')
+        )
+      );
+    }
+  });
+});
 
 typeof $ === 'function' &&
   $(function () {
@@ -13,7 +32,7 @@ typeof $ === 'function' &&
     /** Home **/
     // add missing breadcrumb for the Homepage
     const breadcrumbs = $('#breadcrumbs');
-    if (breadcrumbs.is(':empty')) {
+    if (breadcrumbs.length === 0) {
       $('#breadcrumbs').append('<span>Home</span>');
     }
     // add heading for the Home/System Administration dashboard
@@ -26,13 +45,13 @@ typeof $ === 'function' &&
     /** Patient Dashboard **/
     // move all the widgets to the first column
     const firstInfoContainer = $('.info-container:first-of-type');
-    if (!firstInfoContainer.is(':empty')) {
+    if (firstInfoContainer.length) {
       const remainingContainersChildren = $('.info-container .info-section');
       remainingContainersChildren.detach().appendTo(firstInfoContainer);
     }
     // re-design Patient header
     const patientHeader = $('.patient-header');
-    if (!patientHeader.is(':empty')) {
+    if (patientHeader.length) {
       const patientId = patientHeader.find('.identifiers:nth-of-type(2) > span').text().trim();
       const patientLocation = patientHeader.find('.patientLocation:not(:empty) > span').text().trim();
       const givenName = patientHeader.find('.PersonName-givenName').text();
@@ -48,7 +67,7 @@ typeof $ === 'function' &&
       const ageAndGender = ' (' + age.split(' ')[0] + '/' + gender[0] + ')';
       // extract the status out of status: <status>
       const status = personStatus.text().split(':');
-      if (status.length > 1) {
+      if (status.length) {
         personStatus.text(status[1]);
       }
       var htmlLines = [
@@ -71,7 +90,7 @@ typeof $ === 'function' &&
       ];
       // add buttons on the right side of patient header
       const note = $('.note.warning');
-      if (!note.is(':empty')) {
+      if (note.length) {
         const buttons = patientHeader.find('.header-buttons');
         const link = note.find('a');
         if (link.length) {
@@ -114,7 +133,7 @@ typeof $ === 'function' &&
 
       // replace the url of 'Patient profile'
       const patientProfileAnchor = $('a#cfl\\.patientProfile');
-      if (!patientProfileAnchor.is(':empty')) {
+      if (patientProfileAnchor.length) {
         const searchParams = new URLSearchParams(window.location.search);
         if (searchParams.has('patientId')) {
           patientProfileAnchor.prop(
@@ -153,6 +172,16 @@ typeof $ === 'function' &&
     }
   });
 
+/**
+ * @return {NodeList}
+ * @param htmlString
+ */
+function htmlToElements(htmlString) {
+  var template = document.createElement('template');
+  template.innerHTML = htmlString;
+  return template.content.childNodes;
+}
+
 // MIT Licensed
 // Author: jwilson8767
 
@@ -161,20 +190,23 @@ typeof $ === 'function' &&
  * Useful for resolving race conditions.
  *
  * @param selector
+ * @param notEmpty
  * @returns {Promise}
  */
-function elementReady(selector) {
+function elementReady(selector, notEmpty = false) {
   return new Promise((resolve, reject) => {
     let el = document.querySelector(selector);
-    if (el) {
+    if (el && (!notEmpty || !!el.textContent)) {
       resolve(el);
     }
     new MutationObserver((mutationRecords, observer) => {
       // Query for elements matching the specified selector
       Array.from(document.querySelectorAll(selector)).forEach(element => {
-        resolve(element);
-        //Once we have resolved we don't need the observer anymore.
-        observer.disconnect();
+        if (!notEmpty || !!element.textContent) {
+          resolve(element);
+          // Once we have resolved we don't need the observer anymore.
+          observer.disconnect();
+        }
       });
     }).observe(document.documentElement, {
       childList: true,
