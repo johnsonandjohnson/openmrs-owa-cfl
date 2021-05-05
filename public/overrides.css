@@ -32,54 +32,6 @@ html {
   font-size: 16px;
 }
 
-/** Header **/
-header {
-  border-radius: 0 !important;
-  padding: 0 1em 0 1em !important;
-  min-height: auto !important;
-  display: flex !important;
-}
-
-header .user-options {
-  margin-top: 0 !important;
-  margin-bottom: 0 !important;
-  margin-left: auto;
-  align-self: center;
-}
-
-header .user-options i {
-  box-sizing: content-box !important;
-}
-
-header .logo {
-  margin: 5px 0 !important;
-}
-
-header .logo a {
-  content: url('img/logo.png');
-  height: 30px !important;
-  width: auto !important;
-}
-
-header nav.navbar {
-  padding: 0 !important;
-  flex: 1;
-}
-
-header .user-options li {
-  margin-top: 0 !important;
-  margin-bottom: 0 !important;
-}
-
-header #user-account-menu li a {
-  padding: 0 !important;
-}
-
-header #session-location {
-  top: 40px !important;
-  left: calc(100vw - 853px) !important;
-}
-
 /** Apps **/
 .homeList > a.button {
   background: white !important;
@@ -268,9 +220,6 @@ i.cfl-register-patient {
   margin: 10px 0 5px 0 !important;
 }
 
-.patient-header .patient-data {
-}
-
 .patient-header .header-buttons {
   margin-top: 0.5rem;
 }
@@ -430,14 +379,6 @@ button.btn:hover {
 }
 
 /** Common **/
-body {
-  background-color: #fafafa !important;
-  max-width: none !important;
-  width: auto !important;
-  margin-top: 0 !important;
-  font-family: 'CircularStd', serif !important;
-}
-
 div#content {
   padding: 0;
 }
@@ -451,11 +392,6 @@ div.body-wrapper {
   padding: 0 1em 0 1em;
   margin: 0;
   background-color: transparent !important;
-}
-
-form#login-form {
-  display: flex;
-  justify-content: center;
 }
 
 @media only screen and (max-width: 575px) {
@@ -475,11 +411,6 @@ form#login-form {
   }
 }
 @media only screen and (min-width: 576px) {
-  header {
-    padding: 0 2em 0 2em !important;
-  }
-  div#body-wrapper,
-  div.body-wrapper,
   #breadcrumbs {
     padding: 0 2rem 0;
   }
@@ -492,11 +423,6 @@ form#login-form {
   }
 }
 @media only screen and (min-width: 768px) {
-  header {
-    padding: 0 4em 0 4em !important;
-  }
-  div#body-wrapper,
-  div.body-wrapper,
   #breadcrumbs {
     padding: 0 4rem 0;
   }
@@ -505,21 +431,11 @@ form#login-form {
   }
 }
 @media only screen and (min-width: 992px) {
-  header {
-    padding: 0 6em 0 6em !important;
-  }
-  div#body-wrapper,
-  div.body-wrapper,
   #breadcrumbs {
     padding: 0 6rem 0;
   }
 }
 @media only screen and (min-width: 1280px) {
-  header {
-    padding: 0 8em 0 8em !important;
-  }
-  div#body-wrapper,
-  div.body-wrapper,
   #breadcrumbs {
     padding: 0 8rem 0;
   }
