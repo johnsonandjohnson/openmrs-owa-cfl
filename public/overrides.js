@@ -19,8 +19,9 @@ window.addEventListener('load', function () {
   });
 });
 
-typeof $ === 'function' &&
-  $(function () {
+const jqr = $ || jQuery || jq;
+typeof jqr === 'function' &&
+  jqr(function () {
     const CFL_UI_ROOT = '/openmrs/owa/cfl-ui/';
     /** General **/
     // OpenMRS bug: remove occasional (/undefined) from the System Administration breadcrumbs
@@ -31,12 +32,12 @@ typeof $ === 'function' &&
     }, 100);
     /** Home **/
     // add missing breadcrumb for the Homepage
-    const breadcrumbs = $('#breadcrumbs');
+    const breadcrumbs = jqr('#breadcrumbs');
     if (breadcrumbs.length === 0) {
-      $('#breadcrumbs').append('<span>Home</span>');
+      jqr('#breadcrumbs').append('<span>Home</span>');
     }
     // add heading for the Home/System Administration dashboard
-    const dashboard = $('#body-wrapper > #content');
+    const dashboard = jqr('#body-wrapper > #content');
     if (!!dashboard.has('.row > #apps').length) {
       dashboard.prepend('<div class="homepage-heading">Home</div>');
     } else if (!!dashboard.has('#tasks.row').length) {
@@ -44,13 +45,13 @@ typeof $ === 'function' &&
     }
     /** Patient Dashboard **/
     // move all the widgets to the first column
-    const firstInfoContainer = $('.info-container:first-of-type');
+    const firstInfoContainer = jqr('.info-container:first-of-type');
     if (firstInfoContainer.length) {
-      const remainingContainersChildren = $('.info-container .info-section');
+      const remainingContainersChildren = jqr('.info-container .info-section');
       remainingContainersChildren.detach().appendTo(firstInfoContainer);
     }
     // re-design Patient header
-    const patientHeader = $('.patient-header');
+    const patientHeader = jqr('.patient-header');
     if (patientHeader.length) {
       const patientId = patientHeader.find('.identifiers:nth-of-type(2) > span').text().trim();
       const patientLocation = patientHeader.find('.patientLocation:not(:empty) > span').text().trim();
@@ -89,7 +90,7 @@ typeof $ === 'function' &&
           '<div class="header-buttons">'
       ];
       // add buttons on the right side of patient header
-      const note = $('.note.warning');
+      const note = jqr('.note.warning');
       if (note.length) {
         const buttons = patientHeader.find('.header-buttons');
         const link = note.find('a');
@@ -101,27 +102,25 @@ typeof $ === 'function' &&
             '</button>'
           ]);
         }
-        const deletePatient = $('#org\\.openmrs\\.module\\.coreapps\\.deletePatient');
-        if (deletePatient.length) {
-          const href = deletePatient.attr('href');
-          htmlLines = htmlLines.concat(['<button class="btn btn-secondary" onclick="' + href + '">', deletePatient.text(), '</button>']);
-        }
-        const deleteCaregiver = $('#cfl\\.personDashboard\\.deletePerson');
-        if (deleteCaregiver.length) {
-          const href = deleteCaregiver.attr('href');
-          htmlLines = htmlLines.concat(['<button class="btn btn-secondary" onclick="' + href + '">', deleteCaregiver.text(), '</button>']);
-        }
-        note.remove();
-        if (personStatusDialog.length && personStatus.length) {
-          htmlLines = htmlLines.concat([
-            personStatusDialog[0].outerHTML,
-            '<button class="btn btn-secondary" onclick="' +
-              personStatus[0].getAttribute('onclick') +
-              '">' +
-              'Update the status' +
-              '</button>'
-          ]);
-        }
+      }
+      const deletePatient = jqr('#org\\.openmrs\\.module\\.coreapps\\.deletePatient');
+      if (deletePatient.length) {
+        const href = deletePatient.attr('href');
+        htmlLines = htmlLines.concat(['<button class="btn btn-secondary" onclick="' + href + '">', deletePatient.text(), '</button>']);
+        deletePatient.remove();
+      }
+      const deleteCaregiver = jqr('#cfl\\.personDashboard\\.deletePerson');
+      if (deleteCaregiver.length) {
+        const href = deleteCaregiver.attr('href');
+        htmlLines = htmlLines.concat(['<button class="btn btn-secondary" onclick="' + href + '">', deleteCaregiver.text(), '</button>']);
+        deleteCaregiver.remove();
+      }
+      note.remove();
+      if (personStatusDialog.length && personStatus.length) {
+        htmlLines = htmlLines.concat([
+          personStatusDialog[0].outerHTML,
+          '<button class="btn btn-secondary" onclick="' + personStatus[0].getAttribute('onclick') + '">' + 'Update the status' + '</button>'
+        ]);
       }
       htmlLines.push('</div></div>');
       patientHeader.replaceWith(htmlLines.join('\n'));
@@ -132,7 +131,7 @@ typeof $ === 'function' &&
       });
 
       // replace the url of 'Patient profile'
-      const patientProfileAnchor = $('a#cfl\\.patientProfile');
+      const patientProfileAnchor = jqr('a#cfl\\.patientProfile');
       if (patientProfileAnchor.length) {
         const searchParams = new URLSearchParams(window.location.search);
         if (searchParams.has('patientId')) {
@@ -144,14 +143,14 @@ typeof $ === 'function' &&
       }
     }
     // replace 'None' with '-NO DATA-' in each widget
-    $('.info-body').each(function (index) {
-      const text = $(this).find('li').text().trim() || $(this).find('p').text().trim() || $(this).text().trim();
+    jqr('.info-body').each(function (index) {
+      const text = jqr(this).find('li').text().trim() || jqr(this).find('p').text().trim() || jqr(this).text().trim();
       if (text === 'None' || text === 'Unknown' || text.length === 0) {
-        $(this).replaceWith("<div class='info-body empty'><span class='label'>-NO DATA-</span></div>");
+        jqr(this).replaceWith("<div class='info-body empty'><span class='label'>-NO DATA-</span></div>");
       }
     });
     // Add hamburger menu for general actions (visible on smaller screens)
-    const actionContainer = $('.action-container');
+    const actionContainer = jqr('.action-container');
     if (actionContainer.length) {
       const actions = actionContainer.find('.action-section ul li');
       actionContainer.before(

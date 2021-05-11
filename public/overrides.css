@@ -467,8 +467,8 @@ div.body-wrapper {
 }
 
 /** Header collapse **/
-.navbar-collapse.show,
-.navbar-collapse.collapsing,
+#navbarSupportedContent.show,
+#navbarSupportedContent.collapsing,
 header > .user-options.show {
   position: absolute;
   top: 43px;
@@ -482,14 +482,14 @@ header > .user-options.show {
   z-index: 99;
 }
 
-.navbar-collapse.show li,
-.navbar-collapse.collapsing li,
+#navbarSupportedContent.show li,
+#navbarSupportedContent.collapsing li,
 header > .user-options.show li {
   padding: 0.15em;
 }
 
-.navbar-collapse.show li:not(:last-of-type),
-.navbar-collapse.collapsing li:not(:last-of-type),
+#navbarSupportedContent.show li:not(:last-of-type),
+#navbarSupportedContent.collapsing li:not(:last-of-type),
 header > .user-options.show li:not(:last-of-type) {
   border-bottom: 1px solid rgba(255, 255, 255, 0.5) !important;
 }
