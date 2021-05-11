@@ -41,9 +41,11 @@ const reducer = (state = initialState, action) => {
       };
     case SUCCESS(ACTION_TYPES.SEARCH_PEOPLE):
       const links = action.payload.data.links;
+      const page = action.meta.currentPage || 0;
+      const people = action.payload.data.results || [];
       return {
         ...initialState,
-        people: action.payload.data.results,
+        people: page === 0 ? people : [...state.people, ...people],
         hasNext: links && !!links.find(link => link.rel === 'next'),
         hasPrev: links && !!links.find(link => link.rel === 'prev'),
         totalCount: action.payload.data.totalCount,

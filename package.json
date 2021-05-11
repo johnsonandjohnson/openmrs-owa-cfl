@@ -73,6 +73,7 @@
     "react-datepicker": "^3.8.0",
     "react-dev-utils": "^11.0.3",
     "react-dom": "^16.14.0",
+    "react-infinite-scroll-component": "^6.1.0",
     "react-intl": "^5.13.2",
     "react-phone-number-input": "^3.1.17",
     "react-redux": "^5.1.2",

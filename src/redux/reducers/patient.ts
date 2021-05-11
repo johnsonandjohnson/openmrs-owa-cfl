@@ -43,10 +43,12 @@ const reducer = (state = initialState, action) => {
       };
     case SUCCESS(ACTION_TYPES.SEARCH_PATIENTS):
       const links = action.payload.data.links;
+      const page = action.meta.currentPage || 0;
+      const patients = action.payload.data.results || [];
       if (action.meta.q === state.q) {
         return {
           ...initialState,
-          patients: action.payload.data.results,
+          patients: page === 0 ? patients : [...state.patients, ...patients],
           hasNext: links && !!links.find(link => link.rel === 'next'),
           hasPrev: links && !!links.find(link => link.rel === 'prev'),
           totalCount: action.payload.data.totalCount,

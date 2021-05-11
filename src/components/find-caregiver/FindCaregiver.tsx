@@ -13,6 +13,7 @@ import PagedTable from '../common/PagedTable';
 import { DEFAULT_PAGE_SIZE, pageOf } from '../../redux/page.util';
 import { helperText } from '../../shared/util/table-util';
 import { PATIENT_PAGE_URL } from '../../shared/constants/openmrs';
+import InfiniteTable from '../common/InfiniteTable';
 
 export interface ICaregiversProps extends StateProps, DispatchProps {
   intl: any;
@@ -99,16 +100,14 @@ class FindCaregiver extends React.Component<ICaregiversProps, ICaregiversState> 
               )}
             </div>
             {this.props.totalCount > 0 && (
-              <PagedTable
+              <InfiniteTable
                 columns={this.props.tableColumns.split(',')}
                 // frontend paging as the endpoint has no support for it
                 entities={pageOf(this.props.caregivers, this.state.page)}
                 columnContent={columnContent}
                 hasNext={this.props.totalCount > (this.state.page + 1) * DEFAULT_PAGE_SIZE}
-                hasPrev={this.state.page > 0}
                 currentPage={this.state.page}
                 switchPage={this.switchPage}
-                totalCount={this.props.totalCount}
                 getRecordLink={this.getRecordLink}
               />
             )}

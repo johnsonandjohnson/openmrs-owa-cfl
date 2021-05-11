@@ -1,0 +1,28 @@
+.infinite-scroll-component {
+  text-align: center;
+  thead tr th {
+    text-transform: uppercase;
+    padding-top: 0;
+  }
+  tbody tr td:first-of-type,
+  thead tr th:first-of-type {
+    padding-left: 2em;
+  }
+  @media only screen and (min-width: 1280px) {
+    tbody tr td,
+    thead tr th {
+      font-size: 16px;
+      padding: 0.5rem;
+    }
+  }
+  tbody tr:hover {
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, 0.15) !important;
+  }
+  tfoot {
+    align-items: center;
+  }
+  .spinner {
+    height: 45px;
+  }
+}

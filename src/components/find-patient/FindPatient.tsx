@@ -12,6 +12,7 @@ import { SEARCH_INPUT_DELAY, SEARCH_INPUT_MIN_CHARS } from '../../shared/constan
 import PagedTable from '../common/PagedTable';
 import { helperText } from '../../shared/util/table-util';
 import { PATIENT_PAGE_URL } from '../../shared/constants/openmrs';
+import InfiniteTable from '../common/InfiniteTable';
 
 export interface IPatientsProps extends StateProps, DispatchProps {
   intl: any;
@@ -101,15 +102,13 @@ class FindPatient extends React.Component<IPatientsProps, IPatientsState> {
               )}
             </div>
             {this.props.totalCount > 0 && (
-              <PagedTable
+              <InfiniteTable
                 columns={this.props.tableColumns.split(',')}
                 entities={this.props.patients}
                 columnContent={columnContent}
                 hasNext={this.props.hasNext}
-                hasPrev={this.props.hasPrev}
                 currentPage={this.props.currentPage}
                 switchPage={this.switchPage}
-                totalCount={this.props.totalCount}
                 getRecordLink={this.getRecordLink}
               />
             )}
