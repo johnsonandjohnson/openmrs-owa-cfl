@@ -1,0 +1,72 @@
+[
+  {
+    "label": "Name",
+    "title": "Demographics",
+    "subtitle": "What's the caregiver's name?",
+    "fields": [
+      {
+        "name": "givenName",
+        "required": true
+      },
+      {
+        "name": "middleName",
+        "required": false
+      },
+      {
+        "name": "familyName",
+        "required": true
+      }
+    ]
+  },
+  {
+    "label": "Language",
+    "title": "Demographics",
+    "subtitle": "What language does the caregiver prefer?",
+    "fields": [
+      {
+        "name": "personLanguage",
+        "required": false,
+        "type": "select",
+        "options": ["English", "Marathi", "Hindi"]
+      }
+    ]
+  },
+  {
+    "label": "Phone Number",
+    "title": "Demographics",
+    "subtitle": "What's the caregiver's phone number?",
+    "fields": [
+      {
+        "name": "phoneNumber",
+        "required": false,
+        "type": "phone"
+      }
+    ]
+  },
+  {
+    "label": "Person Location",
+    "title": "Demographics",
+    "subtitle": "What's the caregiver's location?",
+    "fields": [
+      {
+        "name": "locationId",
+        "label": "Person Location",
+        "required": false,
+        "type": "select",
+        "optionSource": "locations"
+      }
+    ]
+  },
+  {
+    "label": "Relatives",
+    "title": "Demographics",
+    "subtitle": "Who is the caregiver related to?",
+    "fields": [
+      {
+        "name": "relatives",
+        "required": false,
+        "type": "relatives"
+      }
+    ]
+  }
+]

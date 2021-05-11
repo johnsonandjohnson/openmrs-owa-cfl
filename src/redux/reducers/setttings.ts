@@ -2,10 +2,12 @@ import axios from 'axios';
 
 import { FAILURE, REQUEST, SUCCESS } from '../action-type.util';
 import {
+  CAREGIVER_REGISTRATION_APP_SETTING,
+  CAREGIVER_REGISTRATION_STEPS_SETTING,
   FIND_CAREGIVER_TABLE_COLUMNS_SETTING,
   FIND_PATIENT_TABLE_COLUMNS_SETTING,
-  REGISTRATION_APP_SETTING,
-  REGISTRATION_STEPS_SETTING,
+  PATIENT_REGISTRATION_APP_SETTING,
+  PATIENT_REGISTRATION_STEPS_SETTING,
   SETTING_PREFIX
 } from '../../shared/constants/setting';
 import { getSetting, getSettingValue, parseJsonSetting } from '../../shared/util/setting-util';
@@ -21,16 +23,20 @@ const initialState = {
   settings: [],
   findPatientTableColumnsSetting: {},
   findCaregiverTableColumnsSetting: {},
-  registrationSteps: null,
-  registrationAppSetting: {}
+  patientRegistrationSteps: null,
+  patientRegistrationAppSetting: {},
+  caregiverRegistrationSteps: null,
+  caregiverRegistrationAppSetting: {}
 };
 
 export const getSettingsState = settings => ({
   settings,
   findPatientTableColumnsSetting: getSetting(settings, FIND_PATIENT_TABLE_COLUMNS_SETTING),
   findCaregiverTableColumnsSetting: getSetting(settings, FIND_CAREGIVER_TABLE_COLUMNS_SETTING),
-  registrationSteps: parseJsonSetting(getSettingValue(settings, REGISTRATION_STEPS_SETTING), null),
-  registrationAppSetting: getSetting(settings, REGISTRATION_APP_SETTING)
+  patientRegistrationSteps: parseJsonSetting(getSettingValue(settings, PATIENT_REGISTRATION_STEPS_SETTING), null),
+  patientRegistrationAppSetting: getSetting(settings, PATIENT_REGISTRATION_APP_SETTING),
+  caregiverRegistrationSteps: parseJsonSetting(getSettingValue(settings, CAREGIVER_REGISTRATION_STEPS_SETTING), null),
+  caregiverRegistrationAppSetting: getSetting(settings, CAREGIVER_REGISTRATION_APP_SETTING)
 });
 
 const reducer = (state = initialState, action) => {

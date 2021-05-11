@@ -15,6 +15,7 @@ export interface IConfirmProps extends StateProps, DispatchProps {
   onPatientChange: any;
   stepButtons: any;
   steps: any[];
+  isCaregiver: boolean;
 }
 
 class Confirm extends React.Component<IConfirmProps> {
@@ -132,10 +133,10 @@ class Confirm extends React.Component<IConfirmProps> {
           {this.errors(errors)}
           <div className="step-title">
             <h2>
-              <FormattedMessage id={'registerPatient.steps.confirm.title'} />
+              <FormattedMessage id={(this.props.isCaregiver ? 'registerCaregiver' : 'registerPatient') + '.steps.confirm.title'} />
             </h2>
             <p>
-              <FormattedMessage id={'registerPatient.steps.confirm.subtitle'} />
+              <FormattedMessage id={(this.props.isCaregiver ? 'registerCaregiver' : 'registerPatient') + '.steps.confirm.subtitle'} />
             </p>
           </div>
           <div className="row">

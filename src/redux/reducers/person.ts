@@ -4,8 +4,10 @@ import { FAILURE, REQUEST, SUCCESS } from '../action-type.util';
 import { DEFAULT_PAGE_SIZE } from '../page.util';
 
 export const ACTION_TYPES = {
-  SEARCH_PEOPLE: 'person/SEARCH_PEOPLE',
-  RESET_PEOPLE: 'person/RESET_PEOPLE'
+  SEARCH_PEOPLE: 'patient/SEARCH_PEOPLE',
+  RESET_PEOPLE: 'patient/RESET_PEOPLE',
+  GET_PERSON: 'patient/GET_PERSON',
+  GET_PERSON_RELATIONSHIPS: 'patient/GET_PERSON_RELATIONSHIPS'
 };
 
 const initialState = {
@@ -15,7 +17,9 @@ const initialState = {
   hasNext: false,
   hasPrev: false,
   currentPage: 0,
-  totalCount: 0
+  totalCount: 0,
+  person: null,
+  personRelationships: null
 };
 
 const reducer = (state = initialState, action) => {
@@ -24,6 +28,11 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         loading: true
+      };
+    case REQUEST(ACTION_TYPES.GET_PERSON_RELATIONSHIPS):
+      return {
+        ...state,
+        personRelationships: null
       };
     case FAILURE(ACTION_TYPES.SEARCH_PEOPLE):
       return {
@@ -39,6 +48,16 @@ const reducer = (state = initialState, action) => {
         hasPrev: links && !!links.find(link => link.rel === 'prev'),
         totalCount: action.payload.data.totalCount,
         currentPage: action.meta.currentPage
+      };
+    case SUCCESS(ACTION_TYPES.GET_PERSON):
+      return {
+        ...state,
+        person: action.payload.data
+      };
+    case SUCCESS(ACTION_TYPES.GET_PERSON_RELATIONSHIPS):
+      return {
+        ...state,
+        personRelationships: action.payload.data.results
       };
     case ACTION_TYPES.RESET_PEOPLE:
       return {
@@ -58,6 +77,24 @@ export const search = (q, page = 0, limit = DEFAULT_PAGE_SIZE) => {
     meta: {
       currentPage: page
     }
+  };
+};
+
+const PERSON_CUSTOM_V = `personId,gender,age,birthdate,birthdateEstimated,preferredAddress,preferredName,attributes,uuid`;
+
+export const getPerson = id => {
+  const requestUrl = `/openmrs/ws/rest/v1/person/${id}?v=custom:(${PERSON_CUSTOM_V})`;
+  return {
+    type: ACTION_TYPES.GET_PERSON,
+    payload: axios.get(requestUrl)
+  };
+};
+
+export const getPersonRelationships = id => {
+  const requestUrl = `/openmrs/ws/rest/v1/relationship?v=default&person=${id}`;
+  return {
+    type: ACTION_TYPES.GET_PERSON_RELATIONSHIPS,
+    payload: axios.get(requestUrl)
   };
 };
 

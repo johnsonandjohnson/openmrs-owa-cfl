@@ -31,4 +31,5 @@ export const GENDER_DICT = { M: 'Male', F: 'Female' };
 export const DEFAULT_COLUMN_VALUE = '';
 
 // registration defaults
-export const DEFAULT_REGISTRATION_APP = 'cfl.registerPatient';
+export const DEFAULT_PATIENT_REGISTRATION_APP = 'cfl.registerPatient';
+export const DEFAULT_CAREGIVER_REGISTRATION_APP = 'cfl.registerCaregiver';

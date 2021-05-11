@@ -48,9 +48,23 @@
       "subtitle": "The Patient has been saved successfully."
     }
   },
+  "editCaregiver": {
+    "title": "Caregiver Profile",
+    "subtitle": "Please edit Caregiver profile below"
+  },
+  "registerCaregiver": {
+    "title": "Register a Caregiver",
+    "subtitle": "Please register a caregiver below",
+    "steps": {
+      "confirm": {
+        "title": "Person Demographics",
+        "subtitle": "Confirm the person details are correct."
+      }
+    }
+  },
   "registerPatient": {
     "title": "Register a Patient",
-    "subtitle": "Please register patient below",
+    "subtitle": "Please register a patient below",
     "steps": {
       "name": {
         "label": "Name",

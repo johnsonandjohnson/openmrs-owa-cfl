@@ -5,25 +5,28 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import { Button, Col, Form, ListGroup, ListGroupItem, Row, Spinner } from 'reactstrap';
 import _ from 'lodash';
 import { IPatient } from '../../shared/models/patient';
-import { extractPatientData, extractPatientRelationships } from '../../shared/util/patient-util';
+import { extractPatientOrPersonData, extractPersonRelationships } from '../../shared/util/patient-util';
 import Check from '../../assets/img/check.svg';
 import CheckCircle from '../../assets/img/check-circle.svg';
-import { editPatient, register, updateRelationships } from '../../redux/reducers/registration';
+import { editPatient, editPerson, register, registerPerson, updateRelationships } from '../../redux/reducers/registration';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
-import { getPatient, getPatientRelationships } from '../../redux/reducers/patient';
-import defaultSteps from './defaultSteps.json';
+import { getPatient } from '../../redux/reducers/patient';
+import { getPerson, getPersonRelationships } from '../../redux/reducers/person';
+import defaultSteps from './patientDefaultSteps.json';
+import caregiverDefaultSteps from './caregiverDefaultSteps.json';
 import Step from './Step';
 import Confirm from './Confirm';
 import queryString from 'query-string';
 import { redirectUrl } from '../../shared/util/url-util';
-import { DEFAULT_REGISTRATION_APP } from '../../shared/constants/patient';
+import { DEFAULT_CAREGIVER_REGISTRATION_APP, DEFAULT_PATIENT_REGISTRATION_APP } from '../../shared/constants/patient';
 import { ROOT_URL } from '../../shared/constants/openmrs';
 
-export interface IPatientsProps extends StateProps, DispatchProps, RouteComponentProps<{ id?: string }> {
+export interface IRegistrationProps extends StateProps, DispatchProps, RouteComponentProps<{ id?: string }> {
   intl: any;
+  isCaregiver: boolean;
 }
 
-export interface IPatientsState {
+export interface IRegistrationState {
   step: number;
   patient: IPatient;
   stepValidity: object;
@@ -31,7 +34,7 @@ export interface IPatientsState {
   success: boolean;
 }
 
-class RegisterPatient extends React.Component<IPatientsProps, IPatientsState> {
+class RegistrationForm extends React.Component<IRegistrationProps, IRegistrationState> {
   state = {
     step: 0,
     patient: {} as IPatient,
@@ -39,30 +42,39 @@ class RegisterPatient extends React.Component<IPatientsProps, IPatientsState> {
     visitedSteps: [0] as number[],
     success: false
   };
+  entityName = this.props.isCaregiver ? 'Caregiver' : 'Patient';
+  steps = () => (this.props.isCaregiver ? this.props.caregiverSteps : this.props.patientSteps);
+  patient = () => (this.props.isCaregiver ? this.props.person : this.props.patient);
+  registrationApp = () => (this.props.isCaregiver ? this.props.caregiverRegistrationApp : this.props.patientRegistrationApp);
 
   componentDidMount() {
     if (this.isEdit()) {
-      this.props.getPatient(this.props.match.params.id);
-      this.props.getPatientRelationships(this.props.match.params.id);
+      this.props.getPersonRelationships(this.props.match.params.id);
+      if (this.props.isCaregiver) {
+        this.props.getPerson(this.props.match.params.id);
+      } else {
+        this.props.getPatient(this.props.match.params.id);
+      }
     }
   }
 
-  componentDidUpdate(prevProps: Readonly<IPatientsProps>, prevState: Readonly<IPatientsState>, snapshot?: any) {
+  componentDidUpdate(prevProps: Readonly<IRegistrationProps>, prevState: Readonly<IRegistrationState>, snapshot?: any) {
     if (this.isEdit()) {
-      if (prevProps.patient !== this.props.patient && !!this.props.patient) {
+      const prevPatient = this.props.isCaregiver ? prevProps.person : prevProps.patient;
+      if (prevPatient !== this.patient() && !!this.patient()) {
         const patient = {
           relatives: this.state.patient?.relatives || [],
-          ...extractPatientData(this.props.patient)
+          ...extractPatientOrPersonData(this.patient())
         };
         this.setState({
           patient,
           stepValidity: {},
-          visitedSteps: _.map(this.props.steps, (stepDefinition, i) => i)
+          visitedSteps: _.map(this.steps(), (stepDefinition, i) => i)
         });
-      } else if (prevProps.patientRelationships !== this.props.patientRelationships && this.props.patientRelationships != null) {
+      } else if (prevProps.personRelationships !== this.props.personRelationships && this.props.personRelationships != null) {
         const patient = {
           ...this.state.patient,
-          relatives: extractPatientRelationships(this.props.match.params.id, this.props.patientRelationships)
+          relatives: extractPersonRelationships(this.props.match.params.id, this.props.personRelationships)
         };
         this.setState({
           patient
@@ -80,6 +92,8 @@ class RegisterPatient extends React.Component<IPatientsProps, IPatientsState> {
     const { match } = this.props;
     return match && match.params.id;
   }
+
+  formName = () => (this.isEdit() ? `edit${this.entityName}` : `register${this.entityName}`);
 
   setStep = step => {
     const highestVisitedStep = Math.max(step, Math.max.apply(Math, this.state.visitedSteps));
@@ -112,10 +126,10 @@ class RegisterPatient extends React.Component<IPatientsProps, IPatientsState> {
 
   stepList = () => {
     const { stepValidity, visitedSteps } = this.state;
-    const isConfirmActive = this.props.steps.length === this.state.step;
+    const isConfirmActive = this.steps().length === this.state.step;
     return (
       <ListGroup>
-        {_.map(this.props.steps, (stepDefinition, i) => {
+        {_.map(this.steps(), (stepDefinition, i) => {
           const isValid = stepValidity[i]?.isValid;
           const isVisited = visitedSteps.indexOf(i) >= 0;
           const isActive = i === this.state.step;
@@ -132,7 +146,7 @@ class RegisterPatient extends React.Component<IPatientsProps, IPatientsState> {
             </ListGroupItem>
           );
         })}
-        <ListGroupItem active={isConfirmActive} onClick={this.onStepClick(this.props.steps.length)} key={`step-${this.props.steps.length}`}>
+        <ListGroupItem active={isConfirmActive} onClick={this.onStepClick(this.steps().length)} key={`step-${this.steps().length}`}>
           <FormattedMessage id={`registerPatient.steps.confirm.label`} />
         </ListGroupItem>
       </ListGroup>
@@ -141,7 +155,7 @@ class RegisterPatient extends React.Component<IPatientsProps, IPatientsState> {
 
   stepForm = () => (
     <Form className="h-100 w-100">
-      {_.map(this.props.steps, (stepDefinition, i) => (
+      {_.map(this.steps(), (stepDefinition, i) => (
         <div className={`step-content ${i === this.state.step ? '' : 'd-none'}`} key={`step-${i}`}>
           <Step
             patient={this.state.patient}
@@ -154,15 +168,13 @@ class RegisterPatient extends React.Component<IPatientsProps, IPatientsState> {
           />
         </div>
       ))}
-      <div
-        className={`step-content ${this.props.steps.length === this.state.step ? '' : 'd-none'}`}
-        key={`step-${this.props.steps.length}`}
-      >
+      <div className={`step-content ${this.steps().length === this.state.step ? '' : 'd-none'}`} key={`step-${this.steps().length}`}>
         <Confirm
           patient={this.state.patient}
           onPatientChange={this.onPatientChange}
-          stepButtons={this.stepButtons(this.props.steps.length)}
-          steps={this.props.steps}
+          stepButtons={this.stepButtons(this.steps().length)}
+          steps={this.steps()}
+          isCaregiver={this.props.isCaregiver}
         />
       </div>
     </Form>
@@ -179,15 +191,24 @@ class RegisterPatient extends React.Component<IPatientsProps, IPatientsState> {
   onConfirmClick = e => {
     if (!this.props.loading && this.isFormValid()) {
       if (this.isEdit()) {
-        this.props.editPatient(this.state.patient, this.props.registrationApp);
+        if (this.props.isCaregiver) {
+          this.props.updateRelationships(this.state.patient);
+          this.props.editPerson(this.state.patient, this.registrationApp());
+        } else {
+          this.props.editPatient(this.state.patient, this.registrationApp());
+        }
       } else {
-        this.props.register(this.state.patient, this.props.registrationApp);
+        if (this.props.isCaregiver) {
+          this.props.registerPerson(this.state.patient, this.registrationApp());
+        } else {
+          this.props.register(this.state.patient, this.registrationApp());
+        }
       }
     }
   };
 
   stepButtons = stepNumber => isValid => {
-    const stepCount = this.props.steps.length;
+    const stepCount = this.steps().length;
     return (
       <div className="step-buttons">
         {stepNumber > 0 ? (
@@ -240,7 +261,7 @@ class RegisterPatient extends React.Component<IPatientsProps, IPatientsState> {
     if (this.props.settingsLoading) {
       return <Spinner />;
     }
-    const isEdit = this.isEdit();
+    const formName = this.formName();
     return (
       <div className="register-patient">
         {this.state.success ? (
@@ -248,10 +269,10 @@ class RegisterPatient extends React.Component<IPatientsProps, IPatientsState> {
         ) : (
           <>
             <h1>
-              <FormattedMessage id={`${isEdit ? 'editPatient' : 'registerPatient'}.title`} />
+              <FormattedMessage id={`${formName}.title`} />
             </h1>
             <div className="helper-text">
-              <FormattedMessage id={`${isEdit ? 'editPatient' : 'registerPatient'}.subtitle`} />
+              <FormattedMessage id={`${formName}.subtitle`} />
             </div>
             <Row className="mt-2">
               <Col xs={4} sm={3} className="step-list">
@@ -268,26 +289,34 @@ class RegisterPatient extends React.Component<IPatientsProps, IPatientsState> {
   }
 }
 
-const mapStateToProps = ({ registration, patient, settings }) => ({
+const mapStateToProps = ({ registration, patient, person, settings }) => ({
   loading: registration.loading,
   success: registration.success,
   message: registration.message,
   patient: patient.patient,
-  patientRelationships: patient.patientRelationships,
-  steps: settings.registrationSteps || defaultSteps,
-  registrationApp: (settings.registrationAppSetting && settings.registrationAppSetting.value) || DEFAULT_REGISTRATION_APP,
+  person: person.person,
+  personRelationships: person.personRelationships,
+  patientSteps: settings.patientRegistrationSteps || defaultSteps,
+  patientRegistrationApp:
+    (settings.patientRegistrationAppSetting && settings.patientRegistrationAppSetting.value) || DEFAULT_PATIENT_REGISTRATION_APP,
+  caregiverSteps: settings.caregiverRegistrationSteps || caregiverDefaultSteps,
+  caregiverRegistrationApp:
+    (settings.caregiverRegistrationAppSetting && settings.caregiverRegistrationAppSetting.value) || DEFAULT_CAREGIVER_REGISTRATION_APP,
   settingsLoading: settings.loading
 });
 
 const mapDispatchToProps = {
   register,
+  registerPerson,
   getPatient,
+  getPerson,
   editPatient,
+  editPerson,
   updateRelationships,
-  getPatientRelationships
+  getPersonRelationships
 };
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
 
-export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(withRouter(RegisterPatient)));
+export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(withRouter(RegistrationForm)));

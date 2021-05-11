@@ -130,14 +130,19 @@ typeof jqr === 'function' &&
         element.textContent = element.textContent.replace(fullName, fullName + ageAndGender);
       });
 
-      // replace the url of 'Patient profile'
+      // replace the url of 'Patient profile' and 'Caregiver profile'
       const patientProfileAnchor = jqr('a#cfl\\.patientProfile');
-      if (patientProfileAnchor.length) {
+      const caregiverProfileAnchor = jqr('a#cfl\\.caregiverProfile');
+      if (patientProfileAnchor.length || caregiverProfileAnchor.length) {
         const searchParams = new URLSearchParams(window.location.search);
         if (searchParams.has('patientId')) {
           patientProfileAnchor.prop(
             'href',
             `${CFL_UI_ROOT}index.html#/edit-patient/${searchParams.get('patientId')}?redirect=${window.location.href}&name=${fullName}`
+          );
+          caregiverProfileAnchor.prop(
+            'href',
+            `${CFL_UI_ROOT}index.html#/edit-caregiver/${searchParams.get('patientId')}?redirect=${window.location.href}&name=${fullName}`
           );
         }
       }

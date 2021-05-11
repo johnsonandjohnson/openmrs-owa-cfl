@@ -64,6 +64,10 @@ i.cfl-find-caregiver {
   content: url('img/find-caregiver.png');
 }
 
+i.cfl-register-caregiver {
+  content: url('img/register-caregiver.png');
+}
+
 i.cfl-register-patient {
   content: url('img/register-patient.png');
 }
@@ -76,8 +80,12 @@ i.cfl-register-patient {
   padding-left: 0 !important;
 }
 
-/** disable CFL Register Patient **/
+/** disable CFL Register Patient/Caregiver **/
 #cfl-registrationapp-registerPatient-homepageLink-cfl-registrationapp-registerPatient-homepageLink-extension {
+  display: none;
+}
+
+#cfl-registerCaregiver-homepageLink-cfl-registerCaregiver-homepageLink-extension {
   display: none;
 }
 
