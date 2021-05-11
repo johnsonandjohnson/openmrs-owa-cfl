@@ -2,7 +2,7 @@ import axios from 'axios';
 
 import { FAILURE, REQUEST, SUCCESS } from '../action-type.util';
 import querystring from 'querystring';
-import { DEFAULT_REGISTRATION_APP } from '../../shared/constants/patient';
+import { DEFAULT_CAREGIVER_REGISTRATION_APP, DEFAULT_PATIENT_REGISTRATION_APP } from '../../shared/constants/patient';
 
 export const ACTION_TYPES = {
   REGISTER: 'registration/REGISTER',
@@ -74,7 +74,7 @@ const extractFormData = patient => {
 };
 
 // actions
-export const register = (patient, app = DEFAULT_REGISTRATION_APP) => {
+export const register = (patient, app = DEFAULT_PATIENT_REGISTRATION_APP) => {
   const requestUrl = `/openmrs/registrationapp/registerPatient/submit.action?appId=${app}`;
   const formData = extractFormData(patient);
   return {
@@ -83,7 +83,16 @@ export const register = (patient, app = DEFAULT_REGISTRATION_APP) => {
   };
 };
 
-export const editPatient = (patient, app = DEFAULT_REGISTRATION_APP) => {
+export const registerPerson = (person, app = DEFAULT_CAREGIVER_REGISTRATION_APP) => {
+  const requestUrl = `/openmrs/cfl/registerPerson/submit.action?appId=${app}`;
+  const formData = extractFormData(person);
+  return {
+    type: ACTION_TYPES.REGISTER,
+    payload: axios.post(requestUrl, querystring.stringify(formData))
+  };
+};
+
+export const editPatient = (patient, app = DEFAULT_PATIENT_REGISTRATION_APP) => {
   const requestUrl = `/openmrs/registrationapp/editSection.page?patientId=${patient.patientId}&appId=${app}&sectionId=demographics&returnUrl=/`;
   const formData = extractFormData(patient);
   return {
@@ -92,9 +101,18 @@ export const editPatient = (patient, app = DEFAULT_REGISTRATION_APP) => {
   };
 };
 
-export const updateRelationships = patient => {
+export const editPerson = (person, app = DEFAULT_CAREGIVER_REGISTRATION_APP) => {
+  const requestUrl = `/openmrs/cfl/editPersonSection.page?personId=${person.personId}&patientId=${person.patientId}&appId=${app}&sectionId=demographics&returnUrl=/`;
+  const formData = extractFormData(person);
+  return {
+    type: ACTION_TYPES.EDIT_SECTION,
+    payload: axios.post(requestUrl, querystring.stringify(formData))
+  };
+};
+
+export const updateRelationships = person => {
   const requestUrl = `/openmrs/cfl/field/personRelationship/updateRelationships.action`;
-  const formData = extractFormData(patient);
+  const formData = extractFormData(person);
   return {
     type: ACTION_TYPES.UPDATE_RELATIONSHIPS,
     payload: axios.post(requestUrl, querystring.stringify(formData))

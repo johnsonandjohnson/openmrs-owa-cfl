@@ -5,24 +5,30 @@ import { connect } from 'react-redux';
 import { getSession } from '../redux/reducers/session';
 import { createSetting, getSettings } from '../redux/reducers/setttings';
 import {
+  DEFAULT_CAREGIVER_REGISTRATION_APP,
   DEFAULT_FIND_CAREGIVER_TABLE_COLUMNS,
   DEFAULT_FIND_PATIENT_TABLE_COLUMNS,
-  DEFAULT_REGISTRATION_APP
+  DEFAULT_PATIENT_REGISTRATION_APP
 } from '../shared/constants/patient';
 import { TinyButton as ScrollUpButton } from 'react-scroll-up-button';
 import {
+  CAREGIVER_REGISTRATION_APP_SETTING,
+  CAREGIVER_REGISTRATION_APP_SETTING_DESCRIPTION,
+  CAREGIVER_REGISTRATION_STEPS_SETTING,
+  CAREGIVER_REGISTRATION_STEPS_SETTING_DESCRIPTION,
   FIND_CAREGIVER_TABLE_COLUMNS_SETTING,
   FIND_CAREGIVER_TABLE_COLUMNS_SETTING_DESCRIPTION,
   FIND_PATIENT_TABLE_COLUMNS_SETTING,
   FIND_PATIENT_TABLE_COLUMNS_SETTING_DESCRIPTION,
-  REGISTRATION_APP_SETTING,
-  REGISTRATION_APP_SETTING_DESCRIPTION,
-  REGISTRATION_STEPS_SETTING,
-  REGISTRATION_STEPS_SETTING_DESCRIPTION
+  PATIENT_REGISTRATION_APP_SETTING,
+  PATIENT_REGISTRATION_APP_SETTING_DESCRIPTION,
+  PATIENT_REGISTRATION_STEPS_SETTING,
+  PATIENT_REGISTRATION_STEPS_SETTING_DESCRIPTION
 } from '../shared/constants/setting';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../assets/css/font-awesome-3.0.2.min.css';
-import defaultSteps from './register-patient/defaultSteps.json';
+import patientDefaultSteps from './register/patientDefaultSteps.json';
+import caregiverDefaultSteps from './register/caregiverDefaultSteps.json';
 
 export interface IAppProps extends StateProps, DispatchProps {}
 
@@ -49,11 +55,33 @@ class App extends React.Component<IAppProps> {
           FIND_CAREGIVER_TABLE_COLUMNS_SETTING_DESCRIPTION
         );
       }
-      if (!this.props.registrationSteps) {
-        this.props.createSetting(REGISTRATION_STEPS_SETTING, JSON.stringify(defaultSteps, null, 2), REGISTRATION_STEPS_SETTING_DESCRIPTION);
+      if (!this.props.patientRegistrationSteps) {
+        this.props.createSetting(
+          PATIENT_REGISTRATION_STEPS_SETTING,
+          JSON.stringify(patientDefaultSteps, null, 2),
+          PATIENT_REGISTRATION_STEPS_SETTING_DESCRIPTION
+        );
       }
-      if (!this.props.registrationAppSetting) {
-        this.props.createSetting(REGISTRATION_APP_SETTING, DEFAULT_REGISTRATION_APP, REGISTRATION_APP_SETTING_DESCRIPTION);
+      if (!this.props.patientRegistrationAppSetting) {
+        this.props.createSetting(
+          PATIENT_REGISTRATION_APP_SETTING,
+          DEFAULT_PATIENT_REGISTRATION_APP,
+          PATIENT_REGISTRATION_APP_SETTING_DESCRIPTION
+        );
+      }
+      if (!this.props.caregiverRegistrationSteps) {
+        this.props.createSetting(
+          CAREGIVER_REGISTRATION_STEPS_SETTING,
+          JSON.stringify(caregiverDefaultSteps, null, 2),
+          CAREGIVER_REGISTRATION_STEPS_SETTING_DESCRIPTION
+        );
+      }
+      if (!this.props.caregiverRegistrationAppSetting) {
+        this.props.createSetting(
+          CAREGIVER_REGISTRATION_APP_SETTING,
+          DEFAULT_CAREGIVER_REGISTRATION_APP,
+          CAREGIVER_REGISTRATION_APP_SETTING_DESCRIPTION
+        );
       }
     }
   }
@@ -73,8 +101,10 @@ const mapStateToProps = ({ session, settings }) => ({
   settings: settings.settings,
   findPatientTableColumnsSetting: settings.findPatientTableColumnsSetting,
   findCaregiverTableColumnsSetting: settings.findCaregiverTableColumnsSetting,
-  registrationSteps: settings.registrationSteps,
-  registrationAppSetting: settings.registrationAppSetting
+  patientRegistrationSteps: settings.patientRegistrationSteps,
+  patientRegistrationAppSetting: settings.patientRegistrationAppSetting,
+  caregiverRegistrationSteps: settings.caregiverRegistrationSteps,
+  caregiverRegistrationAppSetting: settings.caregiverRegistrationAppSetting
 });
 
 const mapDispatchToProps = { getSession, getSettings, createSetting };

@@ -97,7 +97,7 @@ export const getPatient = id => {
   };
 };
 
-export const getPatientRelationships = id => {
+export const getPersonRelationships = id => {
   const requestUrl = `/openmrs/ws/rest/v1/relationship?v=default&person=${id}`;
   return {
     type: ACTION_TYPES.GET_PATIENT_RELATIONSHIPS,

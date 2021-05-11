@@ -1,4 +1,4 @@
-import { IFieldProps } from '../../components/register-patient/inputs/Field';
+import { IFieldProps } from '../../components/register/inputs/Field';
 import { setValueOnChange } from './patient-util';
 
 export const getPlaceholder = (intl, label, fieldName, required) => {

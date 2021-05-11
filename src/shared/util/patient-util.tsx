@@ -32,13 +32,14 @@ export const setValue = (patient, prop, callback, value) => {
 export const setValueOnChange = (patient, prop, callback) => event =>
   setValue(patient, prop, callback, event && event.target ? event.target.value : event);
 
-export const extractPatientData = patient => {
-  const { person } = patient;
-  const { preferredName, preferredAddress, gender } = person;
+export const extractPatientOrPersonData = patient => {
+  const person = patient.person || patient;
+  const { preferredName, preferredAddress, gender, uuid, personId } = person;
   const { givenName, middleName, familyName } = preferredName;
   const { address1, address2, cityVillage, stateProvince, country, postalCode } = preferredAddress || {};
-  const patientData = {
-    patientId: patient.patientId,
+  return {
+    patientId: patient.patientId || uuid,
+    personId,
     givenName,
     middleName,
     familyName,
@@ -56,13 +57,10 @@ export const extractPatientData = patient => {
     ...extractAttributes(person),
     ...extractIdentifiers(person)
   } as IPatient;
-  // patientData[AADHAR_NUMBER_IDENTIFIER] = extractIdentifier(patient, AADHAR_NUMBER_IDENTIFIER);
-  // patientData[ART_NUMBER_IDENTIFIER] = extractIdentifier(patient, ART_NUMBER_IDENTIFIER);
-  return patientData;
 };
 
-export const extractPatientRelationships = (patientId, patientRelationships) =>
-  patientRelationships.map(relationship => {
+export const extractPersonRelationships = (patientId, personRelationships) =>
+  personRelationships.map(relationship => {
     const { personA, personB, relationshipType } = relationship;
     const isPersonA = personA.uuid === patientId;
     return {

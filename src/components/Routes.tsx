@@ -6,13 +6,14 @@ import Breadcrumbs from './common/Breadcrumbs';
 import _ from 'lodash';
 import Header from './common/Header';
 import ErrorBoundary from './common/ErrorBoundary';
-import RegisterPatient from './register-patient/RegisterPatient';
+import RegisterPatient from './register/RegisterPatient';
 import FindCaregiver from './find-caregiver/FindCaregiver';
 import { connect } from 'react-redux';
 import Unauthorized from './common/Unauthorized';
 import { PRIVILEGES } from '../shared/constants/privilege';
 import { Spinner } from 'reactstrap';
 import Customize from '@bit/soldevelo-cfl.omrs-components.customize';
+import RegisterCaregiver from './register/RegisterCaregiver';
 
 export const routeConfig = [
   {
@@ -37,6 +38,18 @@ export const routeConfig = [
     path: '/edit-patient/:id',
     component: RegisterPatient,
     breadcrumb: 'editPatient.title',
+    requiredPrivilege: PRIVILEGES.EDIT_PATIENTS
+  },
+  {
+    path: '/register-caregiver',
+    component: RegisterCaregiver,
+    breadcrumb: 'registerCaregiver.title',
+    requiredPrivilege: PRIVILEGES.ADD_PATIENTS
+  },
+  {
+    path: '/edit-caregiver/:id',
+    component: RegisterCaregiver,
+    breadcrumb: 'editCaregiver.title',
     requiredPrivilege: PRIVILEGES.EDIT_PATIENTS
   },
   {

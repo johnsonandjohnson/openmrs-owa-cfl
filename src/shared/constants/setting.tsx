@@ -16,8 +16,15 @@ export const FIND_CAREGIVER_TABLE_COLUMNS_SETTING_DESCRIPTION =
   'personLanguage - Language';
 export const FIND_PATIENT_TABLE_COLUMNS_SETTING_DESCRIPTION = FIND_CAREGIVER_TABLE_COLUMNS_SETTING_DESCRIPTION;
 
-export const REGISTRATION_SETTING_PREFIX = SETTING_PREFIX + 'registration.';
-export const REGISTRATION_STEPS_SETTING = REGISTRATION_SETTING_PREFIX + 'steps';
-export const REGISTRATION_STEPS_SETTING_DESCRIPTION = 'A JSON representation of Registration steps and fields.';
-export const REGISTRATION_APP_SETTING = REGISTRATION_SETTING_PREFIX + 'app';
-export const REGISTRATION_APP_SETTING_DESCRIPTION = 'The registration app used by the form. The default one is cfl.registerPatient';
+export const PATIENT_REGISTRATION_SETTING_PREFIX = SETTING_PREFIX + 'patient.registration.';
+export const PATIENT_REGISTRATION_STEPS_SETTING = PATIENT_REGISTRATION_SETTING_PREFIX + 'steps';
+export const PATIENT_REGISTRATION_STEPS_SETTING_DESCRIPTION = 'A JSON representation of Registration steps and fields.';
+export const PATIENT_REGISTRATION_APP_SETTING = PATIENT_REGISTRATION_SETTING_PREFIX + 'app';
+export const PATIENT_REGISTRATION_APP_SETTING_DESCRIPTION = 'The registration app used by the form. The default one is cfl.registerPatient';
+
+export const CAREGIVER_REGISTRATION_SETTING_PREFIX = SETTING_PREFIX + 'caregiver.registration.';
+export const CAREGIVER_REGISTRATION_STEPS_SETTING = CAREGIVER_REGISTRATION_SETTING_PREFIX + 'steps';
+export const CAREGIVER_REGISTRATION_STEPS_SETTING_DESCRIPTION = 'A JSON representation of Registration steps and fields.';
+export const CAREGIVER_REGISTRATION_APP_SETTING = CAREGIVER_REGISTRATION_SETTING_PREFIX + 'app';
+export const CAREGIVER_REGISTRATION_APP_SETTING_DESCRIPTION =
+  'The registration app used by the form. The default one is cfl.registerCaregiver';

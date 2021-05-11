@@ -25,6 +25,15 @@
       "id": "demoapp.homepageLink",
       "extensionPointId": "org.openmrs.referenceapplication.homepageLink",
       "type": "link",
+      "label": "CFL Register Caregiver",
+      "url": "owa/cfl-ui/index.html#/register-caregiver",
+      "icon": "cfl-register-caregiver",
+      "requiredPrivilege": "App: registrationapp.registerPatient"
+    },
+    {
+      "id": "demoapp.homepageLink",
+      "extensionPointId": "org.openmrs.referenceapplication.homepageLink",
+      "type": "link",
       "label": "Find Caregiver Record",
       "url": "owa/cfl-ui/index.html#/find-caregiver",
       "icon": "cfl-find-caregiver",
