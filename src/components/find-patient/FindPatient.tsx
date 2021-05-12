@@ -9,7 +9,6 @@ import searchIcon from '../../assets/img/search.png';
 import { columnContent } from '../../shared/util/patient-util';
 import { DEFAULT_FIND_PATIENT_TABLE_COLUMNS } from '../../shared/constants/patient';
 import { SEARCH_INPUT_DELAY, SEARCH_INPUT_MIN_CHARS } from '../../shared/constants/input';
-import PagedTable from '../common/PagedTable';
 import { helperText } from '../../shared/util/table-util';
 import { PATIENT_PAGE_URL } from '../../shared/constants/openmrs';
 import InfiniteTable from '../common/InfiniteTable';
