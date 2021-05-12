@@ -204,6 +204,8 @@ i.cfl-register-patient {
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
+  font-variant-numeric: normal;
+  font-feature-settings: normal;
 }
 
 .patient-header > .patient-id,
@@ -211,7 +213,7 @@ i.cfl-register-patient {
   margin-bottom: 0.35em;
 }
 
-.patient-header .label,
+.patient-header .header-label,
 .dashboard .label {
   font-family: CircularStd-Book;
   color: #333333;
@@ -219,13 +221,14 @@ i.cfl-register-patient {
   display: inline-block;
 }
 
-.patient-header .label {
+.patient-header .header-label {
   min-width: 125px;
 }
 
 .patient-header h1 {
   font-size: 2em !important;
   margin: 10px 0 5px 0 !important;
+  color: #2b3640 !important;
 }
 
 .patient-header .header-buttons {
@@ -234,6 +237,7 @@ i.cfl-register-patient {
 
 .patient-header .header-buttons button {
   margin-bottom: 0.25rem;
+  color: white;
 }
 
 button.btn {
