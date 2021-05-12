@@ -1,4 +1,5 @@
 window.addEventListener('load', function () {
+  const CFL_UI_ROOT = '/openmrs/owa/cfl-ui/';
   // Add collapse to the Header
   elementReady('.user-options').then(userOptions => {
     const collapse = window.document.getElementById('navbarSupportedContent');
@@ -17,12 +18,116 @@ window.addEventListener('load', function () {
       );
     }
   });
+  // re-design Patient header
+  const patientHeader = document.querySelector('.patient-header');
+  if (!!patientHeader) {
+    const patientId = patientHeader.querySelector('.identifiers:nth-of-type(2) span')?.textContent.trim();
+    const patientLocation = patientHeader.querySelector('.patientLocation:not(:empty) span')?.textContent.trim();
+    const givenName = patientHeader.querySelector('.PersonName-givenName')?.textContent;
+    const middleName = patientHeader.querySelector('.PersonName-middleName')?.textContent;
+    const familyName = patientHeader.querySelector('.PersonName-familyName')?.textContent;
+    const fullName = [givenName, middleName, familyName].join(' ').replace('  ', ' ');
+    const gender = patientHeader.querySelector('.gender-age:first-of-type span:nth-child(1)')?.textContent.trim();
+    const age = patientHeader.querySelector('.gender-age:first-of-type span:nth-child(2)')?.textContent.trim();
+    const telephoneNumber = patientHeader.querySelector('.gender-age:nth-of-type(2) span:nth-child(2)')?.textContent.trim();
+    let personStatus = document.querySelector('.person-status');
+    let personStatusDialog = patientHeader.querySelector('#person-status-update-dialog');
+    personStatusDialog = personStatusDialog?.parentElement.removeChild(personStatusDialog);
+    // construct a new header
+    const ageAndGender = ' (' + age.split(' ')[0] + '/' + gender[0] + ')';
+    // extract the status out of status: <status>
+    const status = personStatus?.textContent.split(':');
+    if (status.length) {
+      personStatus.textContent = status[1].trim();
+    }
+    var htmlLines = [
+      '<div class="patient-header">',
+      '<div class="patient-data"><h1>' + fullName + ageAndGender + '</h1>',
+      (!!patientId
+        ? '<div class="patient-id"><span class="header-label">Patient ID: </span><span class="value">' + patientId + '</span></div>'
+        : '') +
+        '<div class="patient-location"><span class="header-label">Patient Location: </span><span class="value">' +
+        patientLocation +
+        '</span></div>' +
+        '<div class="phone-number"><span class="header-label">Phone number: </span><span class="value">' +
+        telephoneNumber +
+        '</span></div>' +
+        '<div class="patient-status"><span class="header-label">Status: </span><span class="value">' +
+        personStatus?.textContent +
+        '</span></div>' +
+        '</div>' +
+        '<div class="header-buttons">'
+    ];
+    // add buttons on the right side of patient header
+    const note = document.querySelector('.note.warning');
+    if (!!note) {
+      const buttons = patientHeader.querySelector('.header-buttons');
+      const link = note.querySelector('a');
+      if (!!link) {
+        const href = link.href;
+        htmlLines = htmlLines.concat([
+          '<button class="btn btn-secondary" onclick="location.href=\'' + href + '\'">',
+          link.textContent.replace('See the', ''),
+          '</button>'
+        ]);
+      }
+      note.parentElement.removeChild(note);
+    }
+    const deletePatient = document.querySelector('#org\\.openmrs\\.module\\.coreapps\\.deletePatient');
+    if (!!deletePatient) {
+      const href = deletePatient.href;
+      htmlLines = htmlLines.concat(['<button class="btn btn-secondary" onclick="' + href + '">', deletePatient.textContent, '</button>']);
+      deletePatient.parentElement.removeChild(deletePatient);
+    }
+    const deleteCaregiver = document.querySelector('#cfl\\.personDashboard\\.deletePerson');
+    if (!!deleteCaregiver) {
+      const href = deleteCaregiver.href;
+      htmlLines = htmlLines.concat(['<button class="btn btn-secondary" onclick="' + href + '">', deleteCaregiver.textContent, '</button>']);
+      deleteCaregiver.parentElement.removeChild(deleteCaregiver);
+    }
+    if (!!personStatus) {
+      const onclick = personStatus.getAttribute('onclick') || "document.querySelector('.person-status').click()";
+      htmlLines = htmlLines.concat([
+        personStatusDialog?.outerHTML,
+        '<button id="updatePersonStatus" class="btn btn-secondary" onclick="' + onclick + '">' + 'Update the status' + '</button>'
+      ]);
+      personStatus.style.display = 'none';
+      document.querySelector('.body-wrapper')?.prepend(personStatus);
+    }
+    htmlLines.push('</div></div>');
+    const updatedHeader = htmlToElements(htmlLines.join('\n'));
+    const patientHeaderContainer = document.querySelector('.patient-header-container');
+    if (!!patientHeaderContainer) {
+      patientHeaderContainer.replaceWith(...updatedHeader);
+    } else {
+      patientHeader.replaceWith(...updatedHeader);
+    }
+    // add (age/gender) to the breadcrumb
+    elementReady('#breadcrumbs li:last-child:not(:empty)').then(element => {
+      element.textContent = element.textContent.replace(fullName, fullName + ageAndGender);
+    });
+    // replace the url of 'Patient profile' and 'Caregiver profile'
+    const searchParams = new URLSearchParams(window.location.search);
+    if (searchParams.has('patientId')) {
+      const patientProfileAnchor = document.querySelector('a#cfl\\.patientProfile');
+      if (!!patientProfileAnchor) {
+        patientProfileAnchor.href = `${CFL_UI_ROOT}index.html#/edit-patient/${searchParams.get('patientId')}?redirect=${
+          window.location.href
+        }&name=${fullName}`;
+      }
+      const caregiverProfileAnchor = document.querySelector('a#cfl\\.caregiverProfile');
+      if (!!caregiverProfileAnchor) {
+        caregiverProfileAnchor.href = `${CFL_UI_ROOT}index.html#/edit-caregiver/${searchParams.get('patientId')}?redirect=${
+          window.location.href
+        }&name=${fullName}`;
+      }
+    }
+  }
 });
 
-const jqr = $ || jQuery || jq;
-typeof jqr === 'function' &&
+const jqr = (typeof $ === 'function' || typeof jQuery === 'function') && ($ || jQuery);
+jqr &&
   jqr(function () {
-    const CFL_UI_ROOT = '/openmrs/owa/cfl-ui/';
     /** General **/
     // OpenMRS bug: remove occasional (/undefined) from the System Administration breadcrumbs
     setTimeout(function () {
@@ -49,103 +154,6 @@ typeof jqr === 'function' &&
     if (firstInfoContainer.length) {
       const remainingContainersChildren = jqr('.info-container .info-section');
       remainingContainersChildren.detach().appendTo(firstInfoContainer);
-    }
-    // re-design Patient header
-    const patientHeader = jqr('.patient-header');
-    if (patientHeader.length) {
-      const patientId = patientHeader.find('.identifiers:nth-of-type(2) > span').text().trim();
-      const patientLocation = patientHeader.find('.patientLocation:not(:empty) > span').text().trim();
-      const givenName = patientHeader.find('.PersonName-givenName').text();
-      const middleName = patientHeader.find('.PersonName-middleName').text();
-      const familyName = patientHeader.find('.PersonName-familyName').text();
-      const fullName = [givenName, middleName, familyName].join(' ').replace('  ', ' ');
-      const gender = patientHeader.find('.gender-age:first-of-type > span:nth-child(1)').text().trim();
-      const age = patientHeader.find('.gender-age:first-of-type > span:nth-child(2)').text().trim();
-      const telephoneNumber = patientHeader.find('.gender-age:nth-of-type(2) > span:nth-child(2)').text().trim();
-      const personStatus = patientHeader.find('.person-status').detach();
-      const personStatusDialog = patientHeader.find('#person-status-update-dialog').detach();
-      // construct a new header
-      const ageAndGender = ' (' + age.split(' ')[0] + '/' + gender[0] + ')';
-      // extract the status out of status: <status>
-      const status = personStatus.text().split(':');
-      if (status.length) {
-        personStatus.text(status[1]);
-      }
-      var htmlLines = [
-        '<div class="patient-header">',
-        '<div class="patient-data"><h1>' + fullName + ageAndGender + '</h1>',
-        (!!patientId
-          ? '<div class="patient-id"><span class="label">Patient ID: </span><span class="value">' + patientId + '</span></div>'
-          : '') +
-          '<div class="patient-location"><span class="label">Patient Location: </span><span class="value">' +
-          patientLocation +
-          '</span></div>' +
-          '<div class="phone-number"><span class="label">Phone number: </span><span class="value">' +
-          telephoneNumber +
-          '</span></div>' +
-          '<div class="patient-status"><span class="label">Status: </span><span class="value">' +
-          personStatus.text() +
-          '</span></div>' +
-          '</div>' +
-          '<div class="header-buttons">'
-      ];
-      // add buttons on the right side of patient header
-      const note = jqr('.note.warning');
-      if (note.length) {
-        const buttons = patientHeader.find('.header-buttons');
-        const link = note.find('a');
-        if (link.length) {
-          const href = link.attr('href');
-          htmlLines = htmlLines.concat([
-            '<button class="btn btn-secondary" onclick="location.href=\'' + href + '\'">',
-            link.text().replace('See the', ''),
-            '</button>'
-          ]);
-        }
-      }
-      const deletePatient = jqr('#org\\.openmrs\\.module\\.coreapps\\.deletePatient');
-      if (deletePatient.length) {
-        const href = deletePatient.attr('href');
-        htmlLines = htmlLines.concat(['<button class="btn btn-secondary" onclick="' + href + '">', deletePatient.text(), '</button>']);
-        deletePatient.remove();
-      }
-      const deleteCaregiver = jqr('#cfl\\.personDashboard\\.deletePerson');
-      if (deleteCaregiver.length) {
-        const href = deleteCaregiver.attr('href');
-        htmlLines = htmlLines.concat(['<button class="btn btn-secondary" onclick="' + href + '">', deleteCaregiver.text(), '</button>']);
-        deleteCaregiver.remove();
-      }
-      note.remove();
-      if (personStatusDialog.length && personStatus.length) {
-        htmlLines = htmlLines.concat([
-          personStatusDialog[0].outerHTML,
-          '<button class="btn btn-secondary" onclick="' + personStatus[0].getAttribute('onclick') + '">' + 'Update the status' + '</button>'
-        ]);
-      }
-      htmlLines.push('</div></div>');
-      patientHeader.replaceWith(htmlLines.join('\n'));
-
-      // add (age/gender) to the breadcrumb
-      elementReady('#breadcrumbs li:last-child:not(:empty)').then(element => {
-        element.textContent = element.textContent.replace(fullName, fullName + ageAndGender);
-      });
-
-      // replace the url of 'Patient profile' and 'Caregiver profile'
-      const patientProfileAnchor = jqr('a#cfl\\.patientProfile');
-      const caregiverProfileAnchor = jqr('a#cfl\\.caregiverProfile');
-      if (patientProfileAnchor.length || caregiverProfileAnchor.length) {
-        const searchParams = new URLSearchParams(window.location.search);
-        if (searchParams.has('patientId')) {
-          patientProfileAnchor.prop(
-            'href',
-            `${CFL_UI_ROOT}index.html#/edit-patient/${searchParams.get('patientId')}?redirect=${window.location.href}&name=${fullName}`
-          );
-          caregiverProfileAnchor.prop(
-            'href',
-            `${CFL_UI_ROOT}index.html#/edit-caregiver/${searchParams.get('patientId')}?redirect=${window.location.href}&name=${fullName}`
-          );
-        }
-      }
     }
     // replace 'None' with '-NO DATA-' in each widget
     jqr('.info-body').each(function (index) {
