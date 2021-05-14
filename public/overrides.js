@@ -150,7 +150,7 @@ jqr &&
     /** Home **/
     // add missing breadcrumb for the Homepage
     const breadcrumbs = jqr('#breadcrumbs');
-    if (breadcrumbs.length === 0) {
+    if (breadcrumbs.is(':empty')) {
       jqr('#breadcrumbs').append('<span>Home</span>');
     }
     // add heading for the Home/System Administration dashboard
