@@ -32,6 +32,18 @@ html {
   font-size: 16px;
 }
 
+#error-message ul {
+  display: inline-block;
+  margin-top: 0.25rem;
+}
+
+.helper-text {
+  font-family: CircularStd-Book;
+  font-size: 16px;
+  color: #333333;
+  opacity: 0.5;
+}
+
 /** Apps **/
 .homeList > a.button {
   background: white !important;
@@ -206,6 +218,8 @@ i.cfl-register-patient {
   flex-wrap: wrap;
   font-variant-numeric: normal;
   font-feature-settings: normal;
+  padding: 5px 0 !important;
+  margin: -10px 0 10px 0 !important;
 }
 
 .patient-header > .patient-id,
@@ -242,10 +256,10 @@ i.cfl-register-patient {
 
 button.btn {
   padding: 0.5rem 1.25rem;
-  font-size: 11px;
+  font-size: 11px !important;
   text-transform: uppercase;
-  background-color: #00455c;
-  background-image: none !important;
+  background: #00455c;
+  border-color: #6c757d !important;
 }
 
 button.btn:hover {
@@ -576,4 +590,167 @@ nav.navbar {
   width: 1rem;
   height: 1rem;
   border-width: 0.2em;
+}
+
+/** Allergy UI **/
+.allergies-container {
+  background-color: white;
+  border: 1px solid #ededed;
+  padding-bottom: 2rem;
+}
+
+.allergies-container h2,
+#allergy h2 {
+  color: #2b3640 !important;
+  font-weight: normal !important;
+  font-size: 22px;
+}
+
+.allergies-header {
+  padding: 10px 15px;
+  margin-bottom: 0.5rem;
+}
+
+.allergies-container h2,
+.allergies-container .helper-text {
+  margin-bottom: 0;
+}
+
+#allergies {
+  border-top: 1px solid #ededed !important;
+  padding: 1em;
+}
+
+#allergies .allergyStatus {
+  background-color: white !important;
+}
+
+table,
+thead,
+tbody,
+tr,
+th,
+td {
+  border: none !important;
+  background: white !important;
+  font-family: CircularStd !important;
+}
+
+th {
+  text-transform: uppercase;
+  color: #212529;
+  font-weight: 400;
+}
+
+#allergies th,
+td {
+  padding: 0.2rem;
+  font-size: 12px;
+  text-align: center !important;
+}
+@media only screen and (min-width: 768px) {
+  #allergies th,
+  td {
+    padding: 0.5rem !important;
+    font-size: 14px;
+  }
+}
+@media only screen and (min-width: 1280px) {
+  #allergies th,
+  td {
+    padding: 0.75rem !important;
+    font-size: 16px;
+  }
+}
+
+tr:nth-child(odd) td {
+  background-color: #ededed !important;
+}
+
+tr:hover td:not(.allergyStatus) {
+  background-color: #d5d5d5 !important;
+  cursor: pointer;
+}
+
+#allergies td i:not(:hover) {
+  color: black;
+}
+
+#content button,
+.content button,
+#allergy > #actions > input {
+  background: #00455c;
+  border-color: #6c757d !important;
+  font-size: 11px !important;
+  text-transform: uppercase;
+}
+
+#content button.cancel,
+#allergy > #actions > input.cancel,
+#body-wrapper #content.container-fluid input.cancel {
+  background: none !important;
+  border: none !important;
+  color: #00455c !important;
+}
+
+/** Add new/edit Allergy **/
+#allergy {
+  background-color: white;
+  padding: 1rem;
+}
+
+#body-wrapper #content.container-fluid button.confirm.right {
+  background: #00455c !important;
+}
+
+#allergy label {
+  font-family: CircularStd-Book;
+  font-size: 14px !important;
+}
+
+#allergy li {
+  margin-bottom: 0.5em !important;
+}
+
+#body-wrapper #content.container-fluid div textarea {
+  border-radius: 4px !important;
+}
+
+#types.button-group > .button {
+  font-family: CircularStd;
+  background: #d5d5d5 !important;
+  font-size: 11px !important;
+  border: 1px solid #6c757d !important;
+  padding: 0.5rem 1.25rem !important;
+  color: black;
+  margin-right: 0.75rem !important;
+  background: white !important;
+  border-radius: 4px !important;
+  line-height: 1.5;
+}
+
+#types.button-group > .button.active {
+  background: #00455c !important;
+  color: white;
+}
+
+#body-wrapper #content.container-fluid #allergy input[type='checkbox'] {
+  background-color: white !important;
+  border: 1px solid #ededed !important;
+  box-shadow: 0 0 2px #ededed;
+  border-radius: 2px;
+  color: #00455c !important;
+  margin-right: 0.5em;
+  margin-top: 0.2em;
+}
+
+#body-wrapper #content.container-fluid #allergy input[type='radio'] {
+  border: 1px solid #ededed !important;
+  margin-right: 0.5em;
+  margin-top: 0.35em;
+}
+
+#body-wrapper #content.container-fluid #allergy input[type='checkbox']:checked:after {
+  color: #00455c !important;
+  font-size: 18px !important;
 }
