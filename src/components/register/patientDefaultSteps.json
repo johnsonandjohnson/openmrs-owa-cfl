@@ -117,7 +117,7 @@
     "subtitle": "What's the patient's phone number?",
     "fields": [
       {
-        "name": "phoneNumber",
+        "name": "Telephone Number",
         "required": false,
         "type": "phone"
       }
@@ -129,7 +129,7 @@
     "subtitle": "What's the patient's location?",
     "fields": [
       {
-        "name": "locationId",
+        "name": "LocationAttribute",
         "label": "Patient Location",
         "required": false,
         "type": "select",

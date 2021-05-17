@@ -248,13 +248,13 @@ class RegistrationForm extends React.Component<IRegistrationProps, IRegistration
   };
 
   success = () => {
-    const { location, message } = this.props;
-    window.location.href = message
-      ? `${ROOT_URL}${message}`
+    const { location, id } = this.props;
+    window.location.href = id
+      ? `${ROOT_URL}/coreapps/clinicianfacing/patient.page?patientId=${id}${this.props.isCaregiver ? '&dashboard=person' : ''}`
       : queryString.stringifyUrl({
           url: redirectUrl(location.search)
         });
-    return null;
+    return <Spinner />;
   };
 
   render() {
@@ -293,6 +293,7 @@ const mapStateToProps = ({ registration, patient, person, settings }) => ({
   loading: registration.loading,
   success: registration.success,
   message: registration.message,
+  id: registration.id,
   patient: patient.patient,
   person: person.person,
   personRelationships: person.personRelationships,

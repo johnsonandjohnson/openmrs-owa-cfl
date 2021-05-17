@@ -2,54 +2,46 @@ import axios from 'axios';
 
 import { FAILURE, REQUEST, SUCCESS } from '../action-type.util';
 import querystring from 'querystring';
-import { DEFAULT_CAREGIVER_REGISTRATION_APP, DEFAULT_PATIENT_REGISTRATION_APP } from '../../shared/constants/patient';
 
 export const ACTION_TYPES = {
   REGISTER: 'registration/REGISTER',
   UPDATE_RELATIONSHIPS: 'registration/UPDATE_RELATIONSHIPS',
-  EDIT_SECTION: 'registration/EDIT_SECTION'
+  UPDATE_PROFILE: 'registration/UPDATE_PROFILE'
 };
 
 const initialState = {
   loading: false,
   success: false,
   message: null,
-  errors: []
+  errors: [],
+  id: null
 };
-
-const fieldErrors = response =>
-  response.fieldErrors ? Object.keys(response.fieldErrors).map(k => `${k}: ${response.fieldErrors[k]}`) : [];
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case REQUEST(ACTION_TYPES.REGISTER):
-    case REQUEST(ACTION_TYPES.EDIT_SECTION):
+    case REQUEST(ACTION_TYPES.UPDATE_PROFILE):
       return {
         ...state,
         loading: true
       };
     case FAILURE(ACTION_TYPES.REGISTER):
-    case FAILURE(ACTION_TYPES.EDIT_SECTION):
-      const resp = action.payload.response.data;
+    case FAILURE(ACTION_TYPES.UPDATE_PROFILE):
+      const error = action.payload.response.data?.error;
+      const message = error?.message;
       return {
         ...initialState,
-        errors: (resp.globalErrors || []).concat(fieldErrors(resp))
+        success: false,
+        errors: !!message ? [message.split('reason: ')[1].replace(']', '')] : []
       };
     case SUCCESS(ACTION_TYPES.REGISTER):
-    case SUCCESS(ACTION_TYPES.EDIT_SECTION):
+    case SUCCESS(ACTION_TYPES.UPDATE_PROFILE):
       const { data } = action.payload;
-      // edit section returns errors both in json and in html responses, despite success response code
-      const error = data
-        .toString()
-        .match(/<p>Validation errors found(.*)<\/p>/)
-        ?.pop();
-      const isSuccess = !data.stackTrace && !data.fullStackTrace && !error;
       return {
         ...state,
-        success: isSuccess,
-        message: data.message,
-        errors: isSuccess ? state.errors : [error || data.message || data.fullStacktrace],
-        loading: false
+        success: true,
+        loading: false,
+        id: data
       };
     default: {
       return state;
@@ -59,10 +51,13 @@ const reducer = (state = initialState, action) => {
 
 const extractFormData = patient => {
   const validRelatives = patient.relatives?.filter(relative => !!relative.relationshipType && !!relative.otherPerson);
+  const relationships = validRelatives?.map(relative => ({
+    relationshipType: relative.relationshipType,
+    otherPersonUuid: relative.otherPerson.value
+  }));
   const formData = {
     ...patient,
-    relationship_type: validRelatives?.map(relative => relative.relationshipType),
-    other_person_uuid: validRelatives?.map(relative => relative.otherPerson.value)
+    relationships
   };
   if (!formData.birthdate) {
     formData.birthdate = null;
@@ -74,39 +69,39 @@ const extractFormData = patient => {
 };
 
 // actions
-export const register = (patient, app = DEFAULT_PATIENT_REGISTRATION_APP) => {
-  const requestUrl = `/openmrs/registrationapp/registerPatient/submit.action?appId=${app}`;
+export const register = patient => {
+  const requestUrl = `/openmrs/ws/cfl/patientRegistration`;
   const formData = extractFormData(patient);
   return {
     type: ACTION_TYPES.REGISTER,
-    payload: axios.post(requestUrl, querystring.stringify(formData))
+    payload: axios.post(requestUrl, formData)
   };
 };
 
-export const registerPerson = (person, app = DEFAULT_CAREGIVER_REGISTRATION_APP) => {
-  const requestUrl = `/openmrs/cfl/registerPerson/submit.action?appId=${app}`;
+export const registerPerson = person => {
+  const requestUrl = `/openmrs/ws/cfl/caregiverRegistration`;
   const formData = extractFormData(person);
   return {
     type: ACTION_TYPES.REGISTER,
-    payload: axios.post(requestUrl, querystring.stringify(formData))
+    payload: axios.post(requestUrl, formData)
   };
 };
 
-export const editPatient = (patient, app = DEFAULT_PATIENT_REGISTRATION_APP) => {
-  const requestUrl = `/openmrs/registrationapp/editSection.page?patientId=${patient.patientId}&appId=${app}&sectionId=demographics&returnUrl=/`;
+export const editPatient = patient => {
+  const requestUrl = `/openmrs/ws/cfl/patientRegistration`;
   const formData = extractFormData(patient);
   return {
-    type: ACTION_TYPES.EDIT_SECTION,
-    payload: axios.post(requestUrl, querystring.stringify(formData))
+    type: ACTION_TYPES.UPDATE_PROFILE,
+    payload: axios.put(requestUrl, formData)
   };
 };
 
-export const editPerson = (person, app = DEFAULT_CAREGIVER_REGISTRATION_APP) => {
-  const requestUrl = `/openmrs/cfl/editPersonSection.page?personId=${person.personId}&patientId=${person.patientId}&appId=${app}&sectionId=demographics&returnUrl=/`;
+export const editPerson = person => {
+  const requestUrl = `/openmrs/ws/cfl/caregiverRegistration`;
   const formData = extractFormData(person);
   return {
-    type: ACTION_TYPES.EDIT_SECTION,
-    payload: axios.post(requestUrl, querystring.stringify(formData))
+    type: ACTION_TYPES.UPDATE_PROFILE,
+    payload: axios.put(requestUrl, formData)
   };
 };
 
