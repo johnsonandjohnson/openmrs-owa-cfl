@@ -29,7 +29,7 @@ window.addEventListener('load', function () {
         await elementReady('.person-status:not(:empty)');
       }
       const patientId = patientHeader.querySelector('.identifiers:nth-of-type(2) span')?.textContent.trim();
-      const patientLocation = patientHeader.querySelector('.patientLocation:not(:empty) span')?.textContent.trim();
+      const patientLocation = patientHeader.querySelector('.patientLocation:not(:empty) span')?.textContent.trim() || '';
       const givenName = patientHeader.querySelector('.PersonName-givenName')?.textContent;
       const middleName = patientHeader.querySelector('.PersonName-middleName')?.textContent;
       const familyName = patientHeader.querySelector('.PersonName-familyName')?.textContent;
@@ -38,7 +38,8 @@ window.addEventListener('load', function () {
       const age = patientHeader.querySelector('.gender-age:first-of-type span:nth-child(2)')?.textContent.trim();
       const telephoneNumber =
         patientHeader.querySelector('.gender-age:nth-of-type(2) span:nth-child(2)')?.textContent.trim() ||
-        patientHeader.querySelector('.telephone span:nth-child(2)')?.textContent.trim();
+        patientHeader.querySelector('.telephone span:nth-child(2)')?.textContent.trim() ||
+        '';
       let personStatusDialog = patientHeader.querySelector('#person-status-update-dialog');
       personStatusDialog = personStatusDialog?.parentElement.removeChild(personStatusDialog);
       // construct a new header
@@ -117,23 +118,34 @@ window.addEventListener('load', function () {
       elementReady('#breadcrumbs li:last-child:not(:empty)').then(element => {
         element.textContent = element.textContent.replace(fullName, fullName + ageAndGender);
       });
-      // replace the url of 'Patient profile' and 'Caregiver profile'
-      const searchParams = new URLSearchParams(window.location.search);
-      if (searchParams.has('patientId')) {
-        const patientProfileAnchor = document.querySelector('a#cfl\\.patientProfile');
-        if (!!patientProfileAnchor) {
-          patientProfileAnchor.href = `${CFL_UI_ROOT}index.html#/edit-patient/${searchParams.get('patientId')}?redirect=${
-            window.location.href
-          }&name=${fullName}`;
-        }
-        const caregiverProfileAnchor = document.querySelector('a#cfl\\.caregiverProfile');
-        if (!!caregiverProfileAnchor) {
-          caregiverProfileAnchor.href = `${CFL_UI_ROOT}index.html#/edit-caregiver/${searchParams.get('patientId')}?redirect=${
-            window.location.href
-          }&name=${fullName}`;
-        }
-      }
     });
+  }
+  // re-design Allergy UI
+  const allergies = document.querySelector('#allergies');
+  if (!!allergies) {
+    const title = document.querySelector('#content > h2');
+    if (!!title) {
+      title.parentElement.removeChild(title);
+    }
+    const addAllergyButton = document.querySelector('#allergyui-addNewAllergy');
+    if (!!addAllergyButton) {
+      addAllergyButton.parentElement.removeChild(addAllergyButton);
+    }
+    const cancelButton = document.querySelector('#content > button.cancel');
+    if (!!cancelButton) {
+      cancelButton.parentElement.removeChild(cancelButton);
+    }
+    const htmlLines = [
+      '<div class="allergies-container">',
+      '<div class="allergies-header">',
+      '<h2>Manage Allergies</h2>',
+      '<span class="helper-text">Create, edit and delete Allergies</span>',
+      addAllergyButton.outerHTML,
+      '</div>',
+      allergies.outerHTML,
+      '</div>'
+    ];
+    allergies.replaceWith(...htmlToElements(htmlLines.join('\n')));
   }
 });
 
@@ -174,6 +186,27 @@ jqr &&
         jqr(this).replaceWith("<div class='info-body empty'><span class='label'>-NO DATA-</span></div>");
       }
     });
+    // replace the url of 'Patient profile' and 'Caregiver profile'
+    const searchParams = new URLSearchParams(window.location.search);
+    if (searchParams.has('patientId')) {
+      const givenName = document.querySelector('.PersonName-givenName')?.textContent;
+      const middleName = document.querySelector('.PersonName-middleName')?.textContent;
+      const familyName = document.querySelector('.PersonName-familyName')?.textContent;
+      const fullName = [givenName, middleName, familyName].join(' ').replace('  ', ' ');
+      const patientProfileAnchor = document.querySelector('a#cfl\\.patientProfile');
+      if (!!patientProfileAnchor) {
+        console.log('setting');
+        patientProfileAnchor.href = `${CFL_UI_ROOT}index.html#/edit-patient/${searchParams.get('patientId')}?redirect=${
+          window.location.href
+        }&name=${fullName}`;
+      }
+      const caregiverProfileAnchor = document.querySelector('a#cfl\\.caregiverProfile');
+      if (!!caregiverProfileAnchor) {
+        caregiverProfileAnchor.href = `${CFL_UI_ROOT}index.html#/edit-caregiver/${searchParams.get('patientId')}?redirect=${
+          window.location.href
+        }&name=${fullName}`;
+      }
+    }
     // Add hamburger menu for general actions (visible on smaller screens)
     const actionContainer = jqr('.action-container');
     if (actionContainer.length) {
