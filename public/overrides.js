@@ -1,6 +1,129 @@
-window.addEventListener('load', function () {
-  const CFL_UI_ROOT = '/openmrs/owa/cfl-ui/';
-  // Add collapse to the Header
+const CFL_UI_BASE = '/openmrs/owa/cfl-ui/';
+
+// Vanilla JS overrides - both for core OpenMRS and OWAs
+window.addEventListener('load', redesignAllergyUI);
+window.addEventListener('load', addCollapseToTheHeader);
+// Override Patient Header both on load and on page change (OWAs)
+window.addEventListener('load', overridePatientHeader);
+window.addEventListener('popstate', function (event) {
+  // the page has changed
+  const patientHeader = document.querySelector('.patient-header.custom');
+  if (!!patientHeader) {
+    // wait for the header to revert to the default one
+    elementReady('.patient-header:not(.custom)').then(overridePatientHeader);
+  }
+});
+
+// JQuery overrides (only for core OpenMRS)
+const jqr = (typeof $ === 'function' || typeof jQuery === 'function') && ($ || jQuery);
+jqr &&
+  jqr(function () {
+    /** General **/
+    // OpenMRS bug: remove occasional (/undefined) from the System Administration breadcrumbs
+    setTimeout(function () {
+      elementReady('#breadcrumbs li:last-child:not(:empty)').then(element => {
+        element.textContent = element.textContent.replace('(/undefined)', '');
+      });
+    }, 100);
+    /** Home **/
+    // add missing breadcrumb for the Homepage
+    const breadcrumbs = jqr('#breadcrumbs');
+    if (breadcrumbs.is(':empty')) {
+      jqr('#breadcrumbs').append('<span>Home</span>');
+    }
+    // add heading for the Home/System Administration dashboard
+    const dashboard = jqr('#body-wrapper > #content');
+    if (!!dashboard.has('.row > #apps').length) {
+      dashboard.prepend('<div class="homepage-heading">Home</div>');
+    } else if (!!dashboard.has('#tasks.row').length) {
+      dashboard.prepend('<div class="homepage-heading">System Administration</div>');
+    }
+    /** Patient Dashboard **/
+    // move all the widgets to the first column
+    const firstInfoContainer = jqr('.info-container:first-of-type');
+    if (firstInfoContainer.length) {
+      const remainingContainersChildren = jqr('.info-container .info-section');
+      remainingContainersChildren.detach().appendTo(firstInfoContainer);
+    }
+    // replace 'None' with '-NO DATA-' in each widget
+    jqr('.info-body').each(function (index) {
+      const text = jqr(this).find('li').text().trim() || jqr(this).find('p').text().trim() || jqr(this).text().trim();
+      if (text === 'None' || text === 'Unknown' || text.length === 0) {
+        jqr(this).replaceWith("<div class='info-body empty'><span class='label'>-NO DATA-</span></div>");
+      }
+    });
+    // replace the url of 'Patient profile' and 'Caregiver profile'
+    const searchParams = new URLSearchParams(window.location.search);
+    if (searchParams.has('patientId')) {
+      const givenName = document.querySelector('.PersonName-givenName')?.textContent;
+      const middleName = document.querySelector('.PersonName-middleName')?.textContent;
+      const familyName = document.querySelector('.PersonName-familyName')?.textContent;
+      const fullName = [givenName, middleName, familyName].join(' ').replace('  ', ' ');
+      const patientProfileAnchor = document.querySelector('a#cfl\\.patientProfile');
+      if (!!patientProfileAnchor) {
+        patientProfileAnchor.href = `${CFL_UI_BASE}index.html#/edit-patient/${searchParams.get('patientId')}?redirect=${
+          window.location.href
+        }&name=${fullName}`;
+      }
+      const caregiverProfileAnchor = document.querySelector('a#cfl\\.caregiverProfile');
+      if (!!caregiverProfileAnchor) {
+        caregiverProfileAnchor.href = `${CFL_UI_BASE}index.html#/edit-caregiver/${searchParams.get('patientId')}?redirect=${
+          window.location.href
+        }&name=${fullName}`;
+      }
+    }
+    // Add hamburger menu for general actions (visible on smaller screens)
+    const actionContainer = jqr('.action-container');
+    if (actionContainer.length) {
+      const actions = actionContainer.find('.action-section ul li');
+      actionContainer.before(
+        [
+          '<div class="general-actions-toggle navbar-dark">',
+          '<button class="navbar-toggler btn btn-secondary" type="button" data-toggle="collapse" data-target="#generalActions" aria-controls="generalActions" aria-expanded="false" aria-label="Toggle general actions">',
+          '<span class="navbar-toggler-icon mr-1"></span><span>General Actions</span>',
+          '</button>',
+          '<div class="collapse navbar-collapse" id="generalActions">',
+          actions
+            .toArray()
+            .map(action => '<div>' + action.innerHTML + '</div>')
+            .join('\n'),
+          '</div>',
+          '</div>'
+        ].join('\n')
+      );
+    }
+  });
+
+function redesignAllergyUI() {
+  const allergies = document.querySelector('#allergies');
+  if (!!allergies) {
+    const title = document.querySelector('#content > h2');
+    if (!!title) {
+      title.parentElement.removeChild(title);
+    }
+    const addAllergyButton = document.querySelector('#allergyui-addNewAllergy');
+    if (!!addAllergyButton) {
+      addAllergyButton.parentElement.removeChild(addAllergyButton);
+    }
+    const cancelButton = document.querySelector('#content > button.cancel');
+    if (!!cancelButton) {
+      cancelButton.parentElement.removeChild(cancelButton);
+    }
+    const htmlLines = [
+      '<div class="allergies-container">',
+      '<div class="allergies-header">',
+      '<h2>Manage Allergies</h2>',
+      '<span class="helper-text">Create, edit and delete Allergies</span>',
+      addAllergyButton.outerHTML,
+      '</div>',
+      allergies.outerHTML,
+      '</div>'
+    ];
+    allergies.replaceWith(...htmlToElements(htmlLines.join('\n')));
+  }
+}
+
+function addCollapseToTheHeader() {
   elementReady('.user-options').then(userOptions => {
     const collapse = window.document.getElementById('navbarSupportedContent');
     const header = document.getElementsByTagName('header');
@@ -18,8 +141,11 @@ window.addEventListener('load', function () {
       );
     }
   });
+}
+
+function overridePatientHeader() {
+  const patientHeader = document.querySelector('.patient-header:not(.custom)');
   // re-design Patient header
-  const patientHeader = document.querySelector('.patient-header');
   if (!!patientHeader) {
     // wait for demographics to load
     elementReady('.demographics').then(async demographics => {
@@ -50,7 +176,7 @@ window.addEventListener('load', function () {
         personStatus.textContent = status[1].trim();
       }
       var htmlLines = [
-        '<div class="patient-header">',
+        '<div class="patient-header custom">',
         '<div class="patient-data"><h1>' + fullName + ageAndGender + '</h1>',
         (!!patientId
           ? '<div class="patient-id"><span class="header-label">Patient ID: </span><span class="value">' + patientId + '</span></div>'
@@ -120,114 +246,7 @@ window.addEventListener('load', function () {
       });
     });
   }
-  // re-design Allergy UI
-  const allergies = document.querySelector('#allergies');
-  if (!!allergies) {
-    const title = document.querySelector('#content > h2');
-    if (!!title) {
-      title.parentElement.removeChild(title);
-    }
-    const addAllergyButton = document.querySelector('#allergyui-addNewAllergy');
-    if (!!addAllergyButton) {
-      addAllergyButton.parentElement.removeChild(addAllergyButton);
-    }
-    const cancelButton = document.querySelector('#content > button.cancel');
-    if (!!cancelButton) {
-      cancelButton.parentElement.removeChild(cancelButton);
-    }
-    const htmlLines = [
-      '<div class="allergies-container">',
-      '<div class="allergies-header">',
-      '<h2>Manage Allergies</h2>',
-      '<span class="helper-text">Create, edit and delete Allergies</span>',
-      addAllergyButton.outerHTML,
-      '</div>',
-      allergies.outerHTML,
-      '</div>'
-    ];
-    allergies.replaceWith(...htmlToElements(htmlLines.join('\n')));
-  }
-});
-
-const jqr = (typeof $ === 'function' || typeof jQuery === 'function') && ($ || jQuery);
-jqr &&
-  jqr(function () {
-    /** General **/
-    // OpenMRS bug: remove occasional (/undefined) from the System Administration breadcrumbs
-    setTimeout(function () {
-      elementReady('#breadcrumbs li:last-child:not(:empty)').then(element => {
-        element.textContent = element.textContent.replace('(/undefined)', '');
-      });
-    }, 100);
-    /** Home **/
-    // add missing breadcrumb for the Homepage
-    const breadcrumbs = jqr('#breadcrumbs');
-    if (breadcrumbs.is(':empty')) {
-      jqr('#breadcrumbs').append('<span>Home</span>');
-    }
-    // add heading for the Home/System Administration dashboard
-    const dashboard = jqr('#body-wrapper > #content');
-    if (!!dashboard.has('.row > #apps').length) {
-      dashboard.prepend('<div class="homepage-heading">Home</div>');
-    } else if (!!dashboard.has('#tasks.row').length) {
-      dashboard.prepend('<div class="homepage-heading">System Administration</div>');
-    }
-    /** Patient Dashboard **/
-    // move all the widgets to the first column
-    const firstInfoContainer = jqr('.info-container:first-of-type');
-    if (firstInfoContainer.length) {
-      const remainingContainersChildren = jqr('.info-container .info-section');
-      remainingContainersChildren.detach().appendTo(firstInfoContainer);
-    }
-    // replace 'None' with '-NO DATA-' in each widget
-    jqr('.info-body').each(function (index) {
-      const text = jqr(this).find('li').text().trim() || jqr(this).find('p').text().trim() || jqr(this).text().trim();
-      if (text === 'None' || text === 'Unknown' || text.length === 0) {
-        jqr(this).replaceWith("<div class='info-body empty'><span class='label'>-NO DATA-</span></div>");
-      }
-    });
-    // replace the url of 'Patient profile' and 'Caregiver profile'
-    const searchParams = new URLSearchParams(window.location.search);
-    if (searchParams.has('patientId')) {
-      const givenName = document.querySelector('.PersonName-givenName')?.textContent;
-      const middleName = document.querySelector('.PersonName-middleName')?.textContent;
-      const familyName = document.querySelector('.PersonName-familyName')?.textContent;
-      const fullName = [givenName, middleName, familyName].join(' ').replace('  ', ' ');
-      const patientProfileAnchor = document.querySelector('a#cfl\\.patientProfile');
-      if (!!patientProfileAnchor) {
-        console.log('setting');
-        patientProfileAnchor.href = `${CFL_UI_ROOT}index.html#/edit-patient/${searchParams.get('patientId')}?redirect=${
-          window.location.href
-        }&name=${fullName}`;
-      }
-      const caregiverProfileAnchor = document.querySelector('a#cfl\\.caregiverProfile');
-      if (!!caregiverProfileAnchor) {
-        caregiverProfileAnchor.href = `${CFL_UI_ROOT}index.html#/edit-caregiver/${searchParams.get('patientId')}?redirect=${
-          window.location.href
-        }&name=${fullName}`;
-      }
-    }
-    // Add hamburger menu for general actions (visible on smaller screens)
-    const actionContainer = jqr('.action-container');
-    if (actionContainer.length) {
-      const actions = actionContainer.find('.action-section ul li');
-      actionContainer.before(
-        [
-          '<div class="general-actions-toggle navbar-dark">',
-          '<button class="navbar-toggler btn btn-secondary" type="button" data-toggle="collapse" data-target="#generalActions" aria-controls="generalActions" aria-expanded="false" aria-label="Toggle general actions">',
-          '<span class="navbar-toggler-icon mr-1"></span><span>General Actions</span>',
-          '</button>',
-          '<div class="collapse navbar-collapse" id="generalActions">',
-          actions
-            .toArray()
-            .map(action => '<div>' + action.innerHTML + '</div>')
-            .join('\n'),
-          '</div>',
-          '</div>'
-        ].join('\n')
-      );
-    }
-  });
+}
 
 /**
  * @return {NodeList}
