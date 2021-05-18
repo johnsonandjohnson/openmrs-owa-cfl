@@ -18,7 +18,6 @@ import Step from './Step';
 import Confirm from './Confirm';
 import queryString from 'query-string';
 import { redirectUrl } from '../../shared/util/url-util';
-import { DEFAULT_CAREGIVER_REGISTRATION_APP, DEFAULT_PATIENT_REGISTRATION_APP } from '../../shared/constants/patient';
 import { ROOT_URL } from '../../shared/constants/openmrs';
 
 export interface IRegistrationProps extends StateProps, DispatchProps, RouteComponentProps<{ id?: string }> {
@@ -45,7 +44,6 @@ class RegistrationForm extends React.Component<IRegistrationProps, IRegistration
   entityName = this.props.isCaregiver ? 'Caregiver' : 'Patient';
   steps = () => (this.props.isCaregiver ? this.props.caregiverSteps : this.props.patientSteps);
   patient = () => (this.props.isCaregiver ? this.props.person : this.props.patient);
-  registrationApp = () => (this.props.isCaregiver ? this.props.caregiverRegistrationApp : this.props.patientRegistrationApp);
 
   componentDidMount() {
     if (this.isEdit()) {
@@ -193,15 +191,15 @@ class RegistrationForm extends React.Component<IRegistrationProps, IRegistration
       if (this.isEdit()) {
         if (this.props.isCaregiver) {
           this.props.updateRelationships(this.state.patient);
-          this.props.editPerson(this.state.patient, this.registrationApp());
+          this.props.editPerson(this.state.patient);
         } else {
-          this.props.editPatient(this.state.patient, this.registrationApp());
+          this.props.editPatient(this.state.patient);
         }
       } else {
         if (this.props.isCaregiver) {
-          this.props.registerPerson(this.state.patient, this.registrationApp());
+          this.props.registerPerson(this.state.patient);
         } else {
-          this.props.register(this.state.patient, this.registrationApp());
+          this.props.register(this.state.patient);
         }
       }
     }
@@ -289,7 +287,7 @@ class RegistrationForm extends React.Component<IRegistrationProps, IRegistration
   }
 }
 
-const mapStateToProps = ({ registration, patient, person, settings }) => ({
+const mapStateToProps = ({ registration, patient, person, apps }) => ({
   loading: registration.loading,
   success: registration.success,
   message: registration.message,
@@ -297,13 +295,9 @@ const mapStateToProps = ({ registration, patient, person, settings }) => ({
   patient: patient.patient,
   person: person.person,
   personRelationships: person.personRelationships,
-  patientSteps: settings.patientRegistrationSteps || defaultSteps,
-  patientRegistrationApp:
-    (settings.patientRegistrationAppSetting && settings.patientRegistrationAppSetting.value) || DEFAULT_PATIENT_REGISTRATION_APP,
-  caregiverSteps: settings.caregiverRegistrationSteps || caregiverDefaultSteps,
-  caregiverRegistrationApp:
-    (settings.caregiverRegistrationAppSetting && settings.caregiverRegistrationAppSetting.value) || DEFAULT_CAREGIVER_REGISTRATION_APP,
-  settingsLoading: settings.loading
+  patientSteps: apps.patientRegistrationSteps || defaultSteps,
+  caregiverSteps: apps.caregiverRegistrationSteps || caregiverDefaultSteps,
+  settingsLoading: apps.loading
 });
 
 const mapDispatchToProps = {

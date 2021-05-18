@@ -1,17 +1,8 @@
 {
-  "id": "cfl-ui",
+  "id": "cflui.findPatient",
   "description": "CFL UI",
-  "order": 0,
+  "order": 1,
   "extensions": [
-    {
-      "id": "demoapp.homepageLink",
-      "extensionPointId": "org.openmrs.referenceapplication.homepageLink",
-      "type": "link",
-      "label": "CFL Register Patient",
-      "url": "owa/cfl-ui/index.html#/register-patient",
-      "icon": "cfl-register-patient",
-      "requiredPrivilege": "App: registrationapp.registerPatient"
-    },
     {
       "id": "demoapp.homepageLink",
       "extensionPointId": "org.openmrs.referenceapplication.homepageLink",
@@ -19,25 +10,10 @@
       "label": "Find Patient Record",
       "url": "owa/cfl-ui/index.html#/find-patient",
       "icon": "cfl-find-patient",
-      "requiredPrivilege": "App: coreapps.findPatient"
-    },
-    {
-      "id": "demoapp.homepageLink",
-      "extensionPointId": "org.openmrs.referenceapplication.homepageLink",
-      "type": "link",
-      "label": "CFL Register Caregiver",
-      "url": "owa/cfl-ui/index.html#/register-caregiver",
-      "icon": "cfl-register-caregiver",
-      "requiredPrivilege": "App: registrationapp.registerPatient"
-    },
-    {
-      "id": "demoapp.homepageLink",
-      "extensionPointId": "org.openmrs.referenceapplication.homepageLink",
-      "type": "link",
-      "label": "Find Caregiver Record",
-      "url": "owa/cfl-ui/index.html#/find-caregiver",
-      "icon": "cfl-find-caregiver",
-      "requiredPrivilege": "App: coreapps.findPerson"
+      "requiredPrivilege": "Get Patients"
     }
-  ]
+  ],
+  "config": {
+    "tableColumns": "patientIdentifier,display,gender,age,birthdate,phoneNumber"
+  }
 }

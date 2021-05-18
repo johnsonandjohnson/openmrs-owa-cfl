@@ -1,0 +1,90 @@
+{
+  "id": "cflui.registerCaregiver",
+  "description": "CFL UI",
+  "order": 2,
+  "extensions": [
+    {
+      "id": "demoapp.homepageLink",
+      "extensionPointId": "org.openmrs.referenceapplication.homepageLink",
+      "type": "link",
+      "label": "CFL Register Caregiver",
+      "url": "owa/cfl-ui/index.html#/register-caregiver",
+      "icon": "cfl-register-caregiver",
+      "requiredPrivilege": "Add People"
+    }
+  ],
+  "config": {
+    "steps": [
+      {
+        "label": "Name",
+        "title": "Demographics",
+        "subtitle": "What's the caregiver's name?",
+        "fields": [
+          {
+            "name": "givenName",
+            "required": true
+          },
+          {
+            "name": "middleName",
+            "required": false
+          },
+          {
+            "name": "familyName",
+            "required": true
+          }
+        ]
+      },
+      {
+        "label": "Language",
+        "title": "Demographics",
+        "subtitle": "What language does the caregiver prefer?",
+        "fields": [
+          {
+            "name": "personLanguage",
+            "required": false,
+            "type": "select",
+            "options": ["English", "Marathi", "Hindi"]
+          }
+        ]
+      },
+      {
+        "label": "Phone Number",
+        "title": "Demographics",
+        "subtitle": "What's the caregiver's phone number?",
+        "fields": [
+          {
+            "name": "Telephone Number",
+            "required": false,
+            "type": "phone"
+          }
+        ]
+      },
+      {
+        "label": "Person Location",
+        "title": "Demographics",
+        "subtitle": "What's the caregiver's location?",
+        "fields": [
+          {
+            "name": "LocationAttribute",
+            "label": "Person Location",
+            "required": false,
+            "type": "select",
+            "optionSource": "locations"
+          }
+        ]
+      },
+      {
+        "label": "Relatives",
+        "title": "Demographics",
+        "subtitle": "Who is the caregiver related to?",
+        "fields": [
+          {
+            "name": "relatives",
+            "required": false,
+            "type": "relatives"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -117,7 +117,7 @@ class FindCaregiver extends React.Component<ICaregiversProps, ICaregiversState> 
   }
 }
 
-const mapStateToProps = ({ cflPeople, settings }) => ({
+const mapStateToProps = ({ cflPeople, apps }) => ({
   caregivers: cflPeople.people,
   loading: cflPeople.loading,
   error: cflPeople.errorMessage,
@@ -125,8 +125,7 @@ const mapStateToProps = ({ cflPeople, settings }) => ({
   hasPrev: cflPeople.hasPrev,
   currentPage: cflPeople.currentPage,
   totalCount: cflPeople.totalCount,
-  tableColumns:
-    (settings.findCaregiverTableColumnsSetting && settings.findCaregiverTableColumnsSetting.value) || DEFAULT_FIND_CAREGIVER_TABLE_COLUMNS
+  tableColumns: (apps.findCaregiverTableColumns && apps.findCaregiverTableColumns) || DEFAULT_FIND_CAREGIVER_TABLE_COLUMNS
 });
 
 const mapDispatchToProps = { search, reset };

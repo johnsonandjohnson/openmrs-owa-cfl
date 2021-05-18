@@ -118,7 +118,7 @@ class FindPatient extends React.Component<IPatientsProps, IPatientsState> {
   }
 }
 
-const mapStateToProps = ({ patient, settings }) => ({
+const mapStateToProps = ({ patient, apps }) => ({
   patients: patient.patients,
   loading: patient.loading,
   error: patient.errorMessage,
@@ -126,8 +126,7 @@ const mapStateToProps = ({ patient, settings }) => ({
   hasPrev: patient.hasPrev,
   currentPage: patient.currentPage,
   totalCount: patient.totalCount,
-  tableColumns:
-    (settings.findPatientTableColumnsSetting && settings.findPatientTableColumnsSetting.value) || DEFAULT_FIND_PATIENT_TABLE_COLUMNS
+  tableColumns: (apps.findPatientTableColumns && apps.findPatientTableColumns) || DEFAULT_FIND_PATIENT_TABLE_COLUMNS
 });
 
 const mapDispatchToProps = { search, reset };
