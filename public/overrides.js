@@ -60,16 +60,17 @@ jqr &&
       const familyName = document.querySelector('.PersonName-familyName')?.textContent;
       const fullName = [givenName, middleName, familyName].join(' ').replace('  ', ' ');
       const patientProfileAnchor = document.querySelector('a#cfl\\.patientProfile');
+      const deletePerson =
+        document.querySelector('#org\\.openmrs\\.module\\.coreapps\\.deletePatient') ||
+        document.querySelector('#cfl\\.personDashboard\\.deletePerson');
+      const uuidMatch = /'([^)]+)'/.exec(deletePerson?.href);
+      const patientId = (uuidMatch && uuidMatch[1]) || searchParams.get('patientId');
       if (!!patientProfileAnchor) {
-        patientProfileAnchor.href = `${CFL_UI_BASE}index.html#/edit-patient/${searchParams.get('patientId')}?redirect=${
-          window.location.href
-        }&name=${fullName}`;
+        patientProfileAnchor.href = `${CFL_UI_BASE}index.html#/edit-patient/${patientId}?redirect=${window.location.href}&name=${fullName}`;
       }
       const caregiverProfileAnchor = document.querySelector('a#cfl\\.caregiverProfile');
       if (!!caregiverProfileAnchor) {
-        caregiverProfileAnchor.href = `${CFL_UI_BASE}index.html#/edit-caregiver/${searchParams.get('patientId')}?redirect=${
-          window.location.href
-        }&name=${fullName}`;
+        caregiverProfileAnchor.href = `${CFL_UI_BASE}index.html#/edit-caregiver/${patientId}?redirect=${window.location.href}&name=${fullName}`;
       }
     }
     // Add hamburger menu for general actions (visible on smaller screens)
