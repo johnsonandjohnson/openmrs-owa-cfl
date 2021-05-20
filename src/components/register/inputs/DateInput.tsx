@@ -26,7 +26,7 @@ class DateInput extends React.Component<IDateInputProps, IFieldState> {
       <div className={`${className} input-container`}>
         <DatePicker {...props} peekNextMonth showMonthDropdown showYearDropdown dropdownMode="select" dateFormat={DATE_FORMAT} />
         {hasValue && <span className="placeholder">{placeholder}</span>}
-        {isDirty && isInvalid && <ValidationError hasValue={hasValue} />}
+        {isDirty && isInvalid && <ValidationError hasValue={hasValue} field={field} />}
       </div>
     );
   };

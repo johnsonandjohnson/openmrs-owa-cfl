@@ -99,6 +99,10 @@ class Step extends React.Component<IStepProps, IStepState> {
     if (field.type === PHONE_FIELD_TYPE && !!value) {
       isInvalid = !isPossiblePhoneNumber(value);
     }
+    if (field.regex) {
+      const re = new RegExp(field.regex);
+      isInvalid = !re.test(value);
+    }
     if (BIRTHDATE_FIELD === field.name || ESTIMATED_BIRTHDATE_FIELDS.includes(field.name)) {
       // if estimation was made, don't require exact birthdate
       const usesEstimate = ESTIMATED_BIRTHDATE_FIELDS.every(fieldName => !!this.props.patient[fieldName]);
