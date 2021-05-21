@@ -56,7 +56,7 @@ class Select extends React.Component<ISelectProps, IFieldState> {
           {this.getSelectOptions(field, placeholder)}
         </ReactstrapInput>
         {hasValue && <span className="placeholder">{placeholder}</span>}
-        {isDirty && isInvalid && <ValidationError hasValue={hasValue} />}
+        {isDirty && isInvalid && <ValidationError hasValue={hasValue} field={field} />}
       </div>
     );
   };

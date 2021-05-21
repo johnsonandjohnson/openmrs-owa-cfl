@@ -1,10 +1,5 @@
-import {
-  LOCATION_ATTRIBUTE_TYPE,
-  PATIENT_IDENTIFIER,
-  PERSON_LANGUAGE_ATTRIBUTE_TYPE,
-  TELEPHONE_NUMBER_ATTRIBUTE_TYPE
-} from '../constants/patient';
-import { extractAttribute, extractAttributes, extractIdentifiers, extractValue } from './omrs-entity-util';
+import { PATIENT_IDENTIFIER } from '../constants/patient';
+import { extractAttributes, extractIdentifiers, extractValue } from './omrs-entity-util';
 import { columnContent as personColumnContent } from './person-util';
 import { IPatient } from '../models/patient';
 
@@ -39,6 +34,7 @@ export const extractPatientOrPersonData = patient => {
   const { address1, address2, cityVillage, stateProvince, country, postalCode } = preferredAddress || {};
   return {
     patientId: patient.patientId || uuid,
+    uuid: patient.uuid,
     personId,
     givenName,
     middleName,
@@ -51,11 +47,8 @@ export const extractPatientOrPersonData = patient => {
     stateProvince,
     country,
     postalCode,
-    personLanguage: extractAttribute(person, PERSON_LANGUAGE_ATTRIBUTE_TYPE),
-    phoneNumber: extractAttribute(person, TELEPHONE_NUMBER_ATTRIBUTE_TYPE),
-    locationId: extractAttribute(person, LOCATION_ATTRIBUTE_TYPE),
     ...extractAttributes(person),
-    ...extractIdentifiers(person)
+    ...extractIdentifiers(patient)
   } as IPatient;
 };
 

@@ -10,6 +10,7 @@ import registration from './registration';
 import { reducers as openmrsReducers } from '@openmrs/react-components';
 import { reducer as reduxFormReducer } from 'redux-form';
 import customizeReducer from '@bit/soldevelo-cfl.omrs-components.customize/customize.reducer';
+import apps from './apps';
 
 export default combineReducers({
   patient,
@@ -20,6 +21,7 @@ export default combineReducers({
   location,
   relationshipType,
   registration,
+  apps,
   customizeReducer,
   openmrs: openmrsReducers,
   form: reduxFormReducer

@@ -31,7 +31,9 @@ class Input extends React.Component<IInputProps, IFieldState> {
       <div className={`${className} input-container`}>
         <PhoneInput {...props} ref={this.inputRef} />
         {inputValue.length > 0 && <span className="placeholder">{placeholder}</span>}
-        {((isDirty && isInvalid) || errorMessage) && <ValidationError hasValue={inputValue.length > 0} message={errorMessage} />}
+        {((isDirty && isInvalid) || errorMessage) && (
+          <ValidationError hasValue={inputValue.length > 0} message={errorMessage} field={field} />
+        )}
       </div>
     );
   };

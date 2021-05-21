@@ -1,16 +1,6 @@
 import axios from 'axios';
 
 import { FAILURE, REQUEST, SUCCESS } from '../action-type.util';
-import {
-  CAREGIVER_REGISTRATION_APP_SETTING,
-  CAREGIVER_REGISTRATION_STEPS_SETTING,
-  FIND_CAREGIVER_TABLE_COLUMNS_SETTING,
-  FIND_PATIENT_TABLE_COLUMNS_SETTING,
-  PATIENT_REGISTRATION_APP_SETTING,
-  PATIENT_REGISTRATION_STEPS_SETTING,
-  SETTING_PREFIX
-} from '../../shared/constants/setting';
-import { getSetting, getSettingValue, parseJsonSetting } from '../../shared/util/setting-util';
 
 export const ACTION_TYPES = {
   GET_SETTINGS: 'settings/GET_SETTINGS',
@@ -20,24 +10,8 @@ export const ACTION_TYPES = {
 const initialState = {
   loading: false,
   errorMessage: null,
-  settings: [],
-  findPatientTableColumnsSetting: {},
-  findCaregiverTableColumnsSetting: {},
-  patientRegistrationSteps: null,
-  patientRegistrationAppSetting: {},
-  caregiverRegistrationSteps: null,
-  caregiverRegistrationAppSetting: {}
+  settings: []
 };
-
-export const getSettingsState = settings => ({
-  settings,
-  findPatientTableColumnsSetting: getSetting(settings, FIND_PATIENT_TABLE_COLUMNS_SETTING),
-  findCaregiverTableColumnsSetting: getSetting(settings, FIND_CAREGIVER_TABLE_COLUMNS_SETTING),
-  patientRegistrationSteps: parseJsonSetting(getSettingValue(settings, PATIENT_REGISTRATION_STEPS_SETTING), null),
-  patientRegistrationAppSetting: getSetting(settings, PATIENT_REGISTRATION_APP_SETTING),
-  caregiverRegistrationSteps: parseJsonSetting(getSettingValue(settings, CAREGIVER_REGISTRATION_STEPS_SETTING), null),
-  caregiverRegistrationAppSetting: getSetting(settings, CAREGIVER_REGISTRATION_APP_SETTING)
-});
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
@@ -58,7 +32,7 @@ const reducer = (state = initialState, action) => {
     case SUCCESS(ACTION_TYPES.GET_SETTINGS):
       return {
         ...initialState,
-        ...getSettingsState(action.payload.data.results)
+        settings: action.payload.data.results
       };
     case SUCCESS(ACTION_TYPES.CREATE_SETTING):
       return {
@@ -72,8 +46,8 @@ const reducer = (state = initialState, action) => {
 };
 
 // actions
-export const getSettings = () => {
-  const requestUrl = `/openmrs/ws/rest/v1/systemsetting?q=${SETTING_PREFIX}&v=full`;
+export const getSettings = (prefix = '') => {
+  const requestUrl = `/openmrs/ws/rest/v1/systemsetting?q=${prefix}&v=full`;
   return {
     type: ACTION_TYPES.GET_SETTINGS,
     payload: axios.get(requestUrl)

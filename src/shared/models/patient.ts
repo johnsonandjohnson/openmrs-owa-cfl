@@ -25,6 +25,7 @@ export interface IPatient {
   birthdateMonths: number;
   patientId?: number;
   personId?: number;
+  uuid?: string;
   // custom
   relatives?: any[];
 }

@@ -39,7 +39,7 @@ class Buttons extends React.Component<IButtonsProps, IFieldState> {
         {isDirty && isInvalid && (
           <span className="error field-error">
             {intl.formatMessage({
-              id: hasValue ? `registerPatient.invalid` : `registerPatient.required`
+              id: hasValue ? field.errorMessage || `registerPatient.invalid` : `registerPatient.required`
             })}
           </span>
         )}

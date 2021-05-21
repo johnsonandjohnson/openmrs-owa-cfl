@@ -1,0 +1,196 @@
+{
+  "id": "cflui.registerPatient",
+  "description": "CFL UI",
+  "order": 0,
+  "extensions": [
+    {
+      "id": "demoapp.homepageLink",
+      "extensionPointId": "org.openmrs.referenceapplication.homepageLink",
+      "type": "link",
+      "label": "CFL Register Patient",
+      "url": "owa/cfl-ui/index.html#/register-patient",
+      "icon": "cfl-register-patient",
+      "requiredPrivilege": "Add Patients"
+    }
+  ],
+  "config": {
+    "steps": [
+      {
+        "label": "Name",
+        "title": "Patient Demographics",
+        "subtitle": "What's the patient's name?",
+        "fields": [
+          {
+            "name": "givenName",
+            "required": true
+          },
+          {
+            "name": "middleName",
+            "required": false
+          },
+          {
+            "name": "familyName",
+            "required": true
+          }
+        ]
+      },
+      {
+        "label": "Gender",
+        "title": "Patient Demographics",
+        "subtitle": "What's the patient's gender? (Required)",
+        "fields": [
+          {
+            "name": "gender",
+            "required": true,
+            "type": "buttons",
+            "options": [
+              {
+                "label": "Male",
+                "value": "M"
+              },
+              {
+                "label": "Female",
+                "value": "F"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "label": "Birthdate",
+        "title": "Patient Demographics",
+        "subtitle": "What's the patient's birth date? (Required)",
+        "fields": [
+          {
+            "name": "birthdate",
+            "required": true,
+            "type": "date"
+          },
+          {
+            "label": "Or",
+            "type": "separator"
+          },
+          {
+            "name": "birthdateYears",
+            "required": false,
+            "type": "number"
+          },
+          {
+            "name": "birthdateMonths",
+            "required": false,
+            "type": "number"
+          }
+        ]
+      },
+      {
+        "label": "Address",
+        "title": "Patient Demographics",
+        "subtitle": "What's the patient's address?",
+        "columns": 2,
+        "fields": [
+          {
+            "name": "address1",
+            "required": false
+          },
+          {
+            "name": "address2",
+            "required": false
+          },
+          {
+            "name": "cityVillage",
+            "required": false
+          },
+          {
+            "name": "stateProvince",
+            "required": false
+          },
+          {
+            "name": "country",
+            "required": false
+          },
+          {
+            "name": "postalCode",
+            "required": false
+          }
+        ]
+      },
+      {
+        "label": "Language",
+        "title": "Patient Demographics",
+        "subtitle": "What language does the patient prefer?",
+        "fields": [
+          {
+            "name": "personLanguage",
+            "required": false,
+            "type": "select",
+            "options": ["English", "Marathi", "Hindi"]
+          }
+        ]
+      },
+      {
+        "label": "Phone Number",
+        "title": "Patient Demographics",
+        "subtitle": "What's the patient's phone number?",
+        "fields": [
+          {
+            "name": "Telephone Number",
+            "required": false,
+            "type": "phone"
+          }
+        ]
+      },
+      {
+        "label": "Patient Location",
+        "title": "Patient Demographics",
+        "subtitle": "What's the patient's location?",
+        "fields": [
+          {
+            "name": "LocationAttribute",
+            "label": "Patient Location",
+            "required": false,
+            "type": "select",
+            "optionSource": "locations"
+          }
+        ]
+      },
+      {
+        "label": "Aadhar Number",
+        "title": "Patient Demographics",
+        "subtitle": "What's the patient's Aadhar Number?",
+        "fields": [
+          {
+            "name": "Aadhar Number",
+            "label": "AADHAR Number",
+            "required": false,
+            "type": "number"
+          }
+        ]
+      },
+      {
+        "label": "ART Number",
+        "title": "Patient Demographics",
+        "subtitle": "What's the patient's ART Number?",
+        "fields": [
+          {
+            "name": "ART Number",
+            "label": "ART Number",
+            "required": false,
+            "type": "number"
+          }
+        ]
+      },
+      {
+        "label": "Relatives",
+        "title": "Patient Demographics",
+        "subtitle": "Who is the patient related to?",
+        "fields": [
+          {
+            "name": "relatives",
+            "required": false,
+            "type": "relatives"
+          }
+        ]
+      }
+    ]
+  }
+}

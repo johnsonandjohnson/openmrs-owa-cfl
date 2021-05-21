@@ -33,7 +33,7 @@ class Input extends React.Component<IInputProps, IFieldState> {
       <div className={`${className} input-container`}>
         <input {...props} />
         {hasValue && <span className="placeholder">{placeholder}</span>}
-        {isDirty && isInvalid && <ValidationError hasValue={hasValue} />}
+        {isDirty && isInvalid && <ValidationError hasValue={hasValue} field={field} />}
       </div>
     );
   };

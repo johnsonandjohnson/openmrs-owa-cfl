@@ -37,7 +37,7 @@
     "subtitle": "What's the caregiver's phone number?",
     "fields": [
       {
-        "name": "phoneNumber",
+        "name": "Telephone Number",
         "required": false,
         "type": "phone"
       }
@@ -49,7 +49,7 @@
     "subtitle": "What's the caregiver's location?",
     "fields": [
       {
-        "name": "locationId",
+        "name": "LocationAttribute",
         "label": "Person Location",
         "required": false,
         "type": "select",

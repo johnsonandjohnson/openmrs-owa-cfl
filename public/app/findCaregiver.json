@@ -1,0 +1,19 @@
+{
+  "id": "cflui.findCaregiver",
+  "description": "CFL UI",
+  "order": 3,
+  "extensions": [
+    {
+      "id": "demoapp.homepageLink",
+      "extensionPointId": "org.openmrs.referenceapplication.homepageLink",
+      "type": "link",
+      "label": "Find Caregiver Record",
+      "url": "owa/cfl-ui/index.html#/find-caregiver",
+      "icon": "cfl-find-caregiver",
+      "requiredPrivilege": "Get People"
+    }
+  ],
+  "config": {
+    "tableColumns": "patientIdentifier,display,gender,age,birthdate,phoneNumber"
+  }
+}

@@ -38,9 +38,10 @@ class Confirm extends React.Component<IConfirmProps> {
     }
   };
 
-  location = patient => {
-    if (patient.locationId) {
-      return this.props.locations.find(loc => loc.uuid === patient.locationId)?.display;
+  location = (patient, fieldName) => {
+    const id = patient[fieldName];
+    if (!!id) {
+      return this.props.locations.find(loc => loc.uuid === id)?.display;
     }
   };
 
@@ -83,12 +84,13 @@ class Confirm extends React.Component<IConfirmProps> {
     steps.forEach(step => {
       let value;
       const separator = this.getSeparator(step);
+      const locField = step.fields.find(field => field.optionSource === LOCATIONS_OPTION_SOURCE);
       if (step.fields.find(field => BIRTHDATE_FIELD === field.name || ESTIMATED_BIRTHDATE_FIELDS.includes(field.name))) {
         value = this.birthdate(patient);
       } else if (step.fields.find(field => field.type === RELATIVES_FIELD_TYPE)) {
         value = this.relatives(patient);
-      } else if (step.fields.find(field => field.optionSource === LOCATIONS_OPTION_SOURCE)) {
-        value = this.location(patient);
+      } else if (locField) {
+        value = this.location(patient, locField.name);
       } else {
         value = step.fields
           .filter(field => !!field.name)
