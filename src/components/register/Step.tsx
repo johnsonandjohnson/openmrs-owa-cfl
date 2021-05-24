@@ -166,9 +166,9 @@ class Step extends React.Component<IStepProps, IStepState> {
                 additionalProps.onKeyDown = this.handleLastFieldKeyDown;
               }
               return field.type === SEPARATOR_FIELD_TYPE ? (
-                <div className="col-7 offset-5 col-sm-10 offset-sm-2 mb-5 mt-5" key={`field-${i}`}>
+                <p className={field.class || 'col-7 offset-5 col-sm-10 offset-sm-2 mb-5 mt-5'} key={`field-${i}`}>
                   {field.label}
-                </div>
+                </p>
               ) : (
                 <Field
                   {...this.props}
