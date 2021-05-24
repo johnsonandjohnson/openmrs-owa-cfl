@@ -2,6 +2,7 @@ import axios from 'axios';
 
 import { FAILURE, REQUEST, SUCCESS } from '../action-type.util';
 import querystring from 'querystring';
+import { GENERIC_ERROR_MESSAGE } from '../../shared/constants/error';
 
 export const ACTION_TYPES = {
   REGISTER: 'registration/REGISTER',
@@ -28,11 +29,13 @@ const reducer = (state = initialState, action) => {
     case FAILURE(ACTION_TYPES.REGISTER):
     case FAILURE(ACTION_TYPES.UPDATE_PROFILE):
       const error = action.payload.response.data?.error;
-      const message = error?.message;
+      let message = error?.message;
+      message = message.split('reason: ')[1]?.replace(']', '') || message;
       return {
         ...initialState,
         success: false,
-        errors: !!message ? [message.split('reason: ')[1].replace(']', '')] : []
+        loading: false,
+        errors: !!message ? [message] : [GENERIC_ERROR_MESSAGE]
       };
     case SUCCESS(ACTION_TYPES.REGISTER):
     case SUCCESS(ACTION_TYPES.UPDATE_PROFILE):
