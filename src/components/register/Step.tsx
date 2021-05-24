@@ -134,10 +134,16 @@ class Step extends React.Component<IStepProps, IStepState> {
   handleLastFieldKeyDown = e => {
     const { fields } = this.props.stepDefinition;
     if (e.key === 'Tab') {
-      const isValid = this.validate(fields, fields);
-      e.preventDefault();
-      if (isValid) {
-        this.props.setStep(this.props.stepNumber + 1);
+      if (e.shiftKey) {
+        if (this.props.stepNumber > 0) {
+          this.props.setStep(this.props.stepNumber - 1);
+        }
+      } else {
+        const isValid = this.validate(fields, fields);
+        e.preventDefault();
+        if (isValid) {
+          this.props.setStep(this.props.stepNumber + 1);
+        }
       }
     }
   };

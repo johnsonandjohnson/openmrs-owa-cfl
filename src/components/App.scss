@@ -142,4 +142,16 @@
       opacity: 0.65;
     }
   }
+
+  .react-datepicker {
+    font-size: 14px;
+  }
+  @media only screen and (max-height: 768px) {
+    .react-datepicker {
+      font-size: 12px;
+    }
+    .react-datepicker__week > div {
+      margin: 0.1em;
+    }
+  }
 }

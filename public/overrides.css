@@ -678,7 +678,6 @@ tr:hover td:not(.allergyStatus) {
 }
 
 #content button,
-.content button,
 #allergy > #actions > input {
   background: #00455c;
   border-color: #6c757d !important;
