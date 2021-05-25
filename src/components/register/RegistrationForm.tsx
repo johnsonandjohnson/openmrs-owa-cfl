@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import './RegisterPatient.scss';
+import '../Inputs.scss';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { Button, Col, Form, ListGroup, ListGroupItem, Row, Spinner } from 'reactstrap';
 import _ from 'lodash';
@@ -18,7 +19,7 @@ import Step from './Step';
 import Confirm from './Confirm';
 import queryString from 'query-string';
 import { redirectUrl } from '../../shared/util/url-util';
-import { ROOT_URL } from '../../shared/constants/openmrs';
+import { PATIENT_PAGE_URL } from '../../shared/constants/openmrs';
 
 export interface IRegistrationProps extends StateProps, DispatchProps, RouteComponentProps<{ id?: string }> {
   intl: any;
@@ -248,7 +249,7 @@ class RegistrationForm extends React.Component<IRegistrationProps, IRegistration
   success = () => {
     const { location, id } = this.props;
     window.location.href = id
-      ? `${ROOT_URL}/coreapps/clinicianfacing/patient.page?patientId=${id}${this.props.isCaregiver ? '&dashboard=person' : ''}`
+      ? `${PATIENT_PAGE_URL}?patientId=${id}${this.props.isCaregiver ? '&dashboard=person' : ''}`
       : queryString.stringifyUrl({
           url: redirectUrl(location.search)
         });
@@ -287,14 +288,14 @@ class RegistrationForm extends React.Component<IRegistrationProps, IRegistration
   }
 }
 
-const mapStateToProps = ({ registration, patient, person, apps }) => ({
+const mapStateToProps = ({ registration, cflPatient, cflPerson, apps }) => ({
   loading: registration.loading,
   success: registration.success,
   message: registration.message,
   id: registration.id,
-  patient: patient.patient,
-  person: person.person,
-  personRelationships: person.personRelationships,
+  patient: cflPatient.patient,
+  person: cflPerson.person,
+  personRelationships: cflPerson.personRelationships,
   patientSteps: apps.patientRegistrationSteps || defaultSteps,
   caregiverSteps: apps.caregiverRegistrationSteps || caregiverDefaultSteps,
   settingsLoading: apps.loading

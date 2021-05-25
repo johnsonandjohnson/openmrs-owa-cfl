@@ -1,8 +1,9 @@
-.paged-table {
+.table {
   text-align: center;
   thead tr th {
     text-transform: uppercase;
     padding-top: 0;
+    text-align: center !important;
   }
   tbody tr td:first-of-type,
   thead tr th:first-of-type {
@@ -22,6 +23,10 @@
   tfoot {
     align-items: center;
   }
+}
+
+.table-responsive {
+  border: none !important;
 }
 
 .pagination {

@@ -199,9 +199,9 @@ class Relatives extends React.Component<IRelativesProps, IRelativesState> {
   }
 }
 
-const mapStateToProps = ({ relationshipType, patient }) => ({
+const mapStateToProps = ({ relationshipType, cflPatient }) => ({
   relationshipTypes: relationshipType.relationshipTypes,
-  patients: patient.patients || []
+  patients: cflPatient.patients || []
 });
 
 const mapDispatchToProps = {

@@ -6,12 +6,8 @@ window.addEventListener('load', addCollapseToTheHeader);
 // Override Patient Header both on load and on page change (OWAs)
 window.addEventListener('load', overridePatientHeader);
 window.addEventListener('popstate', function (event) {
-  // the page has changed
-  const patientHeader = document.querySelector('.patient-header.custom');
-  if (!!patientHeader) {
-    // wait for the header to revert to the default one
-    elementReady('.patient-header:not(.custom)').then(overridePatientHeader);
-  }
+  // the page has changed, wait for the header to revert to the default one
+  elementReady('.patient-header:not(.custom)').then(overridePatientHeader);
 });
 
 // JQuery overrides (only for core OpenMRS)
@@ -52,7 +48,7 @@ jqr &&
         jqr(this).replaceWith("<div class='info-body empty'><span class='label'>-NO DATA-</span></div>");
       }
     });
-    // replace the url of 'Patient profile' and 'Caregiver profile'
+    // replace the url of 'Patient profile', 'Caregiver profile' and 'Conditions'
     const searchParams = new URLSearchParams(window.location.search);
     if (searchParams.has('patientId')) {
       const givenName = document.querySelector('.PersonName-givenName')?.textContent;
@@ -71,6 +67,14 @@ jqr &&
       const caregiverProfileAnchor = document.querySelector('a#cfl\\.caregiverProfile');
       if (!!caregiverProfileAnchor) {
         caregiverProfileAnchor.href = `${CFL_UI_BASE}index.html#/edit-caregiver/${patientId}?redirect=${window.location.href}&name=${fullName}`;
+      }
+      const conditionsAnchor = document.querySelector('a#cfl\\.overallActions\\.conditions');
+      if (!!conditionsAnchor) {
+        conditionsAnchor.href = `${CFL_UI_BASE}index.html#/conditions/${patientId}`;
+      }
+      const conditionsIcon = document.querySelector('.info-section.conditions i.edit-action');
+      if (!!conditionsIcon) {
+        conditionsIcon.setAttribute('onclick', `location.href = '${CFL_UI_BASE}index.html#/conditions/${patientId}'`);
       }
     }
     // Add hamburger menu for general actions (visible on smaller screens)
@@ -174,7 +178,7 @@ function overridePatientHeader() {
       // extract the status out of status: <status>
       const status = personStatus?.textContent.split(':');
       if (status.length) {
-        personStatus.textContent = status[1].trim();
+        personStatus.textContent = status[1]?.trim();
       }
       var htmlLines = [
         '<div class="patient-header custom">',
@@ -231,7 +235,7 @@ function overridePatientHeader() {
           '<button id="updatePersonStatus" class="btn btn-secondary" onclick="' + onclick + '">' + 'Update the status' + '</button>'
         ]);
         personStatus.style.display = 'none';
-        document.querySelector('.body-wrapper')?.prepend(personStatus);
+        (document.querySelector('.body-wrapper') || document.querySelector('.content'))?.prepend(personStatus);
       }
       htmlLines.push('</div></div>');
       const updatedHeader = htmlToElements(htmlLines.join('\n'));

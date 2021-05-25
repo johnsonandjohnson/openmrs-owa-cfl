@@ -15,3 +15,5 @@ export const formatDate = (intl, date) =>
     month: 'short',
     year: 'numeric'
   }).format(date);
+
+export const isoDateString = jsDate => (jsDate ? jsDate.toISOString().split('T')[0] : null);

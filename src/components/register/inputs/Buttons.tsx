@@ -27,7 +27,7 @@ class Buttons extends React.Component<IButtonsProps, IFieldState> {
               <FormGroup check inline key={`button-${value}`} className="mb-2">
                 <Button
                   onClick={this.onChange(value)}
-                  className={`gender-button w-100 ${patient[field.name] === value ? 'active' : ''}`}
+                  className={`select-button w-100 ${patient[field.name] === value ? 'active' : ''}`}
                   onKeyDown={!!onKeyDown && i === options.length - 1 && onKeyDown}
                 >
                   {label}

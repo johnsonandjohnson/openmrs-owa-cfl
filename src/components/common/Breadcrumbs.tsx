@@ -1,53 +1,74 @@
 import React from 'react';
-import { Link, withRouter } from 'react-router-dom';
-import useBreadcrumbs from 'use-react-router-breadcrumbs';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
+import withBreadcrumbs from 'react-router-breadcrumbs-hoc';
 import './Breadcrumbs.scss';
-import { routeConfig } from '../Routes';
 import { FormattedMessage } from 'react-intl';
-import { nameParam, redirectUrl } from '../../shared/util/url-util';
+import { nameParamVal, redirectUrl } from '../../shared/util/url-util';
 import { ROOT_URL } from '../../shared/constants/openmrs';
+import { connect } from 'react-redux';
+import { routeConfig } from '../../shared/constants/routes';
+import { IBreadcrumb } from '../../shared/models/breadcrumb';
 
 const separator = (showArrows = true) => <span className="separator">{showArrows && '>>'}</span>;
 
-const Breadcrumbs = props => {
-  const breadcrumbs = useBreadcrumbs(routeConfig);
-  const url = redirectUrl(props.location.search);
-  const name = nameParam(props.location.search);
-  return (
-    <div className="breadcrumbs">
-      {breadcrumbs.map(({ match, key, breadcrumb }, i) => {
-        const id = breadcrumb && breadcrumb['props'] && breadcrumb['props'].children;
-        const isFirstBreadcrumb = i === 0;
-        const isLastBreadcrumb = breadcrumbs.length === i + 1;
-        return (
-          id.indexOf('.') >= 0 && (
-            <span key={key}>
-              {isFirstBreadcrumb ? (
-                <a href={ROOT_URL}>{<FormattedMessage id={'home.title'} />}</a>
-              ) : isLastBreadcrumb ? (
-                <>
-                  {url && name && (
-                    <>
-                      <a href={url}>{name}</a>
-                      {separator()}
-                    </>
-                  )}
-                  <FormattedMessage id={id} />
-                </>
-              ) : (
-                <>
-                  <Link to={match.url}>
-                    <FormattedMessage id={id} />
-                  </Link>
-                </>
-              )}
-              {separator(breadcrumbs.length === 1 || !isLastBreadcrumb)}
-            </span>
-          )
-        );
-      })}
-    </div>
-  );
-};
+export interface IBreadcrumbsProps extends StateProps, DispatchProps, RouteComponentProps {
+  breadcrumbs: any[];
+}
 
-export default withRouter(Breadcrumbs);
+class Breadcrumbs extends React.Component<IBreadcrumbsProps> {
+  routeBreadcrumbs = () => {
+    const breadcrumbs = this.props.breadcrumbs;
+    return breadcrumbs
+      .map(({ match, key, breadcrumb }, i) => {
+        const id = breadcrumb && breadcrumb['props'] && breadcrumb['props'].children;
+        const breadcrumbDef = { labelId: id, order: i, url: `#${match.url}` } as IBreadcrumb;
+        if (i === 0) {
+          breadcrumbDef.url = ROOT_URL;
+        }
+        if (id.indexOf('.') !== -1) {
+          return breadcrumbDef;
+        }
+        return null;
+      })
+      .filter(breadcrumb => !!breadcrumb);
+  };
+
+  render() {
+    let breadcrumbs = this.routeBreadcrumbs();
+    const urlParam = redirectUrl(this.props.location.search);
+    const nameParam = nameParamVal(this.props.location.search);
+    if (urlParam && nameParam) {
+      breadcrumbs.push({
+        url: urlParam,
+        label: nameParam,
+        order: 1
+      });
+    }
+    breadcrumbs = breadcrumbs.concat(this.props.additionalBreadcrumbs).sort((b1, b2) => b1.order - b2.order);
+    return (
+      <div className="breadcrumbs">
+        {breadcrumbs.map(({ url, labelId, label }, i) => (
+          <>
+            {i === breadcrumbs.length - 1 ? (
+              <span>{label || <FormattedMessage id={labelId} />}</span>
+            ) : (
+              <a href={url}>{label || <FormattedMessage id={labelId} />}</a>
+            )}
+            {separator(i !== breadcrumbs.length - 1)}
+          </>
+        ))}
+      </div>
+    );
+  }
+}
+
+const mapStateToProps = ({ breadcrumbs }) => ({
+  additionalBreadcrumbs: breadcrumbs.additionalBreadcrumbs
+});
+
+const mapDispatchToProps = {};
+
+type StateProps = ReturnType<typeof mapStateToProps>;
+type DispatchProps = typeof mapDispatchToProps;
+
+export default connect(mapStateToProps, mapDispatchToProps)(withBreadcrumbs(routeConfig)(withRouter(Breadcrumbs)));

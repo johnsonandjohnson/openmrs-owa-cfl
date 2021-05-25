@@ -20,6 +20,33 @@
     "title": "Find Caregiver Record",
     "searchInputPlaceholder": "Search by Id, name or phone number"
   },
+  "conditions": {
+    "title": "Manage Conditions",
+    "success": "Condition saved successfully",
+    "set": "SET",
+    "active": "Active",
+    "inactive": "Inactive",
+    "return": "Return",
+    "addNew": "Add new Condition",
+    "remove": "Remove Condition",
+    "removeConfirmation": "Are you sure you want to remove condition for this patient?",
+    "yes": "Yes",
+    "no": "No",
+    "condition": "Condition",
+    "onsetDate": "Onset Date",
+    "actions": "Actions"
+  },
+  "manageCondition": {
+    "title": "Condition",
+    "editCondition": "Edit Condition",
+    "addNewCondition": "Add New Condition",
+    "conditions": "Conditions",
+    "condition": "Condition",
+    "onsetDate": "Onset Date",
+    "endDate": "End date",
+    "cancel": "Cancel",
+    "save": "Save"
+  },
   "columnNames": {
     "patientIdentifier": "Identifier",
     "personIdentifier": "Identifier",
