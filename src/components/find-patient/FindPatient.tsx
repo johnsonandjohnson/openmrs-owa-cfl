@@ -118,14 +118,14 @@ class FindPatient extends React.Component<IPatientsProps, IPatientsState> {
   }
 }
 
-const mapStateToProps = ({ patient, apps }) => ({
-  patients: patient.patients,
-  loading: patient.loading,
-  error: patient.errorMessage,
-  hasNext: patient.hasNext,
-  hasPrev: patient.hasPrev,
-  currentPage: patient.currentPage,
-  totalCount: patient.totalCount,
+const mapStateToProps = ({ cflPatient, apps }) => ({
+  patients: cflPatient.patients,
+  loading: cflPatient.loading,
+  error: cflPatient.errorMessage,
+  hasNext: cflPatient.hasNext,
+  hasPrev: cflPatient.hasPrev,
+  currentPage: cflPatient.currentPage,
+  totalCount: cflPatient.totalCount,
   tableColumns: (apps.findPatientTableColumns && apps.findPatientTableColumns) || DEFAULT_FIND_PATIENT_TABLE_COLUMNS
 });
 

@@ -1,0 +1,79 @@
+#app .register-patient,
+#app .conditions,
+#app .condition {
+  input,
+  select:not([class*='react-datepicker__']),
+  div[class*='__value-container'] {
+    height: calc(4rem + 2px);
+    margin-right: 15px;
+    &.invalid {
+      border: 1px red solid;
+    }
+    text-align: center;
+    text-align-last: center;
+    &::placeholder {
+      text-align: start;
+    }
+    &.placeholder {
+      padding-top: 1em;
+      padding-bottom: 1em;
+      color: rgba(0, 0, 0, 0.45);
+      font-size: 14px;
+      font-family: CircularStd-Book;
+      option {
+        font-size: 16px;
+        color: black;
+      }
+    }
+  }
+  input:not(:placeholder-shown),
+  select:not(.placeholder):not([class*='react-datepicker__']) {
+    padding-top: 2rem;
+  }
+  /* style react-select to resemble a regular input */
+  div[class*='__value-container'] {
+    overflow: visible;
+    padding: 0 8px;
+    div[class*='__placeholder'] {
+      color: rgba(0, 0, 0, 0.45);
+      font-size: 14px;
+      font-family: CircularStd-Book;
+    }
+    div[class*='__single-value'] {
+      margin-top: 3em;
+      position: initial;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    div[class*='css-']:not([class*='__single-value']) {
+      position: absolute;
+      width: 100%;
+      margin-left: auto;
+      margin-right: auto;
+      padding-top: 0;
+    }
+  }
+  .react-datepicker-wrapper {
+    width: 100%;
+  }
+  .select-button {
+    padding: 0.75rem 1.5rem;
+    font-size: 12px;
+    text-transform: uppercase;
+    background-color: rgba(0, 0, 0, 0);
+    color: black;
+
+    &.active {
+      background-color: #00455c !important;
+      color: white;
+    }
+  }
+  button:not(.disabled):active {
+    background-color: #00455c !important;
+  }
+  button.cancel,
+  .btn.cancel {
+    background: transparent;
+    color: black;
+  }
+}

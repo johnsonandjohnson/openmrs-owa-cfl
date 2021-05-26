@@ -7,7 +7,7 @@ export const redirectUrl = search => {
   return (redirect || ROOT_URL).toString();
 };
 
-export const nameParam = search => {
+export const nameParamVal = search => {
   const params = queryString.parse(search);
-  return params['name'];
+  return params['name'] && params['name'].toString();
 };

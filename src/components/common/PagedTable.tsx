@@ -1,4 +1,4 @@
-import './PagedTable.scss';
+import './Table.scss';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Pagination, PaginationItem, PaginationLink, Table } from 'reactstrap';
 import React from 'react';
@@ -40,7 +40,7 @@ const PagedTable = (props: PagedTableProps) => {
   const endingPage = startingPage + MAX_PAGES_SHOWN > noPages ? noPages : startingPage + MAX_PAGES_SHOWN;
   return (
     <>
-      <Table borderless striped responsive className="paged-table">
+      <Table borderless striped responsive className="table">
         <thead>
           <tr>
             {_.map(props.columns, column => (

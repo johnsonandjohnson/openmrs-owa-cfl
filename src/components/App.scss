@@ -26,7 +26,7 @@
   src: url('../assets/font/CircularStd-BookItalic.otf') format('opentype');
 }
 
-.app {
+#app {
   min-height: 100vh;
   background-color: #fafafa;
   font-family: 'CircularStd', serif;
@@ -65,11 +65,13 @@
   h1 {
     font-size: 26px;
     color: #333333;
+    margin: 0 0 8px 0;
   }
 
   h2 {
     font-size: 22px;
     color: #333333;
+    margin: 0 0 8px 0;
   }
 
   p {
@@ -153,5 +155,37 @@
     .react-datepicker__week > div {
       margin: 0.1em;
     }
+  }
+
+  a.btn,
+  button.btn {
+    padding: 0.5rem 1.85rem;
+    font-size: 11px;
+    text-transform: uppercase;
+    background-color: #00455c;
+    color: white;
+    border-color: #6c757d;
+  }
+
+  // referenceapplication css overrides
+  form input,
+  form select,
+  form textarea,
+  form ul.select,
+  .form input,
+  .form select,
+  .form textarea,
+  .form ul.select {
+    margin-top: 0;
+  }
+
+  form select,
+  .form select {
+    min-width: auto;
+  }
+
+  form,
+  .form {
+    overflow: initial;
   }
 }

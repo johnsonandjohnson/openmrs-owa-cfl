@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
-import patient from './patient';
-import person from './person';
+import cflPatient from './patient';
+import cflPerson from './person';
 import cflPeople from './cfl-people';
 import session from './session';
 import settings from './setttings';
@@ -10,11 +10,17 @@ import registration from './registration';
 import { reducers as openmrsReducers } from '@openmrs/react-components';
 import { reducer as reduxFormReducer } from 'redux-form';
 import customizeReducer from '@bit/soldevelo-cfl.omrs-components.customize/customize.reducer';
+import person from '@bit/soldevelo-omrs.cfl-components.person-header/person-header/person.reducer';
+import patient from '@bit/soldevelo-omrs.cfl-components.person-header/person-header/patient.reducer';
+import personStatus from '@bit/soldevelo-cfl.omrs-components.person-status/person-status/person-status.reducer';
 import apps from './apps';
+import concept from './concept';
+import condition from './condition';
+import breadcrumbs from './breadcrumbs';
 
 export default combineReducers({
-  patient,
-  person,
+  cflPatient,
+  cflPerson,
   cflPeople,
   session,
   settings,
@@ -22,6 +28,12 @@ export default combineReducers({
   relationshipType,
   registration,
   apps,
+  concept,
+  condition,
+  breadcrumbs,
+  person,
+  patient,
+  personStatus,
   customizeReducer,
   openmrs: openmrsReducers,
   form: reduxFormReducer

@@ -1,3 +1,4 @@
+import './Table.scss';
 import './InfiniteTable.scss';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Spinner, Table } from 'reactstrap';
@@ -33,7 +34,7 @@ const InfiniteTable = (props: InfiniteTableProps) => {
         </div>
       }
     >
-      <Table borderless striped responsive className="paged-table">
+      <Table borderless striped responsive className="table">
         <thead>
           <tr>
             {_.map(props.columns, column => (

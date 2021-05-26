@@ -3,9 +3,9 @@
   color: black;
   margin-bottom: 0.5rem;
   a {
-    color: inherit;
+    color: black !important;
     &:hover {
-      color: inherit;
+      color: black;
       text-decoration: none;
     }
   }
