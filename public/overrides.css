@@ -644,21 +644,21 @@ th {
 }
 
 #allergies th,
-td {
+#allergies td {
   padding: 0.2rem;
   font-size: 12px;
   text-align: center !important;
 }
 @media only screen and (min-width: 768px) {
   #allergies th,
-  td {
+  #allergies td {
     padding: 0.5rem !important;
     font-size: 14px;
   }
 }
 @media only screen and (min-width: 1280px) {
   #allergies th,
-  td {
+  #allergies td {
     padding: 0.75rem !important;
     font-size: 16px;
   }
