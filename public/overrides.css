@@ -183,8 +183,8 @@ i.cfl-register-patient {
   display: none;
 }
 
-#breadcrumbs.breadcrumb a,
-#breadcrumbs.breadcrumb span {
+#breadcrumbs.breadcrumb a:not(:first-child),
+#breadcrumbs.breadcrumb span:not(:first-child) {
   margin-left: 0.35em !important;
 }
 
@@ -626,12 +626,12 @@ nav.navbar {
   background-color: white !important;
 }
 
-table,
-thead,
-tbody,
-tr,
-th,
-td {
+#allergies table,
+#allergies thead,
+#allergies tbody,
+#allergies tr,
+#allergies th,
+#allergies td {
   border: none !important;
   background: white !important;
   font-family: CircularStd !important;
@@ -664,11 +664,11 @@ th {
   }
 }
 
-tr:nth-child(odd) td {
+#allergies tr:nth-child(odd) td {
   background-color: #ededed !important;
 }
 
-tr:hover td:not(.allergyStatus) {
+#allergies tr:hover td:not(.allergyStatus) {
   background-color: #d5d5d5 !important;
   cursor: pointer;
 }
