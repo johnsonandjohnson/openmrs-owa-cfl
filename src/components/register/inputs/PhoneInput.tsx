@@ -4,7 +4,7 @@ import { injectIntl } from 'react-intl';
 import PhoneInput from 'react-phone-number-input/input';
 import { IFieldProps, IFieldState } from './Field';
 import ValidationError from './ValidationError';
-import { getCommonInputProps, getPlaceholder } from '../../../shared/util/form-util';
+import { getCommonInputProps, getPlaceholder } from '../../../shared/util/patient-form-util';
 import { isPossiblePhoneNumber } from 'react-phone-number-input';
 
 export interface IInputProps extends StateProps, DispatchProps, IFieldProps {

@@ -12,7 +12,8 @@ const initialState = {
   loading: false,
   errorMessage: null,
   settings: [],
-  setting: null
+  setting: null,
+  success: false
 };
 
 const reducer = (state = initialState, action) => {
@@ -22,6 +23,7 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         loading: true,
+        success: false,
         errorMessage: null
       };
     case FAILURE(ACTION_TYPES.GET_SETTINGS):
@@ -29,6 +31,7 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         loading: false,
+        success: false,
         errorMessage: action.payload.message
       };
     case SUCCESS(ACTION_TYPES.GET_SETTINGS):
@@ -42,13 +45,14 @@ const reducer = (state = initialState, action) => {
         ...state,
         loading: false,
         errorMessage: null,
-        setting: results && results[0]
+        setting: !!results && results.length > 0 ? results[0] : state.setting
       };
     case SUCCESS(ACTION_TYPES.CREATE_SETTING):
       return {
         ...state,
         loading: false,
-        errorMessage: null
+        errorMessage: null,
+        success: true
       };
     default:
       return state;
@@ -84,6 +88,14 @@ export const createSetting = (property, value = '', description = '') => {
   return {
     type: ACTION_TYPES.CREATE_SETTING,
     payload: axios.post(requestUrl, data)
+  };
+};
+
+export const updateSetting = setting => {
+  const requestUrl = `/openmrs/ws/rest/v1/systemsetting/${setting.uuid}`;
+  return {
+    type: ACTION_TYPES.CREATE_SETTING,
+    payload: axios.post(requestUrl, setting)
   };
 };
 

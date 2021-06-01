@@ -30,7 +30,7 @@ const reducer = (state = initialState, action) => {
     case FAILURE(ACTION_TYPES.UPDATE_PROFILE):
       const error = action.payload.response.data?.error;
       let message = error?.message;
-      message = message.split('reason: ')[1]?.replace(']', '') || message;
+      message = message?.split('reason: ')[1]?.replace(']', '') || message;
       return {
         ...initialState,
         success: false,

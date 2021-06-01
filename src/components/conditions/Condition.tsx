@@ -202,7 +202,7 @@ class Condition extends React.Component<IConditionsProps, IConditionsState> {
                   onInputChange={this.onQueryChange}
                   onChange={this.onConceptChange}
                   className="flex-fill concept"
-                  classNamePrefix="concept"
+                  classNamePrefix="cfl-select"
                   placeholder={intl.formatMessage({ id: 'manageCondition.condition' })}
                   value={this.state.concept}
                   inputValue={this.state.conceptInput}

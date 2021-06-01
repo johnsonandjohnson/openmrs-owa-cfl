@@ -4,7 +4,7 @@ import { injectIntl } from 'react-intl';
 import { Input as ReactstrapInput } from 'reactstrap';
 import { IFieldProps, IFieldState } from './Field';
 import ValidationError from './ValidationError';
-import { getCommonInputProps, getPlaceholder } from '../../../shared/util/form-util';
+import { getCommonInputProps, getPlaceholder } from '../../../shared/util/patient-form-util';
 
 export interface ISelectProps extends StateProps, DispatchProps, IFieldProps {
   intl: any;

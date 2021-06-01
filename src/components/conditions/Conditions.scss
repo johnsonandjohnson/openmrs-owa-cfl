@@ -1,4 +1,8 @@
 .conditions {
+  .inner-content {
+    margin-top: 1rem;
+    background-color: white;
+  }
   .nav-link {
     color: #495057;
   }
@@ -18,6 +22,10 @@
 }
 
 .condition {
+  .inner-content {
+    margin-top: 1rem;
+    background-color: white;
+  }
   max-width: 800px;
   .input-container {
     margin-bottom: 1.25rem;
@@ -26,11 +34,6 @@
     display: flex;
     justify-content: flex-end;
   }
-}
-
-.inner-content {
-  margin-top: 1rem;
-  background-color: white;
 }
 
 .modal-title {

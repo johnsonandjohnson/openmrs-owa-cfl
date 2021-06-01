@@ -1,0 +1,50 @@
+{
+  "id": "cflui.vmpConfig",
+  "description": "CFL UI",
+  "order": 1,
+  "extensions": [
+    {
+      "id": "cflUi.adminGroup",
+      "extensionPointId": "org.openmrs.module.adminui.adminGroups",
+      "type": "group",
+      "label": "VMP",
+      "icon": "icon-book"
+    },
+    {
+      "id": "cflUi.vmpConfigurationLink",
+      "extensionPointId": "org.openmrs.module.adminui.adminLinks",
+      "type": "link",
+      "label": "Manage Configuration",
+      "url": "owa/cfl-ui/index.html#/vmp-config",
+      "extensionParams": {
+        "group": "cflUi.adminGroup"
+      }
+    }
+  ],
+  "config": {
+    "syncScopes": [
+      {
+        "value": "country",
+        "label": "Country"
+      },
+      {
+        "value": "site",
+        "label": "Site"
+      }
+    ],
+    "authSteps": [
+      {
+        "value": "id_card",
+        "label": "ID Card"
+      },
+      {
+        "value": "phone",
+        "label": "Phone"
+      },
+      {
+        "value": "iris_scan",
+        "label": "Iris Scan"
+      }
+    ]
+  }
+}
