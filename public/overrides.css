@@ -549,10 +549,10 @@ nav.navbar {
 
 @media only screen and (max-width: 991px) {
   header > .user-options:not(.show) {
-    display: none;
+    display: none !important;
   }
   header > .user-options {
-    display: flex;
+    display: flex !important;
     flex-direction: column;
   }
 }
@@ -626,12 +626,12 @@ nav.navbar {
   background-color: white !important;
 }
 
-#allergies table,
-#allergies thead,
-#allergies tbody,
-#allergies tr,
-#allergies th,
-#allergies td {
+table,
+thead,
+tbody,
+tr,
+th,
+td {
   border: none !important;
   background: white !important;
   font-family: CircularStd !important;
@@ -664,11 +664,11 @@ th {
   }
 }
 
-#allergies tr:nth-child(odd) td {
+tr:nth-child(odd) td {
   background-color: #ededed !important;
 }
 
-#allergies tr:hover td:not(.allergyStatus) {
+tr:hover td:not(.allergyStatus) {
   background-color: #d5d5d5 !important;
   cursor: pointer;
 }
