@@ -1,36 +1,32 @@
-import { IFieldProps } from '../../components/register/inputs/Field';
-import { setValueOnChange } from './patient-util';
+import { FormattedMessage } from 'react-intl';
+import React from 'react';
 
-export const getPlaceholder = (intl, label, fieldName, required) => {
-  let placeholder =
-    label ||
-    intl.formatMessage({
-      id: 'registerPatient.fields.' + fieldName
-    }) ||
-    fieldName;
-  if (required) {
-    placeholder = [
-      placeholder,
-      intl.formatMessage({
-        id: 'registerPatient.fields.required'
-      })
-    ].join(' ');
+export const getSelectOptions = (selectOptions, placeholderId) => (
+  <>
+    {placeholderId && (
+      <option value="" disabled selected hidden>
+        <FormattedMessage id={placeholderId} />
+      </option>
+    )}
+    {selectOptions.map(option => (
+      <option value={option.value || option} key={`option-${option.value || option}`}>
+        {option.label || option}
+      </option>
+    ))}
+  </>
+);
+
+export const extractEventValue = e => (!!e?.target ? (e?.target?.type === 'checkbox' ? e.target.checked : e?.target?.value) : e);
+
+export const validateRegex = expr => {
+  if (!!expr) {
+    try {
+      // tslint:disable-next-line:no-unused-expression
+      new RegExp(expr);
+      return true;
+    } catch {
+      return false;
+    }
   }
-  return placeholder;
-};
-
-export const getCommonInputProps = (props: IFieldProps, placeholder) => {
-  const { field, isInvalid, isDirty, value, onChange, patient, onPatientChange, onKeyDown } = props;
-  const { name, required, type } = field;
-  return {
-    name,
-    id: name,
-    placeholder,
-    value: value != null ? value : patient[name],
-    onChange: onChange || setValueOnChange(patient, name, onPatientChange),
-    required,
-    className: 'form-control ' + (isDirty && isInvalid ? 'invalid' : ''),
-    type: type || 'text',
-    onKeyDown: !!onKeyDown && onKeyDown
-  };
+  return true;
 };

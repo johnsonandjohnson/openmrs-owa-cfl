@@ -4,7 +4,7 @@ import { injectIntl } from 'react-intl';
 import DatePicker from 'react-datepicker';
 import { IFieldProps, IFieldState } from './Field';
 import ValidationError from './ValidationError';
-import { getCommonInputProps, getPlaceholder } from '../../../shared/util/form-util';
+import { getCommonInputProps, getPlaceholder } from '../../../shared/util/patient-form-util';
 import { DATE_FORMAT } from '../../../shared/util/date-util';
 
 export interface IDateInputProps extends StateProps, DispatchProps, IFieldProps {

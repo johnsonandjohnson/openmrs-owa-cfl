@@ -6,6 +6,7 @@ import RegisterPatient from '../../components/register/RegisterPatient';
 import RegisterCaregiver from '../../components/register/RegisterCaregiver';
 import Dashboard from '../../components/dashboard/Dashboard';
 import Conditions from '../../components/conditions/Conditions';
+import VmpConfig from '../../components/vmp-config/VmpConfig';
 
 export const routeConfig = [
   {
@@ -17,6 +18,11 @@ export const routeConfig = [
     path: '/conditions/:patientUuid',
     component: Conditions,
     breadcrumb: 'conditions.title'
+  },
+  {
+    path: '/vmp-config',
+    component: VmpConfig,
+    breadcrumb: 'vmpConfig.title'
   },
   {
     path: '/find-patient',

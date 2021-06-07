@@ -1,17 +1,16 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
-import { Button, FormGroup } from 'reactstrap';
-import { setValue } from '../../../shared/util/patient-util';
+import { setValue } from '../../../shared/util/patient-form-util';
 import { IFieldProps, IFieldState } from './Field';
-import _ from 'lodash';
+import { Buttons as GenericButtons } from '../../common/form/Buttons';
 
 export interface IButtonsProps extends StateProps, DispatchProps, IFieldProps {
   intl: any;
 }
 
 class Buttons extends React.Component<IButtonsProps, IFieldState> {
-  onChange = value => evt => setValue(this.props.patient, this.props.field.name, this.props.onPatientChange, value);
+  onChange = value => setValue(this.props.patient, this.props.field.name, this.props.onPatientChange, value);
 
   render = () => {
     const { intl, field, isInvalid, className, patient, isDirty, onKeyDown } = this.props;
@@ -19,23 +18,7 @@ class Buttons extends React.Component<IButtonsProps, IFieldState> {
     const hasValue = !!patient[field.name];
     return (
       <div className={`${className}`}>
-        <>
-          {_.map(options || [], (option, i) => {
-            const value = option.value || option;
-            const label = option.label || option;
-            return (
-              <FormGroup check inline key={`button-${value}`} className="mb-2">
-                <Button
-                  onClick={this.onChange(value)}
-                  className={`select-button w-100 ${patient[field.name] === value ? 'active' : ''}`}
-                  onKeyDown={!!onKeyDown && i === options.length - 1 && onKeyDown}
-                >
-                  {label}
-                </Button>
-              </FormGroup>
-            );
-          })}
-        </>
+        <GenericButtons options={options} entity={patient} fieldName={field.name} onChange={this.onChange} onKeyDown={onKeyDown} />
         {isDirty && isInvalid && (
           <span className="error field-error">
             {intl.formatMessage({

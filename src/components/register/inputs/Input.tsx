@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
 import { IFieldProps, IFieldState } from './Field';
 import ValidationError from './ValidationError';
-import { getCommonInputProps, getPlaceholder } from '../../../shared/util/form-util';
+import { getCommonInputProps, getPlaceholder } from '../../../shared/util/patient-form-util';
 import { BIRTHDATE_FIELD, ESTIMATED_BIRTHDATE_FIELDS } from '../Step';
 
 export interface IInputProps extends StateProps, DispatchProps, IFieldProps {
