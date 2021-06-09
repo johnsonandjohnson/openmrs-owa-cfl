@@ -1,4 +1,7 @@
 const CFL_UI_BASE = '/openmrs/owa/cfl-ui/';
+const NODE_TYPE_ELEMENT = 1;
+const NODE_TYPE_TEXT = 3;
+const DATE_PICKER_PLACEHOLDER_REGEX = /\(dd\/mm\/yyyy\)/g;
 
 // Vanilla JS overrides - both for core OpenMRS and OWAs
 window.addEventListener('load', redesignAllergyUI);
@@ -96,6 +99,11 @@ jqr &&
           '</div>'
         ].join('\n')
       );
+    }
+    // HTML Forms bug: remove date picker placeholders - "(dd/mm/yyyy)"
+    const htmlForm = document.getElementById('htmlform');
+    if (!!htmlForm) {
+      removeDatePickerPlaceholders(htmlForm);
     }
   });
 
@@ -232,7 +240,7 @@ function overridePatientHeader() {
         const onclick = personStatus.getAttribute('onclick') || "document.querySelector('.person-status').click()";
         htmlLines = htmlLines.concat([
           personStatusDialog?.outerHTML,
-          '<button id="updatePersonStatus" class="btn btn-secondary" onclick="' + onclick + '">' + 'Update the status' + '</button>'
+          '<button id="updatePersonStatus" class="btn btn-secondary" onclick="' + onclick + '">Update the status</button>'
         ]);
         personStatus.style.display = 'none';
         (document.querySelector('.body-wrapper') || document.querySelector('.content'))?.prepend(personStatus);
@@ -294,4 +302,14 @@ function elementReady(selector, notEmpty = false) {
       subtree: true
     });
   });
+}
+
+function removeDatePickerPlaceholders(node) {
+  if (node.nodeType === NODE_TYPE_TEXT) {
+    node.data = node.data.replace(DATE_PICKER_PLACEHOLDER_REGEX, '');
+  } else if (node.nodeType === NODE_TYPE_ELEMENT) {
+    for (var i = 0; i < node.childNodes.length; i++) {
+      removeDatePickerPlaceholders(node.childNodes[i]);
+    }
+  }
 }
