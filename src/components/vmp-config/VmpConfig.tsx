@@ -484,7 +484,7 @@ class VmpConfig extends React.Component<IVmpConfigProps, IVmpConfigState> {
 
   addAuthStep = () => {
     const { authSteps } = this.state.config;
-    authSteps.push({});
+    authSteps.push({ mandatory: false });
     this.onValueChange('authSteps')(authSteps);
   };
 
