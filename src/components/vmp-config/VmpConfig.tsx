@@ -13,7 +13,7 @@ import { ROOT_URL } from '../../shared/constants/openmrs';
 import { IVmpConfig } from '../../shared/models/vmp-config';
 import { Buttons } from '../common/form/Buttons';
 import ISO6391 from 'iso-639-1';
-import { extractEventValue, validateRegex } from '../../shared/util/form-util';
+import { extractEventValue, validateRegex, selectDefaultTheme } from '../../shared/util/form-util';
 import { getData } from 'country-list';
 import _ from 'lodash';
 import Plus from '../../assets/img/plus.png';
@@ -28,18 +28,19 @@ export interface IVmpConfigProps extends StateProps, DispatchProps, RouteCompone
 
 export interface IVmpConfigState {
   config: IVmpConfig;
+  savedRegimenNames: any[];
 }
 
 const LANGUAGE_OPTIONS = ISO6391.getAllNames().map(name => ({ label: name, value: name }));
 const COUNTRY_OPTIONS = getData().map(country => ({ label: country.name, value: country.name }));
-const ADDRESS_OPTIONS = ADDRESS_FIELDS.map(fieldName => ({ label: fieldName, value: fieldName }));
 const MS_IN_A_MINUTE = 1000 * 60;
 const MS_IN_A_DAY = MS_IN_A_MINUTE * 60 * 24;
 const EMPTY_COUNTRY = { fields: [{}] };
 
 class VmpConfig extends React.Component<IVmpConfigProps, IVmpConfigState> {
   state = {
-    config: {} as IVmpConfig
+    config: {} as IVmpConfig,
+    savedRegimenNames: []
   };
 
   componentDidMount() {
@@ -92,7 +93,8 @@ class VmpConfig extends React.Component<IVmpConfigProps, IVmpConfigState> {
       config.authSteps = [{}];
     }
     this.setState({
-      config
+      config,
+      savedRegimenNames: config.vaccine.map(vc => vc.name)
     });
   };
 
@@ -398,6 +400,7 @@ class VmpConfig extends React.Component<IVmpConfigProps, IVmpConfigState> {
               value={regimen.name}
               onChange={this.onVaccineChange(i, 'name', false)}
               wrapperClassName="flex-1"
+              readOnly={this.state.savedRegimenNames.includes(regimen.name)}
             />
             <SortableSelectWithPlaceholder
               placeholder={this.props.intl.formatMessage({ id: 'vmpConfig.manufacturers' })}
@@ -414,6 +417,7 @@ class VmpConfig extends React.Component<IVmpConfigProps, IVmpConfigState> {
               classNamePrefix="cfl-select"
               isMulti
               isOptionSelected={() => false}
+              theme={selectDefaultTheme}
             />
             <div className="align-items-center justify-content-center d-flex action-icons">
               <div className="action-icons-inner">
@@ -462,6 +466,7 @@ class VmpConfig extends React.Component<IVmpConfigProps, IVmpConfigState> {
           classNamePrefix="cfl-select"
           wrapperClassName="cfl-select-multi"
           isMulti
+          theme={selectDefaultTheme}
         />
       </>
     );
@@ -543,6 +548,7 @@ class VmpConfig extends React.Component<IVmpConfigProps, IVmpConfigState> {
               options={options.filter(opt => !authSteps.find(as => as.type === opt.value))}
               wrapperClassName="flex-2"
               classNamePrefix="cfl-select"
+              theme={selectDefaultTheme}
             />
             <div className="align-items-center justify-content-center d-flex action-icons">
               <div className="action-icons-inner">
@@ -645,6 +651,17 @@ class VmpConfig extends React.Component<IVmpConfigProps, IVmpConfigState> {
     this.onValueChange('addressFields')(addressFields);
   };
 
+  addressPartOptions = (countryIdx, addressPartIdx) => {
+    const addressFields = this.state.config.addressFields || [];
+    const selectedAddressParts = (addressFields[countryIdx].fields || [])
+      .filter((addressPart, idx) => idx !== addressPartIdx)
+      .map(addressPart => addressPart.field);
+    return ADDRESS_FIELDS.filter(addressPart => !selectedAddressParts.includes(addressPart)).map(fieldName => ({
+      label: fieldName,
+      value: fieldName
+    }));
+  };
+
   addressFields = () => {
     const addressFields = this.state.config.addressFields || [];
     return (
@@ -677,6 +694,7 @@ class VmpConfig extends React.Component<IVmpConfigProps, IVmpConfigState> {
                   options={COUNTRY_OPTIONS}
                   wrapperClassName="flex-1"
                   classNamePrefix="cfl-select"
+                  theme={selectDefaultTheme}
                 />
                 <InputWithPlaceholder
                   placeholder={this.props.intl.formatMessage({ id: 'vmpConfig.country' })}
@@ -710,9 +728,10 @@ class VmpConfig extends React.Component<IVmpConfigProps, IVmpConfigState> {
                       showPlaceholder={!!field}
                       value={field ? { value: field, label: field } : null}
                       onChange={this.onCountryChange(i, j, 'field', true)}
-                      options={ADDRESS_OPTIONS}
+                      options={this.addressPartOptions(i, j)}
                       wrapperClassName="flex-1"
                       classNamePrefix="cfl-select"
+                      theme={selectDefaultTheme}
                     />
                     <InputWithPlaceholder
                       placeholder={this.props.intl.formatMessage({ id: 'vmpConfig.addressName' })}

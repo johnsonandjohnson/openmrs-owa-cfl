@@ -78,6 +78,7 @@
   .remove-item {
     &:not(.disabled) {
       cursor: pointer;
+      color: #00455c;
     }
   }
 }
