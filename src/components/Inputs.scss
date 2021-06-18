@@ -36,7 +36,13 @@
   div[class*='-container'] {
     & > div[class*='-control'] {
       border-radius: 0;
-      box-shadow: none !important;
+      box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075) !important;
+      border: 1px solid #ced4da;
+
+      &[class*='--is-focused'],
+      &[class*='--menu-is-open'] {
+        box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6) !important;
+      }
     }
   }
   div[class*='__value-container'] {
@@ -67,6 +73,9 @@
       margin-left: auto;
       margin-right: auto;
     }
+  }
+  div[class*='__menu'] {
+    color: #333333;
   }
   .react-datepicker-wrapper {
     width: 100%;

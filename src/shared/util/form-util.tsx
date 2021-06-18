@@ -30,3 +30,13 @@ export const validateRegex = expr => {
   }
   return true;
 };
+
+export const selectDefaultTheme = theme => ({
+  ...theme,
+  colors: {
+    ...theme.colors,
+    primary: '#00455c',
+    primary25: '#e4e7e7',
+    primary50: '#e4e7e7'
+  }
+});

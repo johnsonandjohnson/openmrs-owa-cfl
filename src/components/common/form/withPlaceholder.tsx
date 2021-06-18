@@ -14,6 +14,7 @@ interface IWithPlaceholderProps {
   isMulti?: boolean;
   isOptionSelected?: any;
   classNamePrefix?: string;
+  theme?: any;
 }
 
 export const withPlaceholder = <P extends object>(WrappedComponent: React.ComponentType<P>) =>
