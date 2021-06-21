@@ -17,6 +17,7 @@ import apps from './apps';
 import concept from './concept';
 import condition from './condition';
 import breadcrumbs from './breadcrumbs';
+import visit from './visit';
 
 export default combineReducers({
   cflPatient,
@@ -35,6 +36,7 @@ export default combineReducers({
   patient,
   personStatus,
   customizeReducer,
+  visit,
   openmrs: openmrsReducers,
   form: reduxFormReducer
 });

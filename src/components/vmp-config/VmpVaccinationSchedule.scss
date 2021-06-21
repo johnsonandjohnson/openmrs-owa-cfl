@@ -1,0 +1,137 @@
+#app .vmp-vaccination-schedule {
+  .inner-content {
+    margin-top: 1rem;
+  }
+
+  .inline-sections {
+    display: flex;
+
+    .section {
+      &:first-of-type {
+        margin-right: 1.5em;
+      }
+    }
+  }
+
+  .section {
+    background-color: white;
+    margin-bottom: 1em;
+    padding: 1em;
+    flex: 1;
+
+    > label {
+      margin-bottom: 0.75rem;
+    }
+  }
+
+  .inline-fields {
+    display: flex;
+    flex-wrap: wrap;
+    flex-grow: 1;
+    margin: 1em 0;
+
+    .input-container:not(:last-of-type) {
+      margin-right: 1em;
+    }
+
+    .flex-1 {
+      flex: 1;
+    }
+
+    .flex-2 {
+      flex: 2;
+    }
+
+    label > span {
+      margin-left: 1.25rem;
+    }
+  }
+
+  .order-icons {
+    justify-content: center;
+    width: 25px;
+
+    :first-child {
+      margin-bottom: 0.5rem;
+    }
+  }
+
+  .action-icons {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+
+    @media only screen and (min-width: 577px) {
+      min-width: 86px;
+    }
+  }
+
+  .action-icons-inner {
+    text-align: end;
+
+    @media only screen and (min-width: 577px) {
+      min-width: 86px;
+    }
+  }
+
+  .row-number {
+    width: 2em;
+  }
+
+  .regimen {
+    margin-bottom: 1.75rem;
+    padding: 1rem 1.5rem 1.5rem;
+    background-color: #fafafa;
+  }
+
+  .id-regex {
+    min-width: 250px;
+  }
+
+  .glyphicon-chevron-up,
+  .glyphicon-chevron-down,
+  .add-item,
+  .remove-item {
+    &:not(.disabled) {
+      cursor: pointer;
+    }
+  }
+
+  .regimen-visit {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    align-items: center;
+    margin: 0.5em 0;
+    padding-left: 0;
+    color: #333333;
+
+    .vaccine-manufacturer {
+      background-color: rgba(0, 0, 0, 0.15);
+      padding: 5px 20px;
+      margin-right: 10px;
+    }
+
+    .vaccine-manufacturer-configured {
+      background-color: #00455c;
+      color: white;
+      padding: 5px 20px;
+      margin-right: 10px;
+    }
+  }
+
+  .cfl-select__control {
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075) !important;
+    border: 1px solid #ced4da;
+
+    &.cfl-select__control--is-focused,
+    &.cfl-select__control--menu-is-open {
+      box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6) !important;
+    }
+  }
+
+  .validation-error {
+    color: red;
+    padding: 5px 0;
+  }
+}

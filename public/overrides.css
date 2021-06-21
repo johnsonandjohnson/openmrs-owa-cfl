@@ -266,6 +266,10 @@ button.btn:hover {
   background-color: #00455c;
 }
 
+button.btn.cancel:hover {
+  background-color: transparent;
+}
+
 .info-container,
 .info-container > [privilege] {
   display: flex;

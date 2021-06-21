@@ -31,6 +31,19 @@ export const validateRegex = expr => {
   return true;
 };
 
+export const ordinalIndicator = number => {
+  const i = number % 10;
+  const j = number % 100;
+  if (i === 1 && j !== 11) {
+    return 'common.ordinalSuffix.st';
+  } else if (i === 2 && j !== 12) {
+    return 'common.ordinalSuffix.nd';
+  } else if (i === 3 && j !== 13) {
+    return 'common.ordinalSuffix.rd';
+  }
+  return 'common.ordinalSuffix.th';
+};
+
 export const selectDefaultTheme = theme => ({
   ...theme,
   colors: {
