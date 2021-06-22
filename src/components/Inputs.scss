@@ -1,7 +1,8 @@
 #app .register-patient,
 #app .conditions,
 #app .condition,
-#app .vmp-config {
+#app .vmp-config,
+#app .vmp-vaccination-schedule {
   input:not([type='checkbox']),
   select:not([class*='react-datepicker__']),
   div[class*='__value-container'],
