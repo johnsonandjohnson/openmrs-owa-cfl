@@ -18,7 +18,7 @@ import { getData } from 'country-list';
 import _ from 'lodash';
 import Plus from '../../assets/img/plus.png';
 import Minus from '../../assets/img/minus.png';
-import { ADDRESS_FIELDS } from '../../shared/constants/address';
+import { ADDRESS_FIELDS, ADDRESS_FIELD_TYPE } from '../../shared/constants/address';
 import { swapPositions } from '../../shared/util/array-util';
 import { successToast, errorToast } from '@bit/soldevelo-omrs.cfl-components.toast-handler';
 
@@ -105,7 +105,7 @@ class VmpConfig extends React.Component<IVmpConfigProps, IVmpConfigState> {
       ? config.addressFields.reduce((map, obj) => {
           if (!!obj.countryName) {
             const fields = obj.fields || [];
-            fields.forEach((field, i) => (field.mappingPos = i + 1));
+            fields.forEach((field, i) => (field.displayOrder = i + 1));
             map[obj.countryName] = fields;
           }
           return map;
@@ -614,6 +614,14 @@ class VmpConfig extends React.Component<IVmpConfigProps, IVmpConfigState> {
     this.onValueChange('addressFields')(addressFields);
   };
 
+  onAddressPartFieldChange = (countryIdx, fieldIdx) => e => {
+    const { addressFields } = this.state.config;
+    const addressPartField = e.value;
+    addressFields[countryIdx].fields[fieldIdx].field = addressPartField;
+    addressFields[countryIdx].fields[fieldIdx].type = ADDRESS_FIELD_TYPE[addressPartField];
+    this.onValueChange('addressFields')(addressFields);
+  };
+
   addAddressPart = countryIdx => () => {
     const { addressFields } = this.state.config;
     addressFields[countryIdx].fields.push({});
@@ -676,7 +684,7 @@ class VmpConfig extends React.Component<IVmpConfigProps, IVmpConfigState> {
         </Label>
         {addressFields.map((country, i) => {
           const addressParts = country.fields || [];
-          addressParts.sort((ap1, ap2) => ap1.mappingPos || 0 > ap2.mappingPos || 0);
+          addressParts.sort((ap1, ap2) => ap1.displayOrder || 0 > ap2.displayOrder || 0);
           return (
             <div key={`addressField-${i}`} className="country">
               <div className="delete-button-container d-flex justify-content-end">
@@ -727,7 +735,7 @@ class VmpConfig extends React.Component<IVmpConfigProps, IVmpConfigState> {
                       placeholder={this.props.intl.formatMessage({ id: 'vmpConfig.addressField' })}
                       showPlaceholder={!!field}
                       value={field ? { value: field, label: field } : null}
-                      onChange={this.onCountryChange(i, j, 'field', true)}
+                      onChange={this.onAddressPartFieldChange(i, j)}
                       options={this.addressPartOptions(i, j)}
                       wrapperClassName="flex-1"
                       classNamePrefix="cfl-select"
