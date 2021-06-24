@@ -101,4 +101,16 @@
     background: transparent;
     color: black;
   }
+  .PhoneInputCountry {
+    position: absolute;
+    left: 1em;
+    top: 2em;
+
+    .PhoneInputCountrySelect {
+      min-height: 100%;
+      bottom: 0;
+      background-color: white;
+      color: black;
+    }
+  }
 }

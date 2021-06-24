@@ -1,11 +1,11 @@
 import React, { RefObject } from 'react';
 import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
-import PhoneInput from 'react-phone-number-input/input';
 import { IFieldProps, IFieldState } from './Field';
 import ValidationError from './ValidationError';
 import { getCommonInputProps, getPlaceholder } from '../../../shared/util/patient-form-util';
-import { isPossiblePhoneNumber } from 'react-phone-number-input';
+import PhoneInput, { isPossiblePhoneNumber } from 'react-phone-number-input';
+import 'react-phone-number-input/style.css';
 
 export interface IInputProps extends StateProps, DispatchProps, IFieldProps {
   intl: any;
@@ -29,7 +29,14 @@ class Input extends React.Component<IInputProps, IFieldState> {
     const errorMessage = this.getErrorMessage(inputValue);
     return (
       <div className={`${className} input-container`}>
-        <PhoneInput {...props} ref={this.inputRef} />
+        <PhoneInput
+          {...props}
+          ref={this.inputRef}
+          international
+          countryCallingCodeEditable={false}
+          numberInputProps={{ className: props.className }}
+          className={null}
+        />
         {inputValue.length > 0 && <span className="placeholder">{placeholder}</span>}
         {((isDirty && isInvalid) || errorMessage) && (
           <ValidationError hasValue={inputValue.length > 0} message={errorMessage} field={field} />

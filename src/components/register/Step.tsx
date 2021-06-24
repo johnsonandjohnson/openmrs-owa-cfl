@@ -30,7 +30,6 @@ export const RELATIVES_FIELD_TYPE = 'relatives';
 export const PHONE_FIELD_TYPE = 'phone';
 export const BIRTHDATE_FIELD = 'birthdate';
 export const ESTIMATED_BIRTHDATE_FIELDS = ['birthdateYears', 'birthdateMonths'];
-export const NAME_FIELDS = ['givenName', 'middleName', 'familyName'];
 
 class Step extends React.Component<IStepProps, IStepState> {
   state = {
