@@ -5,7 +5,7 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import { IPatient } from '../../shared/models/patient';
 import { Alert } from 'reactstrap';
 import _ from 'lodash';
-import { BIRTHDATE_FIELD, ESTIMATED_BIRTHDATE_FIELDS, LOCATIONS_OPTION_SOURCE, NAME_FIELDS, RELATIVES_FIELD_TYPE } from './Step';
+import { BIRTHDATE_FIELD, ESTIMATED_BIRTHDATE_FIELDS, LOCATIONS_OPTION_SOURCE, RELATIVES_FIELD_TYPE } from './Step';
 import { formatDate } from '../../shared/util/date-util';
 import { formatPhoneNumberIntl } from 'react-phone-number-input';
 
@@ -57,6 +57,14 @@ class Confirm extends React.Component<IConfirmProps> {
       .map(relative => [this.relationshipType(relative.relationshipType), relative.otherPerson.label].join(' - '))
       .join(', ');
 
+  getFieldLabel = field =>
+    !!field.label
+      ? field.label
+      : this.props.intl.formatMessage({
+          id: 'registerPatient.fields.' + field.name,
+          defaultMessage: field.name
+        });
+
   getFieldValue = (patient, field) => {
     const val = patient[field.name];
     if (!!field.options) {
@@ -71,19 +79,11 @@ class Confirm extends React.Component<IConfirmProps> {
     return val;
   };
 
-  getSeparator = step => {
-    if (step.fields.find(field => NAME_FIELDS.includes(field.name))) {
-      return ' ';
-    }
-    return ', ';
-  };
-
   sections = patient => {
     const { steps } = this.props;
     const sections = [] as any[];
     steps.forEach(step => {
       let value;
-      const separator = this.getSeparator(step);
       const locField = step.fields.find(field => field.optionSource === LOCATIONS_OPTION_SOURCE);
       if (step.fields.find(field => BIRTHDATE_FIELD === field.name || ESTIMATED_BIRTHDATE_FIELDS.includes(field.name))) {
         value = this.birthdate(patient);
@@ -92,11 +92,15 @@ class Confirm extends React.Component<IConfirmProps> {
       } else if (locField) {
         value = this.location(patient, locField.name);
       } else {
-        value = step.fields
-          .filter(field => !!field.name)
-          .map(field => this.getFieldValue(patient, field))
-          .filter(Boolean)
-          .join(separator);
+        step.fields
+          .filter(field => !!field.name && !!this.getFieldValue(patient, field))
+          .forEach(field => {
+            sections.push({
+              label: this.getFieldLabel(field),
+              value: this.getFieldValue(patient, field)
+            });
+          });
+        return sections;
       }
       sections.push({
         label: step.label,
