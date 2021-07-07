@@ -204,11 +204,11 @@ class VmpConfig extends React.Component<IVmpConfigProps, IVmpConfigState> {
     return (
       <>
         <Label>
-          <FormattedMessage id="vmpConfig.operatorCredentialsRetentionTime" />
+          <FormattedMessage id="vmpConfig.operatorCredentialsOfflineRetentionTime" />
           <span
             className="glyphicon glyphicon-info-sign ml-2"
             aria-hidden="true"
-            title={this.props.intl.formatMessage({ id: 'vmpConfig.operatorCredentialsRetentionTimeTooltip' })}
+            title={this.props.intl.formatMessage({ id: 'vmpConfig.operatorCredentialsOfflineRetentionTimeTooltip' })}
           />
         </Label>
         <InputWithPlaceholder
@@ -228,11 +228,11 @@ class VmpConfig extends React.Component<IVmpConfigProps, IVmpConfigState> {
     return (
       <>
         <Label>
-          <FormattedMessage id="vmpConfig.operatorOfflineSessionTimeout" />
+          <FormattedMessage id="vmpConfig.operatorSessionTimeout" />
           <span
             className="glyphicon glyphicon-info-sign ml-2"
             aria-hidden="true"
-            title={this.props.intl.formatMessage({ id: 'vmpConfig.operatorOfflineSessionTimeoutTooltip' })}
+            title={this.props.intl.formatMessage({ id: 'vmpConfig.operatorSessionTimeoutTooltip' })}
           />
         </Label>
         <InputWithPlaceholder
