@@ -95,6 +95,43 @@
       "body": "Changing the Regimen will affect current configuration.{br}Do you want to proceed?"
     }
   },
+  "vmpAddressData": {
+    "title": "Manage Address Data",
+    "upload": {
+      "title": "Upload Address Data",
+      "instruction1": "Please upload file in <b>.csv</b> or <b>.txt</b> format. The file should contain <b>comma</b> delimiter.",
+      "instruction2": "Download file samples here:",
+      "acceptedFile": "Accepted File:",
+      "rejectedFile": "Rejected File:",
+      "overwriteAddressData": {
+        "true": {
+          "radioLabel": "Overwrite existing address data",
+          "modalHeader": "Overwriting existing data",
+          "modalBody": "Are you sure you want to overwrite existing data?"
+        },
+        "false": {
+          "radioLabel": "Add to existing address data",
+          "modalHeader": "Adding new data to existing file",
+          "modalBody": "Are you sure you want to add new data to existing file?"
+        }
+      },
+      "button": "Upload file",
+      "success": "Address data uploaded successfully",
+      "addressDataEmpty": "There is no file to be displayed yet"
+    },
+    "download": {
+      "csvFileSample": "csv file sample",
+      "txtFileSample": "txt file sample",
+      "button": "Download file"
+    },
+    "dropzone": {
+      "openFileDialog": "Open File Dialog",
+      "instruction": "Drag and drop Address Data file here. The file should be in .csv or .txt format."
+    },
+    "table": {
+      "title": "Uploaded File"
+    }
+  },
   "conditions": {
     "title": "Manage Conditions",
     "success": "Condition saved successfully",
@@ -141,7 +178,14 @@
     "preferredAddress": "Preferred address",
     "phoneNumber": "Phone number",
     "uuid": "ID",
-    "personLanguage": "Language"
+    "personLanguage": "Language",
+    "field1": "Field 1",
+    "field2": "Field 2",
+    "field3": "Field 3",
+    "field4": "Field 4",
+    "field5": "Field 5",
+    "field6": "Field 6",
+    "field7": "Field 7"
   },
   "editPatient": {
     "title": "Patient Profile",
