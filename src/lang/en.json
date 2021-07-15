@@ -99,7 +99,7 @@
     "title": "Manage Address Data",
     "upload": {
       "title": "Upload Address Data",
-      "instruction1": "Please upload file in <b>.csv</b> or <b>.txt</b> format. The file should contain <b>comma</b> delimiter.",
+      "instruction1": "Please upload file in <b>.csv</b> or <b>.txt</b> format. The file should contain <b>comma delimiter</b>.",
       "instruction2": "Download file samples here:",
       "acceptedFile": "Accepted File:",
       "rejectedFile": "Rejected File:",
