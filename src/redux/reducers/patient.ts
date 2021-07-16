@@ -7,7 +7,8 @@ export const ACTION_TYPES = {
   SEARCH_PATIENTS: 'patient/SEARCH_PATIENTS',
   GET_PATIENT: 'patient/GET_PATIENT',
   RESET_PATIENTS: 'patient/RESET_PATIENTS',
-  GET_PATIENT_RELATIONSHIPS: 'patient/GET_PATIENT_RELATIONSHIPS'
+  GET_PATIENT_RELATIONSHIPS: 'patient/GET_PATIENT_RELATIONSHIPS',
+  GET_PATIENT_LINKED_REGIMENS: 'patient/GET_PATIENT_LINKED_REGIMENS'
 };
 
 const initialState = {
@@ -20,7 +21,8 @@ const initialState = {
   totalCount: 0,
   hasNext: false,
   hasPrev: false,
-  q: ''
+  q: '',
+  patientLinkedRegimens: []
 };
 
 const reducer = (state = initialState, action) => {
@@ -67,6 +69,11 @@ const reducer = (state = initialState, action) => {
         ...state,
         patientRelationships: action.payload.data.results
       };
+    case SUCCESS(ACTION_TYPES.GET_PATIENT_LINKED_REGIMENS):
+      return {
+        ...state,
+        patientLinkedRegimens: action.payload.data
+      };
     case ACTION_TYPES.RESET_PATIENTS:
       return {
         ...initialState
@@ -103,6 +110,14 @@ export const getPersonRelationships = id => {
   const requestUrl = `/openmrs/ws/rest/v1/relationship?v=default&person=${id}`;
   return {
     type: ACTION_TYPES.GET_PATIENT_RELATIONSHIPS,
+    payload: axios.get(requestUrl)
+  };
+};
+
+export const getPatientLinkedRegimens = () => {
+  const requestUrl = '/openmrs/ws/cfl/regimens/patient-info';
+  return {
+    type: ACTION_TYPES.GET_PATIENT_LINKED_REGIMENS,
     payload: axios.get(requestUrl)
   };
 };

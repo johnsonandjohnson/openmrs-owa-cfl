@@ -13,7 +13,7 @@ import { ROOT_URL } from '../../shared/constants/openmrs';
 import { IVmpConfig } from '../../shared/models/vmp-config';
 import { Buttons } from '../common/form/Buttons';
 import ISO6391 from 'iso-639-1';
-import { extractEventValue, validateRegex, selectDefaultTheme } from '../../shared/util/form-util';
+import { extractEventValue, validateRegex, selectDefaultTheme, getPlaceholder } from '../../shared/util/form-util';
 import { getData } from 'country-list';
 import _ from 'lodash';
 import Plus from '../../assets/img/plus.png';
@@ -21,6 +21,10 @@ import Minus from '../../assets/img/minus.png';
 import { ADDRESS_FIELDS, ADDRESS_FIELD_TYPE } from '../../shared/constants/address';
 import { swapPositions } from '../../shared/util/array-util';
 import { successToast, errorToast } from '@bit/soldevelo-omrs.cfl-components.toast-handler';
+import ValidationError from '../common/form/ValidationError';
+import { HUNDRED, ONE, TEN, ZERO } from 'src/shared/constants/input';
+import { ConfirmationModal } from '../common/form/ConfirmationModal';
+import { getPatientLinkedRegimens } from '../../redux/reducers/patient';
 
 export interface IVmpConfigProps extends StateProps, DispatchProps, RouteComponentProps {
   intl: any;
@@ -28,7 +32,13 @@ export interface IVmpConfigProps extends StateProps, DispatchProps, RouteCompone
 
 export interface IVmpConfigState {
   config: IVmpConfig;
-  savedRegimenNames: any[];
+  savedRegimen: any[];
+  showValidationErrors: boolean;
+  isModalOpen: boolean;
+  modalHeader: {};
+  modalBody: {};
+  onModalConfirm: any;
+  onModalCancel: any;
 }
 
 const LANGUAGE_OPTIONS = ISO6391.getAllNames().map(name => ({ label: name, value: name }));
@@ -36,16 +46,24 @@ const COUNTRY_OPTIONS = getData().map(country => ({ label: country.name, value: 
 const MS_IN_A_MINUTE = 1000 * 60;
 const MS_IN_A_DAY = MS_IN_A_MINUTE * 60 * 24;
 const EMPTY_COUNTRY = { fields: [{}] };
+const EMPTY_MANUFACTURER = { name: '', barcodeRegex: '' };
+const EMPTY_REGIMEN = { name: '', manufacturers: [] };
 
 class VmpConfig extends React.Component<IVmpConfigProps, IVmpConfigState> {
   state = {
     config: {} as IVmpConfig,
-    savedRegimenNames: []
+    savedRegimen: [],
+    showValidationErrors: false,
+    isModalOpen: false,
+    modalHeader: { id: '', values: {} },
+    modalBody: { id: '', values: {} },
+    onModalConfirm: null,
+    onModalCancel: null
   };
 
   componentDidMount() {
     this.props.getSettingByQuery(SETTING_KEY);
-    this.extractConfigData();
+    this.props.getPatientLinkedRegimens();
   }
 
   componentDidUpdate(prevProps: Readonly<IVmpConfigProps>, prevState: Readonly<IVmpConfigState>, snapshot?: any) {
@@ -94,7 +112,8 @@ class VmpConfig extends React.Component<IVmpConfigProps, IVmpConfigState> {
     }
     this.setState({
       config,
-      savedRegimenNames: config.vaccine.map(vc => vc.name)
+      savedRegimen: _.clone(config.vaccine),
+      showValidationErrors: false
     });
   };
 
@@ -145,6 +164,19 @@ class VmpConfig extends React.Component<IVmpConfigProps, IVmpConfigState> {
     });
   };
 
+  onNumberValueChange = (name, min?, max?) => e => {
+    const { config } = this.state;
+    const extractedEventValue = extractEventValue(e);
+    const value = !!extractedEventValue ? Number.parseInt(extractedEventValue, TEN) : !!min ? min : ZERO;
+    if (Number.isInteger(value)) {
+      if ((min !== null && value < min) || (max !== null && value > max)) return;
+      config[name] = value;
+      this.setState({
+        config
+      });
+    }
+  };
+
   onPersonLanguagesChange = name => selectedOptions => {
     // person languages has a form of [{ name: value }, ...]
     this.onValueChange(name)(selectedOptions.map(option => ({ name: option.value })));
@@ -154,15 +186,42 @@ class VmpConfig extends React.Component<IVmpConfigProps, IVmpConfigState> {
     window.location.href = ROOT_URL;
   };
 
+  scrollToTop = () => window.scrollTo({ top: ZERO, behavior: 'smooth' });
+
+  isFormValid = () => {
+    const { manufacturers, vaccine } = this.state.config;
+    return (
+      !manufacturers.some(manufacturer => !manufacturer.name) &&
+      !vaccine.some(regimen => !regimen.name) &&
+      !vaccine.some((regimen, idx) => this.isRegimenNameDuplicated(vaccine, regimen, idx))
+    );
+  };
+
+  closeModal = () => this.setState({ isModalOpen: false });
+
   save = () => {
     const { setting } = this.props;
-    const config = this.generateConfig();
-    const configJson = JSON.stringify(config);
-    if (setting && setting.uuid) {
-      setting.value = configJson;
-      this.props.updateSetting(setting);
+    if (this.isFormValid()) {
+      const config = this.generateConfig();
+      const configJson = JSON.stringify(config);
+      if (setting && setting.uuid) {
+        setting.value = configJson;
+        this.props.updateSetting(setting);
+      } else {
+        this.props.createSetting(SETTING_KEY, configJson);
+      }
     } else {
-      this.props.createSetting(SETTING_KEY, configJson);
+      this.setState({
+        isModalOpen: true,
+        modalHeader: { id: 'vmpConfig.error.header' },
+        modalBody: { id: 'vmpConfig.error.configurationInvalid' },
+        onModalConfirm: () => {
+          this.closeModal();
+          this.scrollToTop();
+        },
+        onModalCancel: null,
+        showValidationErrors: true
+      });
     }
   };
 
@@ -212,12 +271,13 @@ class VmpConfig extends React.Component<IVmpConfigProps, IVmpConfigState> {
           />
         </Label>
         <InputWithPlaceholder
-          placeholder={this.props.intl.formatMessage({ id: 'vmpConfig.days' })}
+          placeholder={getPlaceholder(this.props.intl, 'vmpConfig.days', true)}
           showPlaceholder={!!operatorCredentialsRetentionTime}
           value={operatorCredentialsRetentionTime}
-          onChange={this.onValueChange('operatorCredentialsRetentionTime')}
+          onChange={this.onNumberValueChange('operatorCredentialsRetentionTime', ONE)}
           type="number"
           pattern="[1-9]"
+          min={ONE}
         />
       </>
     );
@@ -236,12 +296,13 @@ class VmpConfig extends React.Component<IVmpConfigProps, IVmpConfigState> {
           />
         </Label>
         <InputWithPlaceholder
-          placeholder={this.props.intl.formatMessage({ id: 'vmpConfig.minutes' })}
+          placeholder={getPlaceholder(this.props.intl, 'vmpConfig.minutes', true)}
           showPlaceholder={!!operatorOfflineSessionTimeout}
           value={operatorOfflineSessionTimeout}
-          onChange={this.onValueChange('operatorOfflineSessionTimeout')}
+          onChange={this.onNumberValueChange('operatorOfflineSessionTimeout', ONE)}
           type="number"
           pattern="[1-9]"
+          min={ONE}
         />
       </>
     );
@@ -266,7 +327,7 @@ class VmpConfig extends React.Component<IVmpConfigProps, IVmpConfigState> {
     </>
   );
 
-  removeManufacturer = idx => () => {
+  removeManufacturer = idx => {
     const { manufacturers, vaccine } = this.state.config;
     const manufacturerName = manufacturers[idx].name;
     manufacturers.splice(idx, 1);
@@ -283,9 +344,34 @@ class VmpConfig extends React.Component<IVmpConfigProps, IVmpConfigState> {
     this.onValueChange('vaccine')(vaccine);
   };
 
+  onManufacturerRemove = idx => {
+    const { manufacturers, vaccine } = this.state.config;
+    const manufacturerName = manufacturers[idx].name;
+    if (vaccine.some(regimen => !!regimen.manufacturers && regimen.manufacturers.includes(manufacturerName))) {
+      this.setState({
+        isModalOpen: true,
+        modalHeader: { id: 'vmpConfig.error.header' },
+        modalBody: { id: 'vmpConfig.error.manufacturerAssigned' },
+        onModalConfirm: this.closeModal,
+        onModalCancel: null
+      });
+    } else {
+      this.setState({
+        isModalOpen: true,
+        modalHeader: { id: 'vmpConfig.warning.header' },
+        modalBody: { id: 'vmpConfig.warning.deleteManufacturer' },
+        onModalConfirm: () => {
+          this.removeManufacturer(idx);
+          this.closeModal();
+        },
+        onModalCancel: this.closeModal
+      });
+    }
+  };
+
   addManufacturer = () => {
     const { manufacturers } = this.state.config;
-    manufacturers.push({});
+    manufacturers.push(_.clone(EMPTY_MANUFACTURER));
     this.onValueChange('manufacturers')(manufacturers);
   };
 
@@ -296,7 +382,9 @@ class VmpConfig extends React.Component<IVmpConfigProps, IVmpConfigState> {
       // update regimen's manufacturers when the name has changed
       const name = manufacturers[i].name;
       vaccine.forEach(v => {
-        v.manufacturers = v.manufacturers.map(mf => (mf === name ? value : mf));
+        if (!!v.manufacturers && !!v.manufacturers.length) {
+          v.manufacturers = v.manufacturers.map(mf => (mf === name ? value : mf));
+        }
       });
       this.onValueChange('vaccine')(vaccine);
     }
@@ -306,6 +394,7 @@ class VmpConfig extends React.Component<IVmpConfigProps, IVmpConfigState> {
 
   manufacturers = () => {
     const manufacturers = this.state.config.manufacturers || [];
+    const { showValidationErrors } = this.state;
     return (
       <>
         <Label>
@@ -316,45 +405,52 @@ class VmpConfig extends React.Component<IVmpConfigProps, IVmpConfigState> {
             title={this.props.intl.formatMessage({ id: 'vmpConfig.manufacturersTooltip' })}
           />
         </Label>
-        {manufacturers.map((manufacturer, i) => (
-          <div key={`manufacturers-${i}`} className="inline-fields">
-            <InputWithPlaceholder
-              placeholder={this.props.intl.formatMessage({ id: 'vmpConfig.manufacturersName' })}
-              showPlaceholder={!!manufacturer.name}
-              value={manufacturer.name}
-              onChange={this.onManufacturerChange(i, 'name')}
-              wrapperClassName="flex-1"
-            />
-            <InputWithPlaceholder
-              placeholder={this.props.intl.formatMessage({ id: 'vmpConfig.barcodeRegex' })}
-              showPlaceholder={!!manufacturer.barcodeRegex}
-              value={manufacturer.barcodeRegex}
-              onChange={this.onManufacturerChange(i, 'barcodeRegex')}
-              wrapperClassName="flex-2"
-              className={validateRegex(manufacturer.barcodeRegex) ? '' : 'invalid'}
-            />
-            <div className="align-items-center justify-content-center d-flex action-icons">
-              <div className="action-icons-inner">
-                <img
-                  src={Minus}
-                  title={this.props.intl.formatMessage({ id: 'vmpConfig.delete' })}
-                  alt="remove"
-                  className="remove-item"
-                  onClick={this.removeManufacturer(i)}
+        {manufacturers.map((manufacturer, i) => {
+          const isInvalid = !manufacturer.name;
+          return (
+            <>
+              <div key={`manufacturers-${i}`} className="inline-fields">
+                <InputWithPlaceholder
+                  placeholder={this.props.intl.formatMessage({ id: 'vmpConfig.manufacturersName' })}
+                  showPlaceholder={!!manufacturer.name}
+                  value={manufacturer.name}
+                  onChange={this.onManufacturerChange(i, 'name')}
+                  wrapperClassName="flex-1"
+                  className={showValidationErrors && isInvalid ? 'invalid' : ''}
                 />
-                {i === manufacturers.length - 1 && (
-                  <img
-                    src={Plus}
-                    title={this.props.intl.formatMessage({ id: 'vmpConfig.addNew' })}
-                    alt="add"
-                    className="mx-2 add-item"
-                    onClick={this.addManufacturer}
-                  />
-                )}
+                <InputWithPlaceholder
+                  placeholder={this.props.intl.formatMessage({ id: 'vmpConfig.barcodeRegex' })}
+                  showPlaceholder={!!manufacturer.barcodeRegex}
+                  value={manufacturer.barcodeRegex}
+                  onChange={this.onManufacturerChange(i, 'barcodeRegex')}
+                  wrapperClassName="flex-2"
+                  className={validateRegex(manufacturer.barcodeRegex) ? '' : 'invalid'}
+                />
+                <div className="align-items-center justify-content-center d-flex action-icons">
+                  <div className="action-icons-inner">
+                    <img
+                      src={Minus}
+                      title={this.props.intl.formatMessage({ id: 'vmpConfig.delete' })}
+                      alt="remove"
+                      className="remove-item"
+                      onClick={() => this.onManufacturerRemove(i)}
+                    />
+                    {i === manufacturers.length - 1 && (
+                      <img
+                        src={Plus}
+                        title={this.props.intl.formatMessage({ id: 'vmpConfig.addNew' })}
+                        alt="add"
+                        className="mx-2 add-item"
+                        onClick={this.addManufacturer}
+                      />
+                    )}
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-        ))}
+              {showValidationErrors && isInvalid && <ValidationError message="vmpConfig.error.nameRequired" />}
+            </>
+          );
+        })}
       </>
     );
   };
@@ -365,7 +461,10 @@ class VmpConfig extends React.Component<IVmpConfigProps, IVmpConfigState> {
     this.onValueChange('vaccine')(vaccine);
   };
 
-  removeRegimen = idx => () => {
+  isRegimenNameDuplicated = (vaccine, regimen, idx) =>
+    !!regimen.name && !this.state.savedRegimen.includes(regimen) && !!vaccine.find((r, j) => idx !== j && r.name === regimen.name);
+
+  removeRegimen = idx => {
     const { vaccine } = this.state.config;
     vaccine.splice(idx, 1);
     if (vaccine.length === 0) {
@@ -374,13 +473,40 @@ class VmpConfig extends React.Component<IVmpConfigProps, IVmpConfigState> {
     this.onValueChange('vaccine')(vaccine);
   };
 
+  onRegimenRemove = idx => {
+    const { vaccine } = this.state.config;
+    const regimenName = !!vaccine[idx] ? vaccine[idx].name : null;
+    const linkedRegimen = !!regimenName ? this.props.patientLinkedRegimens.find(regimen => regimen.regimenName === regimenName) : null;
+    if (!!linkedRegimen && !!linkedRegimen.anyPatientLinkedWithRegimen) {
+      this.setState({
+        isModalOpen: true,
+        modalHeader: { id: 'vmpConfig.error.header' },
+        modalBody: { id: 'vmpConfig.error.regimenLinked' },
+        onModalConfirm: this.closeModal,
+        onModalCancel: null
+      });
+    } else {
+      this.setState({
+        isModalOpen: true,
+        modalHeader: { id: 'vmpConfig.warning.header' },
+        modalBody: { id: 'vmpConfig.warning.deleteRegimen' },
+        onModalConfirm: () => {
+          this.removeRegimen(idx);
+          this.closeModal();
+        },
+        onModalCancel: this.closeModal
+      });
+    }
+  };
+
   addRegimen = () => {
     const { vaccine } = this.state.config;
-    vaccine.push({});
+    vaccine.push(_.clone(EMPTY_REGIMEN));
     this.onValueChange('vaccine')(vaccine);
   };
 
   regimen = () => {
+    const { savedRegimen, showValidationErrors } = this.state;
     const { vaccine, manufacturers } = this.state.config;
     return (
       <>
@@ -392,55 +518,68 @@ class VmpConfig extends React.Component<IVmpConfigProps, IVmpConfigState> {
             title={this.props.intl.formatMessage({ id: 'vmpConfig.regimenTooltip' })}
           />
         </Label>
-        {(vaccine || []).map((regimen, i) => (
-          <div key={`regimen-${i}`} className="inline-fields">
-            <InputWithPlaceholder
-              placeholder={this.props.intl.formatMessage({ id: 'vmpConfig.regimenName' })}
-              showPlaceholder={!!regimen.name}
-              value={regimen.name}
-              onChange={this.onVaccineChange(i, 'name', false)}
-              wrapperClassName="flex-1"
-              readOnly={this.state.savedRegimenNames.includes(regimen.name)}
-            />
-            <SortableSelectWithPlaceholder
-              placeholder={this.props.intl.formatMessage({ id: 'vmpConfig.manufacturers' })}
-              showPlaceholder={!!regimen.manufacturers && regimen.manufacturers.length}
-              // value = index so it's possible to remove an option that was selected multiple times
-              value={regimen.manufacturers && regimen.manufacturers.map((mf, idx) => ({ label: mf, value: idx }))}
-              onChange={this.onVaccineChange(i, 'manufacturers', true)}
-              options={(manufacturers || []).map(manufacturer => ({
-                label: manufacturer.name,
-                value: manufacturer.name
-              }))}
-              wrapperClassName="flex-2 cfl-select-multi"
-              className="cfl-select"
-              classNamePrefix="cfl-select"
-              isMulti
-              isOptionSelected={() => false}
-              theme={selectDefaultTheme}
-            />
-            <div className="align-items-center justify-content-center d-flex action-icons">
-              <div className="action-icons-inner">
-                <img
-                  src={Minus}
-                  title={this.props.intl.formatMessage({ id: 'vmpConfig.delete' })}
-                  alt="remove"
-                  className="remove-item"
-                  onClick={this.removeRegimen(i)}
+        {(vaccine || []).map((regimen, i) => {
+          const isInvalid = !regimen.name;
+          const isDuplicateName = this.isRegimenNameDuplicated(vaccine, regimen, i);
+          return (
+            <>
+              <div key={`regimen-${i}`} className="inline-fields">
+                <InputWithPlaceholder
+                  placeholder={this.props.intl.formatMessage({ id: 'vmpConfig.regimenName' })}
+                  showPlaceholder={!!regimen.name}
+                  value={regimen.name}
+                  onChange={this.onVaccineChange(i, 'name', false)}
+                  wrapperClassName="flex-1"
+                  readOnly={!!regimen.name && savedRegimen.includes(regimen)}
+                  className={showValidationErrors && (isInvalid || isDuplicateName) ? 'invalid' : ''}
                 />
-                {i === vaccine.length - 1 && (
-                  <img
-                    src={Plus}
-                    title={this.props.intl.formatMessage({ id: 'vmpConfig.addNew' })}
-                    alt="add"
-                    className="mx-2 add-item"
-                    onClick={this.addRegimen}
-                  />
-                )}
+                <SortableSelectWithPlaceholder
+                  placeholder={this.props.intl.formatMessage({ id: 'vmpConfig.manufacturers' })}
+                  showPlaceholder={!!regimen.manufacturers && regimen.manufacturers.length}
+                  // value = index so it's possible to remove an option that was selected multiple times
+                  value={regimen.manufacturers && regimen.manufacturers.map((mf, idx) => ({ label: mf, value: idx }))}
+                  onChange={this.onVaccineChange(i, 'manufacturers', true)}
+                  options={(manufacturers || []).map(manufacturer => ({
+                    label: manufacturer.name,
+                    value: manufacturer.name
+                  }))}
+                  wrapperClassName="flex-2 cfl-select-multi"
+                  className="cfl-select"
+                  classNamePrefix="cfl-select"
+                  isMulti
+                  isOptionSelected={() => false}
+                  theme={selectDefaultTheme}
+                />
+                <div className="align-items-center justify-content-center d-flex action-icons">
+                  <div className="action-icons-inner">
+                    <img
+                      src={Minus}
+                      title={this.props.intl.formatMessage({ id: 'vmpConfig.delete' })}
+                      alt="remove"
+                      className="remove-item"
+                      onClick={() => this.onRegimenRemove(i)}
+                    />
+                    {i === vaccine.length - 1 && (
+                      <img
+                        src={Plus}
+                        title={this.props.intl.formatMessage({ id: 'vmpConfig.addNew' })}
+                        alt="add"
+                        className="mx-2 add-item"
+                        onClick={this.addRegimen}
+                      />
+                    )}
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-        ))}
+              {showValidationErrors &&
+                (isInvalid ? (
+                  <ValidationError message="vmpConfig.error.nameRequired" />
+                ) : (
+                  isDuplicateName && <ValidationError message="vmpConfig.error.nameDuplicate" />
+                ))}
+            </>
+          );
+        })}
       </>
     );
   };
@@ -591,11 +730,14 @@ class VmpConfig extends React.Component<IVmpConfigProps, IVmpConfigState> {
         <div className="d-inline-block">
           <InputWithPlaceholder
             placeholder={this.props.intl.formatMessage({ id: 'vmpConfig.irisScore' })}
-            showPlaceholder={!!irisScore}
+            showPlaceholder={irisScore !== null}
             value={irisScore}
-            onChange={this.onValueChange('irisScore')}
+            onChange={this.onNumberValueChange('irisScore', ZERO, HUNDRED)}
             type="number"
             pattern="[1-9]"
+            className="iris-score"
+            min={ZERO}
+            max={HUNDRED}
           />
         </div>
       </>
@@ -822,10 +964,21 @@ class VmpConfig extends React.Component<IVmpConfigProps, IVmpConfigState> {
     );
   };
 
+  modal = () => (
+    <ConfirmationModal
+      header={this.state.modalHeader}
+      body={this.state.modalBody}
+      onYes={this.state.onModalConfirm}
+      onNo={this.state.onModalCancel}
+      isOpen={this.state.isModalOpen}
+    />
+  );
+
   render() {
     const { appError, appLoading, loading, config } = this.props;
     return (
       <div className="vmp-config">
+        {this.modal()}
         <h2>
           <FormattedMessage id="vmpConfig.title" />
         </h2>
@@ -869,7 +1022,7 @@ class VmpConfig extends React.Component<IVmpConfigProps, IVmpConfigState> {
   }
 }
 
-const mapStateToProps = ({ apps, settings }) => ({
+const mapStateToProps = ({ apps, settings, cflPatient }) => ({
   syncScopes: (apps.vmpConfig && apps.vmpConfig.syncScopes) || DEFAULT_SYNC_SCOPES,
   authSteps: (apps.vmpConfig && apps.vmpConfig.authSteps) || DEFAULT_AUTH_STEPS,
   appError: apps.errorMessage,
@@ -878,10 +1031,11 @@ const mapStateToProps = ({ apps, settings }) => ({
   loading: settings.loading,
   success: settings.success,
   config: settings.setting?.value && settings.setting?.value,
-  setting: settings.setting
+  setting: settings.setting,
+  patientLinkedRegimens: cflPatient.patientLinkedRegimens
 });
 
-const mapDispatchToProps = { getSettingByQuery, updateSetting, createSetting };
+const mapDispatchToProps = { getSettingByQuery, updateSetting, createSetting, getPatientLinkedRegimens };
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;

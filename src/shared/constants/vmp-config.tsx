@@ -25,13 +25,13 @@ export const DEFAULT_AUTH_STEPS = [
 ];
 export const DEFAULT_VMP_CONFIG = {
   syncScope: '',
-  operatorCredentialsRetentionTime: '',
-  operatorOfflineSessionTimeout: '',
+  operatorCredentialsRetentionTime: 604800000,
+  operatorOfflineSessionTimeout: 43200000,
   vaccine: [],
   canUseDifferentManufacturers: '',
   manufacturers: [],
   personLanguages: [],
   authSteps: [],
-  irisScore: '',
+  irisScore: null,
   addressFields: {}
 };
