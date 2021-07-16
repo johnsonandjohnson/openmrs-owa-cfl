@@ -32,10 +32,10 @@ const reducer = (state = initialState, action) => {
     case SUCCESS(ACTION_TYPES.GET_ADDRESS_DATA):
       return {
         ...state,
-        downloadableAddressData: action.payload.data.content
+        downloadableAddressData: !!action.payload.data.content ? action.payload.data.content.map(content => content.content) : []
       };
     case SUCCESS(ACTION_TYPES.GET_ADDRESS_DATA_PAGE):
-      const data = action.payload.data.content || [];
+      const data = !!action.payload.data.content ? action.payload.data.content.map(content => content.content) : [];
       const currentPage = action.payload.data.pageNumber;
       return {
         ...state,
