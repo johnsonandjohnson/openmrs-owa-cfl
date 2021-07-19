@@ -21,10 +21,9 @@ import { IVmpVaccinationSchedule } from '../../shared/models/vmp-vaccination-sch
 import { ConfirmationModal } from '../common/form/ConfirmationModal';
 import { extractEventValue, ordinalIndicator, selectDefaultTheme } from '../../shared/util/form-util';
 import _ from 'lodash';
-import Plus from '../../assets/img/plus.png';
-import Minus from '../../assets/img/minus.png';
 import { successToast, errorToast } from '@bit/soldevelo-omrs.cfl-components.toast-handler';
 import { IVmpConfig } from 'src/shared/models/vmp-config';
+import { PlusMinusButtons } from '../common/form/PlusMinusButtons';
 
 export interface IVmpVaccinationScheduleProps extends StateProps, DispatchProps, RouteComponentProps {
   intl: any;
@@ -239,13 +238,13 @@ class VmpVaccinationSchedule extends React.Component<IVmpVaccinationScheduleProp
     }
   };
 
-  addVisit = (regimenIdx, prevVisitIdx) => () => {
+  addVisit = (regimenIdx, prevVisitIdx) => {
     const { vmpVaccinationSchedule } = this.state;
     vmpVaccinationSchedule[regimenIdx].visits.splice(prevVisitIdx + 1, 0, EMPTY_VISIT);
     this.onValueChange(vmpVaccinationSchedule);
   };
 
-  removeVisit = (regimenIdx, visitIdx) => () => {
+  removeVisit = (regimenIdx, visitIdx) => {
     const { vmpVaccinationSchedule } = this.state;
     let visits = vmpVaccinationSchedule[regimenIdx].visits;
     visits.splice(visitIdx, 1);
@@ -300,7 +299,7 @@ class VmpVaccinationSchedule extends React.Component<IVmpVaccinationScheduleProp
 
   vaccineManufacturers = regimenIdx => {
     const { vmpVaccinationSchedule } = this.state;
-    const { dosingVisitTypes } = this.props;
+    const { intl, dosingVisitTypes } = this.props;
     const vaccine = this.getVaccineByRegimenIndex(regimenIdx);
     const configuredDoses =
       !!vmpVaccinationSchedule &&
@@ -315,7 +314,7 @@ class VmpVaccinationSchedule extends React.Component<IVmpVaccinationScheduleProp
         <span
           key={`manufacturer-${regimenIdx}-${i}`}
           className={i < configuredDoses ? 'vaccine-manufacturer-configured' : 'vaccine-manufacturer'}
-          title={this.props.intl.formatMessage({ id: 'vmpVaccinationSchedule.dosesTooltip' })}
+          title={intl.formatMessage({ id: 'vmpVaccinationSchedule.dosesTooltip' })}
         >
           {manufacturer}
         </span>
@@ -346,6 +345,7 @@ class VmpVaccinationSchedule extends React.Component<IVmpVaccinationScheduleProp
   closeModal = () => this.setState({ isModalOpen: false });
 
   regimenConfig = () => {
+    const { intl, dosingVisitTypes } = this.props;
     const regimenConfig = this.state.vmpVaccinationSchedule || [];
     return (
       <>
@@ -362,7 +362,7 @@ class VmpVaccinationSchedule extends React.Component<IVmpVaccinationScheduleProp
                 <div className="inline-fields">
                   <div className="col-lg-3 col-xs-12 regimen-visit">
                     <SelectWithPlaceholder
-                      placeholder={this.props.intl.formatMessage({ id: 'vmpVaccinationSchedule.regimen' })}
+                      placeholder={intl.formatMessage({ id: 'vmpVaccinationSchedule.regimen' })}
                       showPlaceholder
                       value={regimen.name && { value: regimen.name, label: regimen.name }}
                       onChange={this.onRegimenChange(i)}
@@ -390,7 +390,7 @@ class VmpVaccinationSchedule extends React.Component<IVmpVaccinationScheduleProp
                     <div className="inline-fields">
                       <div className="col-lg-6 col-sm-12 regimen-visit">
                         <SelectWithPlaceholder
-                          placeholder={this.props.intl.formatMessage({ id: 'vmpVaccinationSchedule.visitType' })}
+                          placeholder={intl.formatMessage({ id: 'vmpVaccinationSchedule.visitType' })}
                           showPlaceholder
                           value={nameOfDose ? { value: nameOfDose, label: nameOfDose } : null}
                           onChange={this.onVisitTypeChange(i, j)}
@@ -401,7 +401,7 @@ class VmpVaccinationSchedule extends React.Component<IVmpVaccinationScheduleProp
                         />
                         <InputWithPlaceholder
                           type="number"
-                          placeholder={this.props.intl.formatMessage({ id: 'vmpVaccinationSchedule.midPointWindow' })}
+                          placeholder={intl.formatMessage({ id: 'vmpVaccinationSchedule.midPointWindow' })}
                           showPlaceholder
                           value={midPointWindow || 0}
                           onChange={this.onWindowChange(i, j, 'midPointWindow')}
@@ -409,12 +409,12 @@ class VmpVaccinationSchedule extends React.Component<IVmpVaccinationScheduleProp
                           min={ZERO}
                         />
                       </div>
-                      {!!this.props.dosingVisitTypes && this.props.dosingVisitTypes.includes(nameOfDose) && (
+                      {!!dosingVisitTypes && dosingVisitTypes.includes(nameOfDose) && (
                         <div className="col-lg-6 col-sm-12 regimen-visit">
                           <InputWithPlaceholder
-                            placeholder={`${doseNumber}${this.props.intl.formatMessage({
+                            placeholder={`${doseNumber}${intl.formatMessage({
                               id: ordinalIndicator(doseNumber)
-                            })} ${this.props.intl.formatMessage({ id: 'vmpVaccinationSchedule.doseNumber' })}`}
+                            })} ${intl.formatMessage({ id: 'vmpVaccinationSchedule.doseNumber' })}`}
                             showPlaceholder
                             value={this.doseManufacturer(i, doseNumber)}
                             wrapperClassName="flex-1"
@@ -422,7 +422,7 @@ class VmpVaccinationSchedule extends React.Component<IVmpVaccinationScheduleProp
                           />
                           <InputWithPlaceholder
                             type="number"
-                            placeholder={this.props.intl.formatMessage({ id: 'vmpVaccinationSchedule.lowWindow' })}
+                            placeholder={intl.formatMessage({ id: 'vmpVaccinationSchedule.lowWindow' })}
                             showPlaceholder
                             value={lowWindow || 0}
                             onChange={this.onWindowChange(i, j, 'lowWindow')}
@@ -431,7 +431,7 @@ class VmpVaccinationSchedule extends React.Component<IVmpVaccinationScheduleProp
                           />
                           <InputWithPlaceholder
                             type="number"
-                            placeholder={this.props.intl.formatMessage({ id: 'vmpVaccinationSchedule.upWindow' })}
+                            placeholder={intl.formatMessage({ id: 'vmpVaccinationSchedule.upWindow' })}
                             showPlaceholder
                             value={upWindow || 0}
                             onChange={this.onWindowChange(i, j, 'upWindow')}
@@ -441,24 +441,7 @@ class VmpVaccinationSchedule extends React.Component<IVmpVaccinationScheduleProp
                         </div>
                       )}
                     </div>
-                    <div className="action-icons">
-                      <div className="action-icons-inner">
-                        <img
-                          src={Minus}
-                          title={this.props.intl.formatMessage({ id: 'vmpVaccinationSchedule.delete' })}
-                          alt="remove"
-                          className="ml-2 remove-item"
-                          onClick={this.removeVisit(i, j)}
-                        />
-                        <img
-                          src={Plus}
-                          title={this.props.intl.formatMessage({ id: 'vmpVaccinationSchedule.addNew' })}
-                          alt="add"
-                          className="ml-2 add-item"
-                          onClick={this.addVisit(i, j)}
-                        />
-                      </div>
-                    </div>
+                    <PlusMinusButtons intl={intl} onPlusClick={() => this.addVisit(i, j)} onMinusClick={() => this.removeVisit(i, j)} />
                   </div>
                 );
               })}

@@ -66,3 +66,14 @@ export const getPlaceholder = (intl, translationId, required) => {
   }
   return placeholder;
 };
+
+export const yesNoOptions = intl => [
+  {
+    label: intl.formatMessage({ id: 'common.yes' }),
+    value: true
+  },
+  {
+    label: intl.formatMessage({ id: 'common.no' }),
+    value: false
+  }
+];

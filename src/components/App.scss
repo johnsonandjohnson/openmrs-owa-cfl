@@ -197,4 +197,11 @@
   .spinner {
     color: #333333;
   }
+
+  .action-icons,
+  .action-icons-inner {
+    @media only screen and (min-width: 577px) {
+      min-width: 86px;
+    }
+  }
 }
