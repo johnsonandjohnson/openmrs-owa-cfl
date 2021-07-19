@@ -19,6 +19,26 @@
       "extensionParams": {
         "group": "cflUi.adminGroup"
       }
+    },
+    {
+      "id": "cflUi.vmpVaccinationScheduleLink",
+      "extensionPointId": "org.openmrs.module.adminui.adminLinks",
+      "type": "link",
+      "label": "Manage Vaccination Schedule",
+      "url": "owa/cfl-ui/index.html#/vmp-vaccination-schedule",
+      "extensionParams": {
+        "group": "cflUi.adminGroup"
+      }
+    },
+    {
+      "id": "cflUi.vmpAddressDataLink",
+      "extensionPointId": "org.openmrs.module.adminui.adminLinks",
+      "type": "link",
+      "label": "Manage Address Data",
+      "url": "owa/cfl-ui/index.html#/vmp-address-data",
+      "extensionParams": {
+        "group": "cflUi.adminGroup"
+      }
     }
   ],
   "config": {
@@ -45,6 +65,7 @@
         "value": "iris_scan",
         "label": "Iris Scan"
       }
-    ]
+    ],
+    "dosingVisitTypes": ["Dosing"]
   }
 }

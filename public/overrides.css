@@ -668,6 +668,11 @@ th {
   }
 }
 
+#adminui-configure-metadata-table td {
+  background-color: #fafafa !important;
+  cursor: default;
+}
+
 tr:nth-child(odd) td {
   background-color: #ededed !important;
 }

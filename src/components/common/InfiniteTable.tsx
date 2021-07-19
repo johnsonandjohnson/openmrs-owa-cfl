@@ -48,7 +48,7 @@ const InfiniteTable = (props: InfiniteTableProps) => {
           {_.map(props.entities, (entity, i) => (
             <tr key={i} onClick={() => handleRowClick(entity)}>
               {_.map(props.columns, column => (
-                <td>{props.columnContent(entity, column, intl)}</td>
+                <td className={!!props.getRecordLink ? 'td-clickable' : undefined}>{props.columnContent(entity, column, intl)}</td>
               ))}
             </tr>
           ))}

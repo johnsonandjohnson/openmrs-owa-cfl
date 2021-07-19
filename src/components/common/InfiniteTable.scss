@@ -19,6 +19,9 @@
     cursor: pointer;
     background-color: rgba(0, 0, 0, 0.15) !important;
   }
+  tbody td:not(.td-clickable) {
+    cursor: default !important;
+  }
   tfoot {
     align-items: center;
   }

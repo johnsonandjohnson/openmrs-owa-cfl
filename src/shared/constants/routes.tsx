@@ -7,7 +7,8 @@ import RegisterCaregiver from '../../components/register/RegisterCaregiver';
 import Dashboard from '../../components/dashboard/Dashboard';
 import Conditions from '../../components/conditions/Conditions';
 import VmpConfig from '../../components/vmp-config/VmpConfig';
-import VmpVaccinationSchedule from '../../components/vmp-config/VmpVaccinationSchedule';
+import VmpVaccinationSchedule from '../../components/vmp-vaccination-schedule/VmpVaccinationSchedule';
+import VmpAddressData from 'src/components/vmp-address-data/VmpAddressData';
 
 export const routeConfig = [
   {
@@ -29,6 +30,11 @@ export const routeConfig = [
     path: '/vmp-vaccination-schedule',
     component: VmpVaccinationSchedule,
     breadcrumb: 'vmpVaccinationSchedule.title'
+  },
+  {
+    path: '/vmp-address-data',
+    component: VmpAddressData,
+    breadcrumb: 'vmpAddressData.title'
   },
   {
     path: '/find-patient',
