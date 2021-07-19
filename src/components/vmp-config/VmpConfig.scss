@@ -52,12 +52,6 @@
       margin-bottom: 0.5rem;
     }
   }
-  .action-icons,
-  .action-icons-inner {
-    @media only screen and (min-width: 577px) {
-      min-width: 86px;
-    }
-  }
   .row-number {
     width: 2em;
   }
@@ -68,6 +62,7 @@
     background-color: #fafafa;
   }
 
+  .iris-score,
   .id-regex {
     min-width: 250px;
   }

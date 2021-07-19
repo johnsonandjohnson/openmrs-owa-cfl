@@ -63,7 +63,20 @@
     "success": "Configuration saved successfully!",
     "addNew": "Add new",
     "moveUp": "Move up",
-    "moveDown": "Move down"
+    "moveDown": "Move down",
+    "error": {
+      "header": "Error",
+      "configurationInvalid": "Some fields are not entered correctly. Please check the configuration.",
+      "nameRequired": "Name is a mandatory field",
+      "nameDuplicate": "Name already exists",
+      "manufacturerAssigned": "To delete this manufacturer, please first remove it from the defined regimen.",
+      "regimenLinked": "This regimen is already in use and cannot be removed."
+    },
+    "warning": {
+      "header": "Warning",
+      "deleteManufacturer": "Are you sure you want to delete this manufacturer?",
+      "deleteRegimen": "Are you sure you want to delete this regimen?"
+    }
   },
   "vmpVaccinationSchedule": {
     "title": "Manage Vaccination Schedule",
@@ -323,11 +336,16 @@
   "common": {
     "yes": "Yes",
     "no": "No",
+    "ok": "Ok",
     "ordinalSuffix": {
       "st": "st",
       "nd": "nd",
       "rd": "rd",
       "th": "th"
+    },
+    "required": "(Required)",
+    "error": {
+      "required": "Required"
     }
   }
 }

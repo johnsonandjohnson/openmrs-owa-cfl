@@ -1,3 +1,5 @@
+const DEFAULT_OPERATOR_CREDENTIALS_RETENTION_TIME = 604800000;
+const DEFAULT_OPERATOR_OFFLINE_SESSION_TIMEOUT = 43200000;
 export const SETTING_KEY = 'biometric.api.config.main';
 export const DEFAULT_SYNC_SCOPES = [
   {
@@ -25,13 +27,14 @@ export const DEFAULT_AUTH_STEPS = [
 ];
 export const DEFAULT_VMP_CONFIG = {
   syncScope: '',
-  operatorCredentialsRetentionTime: '',
-  operatorOfflineSessionTimeout: '',
+  operatorCredentialsRetentionTime: DEFAULT_OPERATOR_CREDENTIALS_RETENTION_TIME,
+  operatorOfflineSessionTimeout: DEFAULT_OPERATOR_OFFLINE_SESSION_TIMEOUT,
   vaccine: [],
   canUseDifferentManufacturers: '',
   manufacturers: [],
   personLanguages: [],
   authSteps: [],
-  irisScore: '',
+  irisScore: null,
   addressFields: {}
 };
+export const EMPTY_COUNTRY = { fields: [{}] };

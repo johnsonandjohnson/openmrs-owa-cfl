@@ -31,13 +31,17 @@ export const ConfirmationModal = (props: IConfirmationModalProps) => {
           <FormattedMessage id={!!body && !!body.id && body.id} values={{ ...bodyValues, br: <br /> }} />
         </p>
       </ModalBody>
-      <ModalFooter>
-        <Button className="btn cancel" onClick={onNo}>
-          <FormattedMessage id="common.no" />
-        </Button>
-        <Button className="btn btn-primary" onClick={onYes}>
-          <FormattedMessage id="common.yes" />
-        </Button>
+      <ModalFooter className={`${!!onNo ? '' : 'justify-content-end'}`}>
+        {!!onNo && (
+          <Button className="btn cancel" onClick={onNo}>
+            <FormattedMessage id="common.no" />
+          </Button>
+        )}
+        {!!onYes && (
+          <Button className="btn btn-primary" onClick={onYes}>
+            <FormattedMessage id={`${!!onNo ? 'common.yes' : 'common.ok'}`} />
+          </Button>
+        )}
       </ModalFooter>
     </Modal>
   );

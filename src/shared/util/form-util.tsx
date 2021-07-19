@@ -53,3 +53,27 @@ export const selectDefaultTheme = theme => ({
     primary50: '#e4e7e7'
   }
 });
+
+export const getPlaceholder = (intl, translationId, required) => {
+  let placeholder = intl.formatMessage({ id: translationId });
+  if (required) {
+    placeholder = [
+      placeholder,
+      intl.formatMessage({
+        id: 'common.required'
+      })
+    ].join(' ');
+  }
+  return placeholder;
+};
+
+export const yesNoOptions = intl => [
+  {
+    label: intl.formatMessage({ id: 'common.yes' }),
+    value: true
+  },
+  {
+    label: intl.formatMessage({ id: 'common.no' }),
+    value: false
+  }
+];

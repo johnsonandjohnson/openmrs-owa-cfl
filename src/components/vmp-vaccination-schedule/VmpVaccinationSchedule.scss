@@ -56,24 +56,6 @@
     }
   }
 
-  .action-icons {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-
-    @media only screen and (min-width: 577px) {
-      min-width: 86px;
-    }
-  }
-
-  .action-icons-inner {
-    text-align: end;
-
-    @media only screen and (min-width: 577px) {
-      min-width: 86px;
-    }
-  }
-
   .row-number {
     width: 2em;
   }
