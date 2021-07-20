@@ -6,6 +6,8 @@ import { SETTING_KEY as VMP_CONFIG_SETTING_KEY } from '../../shared/constants/vm
 import {
   DEFAULT_DOSING_VISIT_TYPES,
   DEFAULT_VMP_VACCINATION_SCHEDULE,
+  EMPTY_REGIMEN,
+  EMPTY_VISIT,
   VMP_VACCINATION_SCHEDULE_SETTING_KEY
 } from '../../shared/constants/vmp-vaccination-schedule';
 import { createSetting, getSettingByQuery, updateSetting } from '../../redux/reducers/setttings';
@@ -39,9 +41,6 @@ export interface IVmpVaccinationScheduleState {
   onModalConfirm: any;
   onModalCancel: any;
 }
-
-const EMPTY_VISIT = { doseNumber: ZERO, nameOfDose: '', numberOfFutureVisit: ZERO, lowWindow: ZERO, midPointWindow: ZERO, upWindow: ZERO };
-const EMPTY_REGIMEN = { name: null, visits: [EMPTY_VISIT] };
 
 class VmpVaccinationSchedule extends React.Component<IVmpVaccinationScheduleProps, IVmpVaccinationScheduleState> {
   state = {
@@ -363,7 +362,7 @@ class VmpVaccinationSchedule extends React.Component<IVmpVaccinationScheduleProp
                   <div className="col-lg-3 col-xs-12 regimen-visit">
                     <SelectWithPlaceholder
                       placeholder={intl.formatMessage({ id: 'vmpVaccinationSchedule.regimen' })}
-                      showPlaceholder
+                      showPlaceholder={!!regimen.name}
                       value={regimen.name && { value: regimen.name, label: regimen.name }}
                       onChange={this.onRegimenChange(i)}
                       options={this.regimenOptions(i)}
@@ -391,7 +390,7 @@ class VmpVaccinationSchedule extends React.Component<IVmpVaccinationScheduleProp
                       <div className="col-lg-6 col-sm-12 regimen-visit">
                         <SelectWithPlaceholder
                           placeholder={intl.formatMessage({ id: 'vmpVaccinationSchedule.visitType' })}
-                          showPlaceholder
+                          showPlaceholder={!!nameOfDose}
                           value={nameOfDose ? { value: nameOfDose, label: nameOfDose } : null}
                           onChange={this.onVisitTypeChange(i, j)}
                           options={this.visitTypeOptions(i)}
