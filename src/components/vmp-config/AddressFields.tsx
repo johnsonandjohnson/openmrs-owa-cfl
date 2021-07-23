@@ -34,12 +34,12 @@ export function AddressFields({ intl, config, onValueChange }) {
     onValueChange('addressFields')(addressFields);
   };
 
-  const addAddressPart = countryIdx => () => {
+  const addAddressPart = countryIdx => {
     addressFields[countryIdx].fields.push({});
     onValueChange('addressFields')(addressFields);
   };
 
-  const removeAddressPart = (countryIdx, addressPartIdx) => () => {
+  const removeAddressPart = (countryIdx, addressPartIdx) => {
     const fields = addressFields[countryIdx].fields;
     fields.splice(addressPartIdx, 1);
     if (fields.length === 0) {
