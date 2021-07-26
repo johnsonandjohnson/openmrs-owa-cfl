@@ -1,8 +1,8 @@
 const DROPDOWN = 'DROPDOWN';
 const FREE_INPUT = 'FREE_INPUT';
-export const ADDRESS_FIELDS = ['countryDistrict', 'stateProvince', 'cityVillage', 'postalCode', 'address1', 'address2'];
+export const ADDRESS_FIELDS = ['countyDistrict', 'stateProvince', 'cityVillage', 'postalCode', 'address1', 'address2'];
 export const ADDRESS_FIELD_TYPE = {
-  countryDistrict: DROPDOWN,
+  countyDistrict: DROPDOWN,
   stateProvince: DROPDOWN,
   cityVillage: DROPDOWN,
   postalCode: DROPDOWN,
