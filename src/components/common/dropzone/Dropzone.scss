@@ -1,0 +1,43 @@
+#app {
+  .dropzone {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    border-width: 2px;
+    border-radius: 2px;
+    border-color: #eeeeee;
+    border-style: dashed;
+    background-color: #fafafa;
+    color: #bdbdbd;
+    outline: none;
+    transition: border 0.24s ease-in-out;
+    margin-top: 2em;
+
+    .dropzone-instruction {
+      font-style: italic;
+      color: #777676;
+      margin-bottom: 2em;
+    }
+  }
+
+  .dropzone-active {
+    border-color: #333333;
+  }
+
+  .drop-result {
+    min-height: 2em;
+    padding: 0.25em 0;
+
+    .accepted-file {
+      color: #51a351;
+      font-weight: bold;
+    }
+
+    .rejected-file {
+      color: #df2020;
+      font-weight: bold;
+    }
+  }
+}

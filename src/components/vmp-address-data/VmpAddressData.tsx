@@ -9,11 +9,17 @@ import { ROOT_URL } from '../../shared/constants/openmrs';
 import { ZERO } from '../../shared/constants/input';
 import { ConfirmationModal } from '../common/form/ConfirmationModal';
 import { successToast, errorToast } from '@bit/soldevelo-omrs.cfl-components.toast-handler';
-import Dropzone from 'react-dropzone';
 import InfiniteTable from '../common/InfiniteTable';
 import { getAddressDataPage, getAddressData, postAddressData } from '../../redux/reducers/addressData';
-import { ADDRESS_DATA_TABLE_COLUMNS, DEFAULT_DOWNLOAD_FILENAME, STRING_FALSE, STRING_TRUE } from 'src/shared/constants/vmp-address-data';
+import {
+  ACCEPTED_FILE_EXTENSIONS,
+  ADDRESS_DATA_TABLE_COLUMNS,
+  DEFAULT_DOWNLOAD_FILENAME,
+  STRING_FALSE,
+  STRING_TRUE
+} from 'src/shared/constants/vmp-address-data';
 import downloadCsv from 'download-csv';
+import Dropzone from '../common/dropzone/Dropzone';
 
 export interface IVmpAddressDataProps extends StateProps, DispatchProps, RouteComponentProps {
   intl: any;
@@ -113,56 +119,13 @@ class VmpAddressData extends React.Component<IVmpAddressDataProps, IVmpAddressDa
         <FormattedMessage id="vmpAddressData.upload.instruction2" />
       </p>
       <a href={`${ROOT_URL}/owa/cfl-ui/vmp-address-data/address-data-sample-file.csv`} download className="ml-2">
-        <FormattedMessage id="vmpAddressData.download.csvFileSample" />
+        <FormattedMessage id="vmp.download.csvFileSample" />
       </a>
       <a href={`${ROOT_URL}/owa/cfl-ui/vmp-address-data/address-data-sample-file.txt`} download className="ml-2">
-        <FormattedMessage id="vmpAddressData.download.txtFileSample" />
+        <FormattedMessage id="vmp.download.txtFileSample" />
       </a>
     </>
   );
-
-  dropzone = () => {
-    const { isDragActive, acceptedFile, rejectedFile } = this.state;
-    return (
-      <>
-        <Dropzone
-          accept=".txt,.csv"
-          multiple={false}
-          onDropAccepted={file => this.setState({ acceptedFile: file.find(Boolean), rejectedFile: null, isDragActive: false })}
-          onDropRejected={file => this.setState({ acceptedFile: null, rejectedFile: file.find(Boolean), isDragActive: false })}
-          onDragEnter={() => this.setState({ isDragActive: true })}
-          onDragLeave={() => this.setState({ isDragActive: false })}
-        >
-          {({ getRootProps, getInputProps }) => (
-            <section>
-              <div {...getRootProps({ className: isDragActive ? 'dropzone dropzone-active' : 'dropzone' })}>
-                <input {...getInputProps()} />
-                <p className="dropzone-instruction">
-                  <FormattedMessage id="vmpAddressData.dropzone.instruction" />
-                </p>
-                <Button>
-                  <FormattedMessage id="vmpAddressData.dropzone.openFileDialog" />
-                </Button>
-              </div>
-            </section>
-          )}
-        </Dropzone>
-        <div className="drop-result">
-          {(!!acceptedFile || !!rejectedFile) && (
-            <>
-              <p className={`d-inline ${!!acceptedFile ? 'accepted-file' : 'rejected-file'}`}>
-                <FormattedMessage
-                  id={`vmpAddressData.upload.${!!acceptedFile ? 'acceptedFile' : 'rejectedFile'}`}
-                  values={{ b: (...text) => <b>{text}</b> }}
-                />
-              </p>
-              <p className="d-inline ml-2">{!!acceptedFile ? acceptedFile.name : rejectedFile.file.name}</p>
-            </>
-          )}
-        </div>
-      </>
-    );
-  };
 
   overwriteAddressDataRadioButtons = () => (
     <div onChange={this.onOverwriteAddressDataChange} className="my-2">
@@ -184,7 +147,7 @@ class VmpAddressData extends React.Component<IVmpAddressDataProps, IVmpAddressDa
   uploadButton = () => (
     <div className="upload-button-wrapper">
       <Button onClick={this.onUpload} disabled={!this.state.acceptedFile} className="pull-right">
-        <FormattedMessage id="vmpAddressData.upload.button" />
+        <FormattedMessage id="vmp.upload.button" />
       </Button>
       <p className="upload-error pull-right">{this.props.uploadError}</p>
     </div>
@@ -192,7 +155,7 @@ class VmpAddressData extends React.Component<IVmpAddressDataProps, IVmpAddressDa
 
   downloadButton = () => (
     <Button onClick={this.downloadAddressData} disabled={!this.props.totalCount} className="cancel">
-      <FormattedMessage id="vmpAddressData.download.button" />
+      <FormattedMessage id="vmp.download.button" />
     </Button>
   );
 
@@ -239,7 +202,11 @@ class VmpAddressData extends React.Component<IVmpAddressDataProps, IVmpAddressDa
                 <FormattedMessage id="vmpAddressData.upload.title" />
               </h2>
               {this.instructions()}
-              {this.dropzone()}
+              <Dropzone
+                acceptedFileExt={ACCEPTED_FILE_EXTENSIONS}
+                instructionMessageId="vmpAddressData.dropzone.instruction"
+                onFileAccepted={acceptedFile => this.setState({ acceptedFile })}
+              />
               {this.overwriteAddressDataRadioButtons()}
               {this.uploadButton()}
               {this.uploadedFileTable()}

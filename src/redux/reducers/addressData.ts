@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { ONE, ZERO } from 'src/shared/constants/input';
-import { DEFAULT_DELIMITER } from 'src/shared/constants/vmp-address-data';
+import { ONE, ZERO } from '../../shared/constants/input';
+import { DEFAULT_DELIMITER } from '../../shared/constants/vmp-address-data';
 import { FAILURE, REQUEST, SUCCESS } from '../action-type.util';
 import { DEFAULT_PAGE_SIZE } from '../page.util';
 
@@ -16,6 +16,7 @@ const initialState = {
   currentPage: ONE,
   hasNextPage: false,
   totalCount: ZERO,
+  loadingAddressData: false,
   downloadableAddressData: [],
   errorMessage: null
 };
@@ -24,6 +25,10 @@ const reducer = (state = initialState, action) => {
   switch (action.type) {
     case REQUEST(ACTION_TYPES.GET_ADDRESS_DATA):
     case REQUEST(ACTION_TYPES.GET_ADDRESS_DATA_PAGE):
+      return {
+        ...state,
+        loadingAddressData: true
+      };
     case FAILURE(ACTION_TYPES.GET_ADDRESS_DATA):
     case FAILURE(ACTION_TYPES.GET_ADDRESS_DATA_PAGE):
       return {
@@ -32,6 +37,7 @@ const reducer = (state = initialState, action) => {
     case SUCCESS(ACTION_TYPES.GET_ADDRESS_DATA):
       return {
         ...state,
+        loadingAddressData: false,
         downloadableAddressData: !!action.payload.data.content ? action.payload.data.content.map(content => content.content) : []
       };
     case SUCCESS(ACTION_TYPES.GET_ADDRESS_DATA_PAGE):

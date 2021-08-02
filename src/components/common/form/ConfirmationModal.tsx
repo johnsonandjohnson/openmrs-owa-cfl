@@ -1,7 +1,7 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import './ConfirmationModal.scss';
+import './Modal.scss';
 
 export interface IConfirmationModalProps {
   header: {
@@ -12,8 +12,8 @@ export interface IConfirmationModalProps {
     id: string;
     values: {};
   };
-  onYes: any;
-  onNo: any;
+  onYes: () => void;
+  onNo: () => void;
   isOpen: boolean;
 }
 

@@ -114,36 +114,10 @@
     background-color: rgba(0, 0, 0, 0) !important;
   }
 
-  input::placeholder {
-    font-family: CircularStd-Book;
-    font-size: 14px;
-    color: #333333;
-    opacity: 0.5;
-  }
-
   .form-control {
     border: 1px solid #ced4da !important;
     border-radius: 0;
     outline: none !important;
-  }
-
-  input:focus,
-  textarea:focus,
-  select:focus {
-    outline: none !important;
-  }
-
-  .input-container {
-    position: relative;
-    span.placeholder {
-      font-family: CircularStd;
-      position: absolute;
-      top: 1em;
-      left: 1em;
-      font-size: 10px;
-      text-transform: uppercase;
-      opacity: 0.65;
-    }
   }
 
   .react-datepicker {
@@ -203,5 +177,16 @@
     @media only screen and (min-width: 577px) {
       min-width: 86px;
     }
+  }
+
+  .inner-content {
+    margin-top: 1rem;
+  }
+
+  .section {
+    background-color: white;
+    margin-bottom: 1em;
+    padding: 1em;
+    flex: 1;
   }
 }

@@ -3,11 +3,13 @@
 #app .condition,
 #app .vmp-config,
 #app .vmp-vaccination-schedule,
-#app .vmp-address-data {
-  input:not([type='checkbox']),
+#app .vmp-address-data,
+#app .vmp-translations,
+.modal {
+  input:not([type='checkbox']):not([class*='filter-input']),
   select:not([class*='react-datepicker__']),
-  div[class*='__value-container'],
-  div[class*='-ValueContainer'] {
+  div[class*='__value-container']:not([class*='filter-select']),
+  div[class*='-ValueContainer']:not([class*='filter-select']) {
     min-height: calc(4rem + 2px);
     margin-right: 15px;
     &.invalid {
@@ -31,11 +33,34 @@
     }
   }
   input:not(:placeholder-shown),
-  select:not(.placeholder):not([class*='react-datepicker__']) {
+  select:not(.placeholder):not([class*='react-datepicker__']):not(.filter-select) {
     padding-top: 2rem;
   }
+  input::placeholder {
+    font-family: CircularStd-Book;
+    font-size: 14px;
+    color: #333333;
+    opacity: 0.5;
+  }
+  input:focus,
+  textarea:focus,
+  select:focus {
+    outline: none !important;
+  }
+  .input-container {
+    position: relative;
+    span.placeholder {
+      font-family: CircularStd;
+      position: absolute;
+      top: 1em;
+      left: 1em;
+      font-size: 10px;
+      text-transform: uppercase;
+      opacity: 0.65;
+    }
+  }
   /* style react-select to resemble a regular input */
-  div[class*='-container'] {
+  div[class*='-container']:not([class*='filter-select']) {
     & > div[class*='-control'] {
       border-radius: 0;
       box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075) !important;
@@ -47,7 +72,7 @@
       }
     }
   }
-  div[class*='__value-container'] {
+  div[class*='__value-container']:not([class*='filter-select']) {
     min-height: calc(4rem) !important;
     overflow: visible;
     padding: 0 8px;
