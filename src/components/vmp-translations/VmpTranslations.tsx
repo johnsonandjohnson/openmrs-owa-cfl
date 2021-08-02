@@ -304,18 +304,25 @@ export class VmpTranslations extends React.Component<IVmpAddressDataProps, IVmpA
 
   uploadTranslationFile = translationFile => {
     const { translations } = this.state;
-    const fileReader = new FileReader();
-    fileReader.onload = () => {
-      const parsedTranslationFile = Papa.parse(fileReader.result, { delimiter: DEFAULT_DELIMITER, header: true });
-      !!parsedTranslationFile &&
-        !!parsedTranslationFile.data &&
-        parsedTranslationFile.data.forEach(row => {
-          const { default: defaultValue, ...translationValues } = row;
-          translations[defaultValue] = translationValues;
-        });
-      this.setState({ translations });
-    };
-    fileReader.readAsText(translationFile);
+    Papa.parse(translationFile, {
+      delimiter: DEFAULT_DELIMITER,
+      header: true,
+      complete: parsedTranslationFile => {
+        !!parsedTranslationFile &&
+          !!parsedTranslationFile.data &&
+          parsedTranslationFile.data.forEach(row => {
+            const { default: defaultValue, ...translationValues } = row;
+            translations[defaultValue] = translationValues;
+          });
+        const translationsTableLanguages = !!parsedTranslationFile.meta.fields
+          ? parsedTranslationFile.meta.fields.filter(field => field !== CSV_FILE_DEFAULT_COLUMN_LABEL)
+          : [];
+        this.setState(state => ({
+          translations,
+          translationsTableLanguages: Array.from(new Set([...state.translationsTableLanguages, ...translationsTableLanguages]))
+        }));
+      }
+    });
   };
 
   downloadButton = () => (
