@@ -105,7 +105,7 @@ export function AddressFields({ intl, config, onValueChange }) {
                 onChange={onCountryChange(i, null, null, true)}
                 options={COUNTRY_OPTIONS}
                 wrapperClassName="flex-1"
-                classNamePrefix="cfl-select"
+                classNamePrefix="default-select"
                 theme={selectDefaultTheme}
               />
               <InputWithPlaceholder
@@ -142,7 +142,7 @@ export function AddressFields({ intl, config, onValueChange }) {
                     onChange={onAddressPartFieldChange(i, j)}
                     options={addressPartOptions(i, j)}
                     wrapperClassName="flex-1"
-                    classNamePrefix="cfl-select"
+                    classNamePrefix="default-select"
                     theme={selectDefaultTheme}
                   />
                   <InputWithPlaceholder

@@ -175,7 +175,7 @@ class Relatives extends React.Component<IRelativesProps, IRelativesState> {
               onInputChange={this.onChange(rowNo, OTHER_PERSON_NAME)}
               onChange={this.onChange(rowNo, otherPersonField.name)}
               className="flex-fill other-person"
-              classNamePrefix="cfl-select"
+              classNamePrefix="default-select"
               placeholder={otherPersonPlaceholder}
               value={relative.otherPerson}
               inputValue={relative.otherPersonInput}

@@ -31,7 +31,7 @@ export function AddLanguageModal(props: IAddLanguageModalProps) {
           onChange={lang => setLanguage(lang.value)}
           options={LANGUAGE_OPTIONS.filter(lang => languages.includes(lang.value))}
           wrapperClassName="flex-2"
-          classNamePrefix="cfl-select"
+          classNamePrefix="default-select"
           theme={selectDefaultTheme}
         />
       </ModalBody>

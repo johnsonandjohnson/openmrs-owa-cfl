@@ -9,6 +9,9 @@ export default function Dropzone({ acceptedFileExt, instructionMessageId, onFile
   const [isDragActive, setIsDragActive] = React.useState(false);
   const [acceptedFile, setAcceptedFile] = React.useState(null);
   const [rejectedFile, setRejectedFile] = React.useState(null);
+
+  const isFileDropped = () => !!acceptedFile || !!rejectedFile;
+
   return (
     <>
       <ReactDropzone
@@ -44,7 +47,7 @@ export default function Dropzone({ acceptedFileExt, instructionMessageId, onFile
         )}
       </ReactDropzone>
       <div className="drop-result">
-        {(!!acceptedFile || !!rejectedFile) && (
+        {isFileDropped() && (
           <>
             <div className={`d-inline ${!!acceptedFile ? 'accepted-file' : 'rejected-file'}`}>
               <FormattedMessage

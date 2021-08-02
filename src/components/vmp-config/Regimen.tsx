@@ -85,9 +85,9 @@ export function Regimen({
                   label: manufacturer.name,
                   value: manufacturer.name
                 }))}
-                wrapperClassName="flex-2 cfl-select-multi"
-                className="cfl-select"
-                classNamePrefix="cfl-select"
+                wrapperClassName="flex-2 default-select-multi"
+                className="default-select"
+                classNamePrefix="default-select"
                 isMulti
                 isOptionSelected={() => false}
                 theme={selectDefaultTheme}

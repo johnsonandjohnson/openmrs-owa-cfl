@@ -52,19 +52,19 @@ Object {
                       class="css-1f43avz-a11yText-A11yText"
                     />
                     <div
-                      class="cfl-select__control css-yk16xz-control"
+                      class="default-select__control css-yk16xz-control"
                     >
                       <div
-                        class="cfl-select__value-container css-g1d714-ValueContainer"
+                        class="default-select__value-container css-g1d714-ValueContainer"
                       >
                         <div
-                          class="cfl-select__placeholder css-1wa3eu0-placeholder"
+                          class="default-select__placeholder css-1wa3eu0-placeholder"
                         />
                         <div
                           class="css-b8ldur-Input"
                         >
                           <div
-                            class="cfl-select__input"
+                            class="default-select__input"
                             style="display: inline-block;"
                           >
                             <input
@@ -86,14 +86,14 @@ Object {
                         </div>
                       </div>
                       <div
-                        class="cfl-select__indicators css-1hb7zxy-IndicatorsContainer"
+                        class="default-select__indicators css-1hb7zxy-IndicatorsContainer"
                       >
                         <span
-                          class="cfl-select__indicator-separator css-1okebmr-indicatorSeparator"
+                          class="default-select__indicator-separator css-1okebmr-indicatorSeparator"
                         />
                         <div
                           aria-hidden="true"
-                          class="cfl-select__indicator cfl-select__dropdown-indicator css-tlfecz-indicatorContainer"
+                          class="default-select__indicator default-select__dropdown-indicator css-tlfecz-indicatorContainer"
                         >
                           <svg
                             aria-hidden="true"
