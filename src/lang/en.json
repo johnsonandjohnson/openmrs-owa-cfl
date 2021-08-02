@@ -20,6 +20,21 @@
     "title": "Find Caregiver Record",
     "searchInputPlaceholder": "Search by Id, name or phone number"
   },
+  "vmp": {
+    "dropzone": {
+      "openFileDialog": "Open File Dialog",
+      "acceptedFile": "Accepted File:",
+      "rejectedFile": "Rejected File:"
+    },
+    "upload": {
+      "button": "Upload file"
+    },
+    "download": {
+      "csvFileSample": "csv file sample",
+      "txtFileSample": "txt file sample",
+      "button": "Download file"
+    }
+  },
   "vmpConfig": {
     "title": "Manage Configuration",
     "save": "Save",
@@ -114,8 +129,6 @@
       "title": "Upload Address Data",
       "instruction1": "Please upload file in <b>.csv</b> or <b>.txt</b> format. The file should contain <b>comma delimiter</b>.",
       "instruction2": "Download file samples here:",
-      "acceptedFile": "Accepted File:",
-      "rejectedFile": "Rejected File:",
       "overwriteAddressData": {
         "true": {
           "radioLabel": "Overwrite existing address data",
@@ -128,21 +141,50 @@
           "modalBody": "Are you sure you want to add new data to existing file?"
         }
       },
-      "button": "Upload file",
       "success": "Address data uploaded successfully",
       "addressDataEmpty": "There is no file to be displayed yet"
     },
-    "download": {
-      "csvFileSample": "csv file sample",
-      "txtFileSample": "txt file sample",
-      "button": "Download file"
-    },
     "dropzone": {
-      "openFileDialog": "Open File Dialog",
       "instruction": "Drag and drop Address Data file here. The file should be in .csv or .txt format."
     },
     "table": {
       "title": "Uploaded File"
+    }
+  },
+  "vmpTranslations": {
+    "title": "Manage Translations",
+    "dropzone": {
+      "instruction": "Drag and drop Translation file here. The file should be in .csv format."
+    },
+    "upload": {
+      "title": "Upload File",
+      "instruction1": "Please upload file in <b>.csv</b> format. The file should contain <b>comma delimiter</b>.",
+      "modalHeader": "Uploading new file",
+      "modalBody": "Are you sure you want to overwrite existing data?"
+    },
+    "table": {
+      "defaultLanguage": "Default",
+      "defaultValue": "default",
+      "filter": {
+        "phrase": "Search by phrase",
+        "language": "Search by language"
+      }
+    },
+    "addLanguage": {
+      "title": "Add language",
+      "selectPlaceholder": "Select language",
+      "add": "Add"
+    },
+    "save": {
+      "success": "Translations saved successfully"
+    },
+    "return": {
+      "modalHeader": "Warning",
+      "modalBody": "The changes you made will not be saved.{br}Are you sure you want to continue?"
+    },
+    "download": {
+      "modalHeader": "Warning",
+      "modalBody": "You haven’t saved the changes. The downloaded file might not be complete.{br}Do you want to continue?"
     }
   },
   "conditions": {
@@ -337,6 +379,7 @@
     "yes": "Yes",
     "no": "No",
     "ok": "Ok",
+    "cancel": "Cancel",
     "ordinalSuffix": {
       "st": "st",
       "nd": "nd",

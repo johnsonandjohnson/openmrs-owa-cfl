@@ -39,6 +39,16 @@
       "extensionParams": {
         "group": "cflUi.adminGroup"
       }
+    },
+    {
+      "id": "cflUi.vmpTranslationsLink",
+      "extensionPointId": "org.openmrs.module.adminui.adminLinks",
+      "type": "link",
+      "label": "Manage Translations",
+      "url": "owa/cfl-ui/index.html#/vmp-translations",
+      "extensionParams": {
+        "group": "cflUi.adminGroup"
+      }
     }
   ],
   "config": {

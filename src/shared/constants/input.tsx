@@ -4,3 +4,4 @@ export const ZERO = 0;
 export const ONE = 1;
 export const TEN = 10;
 export const HUNDRED = 100;
+export const EMPTY_STRING = '';

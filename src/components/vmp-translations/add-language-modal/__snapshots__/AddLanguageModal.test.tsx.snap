@@ -1,0 +1,194 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should render match snapshot 1`] = `
+Object {
+  "asFragment": [Function],
+  "baseElement": <body
+    class="modal-open"
+  >
+    <div />
+    <div
+      style="position: relative; z-index: 1050; display: block;"
+      tabindex="-1"
+    >
+      <div
+        class=""
+      >
+        <div
+          class="modal"
+          role="dialog"
+          style="display: block;"
+          tabindex="-1"
+        >
+          <div
+            class="modal-dialog"
+            role="document"
+          >
+            <div
+              class="modal-content"
+            >
+              <div
+                class="modal-header"
+              >
+                <h5
+                  class="modal-title"
+                >
+                  vmpTranslations.addLanguage.title
+                </h5>
+              </div>
+              <div
+                class="modal-body"
+              >
+                <div
+                  class="input-container flex-2"
+                >
+                  <div
+                    class=" css-2b097c-container"
+                  >
+                    <span
+                      aria-atomic="false"
+                      aria-live="polite"
+                      aria-relevant="additions text"
+                      class="css-1f43avz-a11yText-A11yText"
+                    />
+                    <div
+                      class="default-select__control css-yk16xz-control"
+                    >
+                      <div
+                        class="default-select__value-container css-g1d714-ValueContainer"
+                      >
+                        <div
+                          class="default-select__placeholder css-1wa3eu0-placeholder"
+                        />
+                        <div
+                          class="css-b8ldur-Input"
+                        >
+                          <div
+                            class="default-select__input"
+                            style="display: inline-block;"
+                          >
+                            <input
+                              aria-autocomplete="list"
+                              autocapitalize="none"
+                              autocomplete="off"
+                              autocorrect="off"
+                              id="react-select-2-input"
+                              spellcheck="false"
+                              style="box-sizing: content-box; width: 2px; border: 0px; opacity: 1; outline: 0; padding: 0px;"
+                              tabindex="0"
+                              type="text"
+                              value=""
+                            />
+                            <div
+                              style="position: absolute; top: 0px; left: 0px; visibility: hidden; height: 0px; overflow: scroll; white-space: pre; font-family: -webkit-small-control; letter-spacing: normal; text-transform: none;"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                      <div
+                        class="default-select__indicators css-1hb7zxy-IndicatorsContainer"
+                      >
+                        <span
+                          class="default-select__indicator-separator css-1okebmr-indicatorSeparator"
+                        />
+                        <div
+                          aria-hidden="true"
+                          class="default-select__indicator default-select__dropdown-indicator css-tlfecz-indicatorContainer"
+                        >
+                          <svg
+                            aria-hidden="true"
+                            class="css-tj5bde-Svg"
+                            focusable="false"
+                            height="20"
+                            viewBox="0 0 20 20"
+                            width="20"
+                          >
+                            <path
+                              d="M4.516 7.548c0.436-0.446 1.043-0.481 1.576 0l3.908 3.747 3.908-3.747c0.533-0.481 1.141-0.446 1.574 0 0.436 0.445 0.408 1.197 0 1.615-0.406 0.418-4.695 4.502-4.695 4.502-0.217 0.223-0.502 0.335-0.787 0.335s-0.57-0.112-0.789-0.335c0 0-4.287-4.084-4.695-4.502s-0.436-1.17 0-1.615z"
+                            />
+                          </svg>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="modal-footer"
+              >
+                <button
+                  class="btn cancel btn btn-secondary"
+                  type="button"
+                >
+                  common.cancel
+                </button>
+                <button
+                  class="btn btn-primary btn btn-secondary"
+                  type="button"
+                >
+                  vmpTranslations.addLanguage.add
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="modal-backdrop show"
+        />
+      </div>
+    </div>
+  </body>,
+  "container": <div />,
+  "debug": [Function],
+  "findAllByAltText": [Function],
+  "findAllByDisplayValue": [Function],
+  "findAllByLabelText": [Function],
+  "findAllByPlaceholderText": [Function],
+  "findAllByRole": [Function],
+  "findAllByTestId": [Function],
+  "findAllByText": [Function],
+  "findAllByTitle": [Function],
+  "findByAltText": [Function],
+  "findByDisplayValue": [Function],
+  "findByLabelText": [Function],
+  "findByPlaceholderText": [Function],
+  "findByRole": [Function],
+  "findByTestId": [Function],
+  "findByText": [Function],
+  "findByTitle": [Function],
+  "getAllByAltText": [Function],
+  "getAllByDisplayValue": [Function],
+  "getAllByLabelText": [Function],
+  "getAllByPlaceholderText": [Function],
+  "getAllByRole": [Function],
+  "getAllByTestId": [Function],
+  "getAllByText": [Function],
+  "getAllByTitle": [Function],
+  "getByAltText": [Function],
+  "getByDisplayValue": [Function],
+  "getByLabelText": [Function],
+  "getByPlaceholderText": [Function],
+  "getByRole": [Function],
+  "getByTestId": [Function],
+  "getByText": [Function],
+  "getByTitle": [Function],
+  "queryAllByAltText": [Function],
+  "queryAllByDisplayValue": [Function],
+  "queryAllByLabelText": [Function],
+  "queryAllByPlaceholderText": [Function],
+  "queryAllByRole": [Function],
+  "queryAllByTestId": [Function],
+  "queryAllByText": [Function],
+  "queryAllByTitle": [Function],
+  "queryByAltText": [Function],
+  "queryByDisplayValue": [Function],
+  "queryByLabelText": [Function],
+  "queryByPlaceholderText": [Function],
+  "queryByRole": [Function],
+  "queryByTestId": [Function],
+  "queryByText": [Function],
+  "queryByTitle": [Function],
+  "rerender": [Function],
+  "unmount": [Function],
+}
+`;

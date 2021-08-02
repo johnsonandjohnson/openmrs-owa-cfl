@@ -78,7 +78,7 @@ export function AuthSteps({ intl, config, options, onValueChange }) {
             onChange={onAuthStepsChange(i, 'type', true)}
             options={options.filter(opt => !authSteps.find(as => as.type === opt.value))}
             wrapperClassName="flex-2"
-            classNamePrefix="cfl-select"
+            classNamePrefix="default-select"
             theme={selectDefaultTheme}
           />
           <PlusMinusButtons

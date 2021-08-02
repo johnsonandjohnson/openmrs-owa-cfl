@@ -71,6 +71,7 @@
     "lodash": "^4.17.21",
     "mini-css-extract-plugin": "0.11.3",
     "optimize-css-assets-webpack-plugin": "5.0.4",
+    "papaparse": "^5.3.1",
     "pnp-webpack-plugin": "1.6.4",
     "postcss-flexbugs-fixes": "4.2.1",
     "postcss-loader": "3.0.0",
@@ -96,6 +97,7 @@
     "react-scroll-up-button": "^1.6.4",
     "react-select": "^4.3.1",
     "react-sortable-hoc": "^1.11.0",
+    "react-textarea-autosize": "^8.3.3",
     "react-toastify": "5.4.1",
     "reactstrap": "^8.9.0",
     "redux": "^4.0.5",
@@ -176,7 +178,7 @@
       "<rootDir>/src/**/*.{spec,test}.{js,jsx,ts,tsx}"
     ],
     "testEnvironment": "jsdom",
-    "testRunner": "/home/user/cfl-ui/node_modules/jest-circus/runner.js",
+    "testRunner": "/home/user/cfl/cfl-ui/node_modules/jest-circus/runner.js",
     "transform": {
       "^.+\\.(js|jsx|mjs|cjs|ts|tsx)$": "<rootDir>/config/jest/babelTransform.js",
       "^.+\\.css$": "<rootDir>/config/jest/cssTransform.js",

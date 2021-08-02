@@ -32,8 +32,8 @@ export function PersonLanguages({ intl, config, onValueChange }) {
         value={personLanguages.map(lang => ({ label: lang.name, value: lang.name }))}
         onChange={onPersonLanguagesChange('personLanguages')}
         options={LANGUAGE_OPTIONS}
-        classNamePrefix="cfl-select"
-        wrapperClassName="cfl-select-multi"
+        classNamePrefix="default-select"
+        wrapperClassName="default-select-multi"
         isMulti
         theme={selectDefaultTheme}
       />

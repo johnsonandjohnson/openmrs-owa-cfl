@@ -367,7 +367,7 @@ class VmpVaccinationSchedule extends React.Component<IVmpVaccinationScheduleProp
                       onChange={this.onRegimenChange(i)}
                       options={this.regimenOptions(i)}
                       wrapperClassName="flex-1"
-                      classNamePrefix="cfl-select"
+                      classNamePrefix="default-select"
                       theme={selectDefaultTheme}
                     />
                   </div>
@@ -395,7 +395,7 @@ class VmpVaccinationSchedule extends React.Component<IVmpVaccinationScheduleProp
                           onChange={this.onVisitTypeChange(i, j)}
                           options={this.visitTypeOptions(i)}
                           wrapperClassName="flex-1"
-                          classNamePrefix="cfl-select"
+                          classNamePrefix="default-select"
                           theme={selectDefaultTheme}
                         />
                         <InputWithPlaceholder
