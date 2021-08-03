@@ -89,7 +89,7 @@ export class VmpTranslations extends React.Component<IVmpAddressDataProps, IVmpA
 
   componentDidUpdate(prevProps: Readonly<IVmpAddressDataProps>, prevState: Readonly<IVmpAddressDataState>, snapshot?: any) {
     const { intl, config, addressData, locations, loading, success, error } = this.props;
-    if (prevProps.config !== config) {
+    if (prevProps.config !== config || this.isRequestedSettingNonexistent(prevProps, this.props)) {
       this.extractTranslations();
     } else if (prevProps.addressData !== addressData) {
       this.extractAddressDataTranslations();
@@ -110,9 +110,16 @@ export class VmpTranslations extends React.Component<IVmpAddressDataProps, IVmpA
     this.props.searchLocations(EMPTY_STRING);
   };
 
+  isRequestedSettingNonexistent = (prevProps, props) =>
+    prevProps.loading && !props.loading && !!props.isSettingExist && !props.isSettingExist.value;
+
   extractTranslations = () => {
-    if (this.props.setting?.property === VMP_TRANSLATIONS_SETTING_KEY) {
-      let translations = parseJson(this.props.config);
+    if (
+      this.props.setting?.property === VMP_TRANSLATIONS_SETTING_KEY ||
+      this.props.isSettingExist.settingPropertyUrl.includes(VMP_TRANSLATIONS_SETTING_KEY)
+    ) {
+      let translations =
+        !!this.props.isSettingExist && this.props.isSettingExist.value ? parseJson(this.props.config) : DEFAULT_VMP_TRANSLATIONS_SETTING;
       translations = !!translations && !!translations.localization ? translations.localization : [];
       const parsedConfig = {};
       Object.keys(translations).forEach(language => {
@@ -522,6 +529,7 @@ const mapStateToProps = ({ apps, settings, addressData, location }) => ({
   success: settings.success,
   config: settings.setting?.value && settings.setting?.value,
   setting: settings.setting,
+  isSettingExist: settings.isSettingExist,
   loadingAddressData: addressData.loadingAddressData,
   addressData: addressData.downloadableAddressData,
   locations: location.locations,

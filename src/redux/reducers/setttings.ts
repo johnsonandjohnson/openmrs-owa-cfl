@@ -13,11 +13,13 @@ const initialState = {
   errorMessage: null,
   settings: [],
   setting: null,
-  success: false
+  success: false,
+  isSettingExist: { settingPropertyUrl: null, value: false }
 };
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.GET_SETTING):
     case REQUEST(ACTION_TYPES.GET_SETTINGS):
     case REQUEST(ACTION_TYPES.CREATE_SETTING):
       return {
@@ -26,6 +28,7 @@ const reducer = (state = initialState, action) => {
         success: false,
         errorMessage: null
       };
+    case FAILURE(ACTION_TYPES.GET_SETTING):
     case FAILURE(ACTION_TYPES.GET_SETTINGS):
     case FAILURE(ACTION_TYPES.CREATE_SETTING):
       return {
@@ -41,11 +44,13 @@ const reducer = (state = initialState, action) => {
       };
     case SUCCESS(ACTION_TYPES.GET_SETTING):
       const results = action.payload.data.results;
+      const isSettingExist = !!results && results.length > 0;
       return {
         ...state,
         loading: false,
         errorMessage: null,
-        setting: !!results && results.length > 0 ? results[0] : state.setting
+        isSettingExist: { settingPropertyUrl: action.payload.config.url, value: isSettingExist },
+        setting: isSettingExist ? results[0] : state.setting
       };
     case SUCCESS(ACTION_TYPES.CREATE_SETTING):
       return {
