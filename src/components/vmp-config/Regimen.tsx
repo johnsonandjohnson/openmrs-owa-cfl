@@ -61,20 +61,28 @@ export function Regimen({
         />
       </Label>
       {(vaccine || []).map((regimen, i) => {
-        const isInvalid = !regimen.name;
-        const isDuplicateName = isRegimenNameDuplicated(vaccine, regimen, i);
+        const isNameEmpty = !regimen.name;
+        const isNameDuplicate = isRegimenNameDuplicated(vaccine, regimen, i);
+        const isManufacturersEmpty = !regimen.manufacturers.length;
         return (
-          <>
-            <div key={`regimen-${i}`} className="inline-fields">
+          <div key={`regimen-${i}`} className="inline-fields">
+            <div className="flex-1 input-container">
               <InputWithPlaceholder
                 placeholder={intl.formatMessage({ id: 'vmpConfig.regimenName' })}
                 showPlaceholder={!!regimen.name}
                 value={regimen.name}
                 onChange={onVaccineChange(i, 'name', false)}
-                wrapperClassName="flex-1"
                 readOnly={!!regimen.name && savedRegimen.includes(regimen)}
-                className={showValidationErrors && (isInvalid || isDuplicateName) ? 'invalid' : ''}
+                className={showValidationErrors && (isNameEmpty || isNameDuplicate) ? 'invalid' : ''}
               />
+              {showValidationErrors &&
+                (isNameEmpty ? (
+                  <ValidationError message="vmpConfig.error.nameRequired" />
+                ) : (
+                  isNameDuplicate && <ValidationError message="vmpConfig.error.nameDuplicate" />
+                ))}
+            </div>
+            <div className="flex-2 default-select-multi input-container">
               <SortableSelectWithPlaceholder
                 placeholder={intl.formatMessage({ id: 'vmpConfig.manufacturers' })}
                 showPlaceholder={!!regimen.manufacturers && regimen.manufacturers.length}
@@ -85,27 +93,21 @@ export function Regimen({
                   label: manufacturer.name,
                   value: manufacturer.name
                 }))}
-                wrapperClassName="flex-2 default-select-multi"
-                className="default-select"
+                className={showValidationErrors && isManufacturersEmpty ? 'default-select invalid' : 'default-select'}
                 classNamePrefix="default-select"
                 isMulti
                 isOptionSelected={() => false}
                 theme={selectDefaultTheme}
               />
-              <PlusMinusButtons
-                intl={intl}
-                onPlusClick={addRegimen}
-                onMinusClick={() => onRegimenRemove(i)}
-                isPlusButtonVisible={i === vaccine.length - 1}
-              />
+              {showValidationErrors && isManufacturersEmpty && <ValidationError message="vmpConfig.error.regimenManufacturersEmpty" />}
             </div>
-            {showValidationErrors &&
-              (isInvalid ? (
-                <ValidationError message="vmpConfig.error.nameRequired" />
-              ) : (
-                isDuplicateName && <ValidationError message="vmpConfig.error.nameDuplicate" />
-              ))}
-          </>
+            <PlusMinusButtons
+              intl={intl}
+              onPlusClick={addRegimen}
+              onMinusClick={() => onRegimenRemove(i)}
+              isPlusButtonVisible={i === vaccine.length - 1}
+            />
+          </div>
         );
       })}
     </>
