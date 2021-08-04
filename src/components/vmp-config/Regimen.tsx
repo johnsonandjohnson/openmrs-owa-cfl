@@ -62,7 +62,7 @@ export function Regimen({
       </Label>
       {(vaccine || []).map((regimen, i) => {
         const isNameEmpty = !regimen.name;
-        const isNameDuplicate = isRegimenNameDuplicated(vaccine, regimen, i);
+        const isNameDuplicated = isRegimenNameDuplicated(vaccine, regimen, i);
         const isManufacturersEmpty = !regimen.manufacturers.length;
         return (
           <div key={`regimen-${i}`} className="inline-fields">
@@ -73,13 +73,13 @@ export function Regimen({
                 value={regimen.name}
                 onChange={onVaccineChange(i, 'name', false)}
                 readOnly={!!regimen.name && savedRegimen.includes(regimen)}
-                className={showValidationErrors && (isNameEmpty || isNameDuplicate) ? 'invalid' : ''}
+                className={showValidationErrors && (isNameEmpty || isNameDuplicated) ? 'invalid' : ''}
               />
               {showValidationErrors &&
                 (isNameEmpty ? (
                   <ValidationError message="vmpConfig.error.nameRequired" />
                 ) : (
-                  isNameDuplicate && <ValidationError message="vmpConfig.error.nameDuplicate" />
+                  isNameDuplicated && <ValidationError message="vmpConfig.error.nameDuplicate" />
                 ))}
             </div>
             <div className="flex-2 default-select-multi input-container">
