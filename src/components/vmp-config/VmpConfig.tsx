@@ -10,7 +10,7 @@ import { Button, Spinner } from 'reactstrap';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { ROOT_URL } from '../../shared/constants/openmrs';
 import { IVmpConfig } from '../../shared/models/vmp-config';
-import { extractEventValue, getPlaceholder } from '../../shared/util/form-util';
+import { extractEventValue, getPlaceholder, validateRegex } from '../../shared/util/form-util';
 import _ from 'lodash';
 import { successToast, errorToast } from '@bit/soldevelo-omrs.cfl-components.toast-handler';
 import { TEN, ZERO } from 'src/shared/constants/input';
@@ -181,8 +181,8 @@ class VmpConfig extends React.Component<IVmpConfigProps, IVmpConfigState> {
   isFormValid = () => {
     const { manufacturers, vaccine } = this.state.config;
     return (
-      !manufacturers.some(manufacturer => !manufacturer.name) &&
-      !vaccine.some(regimen => !regimen.name) &&
+      !manufacturers.some(manufacturer => !manufacturer.name || !validateRegex(manufacturer.barcodeRegex) || !manufacturer.barcodeRegex) &&
+      !vaccine.some(regimen => !regimen.name || !regimen.manufacturers.length) &&
       !vaccine.some((regimen, idx) => this.isRegimenNameDuplicated(vaccine, regimen, idx))
     );
   };

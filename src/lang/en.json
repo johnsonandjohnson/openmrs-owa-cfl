@@ -48,7 +48,7 @@
     "manufacturers": "Manufacturers",
     "manufacturersTooltip": "Vaccine manufacturers. A regular expression may be defined for the vial barcode format. If a scanned vial barcode matches this regular expression, this manufacturer will be pre-selected in the app.",
     "vaccine": "Regimen",
-    "regimenTooltip": "Dosing regimens that participants can follow. The expected manufacturer for each dose should be listed.",
+    "regimenTooltip": "Dosing regimens that participants can follow. The expected manufacturer for each dose should be listed. All regimens must be configured on the Manage Vaccination Schedule page.",
     "canUseDifferentManufacturers": "Overruling Prescribed Manufacturer",
     "canUseDifferentManufacturersTooltip": "Indicate whether the operator is allowed to administer a vaccine from a different manufacturer than is specified in the regimen.",
     "personLanguages": "Languages",
@@ -85,7 +85,9 @@
       "nameRequired": "Name is a mandatory field",
       "nameDuplicate": "Name already exists",
       "manufacturerAssigned": "To delete this manufacturer, please first remove it from the defined regimen.",
-      "regimenLinked": "This regimen is already in use and cannot be removed."
+      "regimenLinked": "This regimen is already in use and cannot be removed.",
+      "barcodeRegexInvalid": "Invalid Barcode Regex",
+      "regimenManufacturersEmpty": "At least one manufacturer for each dose should be listed"
     },
     "warning": {
       "header": "Warning",

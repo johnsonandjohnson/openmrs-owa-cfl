@@ -93,35 +93,37 @@ export function Manufacturers({ intl, config, showValidationErrors, openModal, c
         />
       </Label>
       {(manufacturers || []).map((manufacturer, i) => {
-        const isInvalid = !manufacturer.name;
+        const isNameEmpty = !manufacturer.name;
+        const isBarcodeRegexInvalid = !validateRegex(manufacturer.barcodeRegex) || !manufacturer.barcodeRegex;
         return (
-          <>
-            <div key={`manufacturers-${i}`} className="inline-fields">
+          <div key={`manufacturers-${i}`} className="inline-fields">
+            <div className="flex-1 input-container">
               <InputWithPlaceholder
                 placeholder={intl.formatMessage({ id: 'vmpConfig.manufacturersName' })}
                 showPlaceholder={!!manufacturer.name}
                 value={manufacturer.name}
                 onChange={onManufacturerChange(i, 'name')}
-                wrapperClassName="flex-1"
-                className={showValidationErrors && isInvalid ? 'invalid' : ''}
+                className={showValidationErrors && isNameEmpty ? 'invalid' : ''}
               />
+              {showValidationErrors && isNameEmpty && <ValidationError message="vmpConfig.error.nameRequired" />}
+            </div>
+            <div className="flex-2 input-container">
               <InputWithPlaceholder
                 placeholder={intl.formatMessage({ id: 'vmpConfig.barcodeRegex' })}
                 showPlaceholder={!!manufacturer.barcodeRegex}
                 value={manufacturer.barcodeRegex}
                 onChange={onManufacturerChange(i, 'barcodeRegex')}
-                wrapperClassName="flex-2"
-                className={validateRegex(manufacturer.barcodeRegex) ? '' : 'invalid'}
+                className={showValidationErrors && isBarcodeRegexInvalid ? 'invalid' : ''}
               />
-              <PlusMinusButtons
-                intl={intl}
-                onPlusClick={addManufacturer}
-                onMinusClick={() => onManufacturerRemove(i)}
-                isPlusButtonVisible={i === manufacturers.length - 1}
-              />
+              {showValidationErrors && isBarcodeRegexInvalid && <ValidationError message="vmpConfig.error.barcodeRegexInvalid" />}
             </div>
-            {showValidationErrors && isInvalid && <ValidationError message="vmpConfig.error.nameRequired" />}
-          </>
+            <PlusMinusButtons
+              intl={intl}
+              onPlusClick={addManufacturer}
+              onMinusClick={() => onManufacturerRemove(i)}
+              isPlusButtonVisible={i === manufacturers.length - 1}
+            />
+          </div>
         );
       })}
     </>

@@ -1,3 +1,7 @@
+:root {
+  --error-border: 1px red solid;
+}
+
 #app .register-patient,
 #app .conditions,
 #app .condition,
@@ -13,7 +17,7 @@
     min-height: calc(4rem + 2px);
     margin-right: 15px;
     &.invalid {
-      border: 1px red solid !important;
+      border: var(--error-border) !important;
     }
     text-align: center;
     text-align-last: center;
@@ -70,6 +74,9 @@
       &[class*='--menu-is-open'] {
         box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6) !important;
       }
+    }
+    &.invalid div[class*='-control'] {
+      border: var(--error-border);
     }
   }
   div[class*='__value-container']:not([class*='filter-select']) {
