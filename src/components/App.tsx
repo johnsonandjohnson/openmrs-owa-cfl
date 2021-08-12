@@ -6,6 +6,7 @@ import { getSession } from '../redux/reducers/session';
 import { TinyButton as ScrollUpButton } from 'react-scroll-up-button';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-3/dist/css/bootstrap.min.css';
+import 'bootstrap-icons/font/bootstrap-icons.css';
 import '../assets/css/font-awesome-3.0.2.min.css';
 import { getApps } from '../redux/reducers/apps';
 import '@openmrs/style-referenceapplication/lib/referenceapplication.css';

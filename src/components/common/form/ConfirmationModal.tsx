@@ -6,11 +6,11 @@ import './Modal.scss';
 export interface IConfirmationModalProps {
   header: {
     id: string;
-    values: {};
+    values?: {};
   };
   body: {
     id: string;
-    values: {};
+    values?: {};
   };
   onYes: () => void;
   onNo: () => void;

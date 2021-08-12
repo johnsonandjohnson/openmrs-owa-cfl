@@ -1,0 +1,50 @@
+.default-time-picker.ant-picker {
+  padding-top: 0;
+  padding-bottom: 0;
+  border: var(--input-border);
+  border-radius: 0;
+  box-shadow: var(--input-box-shadow);
+
+  &.ant-picker-focused {
+    box-shadow: var(--input-box-shadow), var(--input-focused-box-shadow);
+  }
+
+  .ant-picker-input input {
+    min-height: var(--input-min-height) !important;
+    margin-right: 0 !important;
+    min-width: 120px;
+    color: var(--main-color);
+  }
+}
+
+.ant-picker-dropdown {
+  .ant-picker-time-panel-column > li.ant-picker-time-panel-cell .ant-picker-time-panel-cell-inner {
+    color: var(--main-color);
+
+    &:hover {
+      background-color: var(--dropdown-option-hover-background-color);
+    }
+  }
+
+  .ant-picker-time-panel-column > li.ant-picker-time-panel-cell-selected .ant-picker-time-panel-cell-inner {
+    color: white;
+    background: var(--dropdown-option-selected-background-color);
+
+    &:hover {
+      color: var(--main-color);
+    }
+  }
+
+  .ant-picker-footer {
+    .ant-picker-now a {
+      color: var(--button-main-background-color);
+    }
+
+    .ant-picker-ok button {
+      color: white;
+      background-color: var(--button-main-background-color);
+      text-shadow: none;
+      border-color: var(--button-border-color);
+    }
+  }
+}

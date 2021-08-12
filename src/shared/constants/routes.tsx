@@ -10,8 +10,14 @@ import VmpConfig from '../../components/vmp-config/VmpConfig';
 import VmpVaccinationSchedule from '../../components/vmp-vaccination-schedule/VmpVaccinationSchedule';
 import VmpAddressData from 'src/components/vmp-address-data/VmpAddressData';
 import VmpTranslations from 'src/components/vmp-translations/VmpTranslations';
+import CountrySettingsMap from 'src/components/country-settings-map/CountrySettingsMap';
 
 export const routeConfig = [
+  {
+    path: '/country-settings-map',
+    component: CountrySettingsMap,
+    breadcrumb: 'countrySettingsMap.title'
+  },
   {
     path: '/conditions/:patientUuid/manage',
     component: Condition,

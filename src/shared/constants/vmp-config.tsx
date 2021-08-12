@@ -1,3 +1,5 @@
+import { getData } from 'country-list';
+
 const DEFAULT_OPERATOR_CREDENTIALS_RETENTION_TIME = 604800000;
 const DEFAULT_OPERATOR_OFFLINE_SESSION_TIMEOUT = 43200000;
 export const SETTING_KEY = 'biometric.api.config.main';
@@ -38,3 +40,7 @@ export const DEFAULT_VMP_CONFIG = {
   addressFields: {}
 };
 export const EMPTY_COUNTRY = { fields: [{}] };
+export const COUNTRY_OPTIONS = getData()
+  .map(country => country.name)
+  .sort()
+  .map(countryName => ({ label: countryName, value: countryName }));
