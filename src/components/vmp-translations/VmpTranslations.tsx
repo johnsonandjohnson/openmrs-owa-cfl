@@ -60,7 +60,6 @@ export interface IVmpAddressDataState {
   phraseFilterValue: any;
   languageFilterValue: any;
   isDirty: boolean;
-  emptyTranslation: {};
 }
 
 export class VmpTranslations extends React.Component<IVmpAddressDataProps, IVmpAddressDataState> {
@@ -81,8 +80,7 @@ export class VmpTranslations extends React.Component<IVmpAddressDataProps, IVmpA
     isAddLanguageModalOpen: false,
     phraseFilterValue: EMPTY_STRING,
     languageFilterValue: null,
-    isDirty: false,
-    emptyTranslation: {}
+    isDirty: false
   };
 
   componentDidMount() {
@@ -124,11 +122,14 @@ export class VmpTranslations extends React.Component<IVmpAddressDataProps, IVmpA
         !!this.props.isSettingExist && this.props.isSettingExist.value ? parseJson(this.props.config) : DEFAULT_VMP_TRANSLATIONS_SETTING;
       translations = !!translations && !!translations.localization ? translations.localization : [];
       const translationsTableLanguages = Object.keys(translations).sort();
-      const emptyTranslation = this.emptyTranslation(translationsTableLanguages);
       const parsedConfig = {};
       Object.keys(translations).forEach(language => {
         Object.keys(translations[language]).forEach(key => {
-          parsedConfig[key] = { ...emptyTranslation, ...parsedConfig[key], [language]: translations[language][key] };
+          parsedConfig[key] = {
+            ...this.emptyTranslation(translationsTableLanguages),
+            ...parsedConfig[key],
+            [language]: translations[language][key]
+          };
         });
       });
       this.setState(
@@ -137,8 +138,7 @@ export class VmpTranslations extends React.Component<IVmpAddressDataProps, IVmpA
           downloadableTranslations: _.cloneDeep(parsedConfig),
           translationsTableLanguages,
           vmpTranslationsSetting: this.props.setting,
-          isDirty: false,
-          emptyTranslation
+          isDirty: false
         },
         () => {
           this.props.getSettingByQuery(VMP_CONFIG_SETTING_KEY);
@@ -160,7 +160,7 @@ export class VmpTranslations extends React.Component<IVmpAddressDataProps, IVmpA
   };
 
   extractAddressDataTranslations = () => {
-    const { translations, emptyTranslation } = this.state;
+    const { translations, translationsTableLanguages } = this.state;
     const distinctAddressFields = [];
     if (Array.isArray(this.props.addressData)) {
       this.props.addressData.forEach(address =>
@@ -172,13 +172,13 @@ export class VmpTranslations extends React.Component<IVmpAddressDataProps, IVmpA
       );
       distinctAddressFields
         .filter(addressField => !translations[addressField])
-        .forEach(addressField => (translations[addressField] = emptyTranslation));
+        .forEach(addressField => (translations[addressField] = this.emptyTranslation(translationsTableLanguages)));
       this.setState({ translations, downloadableTranslations: _.cloneDeep(translations) });
     }
   };
 
   extractConfigTranslations = () => {
-    const { translations, emptyTranslation } = this.state;
+    const { translations, translationsTableLanguages } = this.state;
     const vmpConfigTranslations = [];
     const config = parseJson(this.props.config) as IVmpConfig;
     config.vaccine.forEach(
@@ -199,17 +199,17 @@ export class VmpTranslations extends React.Component<IVmpAddressDataProps, IVmpA
     );
     vmpConfigTranslations
       .filter(translation => !translations[translation])
-      .forEach(translation => (translations[translation] = emptyTranslation));
+      .forEach(translation => (translations[translation] = this.emptyTranslation(translationsTableLanguages)));
     this.setState({ translations, downloadableTranslations: _.cloneDeep(translations) });
   };
 
   extractLocationsTranslations = () => {
-    const { translations, emptyTranslation } = this.state;
+    const { translations, translationsTableLanguages } = this.state;
     const { locations } = this.props;
     if (Array.isArray(locations)) {
       locations
         .filter(location => !!location.display && !translations[location.display])
-        .forEach(location => (translations[location.display] = emptyTranslation));
+        .forEach(location => (translations[location.display] = this.emptyTranslation(translationsTableLanguages)));
       this.setState({ translations, downloadableTranslations: _.cloneDeep(translations) });
     }
   };
