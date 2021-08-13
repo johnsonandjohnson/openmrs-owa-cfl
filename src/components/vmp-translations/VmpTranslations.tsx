@@ -395,7 +395,6 @@ export class VmpTranslations extends React.Component<IVmpAddressDataProps, IVmpA
           intl={intl}
           value={phraseFilterValue}
           placeholderId="vmpTranslations.table.filter.phrase"
-          wrapperClassName="col p-0"
           onChange={phrase => this.setState({ phraseFilterValue: extractEventValue(phrase) })}
         />
         <FilterSelect
@@ -403,7 +402,6 @@ export class VmpTranslations extends React.Component<IVmpAddressDataProps, IVmpA
           value={LANGUAGE_OPTIONS.find(opt => opt.value === languageFilterValue) || null}
           options={[LANGUAGE_FILTER_EMPTY_VALUE, ...LANGUAGE_OPTIONS.filter(lang => translationsTableLanguages.includes(lang.value))]}
           placeholderId="vmpTranslations.table.filter.language"
-          wrapperClassName="col p-0"
           onChange={lang => this.setState({ languageFilterValue: lang.value })}
         />
       </div>
