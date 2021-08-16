@@ -1,6 +1,6 @@
 import React from 'react';
 import { TimePicker as ReactTimePicker } from 'antd';
-import { DEFAULT_TIME_FORMAT, EMPTY_STRING } from 'src/shared/constants/input';
+import { DEFAULT_TIME_FORMAT, EMPTY_STRING } from '../../../shared/constants/input';
 import 'antd/dist/antd.min.css';
 import './TimePicker.scss';
 import '../../Inputs.scss';

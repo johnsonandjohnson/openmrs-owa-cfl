@@ -5,7 +5,7 @@ import { Button } from 'reactstrap';
 export default function ExpandableSection({
   innerKey = null,
   headerComponent,
-  disabledHeaderComponent,
+  disabledHeaderComponent = headerComponent,
   bodyComponent,
   isDeletable = false,
   onDelete = null,
