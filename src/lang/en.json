@@ -406,9 +406,10 @@
       "addNewCountry": "Add new Country"
     },
     "confirmationModal": {
-      "header": "Submit Country Settings Map",
-      "body": "Are you sure you want to submit Country Settings Map?"
-    }
+      "header": "Submit Notification Configuration",
+      "body": "Are you sure you want to submit Notification Configuration?"
+    },
+    "success": "Notification Configuration submitted successfully!"
   },
   "common": {
     "yes": "Yes",
