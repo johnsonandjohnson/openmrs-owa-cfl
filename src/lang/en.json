@@ -377,8 +377,8 @@
     "confirm": "Confirm",
     "invalidPhoneNumber": "Please provide a valid phone number including the country code. Example: +1 555 555 1234"
   },
-  "countrySettingsMap": {
-    "title": "Manage Country Settings Map",
+  "notificationConfiguration": {
+    "title": "Manage Notification Configuration",
     "configureSettings": "Configure Settings",
     "defaultCountry": "Default Country",
     "country": "Country",

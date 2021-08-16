@@ -17,7 +17,8 @@ import TimePicker from '../common/time-picker/TimePicker';
 import moment from 'moment';
 import { PlusMinusButtons } from '../common/form/PlusMinusButtons';
 import { ConfirmationModal } from '../common/form/ConfirmationModal';
-import './CountrySettingsMap.scss';
+import ValidationError from '../common/form/ValidationError';
+import './NotificationConfiguration.scss';
 import '../Inputs.scss';
 import { COUNTRY_OPTIONS } from 'src/shared/constants/vmp-config';
 import {
@@ -36,23 +37,23 @@ import {
   CALL_PROPERTY_NAME,
   PERFORM_CALL_UPON_REGISTRATION_PROPERTY_NAME,
   SEND_CALL_REMINDER_PROPERTY_NAME
-} from 'src/shared/constants/country-settings-map';
+} from 'src/shared/constants/notification-configuration';
 import { DEFAULT_TIME_FORMAT, ONE, TEN, ZERO } from 'src/shared/constants/input';
 import { ROOT_URL } from 'src/shared/constants/openmrs';
 
-interface ICountrySettingsMapProps extends StateProps, DispatchProps, RouteComponentProps {
+interface INotificationConfigurationProps extends StateProps, DispatchProps, RouteComponentProps {
   intl: any;
 }
 
-interface ICountrySettingsMapState {
-  countrySettingsMap: any[];
+interface INotificationConfigurationState {
+  notificationConfiguration: any[];
   isAllSectionsExpanded: boolean;
   isConfirmationModalOpen: boolean;
 }
 
-class CountrySettingsMap extends React.Component<ICountrySettingsMapProps, ICountrySettingsMapState> {
+class NotificationConfiguration extends React.Component<INotificationConfigurationProps, INotificationConfigurationState> {
   state = {
-    countrySettingsMap: [],
+    notificationConfiguration: [],
     isAllSectionsExpanded: false,
     isConfirmationModalOpen: false
   };
@@ -63,13 +64,17 @@ class CountrySettingsMap extends React.Component<ICountrySettingsMapProps, ICoun
     this.props.getSmsProviders();
   }
 
-  componentDidUpdate(prevProps: Readonly<ICountrySettingsMapProps>, prevState: Readonly<ICountrySettingsMapState>, snapshot?: any) {
+  componentDidUpdate(
+    prevProps: Readonly<INotificationConfigurationProps>,
+    prevState: Readonly<INotificationConfigurationState>,
+    snapshot?: any
+  ) {
     const { intl, config, loading, success, error } = this.props;
     if (prevProps.config !== config) {
       this.extractConfigData();
     }
     if (!prevProps.success && success) {
-      successToast(intl.formatMessage({ id: 'countrySettingsMap.success' }));
+      successToast(intl.formatMessage({ id: 'notificationConfiguration.success' }));
     } else if (prevProps.error !== this.props.error && !loading) {
       errorToast(error);
     }
@@ -78,7 +83,7 @@ class CountrySettingsMap extends React.Component<ICountrySettingsMapProps, ICoun
   extractConfigData = () => {
     let config = parseJson(this.props.config);
     config = !!config[ZERO] ? config[ZERO] : _.cloneDeep(DEFAULT_COUNTRY_SETTINGS_MAP);
-    const countrySettingsMap = [];
+    const notificationConfiguration = [];
     Object.keys(config).forEach(configurationName => {
       const configuration = !!configurationName ? config[configurationName] : null;
       if (!!configuration) {
@@ -105,19 +110,21 @@ class CountrySettingsMap extends React.Component<ICountrySettingsMapProps, ICoun
         ) {
           configuration[VISIT_REMINDER_PROPERTY_NAME] = [ZERO];
         }
-        countrySettingsMap.push(configuration);
+        notificationConfiguration.push(configuration);
       }
     });
-    this.setState({ countrySettingsMap });
+    this.setState({ notificationConfiguration });
   };
+
+  isSaveDisabled = () => this.props.loading || this.state.notificationConfiguration.some(configuration => !configuration.name);
 
   onSave = () => this.setState({ isConfirmationModalOpen: true });
 
   save = () => {
     const { setting } = this.props;
-    const { countrySettingsMap } = this.state;
+    const { notificationConfiguration } = this.state;
     const settingValue = [{}];
-    countrySettingsMap.forEach(configuration => {
+    notificationConfiguration.forEach(configuration => {
       const { name, ...configurationProps } = configuration;
       if (
         configurationProps.hasOwnProperty(NOTIFICATION_TIME_WINDOW_FROM_PROPERTY_NAME) &&
@@ -162,8 +169,8 @@ class CountrySettingsMap extends React.Component<ICountrySettingsMapProps, ICoun
 
   confirmationModal = () => (
     <ConfirmationModal
-      header={{ id: 'countrySettingsMap.confirmationModal.body' }}
-      body={{ id: 'countrySettingsMap.confirmationModal.body' }}
+      header={{ id: 'notificationConfiguration.confirmationModal.body' }}
+      body={{ id: 'notificationConfiguration.confirmationModal.body' }}
       onYes={() => {
         this.save();
         this.closeModal();
@@ -174,22 +181,22 @@ class CountrySettingsMap extends React.Component<ICountrySettingsMapProps, ICoun
   );
 
   onChange = (configurationIdx, propertyName, isSelect = false) => event => {
-    const { countrySettingsMap } = this.state;
-    const configuration = countrySettingsMap[configurationIdx];
+    const { notificationConfiguration } = this.state;
+    const configuration = notificationConfiguration[configurationIdx];
     const value = isSelect ? event.value : extractEventValue(event);
     if (!configuration) {
-      countrySettingsMap.push({ [CONFIGURATION_NAME_PROPERTY_NAME]: configuration[CONFIGURATION_NAME_PROPERTY_NAME] });
+      notificationConfiguration.push({ [CONFIGURATION_NAME_PROPERTY_NAME]: configuration[CONFIGURATION_NAME_PROPERTY_NAME] });
     }
     configuration[propertyName] = value;
-    this.setState({ countrySettingsMap });
+    this.setState({ notificationConfiguration });
   };
 
   selectTextOption = value => ({ label: value, value });
 
   smsSettings = configurationIdx => {
     const { intl, smsProviders } = this.props;
-    const { countrySettingsMap } = this.state;
-    const configuration = countrySettingsMap[configurationIdx];
+    const { notificationConfiguration } = this.state;
+    const configuration = notificationConfiguration[configurationIdx];
     const smsProviderOptions = smsProviders.map(provider => ({ label: provider.name, value: provider.name }));
     const smsProvider =
       !!configuration && !!configuration[SMS_PROPERTY_NAME] ? this.selectTextOption(configuration[SMS_PROPERTY_NAME]) : null;
@@ -203,12 +210,12 @@ class CountrySettingsMap extends React.Component<ICountrySettingsMapProps, ICoun
       <>
         <div className="py-3">
           <Label>
-            <FormattedMessage id="countrySettingsMap.smsSettings" />
+            <FormattedMessage id="notificationConfiguration.smsSettings" />
           </Label>
           <div className="inline-fields">
             <div className="col-6 pl-0">
               <SelectWithPlaceholder
-                placeholder={intl.formatMessage({ id: 'countrySettingsMap.provider' })}
+                placeholder={intl.formatMessage({ id: 'notificationConfiguration.provider' })}
                 showPlaceholder={!!smsProvider}
                 value={smsProvider}
                 onChange={this.onChange(configurationIdx, SMS_PROPERTY_NAME, true)}
@@ -221,7 +228,7 @@ class CountrySettingsMap extends React.Component<ICountrySettingsMapProps, ICoun
             <div className="col-6 px-5">
               <Switch
                 intl={intl}
-                labelTranslationId="countrySettingsMap.uponRegistration"
+                labelTranslationId="notificationConfiguration.uponRegistration"
                 checked={shouldSendSmsUponRegistration}
                 checkedTranslationId="common.switch.on"
                 uncheckedTranslationId="common.switch.off"
@@ -229,7 +236,7 @@ class CountrySettingsMap extends React.Component<ICountrySettingsMapProps, ICoun
               />
               <Switch
                 intl={intl}
-                labelTranslationId="countrySettingsMap.visitReminder.switch"
+                labelTranslationId="notificationConfiguration.visitReminder.switch"
                 checked={shouldSendSmsReminder}
                 checkedTranslationId="common.switch.on"
                 uncheckedTranslationId="common.switch.off"
@@ -245,8 +252,8 @@ class CountrySettingsMap extends React.Component<ICountrySettingsMapProps, ICoun
 
   callSettings = configurationIdx => {
     const { intl, callflowsProviders } = this.props;
-    const { countrySettingsMap } = this.state;
-    const configuration = countrySettingsMap[configurationIdx];
+    const { notificationConfiguration } = this.state;
+    const configuration = notificationConfiguration[configurationIdx];
     const callflowsProviderOptions = callflowsProviders.map(provider => ({ label: provider.name, value: provider.name }));
     const callflowsProvider =
       !!configuration && !!configuration[CALL_PROPERTY_NAME] ? this.selectTextOption(configuration[CALL_PROPERTY_NAME]) : null;
@@ -260,12 +267,12 @@ class CountrySettingsMap extends React.Component<ICountrySettingsMapProps, ICoun
       <>
         <div className="py-3">
           <Label>
-            <FormattedMessage id="countrySettingsMap.callSettings" />
+            <FormattedMessage id="notificationConfiguration.callSettings" />
           </Label>
           <div className="inline-fields">
             <div className="col-6 pl-0">
               <SelectWithPlaceholder
-                placeholder={intl.formatMessage({ id: 'countrySettingsMap.provider' })}
+                placeholder={intl.formatMessage({ id: 'notificationConfiguration.provider' })}
                 showPlaceholder={!!callflowsProvider}
                 value={callflowsProvider}
                 onChange={this.onChange(configurationIdx, CALL_PROPERTY_NAME, true)}
@@ -278,7 +285,7 @@ class CountrySettingsMap extends React.Component<ICountrySettingsMapProps, ICoun
             <div className="col-6 px-5">
               <Switch
                 intl={intl}
-                labelTranslationId="countrySettingsMap.uponRegistration"
+                labelTranslationId="notificationConfiguration.uponRegistration"
                 checked={shouldPerformCallUponRegistration}
                 checkedTranslationId="common.switch.on"
                 uncheckedTranslationId="common.switch.off"
@@ -286,7 +293,7 @@ class CountrySettingsMap extends React.Component<ICountrySettingsMapProps, ICoun
               />
               <Switch
                 intl={intl}
-                labelTranslationId="countrySettingsMap.visitReminder.switch"
+                labelTranslationId="notificationConfiguration.visitReminder.switch"
                 checked={shouldSendCallReminder}
                 checkedTranslationId="common.switch.on"
                 uncheckedTranslationId="common.switch.off"
@@ -302,8 +309,8 @@ class CountrySettingsMap extends React.Component<ICountrySettingsMapProps, ICoun
 
   notificationWindowAndBestContactTime = configurationIdx => {
     const { intl } = this.props;
-    const { countrySettingsMap } = this.state;
-    const configuration = countrySettingsMap[configurationIdx];
+    const { notificationConfiguration } = this.state;
+    const configuration = notificationConfiguration[configurationIdx];
     const notificationTimeWindowFrom =
       !!configuration && !!configuration[NOTIFICATION_TIME_WINDOW_FROM_PROPERTY_NAME]
         ? configuration[NOTIFICATION_TIME_WINDOW_FROM_PROPERTY_NAME]
@@ -318,17 +325,17 @@ class CountrySettingsMap extends React.Component<ICountrySettingsMapProps, ICoun
       <div className="inline-fields py-3">
         <div className="col-6 pl-0">
           <Label>
-            <FormattedMessage id="countrySettingsMap.allowedNotificationWindow.label" />
+            <FormattedMessage id="notificationConfiguration.allowedNotificationWindow.label" />
           </Label>
           <div className="inline-fields">
             <TimePicker
-              placeholder={intl.formatMessage({ id: 'countrySettingsMap.allowedNotificationWindow.from' })}
+              placeholder={intl.formatMessage({ id: 'notificationConfiguration.allowedNotificationWindow.from' })}
               showPlaceholder={!!notificationTimeWindowFrom}
               value={notificationTimeWindowFrom}
               onChange={this.onChange(configurationIdx, NOTIFICATION_TIME_WINDOW_FROM_PROPERTY_NAME)}
             />
             <TimePicker
-              placeholder={intl.formatMessage({ id: 'countrySettingsMap.allowedNotificationWindow.to' })}
+              placeholder={intl.formatMessage({ id: 'notificationConfiguration.allowedNotificationWindow.to' })}
               showPlaceholder={!!notificationTimeWindowTo}
               value={notificationTimeWindowTo}
               onChange={this.onChange(configurationIdx, NOTIFICATION_TIME_WINDOW_TO_PROPERTY_NAME)}
@@ -337,10 +344,10 @@ class CountrySettingsMap extends React.Component<ICountrySettingsMapProps, ICoun
         </div>
         <div className="col-6 pl-5">
           <Label>
-            <FormattedMessage id="countrySettingsMap.bestContactTime.label" />
+            <FormattedMessage id="notificationConfiguration.bestContactTime.label" />
           </Label>
           <TimePicker
-            placeholder={intl.formatMessage({ id: 'countrySettingsMap.bestContactTime.placeholder' })}
+            placeholder={intl.formatMessage({ id: 'notificationConfiguration.bestContactTime.placeholder' })}
             showPlaceholder={!!bestContactTime}
             value={bestContactTime}
             onChange={this.onChange(configurationIdx, BEST_CONTACT_TIME_PROPERTY_NAME)}
@@ -351,46 +358,46 @@ class CountrySettingsMap extends React.Component<ICountrySettingsMapProps, ICoun
   };
 
   onVisitReminderChange = (configurationIdx, reminderIdx) => event => {
-    const { countrySettingsMap } = this.state;
+    const { notificationConfiguration } = this.state;
     const extractedEventValue = extractEventValue(event);
     const value = !!extractedEventValue ? Number.parseInt(extractedEventValue, TEN) : ZERO;
     if (Number.isInteger(value) && value >= ZERO) {
-      countrySettingsMap[configurationIdx][VISIT_REMINDER_PROPERTY_NAME][reminderIdx] = value;
-      this.setState({ countrySettingsMap });
+      notificationConfiguration[configurationIdx][VISIT_REMINDER_PROPERTY_NAME][reminderIdx] = value;
+      this.setState({ notificationConfiguration });
     }
   };
 
   addVisitReminder = configurationIdx => {
-    const { countrySettingsMap } = this.state;
-    countrySettingsMap[configurationIdx][VISIT_REMINDER_PROPERTY_NAME].push(ZERO);
-    this.setState({ countrySettingsMap });
+    const { notificationConfiguration } = this.state;
+    notificationConfiguration[configurationIdx][VISIT_REMINDER_PROPERTY_NAME].push(ZERO);
+    this.setState({ notificationConfiguration });
   };
 
   removeVisitReminder = (configurationIdx, reminderIdx) => {
-    const { countrySettingsMap } = this.state;
-    const configuration = countrySettingsMap[configurationIdx];
+    const { notificationConfiguration } = this.state;
+    const configuration = notificationConfiguration[configurationIdx];
     configuration[VISIT_REMINDER_PROPERTY_NAME].splice(reminderIdx, ONE);
     if (!configuration[VISIT_REMINDER_PROPERTY_NAME].length) {
       configuration[VISIT_REMINDER_PROPERTY_NAME].push(ZERO);
     }
-    this.setState({ countrySettingsMap });
+    this.setState({ notificationConfiguration });
   };
 
   visitReminder = configurationIdx => {
     const { intl } = this.props;
-    const { countrySettingsMap } = this.state;
-    const configuration = countrySettingsMap[configurationIdx];
+    const { notificationConfiguration } = this.state;
+    const configuration = notificationConfiguration[configurationIdx];
     const visitReminders =
       !!configuration && !!configuration[VISIT_REMINDER_PROPERTY_NAME] ? configuration[VISIT_REMINDER_PROPERTY_NAME] : [ZERO];
     return (
       <div className="pt-5">
         <Label>
-          <FormattedMessage id="countrySettingsMap.visitReminder.label" />
+          <FormattedMessage id="notificationConfiguration.visitReminder.label" />
         </Label>
         {visitReminders.map((reminder, i) => (
           <div className="inline-fields py-1" key={`${configuration}-${configurationIdx}-reminder-${i}`}>
             <InputWithPlaceholder
-              placeholder={intl.formatMessage({ id: 'countrySettingsMap.visitReminder.placeholder' })}
+              placeholder={intl.formatMessage({ id: 'notificationConfiguration.visitReminder.placeholder' })}
               showPlaceholder
               value={reminder}
               onChange={this.onVisitReminderChange(configurationIdx, i)}
@@ -411,53 +418,56 @@ class CountrySettingsMap extends React.Component<ICountrySettingsMapProps, ICoun
   };
 
   onCountryChange = configurationIdx => event => {
-    const { countrySettingsMap } = this.state;
-    const configuration = countrySettingsMap[configurationIdx];
+    const { notificationConfiguration } = this.state;
+    const configuration = notificationConfiguration[configurationIdx];
     configuration[CONFIGURATION_NAME_PROPERTY_NAME] = event.value;
-    this.setState({ countrySettingsMap });
+    this.setState({ notificationConfiguration });
   };
 
   addNewCountryConfiguration = () => {
-    const { countrySettingsMap } = this.state;
-    countrySettingsMap.push(_.cloneDeep(DEFAULT_COUNTRY_CONFIGURATION));
-    this.setState({ countrySettingsMap });
+    const { notificationConfiguration } = this.state;
+    notificationConfiguration.push(_.cloneDeep(DEFAULT_COUNTRY_CONFIGURATION));
+    this.setState({ notificationConfiguration });
   };
 
   removeCountryConfiguration = configurationIdx => {
-    const { countrySettingsMap } = this.state;
-    countrySettingsMap.splice(configurationIdx, ONE);
-    this.setState({ countrySettingsMap });
+    const { notificationConfiguration } = this.state;
+    notificationConfiguration.splice(configurationIdx, ONE);
+    this.setState({ notificationConfiguration });
   };
 
   countryConfiguration = (configuration, configurationIdx) => {
     const { intl } = this.props;
-    const { isAllSectionsExpanded, countrySettingsMap } = this.state;
+    const { isAllSectionsExpanded, notificationConfiguration } = this.state;
     const configurationName = configuration[CONFIGURATION_NAME_PROPERTY_NAME];
     const isDefaultCountryConfiguration = configurationName === DEFAULT_COUNTRY_CONFIGURATION_NAME;
     const countryOptions = COUNTRY_OPTIONS.filter(
-      country => !countrySettingsMap.map(configuration => configuration.name).includes(country.value)
+      country => !notificationConfiguration.map(configuration => configuration.name).includes(country.value)
     );
     const headerComponent = isDefaultCountryConfiguration ? (
       <Label>
-        <FormattedMessage id="countrySettingsMap.defaultCountry" />
+        <FormattedMessage id="notificationConfiguration.defaultCountry" />
       </Label>
     ) : (
-      <SelectWithPlaceholder
-        placeholder={intl.formatMessage({ id: 'countrySettingsMap.country' })}
-        showPlaceholder={!!configurationName}
-        value={!!configurationName && COUNTRY_OPTIONS.find(countryName => countryName.value === configurationName)}
-        onChange={this.onCountryChange(configurationIdx)}
-        options={countryOptions}
-        wrapperClassName="flex-1"
-        classNamePrefix="default-select"
-        theme={selectDefaultTheme}
-      />
+      <div className="flex-1">
+        <SelectWithPlaceholder
+          placeholder={intl.formatMessage({ id: 'notificationConfiguration.country' })}
+          showPlaceholder={!!configurationName}
+          value={!!configurationName && COUNTRY_OPTIONS.find(countryName => countryName.value === configurationName)}
+          onChange={this.onCountryChange(configurationIdx)}
+          options={countryOptions}
+          wrapperClassName={!configurationName ? 'invalid' : ''}
+          classNamePrefix="default-select"
+          theme={selectDefaultTheme}
+        />
+        {!configurationName && <ValidationError message="common.error.required" />}
+      </div>
     );
     const disabledHeaderComponent = isDefaultCountryConfiguration ? (
       headerComponent
     ) : (
       <InputWithPlaceholder
-        placeholder={intl.formatMessage({ id: 'countrySettingsMap.country' })}
+        placeholder={intl.formatMessage({ id: 'notificationConfiguration.country' })}
         showPlaceholder={!!configurationName}
         value={!!configurationName ? configurationName : ''}
         wrapperClassName="flex-1"
@@ -487,19 +497,19 @@ class CountrySettingsMap extends React.Component<ICountrySettingsMapProps, ICoun
     const { isAllSectionsExpanded } = this.state;
     return (
       <Button onClick={() => this.setState(state => ({ isAllSectionsExpanded: !state.isAllSectionsExpanded }))} className="cancel">
-        <FormattedMessage id={`countrySettingsMap.button.${isAllSectionsExpanded ? 'collapse' : 'expand'}`} />
+        <FormattedMessage id={`notificationConfiguration.button.${isAllSectionsExpanded ? 'collapse' : 'expand'}`} />
       </Button>
     );
   };
 
   render() {
     const { appError, appLoading, loading } = this.props;
-    const { countrySettingsMap } = this.state;
+    const { notificationConfiguration } = this.state;
     return (
       <div className="country-settings-map">
         {this.confirmationModal()}
         <h2>
-          <FormattedMessage id="countrySettingsMap.title" />
+          <FormattedMessage id="notificationConfiguration.title" />
         </h2>
         <div className="error">{appError}</div>
         <div className="inner-content">
@@ -510,14 +520,14 @@ class CountrySettingsMap extends React.Component<ICountrySettingsMapProps, ICoun
               <div className="section">
                 <div className="title-section">
                   <h2>
-                    <FormattedMessage id="countrySettingsMap.configureSettings" />
+                    <FormattedMessage id="notificationConfiguration.configureSettings" />
                   </h2>
                   {this.expandOrCollapseAllButton()}
                 </div>
-                {countrySettingsMap.map((configuration, idx) => this.countryConfiguration(configuration, idx))}
+                {notificationConfiguration.map((configuration, idx) => this.countryConfiguration(configuration, idx))}
                 <div className="d-flex justify-content-end mt-4 mb-2">
                   <Button className="btn btn-primary" onClick={this.addNewCountryConfiguration}>
-                    <FormattedMessage id="countrySettingsMap.button.addNewCountry" />
+                    <FormattedMessage id="notificationConfiguration.button.addNewCountry" />
                   </Button>
                 </div>
               </div>
@@ -528,7 +538,7 @@ class CountrySettingsMap extends React.Component<ICountrySettingsMapProps, ICoun
                   </Button>
                 </div>
                 <div className="d-inline pull-right confirm-button-container">
-                  <Button className="save" onClick={this.onSave} disabled={loading}>
+                  <Button className="save" onClick={this.onSave} disabled={this.isSaveDisabled()}>
                     <FormattedMessage id="vmpConfig.save" />
                   </Button>
                 </div>
@@ -559,4 +569,4 @@ const mapDispatchToProps = { getSettingByQuery, createSetting, updateSetting, ge
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
 
-export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(withRouter(CountrySettingsMap)));
+export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(withRouter(NotificationConfiguration)));
