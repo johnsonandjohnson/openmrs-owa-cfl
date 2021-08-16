@@ -75,6 +75,7 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
     }
     if (!prevProps.success && success) {
       successToast(intl.formatMessage({ id: 'notificationConfiguration.success' }));
+      this.setState({ isAllSectionsExpanded: false });
     } else if (prevProps.error !== this.props.error && !loading) {
       errorToast(error);
     }
