@@ -507,7 +507,7 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
     const { appError, appLoading, loading } = this.props;
     const { notificationConfiguration } = this.state;
     return (
-      <div className="country-settings-map">
+      <div className="notification-configuration">
         {this.confirmationModal()}
         <h2>
           <FormattedMessage id="notificationConfiguration.title" />
