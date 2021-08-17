@@ -44,20 +44,14 @@ const reducer = (state = initialState, action) => {
   }
 };
 
-export const getSmsProviders = () => {
-  const requestUrl = '/openmrs/ws/sms/configs';
-  return {
-    type: ACTION_TYPES.GET_SMS_PROVIDERS,
-    payload: axios.get(requestUrl)
-  };
-};
+export const getSmsProviders = () => ({
+  type: ACTION_TYPES.GET_SMS_PROVIDERS,
+  payload: axios.get('/openmrs/ws/sms/configs')
+});
 
-export const getCallflowsProviders = () => {
-  const requestUrl = '/openmrs/ws/callflows/configs';
-  return {
-    type: ACTION_TYPES.GET_CALLFLOWS_PROVIDERS,
-    payload: axios.get(requestUrl)
-  };
-};
+export const getCallflowsProviders = () => ({
+  type: ACTION_TYPES.GET_CALLFLOWS_PROVIDERS,
+  payload: axios.get('/openmrs/ws/callflows/configs')
+});
 
 export default reducer;

@@ -5,25 +5,23 @@ import 'antd/dist/antd.min.css';
 import './TimePicker.scss';
 import '../../Inputs.scss';
 
-export default function TimePicker({
+export const TimePicker = ({
   format = DEFAULT_TIME_FORMAT,
   placeholder = null,
   showPlaceholder = false,
   showNow = false,
   value,
   onChange
-}) {
-  return (
-    <div className="input-container">
-      <ReactTimePicker
-        format={format}
-        placeholder={placeholder}
-        showNow={showNow}
-        value={value}
-        onChange={onChange}
-        className="default-time-picker"
-      />
-      {!!showPlaceholder && <span className="placeholder">{placeholder || EMPTY_STRING}</span>}
-    </div>
-  );
-}
+}) => (
+  <div className="input-container">
+    <ReactTimePicker
+      format={format}
+      placeholder={placeholder}
+      showNow={showNow}
+      value={value}
+      onChange={onChange}
+      className="default-time-picker"
+    />
+    {!!showPlaceholder && <span className="placeholder">{placeholder || EMPTY_STRING}</span>}
+  </div>
+);

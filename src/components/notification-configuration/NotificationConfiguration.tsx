@@ -7,20 +7,20 @@ import { getCallflowsProviders, getSmsProviders } from '../../redux/reducers/pro
 import { Button, Label, Spinner } from 'reactstrap';
 import ExpandableSection from '../common/expandable-section/ExpandableSection';
 import { InputWithPlaceholder, SelectWithPlaceholder } from '../common/form/withPlaceholder';
-import { extractEventValue, selectDefaultTheme } from 'src/shared/util/form-util';
+import { extractEventValue, selectDefaultTheme } from '../../shared/util/form-util';
 import { successToast, errorToast } from '@bit/soldevelo-omrs.cfl-components.toast-handler';
 import _ from 'lodash';
-import { parseJson } from 'src/shared/util/json-util';
-import Switch from '../common/switch/Switch';
+import { parseJson } from '../../shared/util/json-util';
+import { Switch } from '../common/switch/Switch';
 import Divider from '../common/divider/Divider';
-import TimePicker from '../common/time-picker/TimePicker';
+import { TimePicker } from '../common/time-picker/TimePicker';
 import moment from 'moment';
 import { PlusMinusButtons } from '../common/form/PlusMinusButtons';
 import { ConfirmationModal } from '../common/form/ConfirmationModal';
 import ValidationError from '../common/form/ValidationError';
 import './NotificationConfiguration.scss';
 import '../Inputs.scss';
-import { COUNTRY_OPTIONS } from 'src/shared/constants/vmp-config';
+import { COUNTRY_OPTIONS } from '../../shared/constants/vmp-config';
 import {
   COUNTRY_SETTINGS_MAP_SETTING_KEY,
   DEFAULT_COUNTRY_SETTINGS_MAP,
@@ -37,9 +37,9 @@ import {
   CALL_PROPERTY_NAME,
   PERFORM_CALL_UPON_REGISTRATION_PROPERTY_NAME,
   SEND_CALL_REMINDER_PROPERTY_NAME
-} from 'src/shared/constants/notification-configuration';
-import { DEFAULT_TIME_FORMAT, ONE, TEN, ZERO } from 'src/shared/constants/input';
-import { ROOT_URL } from 'src/shared/constants/openmrs';
+} from '../../shared/constants/notification-configuration';
+import { DEFAULT_TIME_FORMAT, ONE, TEN, ZERO } from '../../shared/constants/input';
+import { ROOT_URL } from '../../shared/constants/openmrs';
 
 interface INotificationConfigurationProps extends StateProps, DispatchProps, RouteComponentProps {
   intl: any;
@@ -64,11 +64,7 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
     this.props.getSmsProviders();
   }
 
-  componentDidUpdate(
-    prevProps: Readonly<INotificationConfigurationProps>,
-    prevState: Readonly<INotificationConfigurationState>,
-    snapshot?: any
-  ) {
+  componentDidUpdate(prevProps: Readonly<INotificationConfigurationProps>) {
     const { intl, config, loading, success, error } = this.props;
     if (prevProps.config !== config) {
       this.extractConfigData();
@@ -86,8 +82,8 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
     config = !!config[ZERO] ? config[ZERO] : _.cloneDeep(DEFAULT_COUNTRY_SETTINGS_MAP);
     const notificationConfiguration = [];
     Object.keys(config).forEach(configurationName => {
-      const configuration = !!configurationName ? config[configurationName] : null;
-      if (!!configuration) {
+      const configuration = configurationName ? config[configurationName] : null;
+      if (configuration) {
         configuration[CONFIGURATION_NAME_PROPERTY_NAME] = configurationName;
         if (configuration.hasOwnProperty(NOTIFICATION_TIME_WINDOW_FROM_PROPERTY_NAME)) {
           configuration[NOTIFICATION_TIME_WINDOW_FROM_PROPERTY_NAME] = moment(
@@ -127,26 +123,17 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
     const settingValue = [{}];
     notificationConfiguration.forEach(configuration => {
       const { name, ...configurationProps } = configuration;
-      if (
-        configurationProps.hasOwnProperty(NOTIFICATION_TIME_WINDOW_FROM_PROPERTY_NAME) &&
-        moment.isMoment(configurationProps[NOTIFICATION_TIME_WINDOW_FROM_PROPERTY_NAME])
-      ) {
+      if (moment.isMoment(configurationProps[NOTIFICATION_TIME_WINDOW_FROM_PROPERTY_NAME])) {
         configurationProps[NOTIFICATION_TIME_WINDOW_FROM_PROPERTY_NAME] = configurationProps[
           NOTIFICATION_TIME_WINDOW_FROM_PROPERTY_NAME
         ].format(DEFAULT_TIME_FORMAT);
       }
-      if (
-        configurationProps.hasOwnProperty(NOTIFICATION_TIME_WINDOW_TO_PROPERTY_NAME) &&
-        moment.isMoment(configurationProps[NOTIFICATION_TIME_WINDOW_TO_PROPERTY_NAME])
-      ) {
+      if (moment.isMoment(configurationProps[NOTIFICATION_TIME_WINDOW_TO_PROPERTY_NAME])) {
         configurationProps[NOTIFICATION_TIME_WINDOW_TO_PROPERTY_NAME] = configurationProps[
           NOTIFICATION_TIME_WINDOW_TO_PROPERTY_NAME
         ].format(DEFAULT_TIME_FORMAT);
       }
-      if (
-        configurationProps.hasOwnProperty(BEST_CONTACT_TIME_PROPERTY_NAME) &&
-        moment.isMoment(configurationProps[BEST_CONTACT_TIME_PROPERTY_NAME])
-      ) {
+      if (moment.isMoment(configurationProps[BEST_CONTACT_TIME_PROPERTY_NAME])) {
         configurationProps[BEST_CONTACT_TIME_PROPERTY_NAME] = configurationProps[BEST_CONTACT_TIME_PROPERTY_NAME].format(
           DEFAULT_TIME_FORMAT
         );
@@ -199,14 +186,9 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
     const { notificationConfiguration } = this.state;
     const configuration = notificationConfiguration[configurationIdx];
     const smsProviderOptions = smsProviders.map(provider => ({ label: provider.name, value: provider.name }));
-    const smsProvider =
-      !!configuration && !!configuration[SMS_PROPERTY_NAME] ? this.selectTextOption(configuration[SMS_PROPERTY_NAME]) : null;
-    const shouldSendSmsUponRegistration =
-      !!configuration && configuration[SEND_SMS_UPON_REGISTRATION_PROPERTY_NAME] !== null
-        ? configuration[SEND_SMS_UPON_REGISTRATION_PROPERTY_NAME]
-        : false;
-    const shouldSendSmsReminder =
-      !!configuration && configuration[SEND_SMS_REMINDER_PROPERTY_NAME] !== null ? configuration[SEND_SMS_REMINDER_PROPERTY_NAME] : false;
+    const smsProvider = !!configuration?.[SMS_PROPERTY_NAME] ? this.selectTextOption(configuration[SMS_PROPERTY_NAME]) : null;
+    const shouldSendSmsUponRegistration = !!configuration?.[SEND_SMS_UPON_REGISTRATION_PROPERTY_NAME];
+    const shouldSendSmsReminder = !!configuration?.[SEND_SMS_REMINDER_PROPERTY_NAME];
     return (
       <>
         <div className="py-3">
@@ -256,14 +238,9 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
     const { notificationConfiguration } = this.state;
     const configuration = notificationConfiguration[configurationIdx];
     const callflowsProviderOptions = callflowsProviders.map(provider => ({ label: provider.name, value: provider.name }));
-    const callflowsProvider =
-      !!configuration && !!configuration[CALL_PROPERTY_NAME] ? this.selectTextOption(configuration[CALL_PROPERTY_NAME]) : null;
-    const shouldPerformCallUponRegistration =
-      !!configuration && configuration[PERFORM_CALL_UPON_REGISTRATION_PROPERTY_NAME] !== null
-        ? configuration[PERFORM_CALL_UPON_REGISTRATION_PROPERTY_NAME]
-        : false;
-    const shouldSendCallReminder =
-      !!configuration && configuration[SEND_CALL_REMINDER_PROPERTY_NAME] !== null ? configuration[SEND_CALL_REMINDER_PROPERTY_NAME] : false;
+    const callflowsProvider = !!configuration?.[CALL_PROPERTY_NAME] ? this.selectTextOption(configuration[CALL_PROPERTY_NAME]) : null;
+    const shouldPerformCallUponRegistration = !!configuration?.[PERFORM_CALL_UPON_REGISTRATION_PROPERTY_NAME];
+    const shouldSendCallReminder = !!configuration?.[SEND_CALL_REMINDER_PROPERTY_NAME];
     return (
       <>
         <div className="py-3">
@@ -312,16 +289,13 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
     const { intl } = this.props;
     const { notificationConfiguration } = this.state;
     const configuration = notificationConfiguration[configurationIdx];
-    const notificationTimeWindowFrom =
-      !!configuration && !!configuration[NOTIFICATION_TIME_WINDOW_FROM_PROPERTY_NAME]
-        ? configuration[NOTIFICATION_TIME_WINDOW_FROM_PROPERTY_NAME]
-        : null;
-    const notificationTimeWindowTo =
-      !!configuration && !!configuration[NOTIFICATION_TIME_WINDOW_TO_PROPERTY_NAME]
-        ? configuration[NOTIFICATION_TIME_WINDOW_TO_PROPERTY_NAME]
-        : null;
-    const bestContactTime =
-      !!configuration && !!configuration[BEST_CONTACT_TIME_PROPERTY_NAME] ? configuration[BEST_CONTACT_TIME_PROPERTY_NAME] : null;
+    const notificationTimeWindowFrom = !!configuration?.[NOTIFICATION_TIME_WINDOW_FROM_PROPERTY_NAME]
+      ? configuration[NOTIFICATION_TIME_WINDOW_FROM_PROPERTY_NAME]
+      : null;
+    const notificationTimeWindowTo = !!configuration?.[NOTIFICATION_TIME_WINDOW_TO_PROPERTY_NAME]
+      ? configuration[NOTIFICATION_TIME_WINDOW_TO_PROPERTY_NAME]
+      : null;
+    const bestContactTime = !!configuration?.[BEST_CONTACT_TIME_PROPERTY_NAME] ? configuration[BEST_CONTACT_TIME_PROPERTY_NAME] : null;
     return (
       <div className="inline-fields py-3">
         <div className="col-6 pl-0">
@@ -388,8 +362,7 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
     const { intl } = this.props;
     const { notificationConfiguration } = this.state;
     const configuration = notificationConfiguration[configurationIdx];
-    const visitReminders =
-      !!configuration && !!configuration[VISIT_REMINDER_PROPERTY_NAME] ? configuration[VISIT_REMINDER_PROPERTY_NAME] : [ZERO];
+    const visitReminders = !!configuration?.[VISIT_REMINDER_PROPERTY_NAME] ? configuration[VISIT_REMINDER_PROPERTY_NAME] : [ZERO];
     return (
       <div className="pt-5">
         <Label>

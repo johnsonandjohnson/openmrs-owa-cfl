@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import TimePicker from './TimePicker';
+import { TimePicker } from './TimePicker';
 import moment from 'moment';
 import { DEFAULT_TIME_FORMAT } from '../../../shared/constants/input';
 
