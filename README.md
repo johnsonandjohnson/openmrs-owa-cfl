@@ -4,10 +4,10 @@
 * [Node.js](https://nodejs.org/en/)
 
 ## Deployment
-1. Run `npm install && npm run build` in the root directory. This should create a file called `cfl.zip`.
+1. Run `npm install && npm run build` in the root directory. This should create a file called `cfl-ui.zip`.
 2. Log in to OpenMRS as an admin.
 3. Go to `System Administration` -> `Advanced Administration` -> `Open Web Apps Module` -> `Manage Apps`.
-4. Upload `cfl.zip`.
+4. Upload `cfl-ui.zip`. The file name must be exactly the same for the module to work correctly.
 5. The app is up and running!
 
 In order to add cfl-ui icons to the home dashboard:
