@@ -6,12 +6,9 @@ import { InputWithPlaceholder, SelectWithPlaceholder } from '../common/form/with
 import { extractEventValue, selectDefaultTheme } from '../../shared/util/form-util';
 import _ from 'lodash';
 import { swapPositions } from '../../shared/util/array-util';
-import { getData } from 'country-list';
 import { ADDRESS_FIELDS, ADDRESS_FIELD_TYPE } from '../../shared/constants/address';
-import { EMPTY_COUNTRY } from 'src/shared/constants/vmp-config';
+import { COUNTRY_OPTIONS, EMPTY_COUNTRY } from 'src/shared/constants/vmp-config';
 import { PlusMinusButtons } from '../common/form/PlusMinusButtons';
-
-const COUNTRY_OPTIONS = getData().map(country => ({ label: country.name, value: country.name }));
 
 export function AddressFields({ intl, config, onValueChange }) {
   const addressFields = config.addressFields || [];

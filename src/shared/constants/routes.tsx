@@ -10,6 +10,7 @@ import VmpConfig from '../../components/vmp-config/VmpConfig';
 import VmpVaccinationSchedule from '../../components/vmp-vaccination-schedule/VmpVaccinationSchedule';
 import VmpAddressData from 'src/components/vmp-address-data/VmpAddressData';
 import VmpTranslations from 'src/components/vmp-translations/VmpTranslations';
+import NotificationConfiguration from 'src/components/notification-configuration/NotificationConfiguration';
 
 export const routeConfig = [
   {
@@ -41,6 +42,11 @@ export const routeConfig = [
     path: '/vmp-translations',
     component: VmpTranslations,
     breadcrumb: 'vmpTranslations.title'
+  },
+  {
+    path: '/notification-configuration',
+    component: NotificationConfiguration,
+    breadcrumb: 'notificationConfiguration.title'
   },
   {
     path: '/find-patient',

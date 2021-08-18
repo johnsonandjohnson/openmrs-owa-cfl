@@ -377,6 +377,40 @@
     "confirm": "Confirm",
     "invalidPhoneNumber": "Please provide a valid phone number including the country code. Example: +1 555 555 1234"
   },
+  "notificationConfiguration": {
+    "title": "Manage Notification Configuration",
+    "configureSettings": "Configure Settings",
+    "defaultCountry": "Default Country",
+    "country": "Country",
+    "smsSettings": "SMS / WhatsApp settings:",
+    "callSettings": "Call settings:",
+    "provider": "Provider",
+    "uponRegistration": "Upon registration",
+    "allowedNotificationWindow": {
+      "label": "Allowed notification window:",
+      "from": "From",
+      "to": "To"
+    },
+    "bestContactTime": {
+      "label": "Best contact time:",
+      "placeholder": "Best contact time"
+    },
+    "visitReminder": {
+      "label": "Visit reminder (days before visit):",
+      "placeholder": "Days before visit",
+      "switch": "Visit reminder"
+    },
+    "button": {
+      "expand": "Expand all",
+      "collapse": "Collapse all",
+      "addNewCountry": "Add new Country"
+    },
+    "confirmationModal": {
+      "header": "Submit Notification Configuration",
+      "body": "Are you sure you want to submit Notification Configuration?"
+    },
+    "success": "Notification Configuration submitted successfully!"
+  },
   "common": {
     "yes": "Yes",
     "no": "No",
@@ -391,6 +425,10 @@
     "required": "(Required)",
     "error": {
       "required": "Required"
+    },
+    "switch": {
+      "on": "on",
+      "off": "off"
     }
   }
 }

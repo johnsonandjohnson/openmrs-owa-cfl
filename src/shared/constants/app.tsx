@@ -7,3 +7,4 @@ export const VMP_CONFIG_APP = APP_PREFIX + 'vmpConfig';
 export const VMP_VACCINATION_SCHEDULE_APP = APP_PREFIX + 'vmpVaccinationSchedule';
 export const VMP_ADDRESS_DATA_APP = APP_PREFIX + 'vmpAddressData';
 export const VMP_TRANSLATIONS_APP = APP_PREFIX + 'vmpTranslations';
+export const NOTIFICATION_CONFIGURATION_APP = APP_PREFIX + 'notificationConfiguration';

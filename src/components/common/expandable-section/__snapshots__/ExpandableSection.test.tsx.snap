@@ -1,0 +1,195 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should be collapsed and match snapshot 1`] = `
+<div>
+  <div
+    class="expandable-section"
+  >
+    <div
+      class="expandable-section-header"
+    >
+      <div
+        class="inline-fields col-6 pl-0"
+      >
+        <input
+          class="form-control"
+          type="text"
+          value="test1"
+        />
+      </div>
+      <div
+        class="icon-buttons col-6"
+      >
+        <button
+          class="icon-button btn btn-secondary"
+          type="button"
+        >
+          <i
+            class="bi bi-arrows-expand"
+          />
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`should collapse and match snapshot 1`] = `
+<div>
+  <div
+    class="expandable-section"
+  >
+    <div
+      class="expandable-section-header"
+    >
+      <div
+        class="inline-fields col-6 pl-0"
+      >
+        <input
+          class="form-control"
+          type="text"
+          value="test1"
+        />
+      </div>
+      <div
+        class="icon-buttons col-6"
+      >
+        <button
+          class="icon-button btn btn-secondary"
+          type="button"
+        >
+          <i
+            class="bi bi-arrows-expand"
+          />
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`should deletable render match snapshot 1`] = `
+<div>
+  <div
+    class="expandable-section"
+  >
+    <div
+      class="expandable-section-header"
+    >
+      <div
+        class="inline-fields col-6 pl-0"
+      >
+        <input
+          class="form-control"
+          type="text"
+          value="test1"
+        />
+      </div>
+      <div
+        class="icon-buttons col-6"
+      >
+        <button
+          class="icon-button btn btn-secondary"
+          type="button"
+        >
+          <i
+            class="bi bi-trash"
+          />
+        </button>
+        <button
+          class="icon-button btn btn-secondary"
+          type="button"
+        >
+          <i
+            class="bi bi-arrows-expand"
+          />
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`should expand and match snapshot 1`] = `
+<div>
+  <div
+    class="expandable-section"
+  >
+    <div
+      class="expandable-section-header"
+    >
+      <div
+        class="inline-fields col-6 pl-0"
+      >
+        <input
+          class="form-control"
+          type="text"
+          value="test1"
+        />
+      </div>
+      <div
+        class="icon-buttons col-6"
+      >
+        <button
+          class="icon-button btn btn-secondary"
+          type="button"
+        >
+          <i
+            class="bi bi-arrows-collapse"
+          />
+        </button>
+      </div>
+    </div>
+    <div
+      class="expandable-section-body"
+    >
+      <div>
+        <input
+          class="form-control"
+          type="text"
+          value="test2"
+        />
+        <input
+          class="form-control"
+          type="text"
+          value="test3"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`should render match snapshot 1`] = `
+<div>
+  <div
+    class="expandable-section"
+  >
+    <div
+      class="expandable-section-header"
+    >
+      <div
+        class="inline-fields col-6 pl-0"
+      >
+        <input
+          class="form-control"
+          type="text"
+          value="test1"
+        />
+      </div>
+      <div
+        class="icon-buttons col-6"
+      >
+        <button
+          class="icon-button btn btn-secondary"
+          type="button"
+        >
+          <i
+            class="bi bi-arrows-expand"
+          />
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+`;

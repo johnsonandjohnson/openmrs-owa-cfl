@@ -1,0 +1,41 @@
+#app .expandable-section {
+  padding: 1.5em;
+  margin-top: 2em;
+  background-color: #fafafa;
+
+  .expandable-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .icon-buttons {
+      display: flex;
+      justify-content: flex-end;
+
+      .icon-button {
+        padding: 4px;
+        font-size: 16px !important;
+
+        &:not(:last-child) {
+          margin-right: 1em;
+        }
+      }
+    }
+  }
+
+  .inline-fields {
+    display: flex;
+
+    .input-container {
+      min-width: 120px;
+
+      &:not(:last-of-type) {
+        margin-right: 1em;
+      }
+    }
+
+    .flex-1 {
+      flex: 1;
+    }
+  }
+}

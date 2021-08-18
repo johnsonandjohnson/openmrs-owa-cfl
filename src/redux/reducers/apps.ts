@@ -10,7 +10,8 @@ import {
   VMP_CONFIG_APP,
   VMP_VACCINATION_SCHEDULE_APP,
   VMP_ADDRESS_DATA_APP,
-  VMP_TRANSLATIONS_APP
+  VMP_TRANSLATIONS_APP,
+  NOTIFICATION_CONFIGURATION_APP
 } from '../../shared/constants/app';
 
 export const ACTION_TYPES = {
@@ -28,7 +29,8 @@ const initialState = {
   vmpConfig: null,
   vmpVaccinationSchedule: null,
   vmpAddressData: null,
-  vmpTranslations: null
+  vmpTranslations: null,
+  notificationConfiguration: null
 };
 
 export const getAppsState = apps => ({
@@ -40,7 +42,8 @@ export const getAppsState = apps => ({
   vmpConfig: getAppConfig(apps, VMP_CONFIG_APP),
   vmpVaccinationSchedule: getAppConfig(apps, VMP_VACCINATION_SCHEDULE_APP),
   vmpAddressData: getAppConfig(apps, VMP_ADDRESS_DATA_APP),
-  vmpTranslations: getAppConfig(apps, VMP_TRANSLATIONS_APP)
+  vmpTranslations: getAppConfig(apps, VMP_TRANSLATIONS_APP),
+  notificationConfiguration: getAppConfig(apps, NOTIFICATION_CONFIGURATION_APP)
 });
 
 const reducer = (state = initialState, action) => {

@@ -1,10 +1,20 @@
 :root {
   --error-border: 1px red solid;
+  --input-border: 1px solid #ced4da;
+  --input-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  --input-focused-box-shadow: 0 0 8px rgba(102, 175, 233, 0.6);
+  --input-min-height: 4rem;
+  --button-main-background-color: #00455c;
+  --button-border-color: #6c757d;
+  --dropdown-option-hover-background-color: #e4e7e7;
+  --dropdown-option-selected-background-color: #00455c;
+  --main-color: #333333;
 }
 
 #app .register-patient,
 #app .conditions,
 #app .condition,
+#app .notification-configuration,
 #app .vmp-config,
 #app .vmp-vaccination-schedule,
 #app .vmp-address-data,
@@ -14,7 +24,7 @@
   select:not([class*='react-datepicker__']),
   div[class*='__value-container']:not([class*='filter-select']),
   div[class*='-ValueContainer']:not([class*='filter-select']) {
-    min-height: calc(4rem + 2px);
+    min-height: calc(var(--input-min-height) + 2px);
     margin-right: 15px;
     &.invalid {
       border: var(--error-border) !important;
@@ -43,7 +53,7 @@
   input::placeholder {
     font-family: CircularStd-Book;
     font-size: 14px;
-    color: #333333;
+    color: var(--main-color);
     opacity: 0.5;
   }
   input:focus,
@@ -67,12 +77,12 @@
   div[class*='-container']:not([class*='filter-select']) {
     & > div[class*='-control'] {
       border-radius: 0;
-      box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075) !important;
-      border: 1px solid #ced4da;
+      box-shadow: var(--input-box-shadow) !important;
+      border: var(--input-border);
 
       &[class*='--is-focused'],
       &[class*='--menu-is-open'] {
-        box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6) !important;
+        box-shadow: var(--input-box-shadow), var(--input-focused-box-shadow) !important;
       }
     }
     &.invalid div[class*='-control'] {
@@ -80,7 +90,7 @@
     }
   }
   div[class*='__value-container']:not([class*='filter-select']) {
-    min-height: calc(4rem) !important;
+    min-height: var(--input-min-height);
     overflow: visible;
     padding: 0 8px;
     font-family: CircularStd-Book;
@@ -109,7 +119,7 @@
     }
   }
   div[class*='__menu'] {
-    color: #333333;
+    color: var(--main-color);
   }
   .react-datepicker-wrapper {
     width: 100%;
@@ -122,17 +132,21 @@
     color: black;
 
     &.active {
-      background-color: #00455c !important;
+      background-color: var(--button-main-background-color) !important;
       color: white;
     }
   }
   button:not(.disabled):active {
-    background-color: #00455c !important;
+    background-color: var(--button-main-background-color) !important;
   }
   button.cancel,
   .btn.cancel {
     background: transparent;
     color: black;
+
+    &:active {
+      background-color: transparent !important;
+    }
   }
   .PhoneInputCountry {
     position: absolute;

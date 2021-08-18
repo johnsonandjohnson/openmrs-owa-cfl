@@ -26,167 +26,177 @@
   src: url('../assets/font/CircularStd-BookItalic.otf') format('opentype');
 }
 
-#app {
-  min-height: 100vh;
-  background-color: #fafafa;
-  font-family: 'CircularStd', serif;
+body {
+  --main-color: #333333;
+  font-variant: normal !important;
+  font-feature-settings: normal !important;
 
-  .header {
-    padding: 0 1em 0 1em;
-    @media only screen and (min-width: 576px) {
-      padding: 0 2em 0 2em;
-    }
-    @media only screen and (min-width: 768px) {
-      padding: 0 4em 0 4em;
-    }
-    @media only screen and (min-width: 992px) {
-      padding: 0 6em 0 6em;
-    }
-    @media only screen and (min-width: 1280px) {
-      padding: 0 8em 0 8em;
-    }
-  }
-  .content {
-    margin: 1em 1em 0;
-    @media only screen and (min-width: 576px) {
-      margin: 1em 2em 0;
-    }
-    @media only screen and (min-width: 768px) {
-      margin: 1em 4em 0;
-    }
-    @media only screen and (min-width: 992px) {
-      margin: 1em 6em 0;
-    }
-    @media only screen and (min-width: 1280px) {
-      margin: 1em 8em 0;
-    }
-  }
+  #app {
+    min-height: 100vh;
+    background-color: #fafafa;
+    font-family: 'CircularStd', serif;
 
-  h1 {
-    font-size: 26px;
-    color: #333333;
-    margin: 0 0 8px 0;
-  }
-
-  h2 {
-    font-size: 22px;
-    color: #333333;
-    margin: 0 0 8px 0;
-  }
-
-  p {
-    font-family: CircularStd-Book;
-    font-size: 16px;
-    color: #333333;
-  }
-
-  .helper-text {
-    font-family: CircularStd-Book;
-    font-size: 16px;
-    color: #333333;
-    opacity: 0.5;
-  }
-
-  thead tr th,
-  tbody tr td {
-    font-size: 12px;
-    font-weight: normal;
-    padding: 0.2rem;
-    @media only screen and (min-width: 768px) {
-      font-size: 14px;
-      padding: 0.5rem;
+    .header {
+      padding: 0 1em 0 1em;
+      @media only screen and (min-width: 576px) {
+        padding: 0 2em 0 2em;
+      }
+      @media only screen and (min-width: 768px) {
+        padding: 0 4em 0 4em;
+      }
+      @media only screen and (min-width: 992px) {
+        padding: 0 6em 0 6em;
+      }
+      @media only screen and (min-width: 1280px) {
+        padding: 0 8em 0 8em;
+      }
     }
-    @media only screen and (min-width: 1280px) {
+    .content {
+      margin: 1em 1em 0;
+      @media only screen and (min-width: 576px) {
+        margin: 1em 2em 0;
+      }
+      @media only screen and (min-width: 768px) {
+        margin: 1em 4em 0;
+      }
+      @media only screen and (min-width: 992px) {
+        margin: 1em 6em 0;
+      }
+      @media only screen and (min-width: 1280px) {
+        margin: 1em 8em 0;
+      }
+    }
+
+    h1 {
+      font-size: 26px;
+      color: var(--main-color);
+      margin: 0 0 8px 0;
+    }
+
+    h2 {
+      font-size: 22px;
+      color: var(--main-color);
+      margin: 0 0 8px 0;
+    }
+
+    p {
+      font-family: CircularStd-Book;
       font-size: 16px;
-      padding: 0.75rem;
+      color: var(--main-color);
     }
-  }
 
-  .error {
-    color: #dc3545;
-  }
+    label {
+      color: var(--main-color);
+    }
 
-  .field-error {
-    font-size: 12px;
-  }
+    .helper-text {
+      font-family: CircularStd-Book;
+      font-size: 16px;
+      color: var(--main-color);
+      opacity: 0.5;
+    }
 
-  .ScrollUpButton__Container {
-    background-color: rgba(0, 0, 0, 0) !important;
-  }
+    thead tr th,
+    tbody tr td {
+      font-size: 12px;
+      font-weight: normal;
+      padding: 0.2rem;
+      @media only screen and (min-width: 768px) {
+        font-size: 14px;
+        padding: 0.5rem;
+      }
+      @media only screen and (min-width: 1280px) {
+        font-size: 16px;
+        padding: 0.75rem;
+      }
+    }
 
-  .form-control {
-    border: 1px solid #ced4da !important;
-    border-radius: 0;
-    outline: none !important;
-  }
+    .error {
+      color: #dc3545;
+    }
 
-  .react-datepicker {
-    font-size: 14px;
-  }
-  @media only screen and (max-height: 768px) {
-    .react-datepicker {
+    .field-error {
       font-size: 12px;
     }
-    .react-datepicker__week > div {
-      margin: 0.1em;
+
+    .ScrollUpButton__Container {
+      background-color: rgba(0, 0, 0, 0) !important;
     }
-  }
 
-  a.btn,
-  button.btn {
-    padding: 0.5rem 1.85rem;
-    font-size: 11px;
-    text-transform: uppercase;
-    background-color: #00455c;
-    color: white;
-    border-color: #6c757d;
-  }
-
-  // referenceapplication css overrides
-  form input,
-  form select,
-  form textarea,
-  form ul.select,
-  .form input,
-  .form select,
-  .form textarea,
-  .form ul.select {
-    margin-top: 0;
-  }
-
-  form select,
-  .form select {
-    min-width: auto;
-  }
-
-  form,
-  .form {
-    overflow: initial;
-  }
-
-  .fade.show {
-    opacity: 1 !important;
-  }
-
-  .spinner {
-    color: #333333;
-  }
-
-  .action-icons,
-  .action-icons-inner {
-    @media only screen and (min-width: 577px) {
-      min-width: 86px;
+    .form-control {
+      border: 1px solid #ced4da !important;
+      border-radius: 0;
+      outline: none !important;
     }
-  }
 
-  .inner-content {
-    margin-top: 1rem;
-  }
+    .react-datepicker {
+      font-size: 14px;
+    }
+    @media only screen and (max-height: 768px) {
+      .react-datepicker {
+        font-size: 12px;
+      }
+      .react-datepicker__week > div {
+        margin: 0.1em;
+      }
+    }
 
-  .section {
-    background-color: white;
-    margin-bottom: 1em;
-    padding: 1em;
-    flex: 1;
+    a.btn,
+    button.btn {
+      padding: 0.5rem 1.85rem;
+      font-size: 11px;
+      text-transform: uppercase;
+      background-color: #00455c;
+      color: white;
+      border-color: #6c757d;
+    }
+
+    // referenceapplication css overrides
+    form input,
+    form select,
+    form textarea,
+    form ul.select,
+    .form input,
+    .form select,
+    .form textarea,
+    .form ul.select {
+      margin-top: 0;
+    }
+
+    form select,
+    .form select {
+      min-width: auto;
+    }
+
+    form,
+    .form {
+      overflow: initial;
+    }
+
+    .fade.show {
+      opacity: 1 !important;
+    }
+
+    .spinner {
+      color: var(--main-color);
+    }
+
+    .action-icons,
+    .action-icons-inner {
+      @media only screen and (min-width: 577px) {
+        min-width: 86px;
+      }
+    }
+
+    .inner-content {
+      margin-top: 1rem;
+    }
+
+    .section {
+      background-color: white;
+      margin-bottom: 1em;
+      padding: 1em;
+      flex: 1;
+    }
   }
 }
