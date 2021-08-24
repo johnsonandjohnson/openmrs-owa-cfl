@@ -1,0 +1,18 @@
+#app .react-codemirror2 .CodeMirror {
+  padding-top: 2rem;
+  min-height: calc(var(--input-min-height) + 2px);
+  box-shadow: var(--input-box-shadow);
+  border: var(--input-border);
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  font-family: CircularStd-Book;
+  font-size: var(--default-placeholder-font-size);
+  color: var(--main-color);
+
+  &.CodeMirror-empty {
+    color: var(--placeholder-color);
+  }
+
+  &.CodeMirror-focused {
+    box-shadow: var(--input-box-shadow), var(--input-focused-box-shadow);
+  }
+}

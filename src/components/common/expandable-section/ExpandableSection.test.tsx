@@ -28,7 +28,7 @@ test('should deletable render match snapshot', () => {
     </div>
   );
   const { container } = render(
-    <ExpandableSection headerComponent={headerComponent} bodyComponent={bodyComponent} isDeletable onDelete={emptyFunction} />
+    <ExpandableSection headerComponent={headerComponent} bodyComponent={bodyComponent} isRemovable onRemove={emptyFunction} />
   );
   expect(container).toMatchSnapshot();
 });

@@ -8,9 +8,10 @@ import Dashboard from '../../components/dashboard/Dashboard';
 import Conditions from '../../components/conditions/Conditions';
 import VmpConfig from '../../components/vmp-config/VmpConfig';
 import VmpVaccinationSchedule from '../../components/vmp-vaccination-schedule/VmpVaccinationSchedule';
-import VmpAddressData from 'src/components/vmp-address-data/VmpAddressData';
-import VmpTranslations from 'src/components/vmp-translations/VmpTranslations';
-import NotificationConfiguration from 'src/components/notification-configuration/NotificationConfiguration';
+import VmpAddressData from '../../components/vmp-address-data/VmpAddressData';
+import VmpTranslations from '../../components/vmp-translations/VmpTranslations';
+import NotificationConfiguration from '../../components/notification-configuration/NotificationConfiguration';
+import NotificationTemplates from '../../components/notification-templates/NotificationTemplates';
 
 export const routeConfig = [
   {
@@ -47,6 +48,11 @@ export const routeConfig = [
     path: '/notification-configuration',
     component: NotificationConfiguration,
     breadcrumb: 'notificationConfiguration.title'
+  },
+  {
+    path: '/notification-templates',
+    component: NotificationTemplates,
+    breadcrumb: 'notificationTemplates.title'
   },
   {
     path: '/find-patient',

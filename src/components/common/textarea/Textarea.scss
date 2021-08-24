@@ -1,0 +1,12 @@
+#app textarea.default-textarea {
+  height: 100%;
+  padding-top: 2rem;
+  word-break: break-word;
+  resize: none;
+  text-align: start;
+  text-align-last: start;
+
+  &.resizable {
+    resize: vertical;
+  }
+}

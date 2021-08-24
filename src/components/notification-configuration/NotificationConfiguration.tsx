@@ -157,7 +157,7 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
 
   confirmationModal = () => (
     <ConfirmationModal
-      header={{ id: 'notificationConfiguration.confirmationModal.body' }}
+      header={{ id: 'notificationConfiguration.confirmationModal.header' }}
       body={{ id: 'notificationConfiguration.confirmationModal.body' }}
       onYes={() => {
         this.save();
@@ -456,12 +456,12 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
     ];
     return (
       <ExpandableSection
-        innerKey={`configurationName-${configurationIdx}`}
+        key={`configuration-${configurationIdx}`}
         headerComponent={headerComponent}
         disabledHeaderComponent={disabledHeaderComponent}
         bodyComponent={bodyComponent}
-        isDeletable={!isDefaultCountryConfiguration}
-        onDelete={() => this.removeCountryConfiguration(configurationIdx)}
+        isRemovable={!isDefaultCountryConfiguration}
+        onRemove={() => this.removeCountryConfiguration(configurationIdx)}
         isExpandTriggered={isAllSectionsExpanded}
       />
     );

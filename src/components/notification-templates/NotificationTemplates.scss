@@ -1,0 +1,11 @@
+#app .notification-templates .section {
+  .title-section {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .custom-template-name-tooltip {
+    display: flex;
+    align-items: center;
+  }
+}

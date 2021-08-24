@@ -2,6 +2,7 @@ import React from 'react';
 import { Input } from 'reactstrap';
 import Select from 'react-select';
 import SortableMultiSelect from './SortableSelect';
+import TextareaAutosize from 'react-textarea-autosize';
 
 interface IWithPlaceholderProps {
   placeholder: string;
@@ -38,3 +39,4 @@ export const withPlaceholder = <P extends object>(WrappedComponent: React.Compon
 export const InputWithPlaceholder = withPlaceholder(Input);
 export const SelectWithPlaceholder = withPlaceholder(Select);
 export const SortableSelectWithPlaceholder = withPlaceholder(SortableMultiSelect);
+export const TextareaAutosizeWithPlaceholder = withPlaceholder(TextareaAutosize);
