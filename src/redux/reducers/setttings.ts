@@ -5,7 +5,8 @@ import { FAILURE, REQUEST, SUCCESS } from '../action-type.util';
 export const ACTION_TYPES = {
   GET_SETTING: 'settings/GET_SETTING',
   GET_SETTINGS: 'settings/GET_SETTINGS',
-  CREATE_SETTING: 'settings/CREATE_SETTING'
+  CREATE_SETTING: 'settings/CREATE_SETTING',
+  DELETE_SETTING: 'settings/DELETE_SETTING'
 };
 
 const initialState = {
@@ -22,6 +23,7 @@ const reducer = (state = initialState, action) => {
     case REQUEST(ACTION_TYPES.GET_SETTING):
     case REQUEST(ACTION_TYPES.GET_SETTINGS):
     case REQUEST(ACTION_TYPES.CREATE_SETTING):
+    case REQUEST(ACTION_TYPES.DELETE_SETTING):
       return {
         ...state,
         loading: true,
@@ -31,6 +33,7 @@ const reducer = (state = initialState, action) => {
     case FAILURE(ACTION_TYPES.GET_SETTING):
     case FAILURE(ACTION_TYPES.GET_SETTINGS):
     case FAILURE(ACTION_TYPES.CREATE_SETTING):
+    case FAILURE(ACTION_TYPES.DELETE_SETTING):
       return {
         ...state,
         loading: false,
@@ -53,6 +56,7 @@ const reducer = (state = initialState, action) => {
         setting: isSettingExist ? results[0] : state.setting
       };
     case SUCCESS(ACTION_TYPES.CREATE_SETTING):
+    case SUCCESS(ACTION_TYPES.DELETE_SETTING):
       return {
         ...state,
         loading: false,
@@ -103,5 +107,10 @@ export const updateSetting = setting => {
     payload: axios.post(requestUrl, setting)
   };
 };
+
+export const deleteSetting = setting => ({
+  type: ACTION_TYPES.DELETE_SETTING,
+  payload: axios.delete(`/openmrs/ws/rest/v1/systemsetting/${setting.uuid}`)
+});
 
 export default reducer;

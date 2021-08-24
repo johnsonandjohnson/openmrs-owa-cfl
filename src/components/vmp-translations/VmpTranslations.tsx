@@ -65,8 +65,8 @@ export interface IVmpAddressDataState {
 export class VmpTranslations extends React.Component<IVmpAddressDataProps, IVmpAddressDataState> {
   state = {
     isConfirmationModalOpen: false,
-    confirmationModalHeader: { id: EMPTY_STRING, values: {} },
-    confirmationModalBody: { id: EMPTY_STRING, values: {} },
+    confirmationModalHeader: { id: EMPTY_STRING },
+    confirmationModalBody: { id: EMPTY_STRING },
     onConfirmationModalConfirm: null,
     onConfirmationModalCancel: null,
     isDragActive: false,
@@ -263,8 +263,8 @@ export class VmpTranslations extends React.Component<IVmpAddressDataProps, IVmpA
   onReturn = () => {
     this.setState({
       isConfirmationModalOpen: true,
-      confirmationModalHeader: { id: `vmpTranslations.return.modalHeader` },
-      confirmationModalBody: { id: `vmpTranslations.return.modalBody` },
+      confirmationModalHeader: { id: 'vmpTranslations.return.modalHeader' },
+      confirmationModalBody: { id: 'vmpTranslations.return.modalBody' },
       onConfirmationModalConfirm: this.return,
       onConfirmationModalCancel: this.closeConfirmationModal
     });
@@ -317,8 +317,8 @@ export class VmpTranslations extends React.Component<IVmpAddressDataProps, IVmpA
     const { acceptedFile } = this.state;
     this.setState({
       isConfirmationModalOpen: true,
-      confirmationModalHeader: { id: `vmpTranslations.upload.modalHeader` },
-      confirmationModalBody: { id: `vmpTranslations.upload.modalBody` },
+      confirmationModalHeader: { id: 'vmpTranslations.upload.modalHeader' },
+      confirmationModalBody: { id: 'vmpTranslations.upload.modalBody' },
       onConfirmationModalConfirm: () => {
         this.uploadTranslationFile(acceptedFile);
         this.closeConfirmationModal();
@@ -361,8 +361,8 @@ export class VmpTranslations extends React.Component<IVmpAddressDataProps, IVmpA
     if (this.state.isDirty) {
       this.setState({
         isConfirmationModalOpen: true,
-        confirmationModalHeader: { id: `vmpTranslations.download.modalHeader` },
-        confirmationModalBody: { id: `vmpTranslations.download.modalBody` },
+        confirmationModalHeader: { id: 'vmpTranslations.download.modalHeader' },
+        confirmationModalBody: { id: 'vmpTranslations.download.modalBody' },
         onConfirmationModalConfirm: () => {
           this.downloadTranslations();
           this.closeConfirmationModal();

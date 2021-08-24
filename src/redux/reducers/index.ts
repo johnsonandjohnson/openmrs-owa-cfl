@@ -20,6 +20,7 @@ import breadcrumbs from './breadcrumbs';
 import visit from './visit';
 import addressData from './addressData';
 import provider from './provider';
+import messages from './messages';
 
 export default combineReducers({
   cflPatient,
@@ -41,6 +42,7 @@ export default combineReducers({
   visit,
   addressData,
   provider,
+  messages,
   openmrs: openmrsReducers,
   form: reduxFormReducer
 });

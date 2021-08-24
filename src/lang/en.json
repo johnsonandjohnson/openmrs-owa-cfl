@@ -411,6 +411,39 @@
     },
     "success": "Notification Configuration submitted successfully!"
   },
+  "notificationTemplates": {
+    "title": "Manage Notification Templates",
+    "notificationTemplate": "Notification Template",
+    "injectedServices": {
+      "label": "Injected Services",
+      "tooltip": "Values which represent the map of services which should be injected into the messaging notification template.",
+      "key": "Key",
+      "value": "Value"
+    },
+    "template": {
+      "customTemplateName": {
+        "label": "Custom Template Name",
+        "tooltip": "When creating a custom template, use only lowercase letters and ‘-’ with no spaces.",
+        "invalid": "The Template Name should only contain lowercase letters, and ‘-’, no spaces"
+      },
+      "description": "Description",
+      "text": "SMS Text"
+    },
+    "button": {
+      "expand": "Expand all",
+      "collapse": "Collapse all",
+      "addNewTemplate": "Add new Template"
+    },
+    "saveModal": {
+      "header": "Submit Notification Templates",
+      "body": "Are you sure you want to submit Notification Templates?"
+    },
+    "removeTemplateModal": {
+      "header": "Delete Notification Template",
+      "body": "Are you sure you want to delete {templateName}?"
+    },
+    "success": "Configuration saved successfully!"
+  },
   "common": {
     "yes": "Yes",
     "no": "No",

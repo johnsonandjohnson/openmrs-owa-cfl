@@ -3,12 +3,11 @@ import './ExpandableSection.scss';
 import { Button } from 'reactstrap';
 
 export default function ExpandableSection({
-  innerKey = null,
   headerComponent,
   disabledHeaderComponent = headerComponent,
   bodyComponent,
-  isDeletable = false,
-  onDelete = null,
+  isRemovable = false,
+  onRemove = null,
   isExpandTriggered = false
 }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -25,12 +24,12 @@ export default function ExpandableSection({
   }
   const isExpanded = isOpenChanged ? isOpen : isExpandTriggeredChanged ? isExpandTriggered : isOpen;
   return (
-    <div className="expandable-section" key={innerKey}>
+    <div className="expandable-section">
       <div className="expandable-section-header">
         <div className="inline-fields col-6 pl-0">{isExpanded ? headerComponent : disabledHeaderComponent}</div>
         <div className="icon-buttons col-6">
-          {isDeletable && !!onDelete && (
-            <Button className="icon-button" onClick={onDelete}>
+          {isRemovable && !!onRemove && (
+            <Button className="icon-button" onClick={onRemove}>
               <i className="bi bi-trash" />
             </Button>
           )}

@@ -59,6 +59,16 @@
       "extensionParams": {
         "group": "cflUi.adminGroup"
       }
+    },
+    {
+      "id": "cflUi.notificationTemplatesLink",
+      "extensionPointId": "org.openmrs.module.adminui.adminLinks",
+      "type": "link",
+      "label": "Manage Notification Templates",
+      "url": "owa/cfl-ui/index.html#/notification-templates",
+      "extensionParams": {
+        "group": "cflUi.adminGroup"
+      }
     }
   ],
   "config": {
