@@ -78,7 +78,9 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
   componentDidUpdate(prevProps: Readonly<INotificationConfigurationProps>) {
     const { intl, settings, loading, success, appError, unremovableGlobalProperties } = this.props;
     if (prevProps.unremovableGlobalProperties !== unremovableGlobalProperties) {
-      this.setState({ unremovableGlobalProperties }, () => this.props.getSettings(NOTIFICATION_TEMPLATE_SETTING_KEY_PREFIX));
+      this.setState({ unremovableGlobalProperties: unremovableGlobalProperties.map(globalProperty => globalProperty.toLowerCase()) }, () =>
+        this.props.getSettings(NOTIFICATION_TEMPLATE_SETTING_KEY_PREFIX)
+      );
     } else if (prevProps.settings !== settings) {
       const sortedSettings = [];
       const injectedServicesSetting = settings.find(setting => setting[TEMPLATE_NAME_PROPERTY_NAME] === INJECTED_SERVICES_SETTING_KEY);
