@@ -45,12 +45,12 @@ interface INotificationConfigurationState {
   savedNotificationTemplates: any[];
   isAllSectionsExpanded: boolean;
   isConfirmationModalOpen: boolean;
-  unremovableGlobalProperties: any[];
+  unremovableGlobalProperties: string[];
   confirmationModalHeader: {};
   confirmationModalBody: {};
-  onConfirmationModalConfirm: any;
-  onConfirmationModalCancel: any;
-  dirtyNotificationTemplates: any;
+  onConfirmationModalConfirm: () => void;
+  onConfirmationModalCancel: () => void;
+  dirtyNotificationTemplates: Set<string>;
   unifiedSuccessToastDisplayed: boolean;
   isAllRequestsSent: boolean;
 }
@@ -66,7 +66,7 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
     confirmationModalBody: { id: EMPTY_STRING },
     onConfirmationModalConfirm: null,
     onConfirmationModalCancel: null,
-    dirtyNotificationTemplates: new Set(),
+    dirtyNotificationTemplates: new Set<string>(),
     unifiedSuccessToastDisplayed: false,
     isAllRequestsSent: false
   };
@@ -76,7 +76,7 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
   }
 
   componentDidUpdate(prevProps: Readonly<INotificationConfigurationProps>) {
-    const { intl, settings, loading, success, error, unremovableGlobalProperties } = this.props;
+    const { intl, settings, loading, success, appError, unremovableGlobalProperties } = this.props;
     if (prevProps.unremovableGlobalProperties !== unremovableGlobalProperties) {
       this.setState({ unremovableGlobalProperties }, () => this.props.getSettings(NOTIFICATION_TEMPLATE_SETTING_KEY_PREFIX));
     } else if (prevProps.settings !== settings) {
@@ -114,8 +114,8 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
         },
         () => this.props.getSettings(NOTIFICATION_TEMPLATE_SETTING_KEY_PREFIX)
       );
-    } else if (prevProps.error !== this.props.error && !loading) {
-      errorToast(error);
+    } else if (prevProps.appError !== this.props.appError && !loading) {
+      errorToast(appError);
     }
   }
 
@@ -464,7 +464,6 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
 const mapStateToProps = ({ apps, settings, provider, messages }) => ({
   appError: apps.errorMessage,
   appLoading: apps.loading,
-  error: apps.errorMessage,
   loading: settings.loading,
   success: settings.success,
   config: settings.setting?.value && settings.setting?.value,
