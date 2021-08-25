@@ -52,7 +52,7 @@
   }
   input:not(:placeholder-shown),
   select:not(.placeholder):not([class*='react-datepicker__']):not(.filter-select),
-  textarea::not(:placeholder-shown) {
+  textarea:not(:placeholder-shown) {
     padding-top: 2rem;
   }
   input::placeholder,

@@ -409,7 +409,7 @@
       "header": "Submit Notification Configuration",
       "body": "Are you sure you want to submit Notification Configuration?"
     },
-    "success": "Notification Configuration submitted successfully!"
+    "success": "Configuration saved successfully!"
   },
   "notificationTemplates": {
     "title": "Manage Notification Templates",
