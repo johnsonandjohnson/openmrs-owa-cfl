@@ -1,5 +1,5 @@
 {
-  "version": "0.1.0",
+  "version": "1.0.0",
   "name": "cfl-ui",
   "description": "CFL UI for OpenMRS",
   "launch_path": "index.html",
@@ -7,7 +7,7 @@
     "48": "/img/cfl48.png"
   },
   "developer": {
-    "name": "jkondrat",
+    "name": "SolDevelo",
     "url": ""
   },
   "default_locale": "en",
