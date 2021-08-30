@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import './VmpVaccinationSchedule.scss';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { SETTING_KEY as VMP_CONFIG_SETTING_KEY } from '../../shared/constants/vmp-config';
+import { DEFAULT_REGIMEN_UPDATE_PERMITTED, SETTING_KEY as VMP_CONFIG_SETTING_KEY } from '../../shared/constants/vmp-config';
 import {
   DEFAULT_DOSING_VISIT_TYPES,
   DEFAULT_VMP_VACCINATION_SCHEDULE,
@@ -34,6 +34,7 @@ export interface IVmpVaccinationScheduleProps extends StateProps, DispatchProps,
 export interface IVmpVaccinationScheduleState {
   vmpConfig: IVmpConfig;
   vmpVaccinationSchedule: IVmpVaccinationSchedule[];
+  savedVmpVaccinationSchedule: IVmpVaccinationSchedule[];
   vmpVaccinationScheduleSetting: {};
   isModalOpen: boolean;
   modalHeader: {};
@@ -46,6 +47,7 @@ class VmpVaccinationSchedule extends React.Component<IVmpVaccinationScheduleProp
   state = {
     vmpConfig: {} as IVmpConfig,
     vmpVaccinationSchedule: [],
+    savedVmpVaccinationSchedule: [],
     vmpVaccinationScheduleSetting: { uuid: null, value: null },
     isModalOpen: false,
     modalHeader: { id: '', values: {} },
@@ -68,6 +70,7 @@ class VmpVaccinationSchedule extends React.Component<IVmpVaccinationScheduleProp
     }
     if (!prevProps.success && success) {
       successToast(intl.formatMessage({ id: 'vmpVaccinationSchedule.success' }));
+      this.props.getSettingByQuery(VMP_VACCINATION_SCHEDULE_SETTING_KEY);
     } else if (prevProps.error !== this.props.error && !loading) {
       errorToast(error);
     }
@@ -79,7 +82,11 @@ class VmpVaccinationSchedule extends React.Component<IVmpVaccinationScheduleProp
       config = _.cloneDeep(DEFAULT_VMP_VACCINATION_SCHEDULE);
     }
     if (this.props.setting?.property === VMP_VACCINATION_SCHEDULE_SETTING_KEY) {
-      this.setState({ vmpVaccinationSchedule: config, vmpVaccinationScheduleSetting: this.props.setting });
+      this.setState({
+        vmpVaccinationSchedule: config,
+        vmpVaccinationScheduleSetting: this.props.setting,
+        savedVmpVaccinationSchedule: _.clone(config)
+      });
     } else if (this.props.setting?.property === VMP_CONFIG_SETTING_KEY) {
       this.setState({ vmpConfig: config });
     }
@@ -344,12 +351,13 @@ class VmpVaccinationSchedule extends React.Component<IVmpVaccinationScheduleProp
   closeModal = () => this.setState({ isModalOpen: false });
 
   regimenConfig = () => {
-    const { intl, dosingVisitTypes } = this.props;
+    const { intl, dosingVisitTypes, regimenUpdatePermitted } = this.props;
     const regimenConfig = this.state.vmpVaccinationSchedule || [];
     return (
       <>
         {regimenConfig.map((regimen, i) => {
           const visits = regimen.visits || [];
+          const isReadOnly = this.state.savedVmpVaccinationSchedule.includes(regimen) && !regimenUpdatePermitted;
           return (
             <div key={`regimen-${i}`} className="regimen">
               <div className="delete-button-container d-flex justify-content-end">
@@ -369,6 +377,7 @@ class VmpVaccinationSchedule extends React.Component<IVmpVaccinationScheduleProp
                       wrapperClassName="flex-1"
                       classNamePrefix="default-select"
                       theme={selectDefaultTheme}
+                      isDisabled={isReadOnly}
                     />
                   </div>
                   <div className="col-lg-9 col-xs-12 regimen-visit justify-content-start">
@@ -397,6 +406,7 @@ class VmpVaccinationSchedule extends React.Component<IVmpVaccinationScheduleProp
                           wrapperClassName="flex-1"
                           classNamePrefix="default-select"
                           theme={selectDefaultTheme}
+                          isDisabled={isReadOnly}
                         />
                         <InputWithPlaceholder
                           type="number"
@@ -406,6 +416,7 @@ class VmpVaccinationSchedule extends React.Component<IVmpVaccinationScheduleProp
                           onChange={this.onWindowChange(i, j, 'midPointWindow')}
                           wrapperClassName="flex-1"
                           min={ZERO}
+                          readOnly={isReadOnly}
                         />
                       </div>
                       {!!dosingVisitTypes && dosingVisitTypes.includes(nameOfDose) && (
@@ -427,6 +438,7 @@ class VmpVaccinationSchedule extends React.Component<IVmpVaccinationScheduleProp
                             onChange={this.onWindowChange(i, j, 'lowWindow')}
                             wrapperClassName="flex-1"
                             min={ZERO}
+                            readOnly={isReadOnly}
                           />
                           <InputWithPlaceholder
                             type="number"
@@ -436,11 +448,14 @@ class VmpVaccinationSchedule extends React.Component<IVmpVaccinationScheduleProp
                             onChange={this.onWindowChange(i, j, 'upWindow')}
                             wrapperClassName="flex-1"
                             min={ZERO}
+                            readOnly={isReadOnly}
                           />
                         </div>
                       )}
                     </div>
-                    <PlusMinusButtons intl={intl} onPlusClick={() => this.addVisit(i, j)} onMinusClick={() => this.removeVisit(i, j)} />
+                    {!isReadOnly && (
+                      <PlusMinusButtons intl={intl} onPlusClick={() => this.addVisit(i, j)} onMinusClick={() => this.removeVisit(i, j)} />
+                    )}
                   </div>
                 );
               })}
@@ -503,6 +518,8 @@ class VmpVaccinationSchedule extends React.Component<IVmpVaccinationScheduleProp
 
 const mapStateToProps = ({ apps, settings, visit }) => ({
   dosingVisitTypes: (apps.vmpConfig && apps.vmpConfig.dosingVisitTypes) || DEFAULT_DOSING_VISIT_TYPES,
+  regimenUpdatePermitted:
+    apps.vmpConfig?.regimenUpdatePermitted !== undefined ? apps.vmpConfig.regimenUpdatePermitted : DEFAULT_REGIMEN_UPDATE_PERMITTED,
   appError: apps.errorMessage,
   appLoading: apps.loading,
   error: apps.errorMessage,

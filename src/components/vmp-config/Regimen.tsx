@@ -19,7 +19,8 @@ export function Regimen({
   isRegimenNameDuplicated,
   openModal,
   closeModal,
-  onValueChange
+  onValueChange,
+  readOnly = false
 }) {
   const { vaccine, manufacturers } = config;
   const onVaccineChange = (i, fieldName, isMultiselect) => e => {
@@ -98,6 +99,7 @@ export function Regimen({
                 isMulti
                 isOptionSelected={() => false}
                 theme={selectDefaultTheme}
+                isDisabled={savedRegimen.includes(regimen) && readOnly}
               />
               {showValidationErrors && isManufacturersEmpty && <ValidationError message="vmpConfig.error.regimenManufacturersEmpty" />}
             </div>

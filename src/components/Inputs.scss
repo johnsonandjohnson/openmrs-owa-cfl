@@ -11,6 +11,7 @@
   --main-color: #333333;
   --placeholder-color: rgba(0, 0, 0, 0.45);
   --default-placeholder-font-size: 14px;
+  --select-with-placeholder-padding-top: calc(2rem - 4px);
 }
 
 #app .register-patient,
@@ -78,6 +79,9 @@
       text-transform: uppercase;
       opacity: 0.65;
     }
+    & div[class*='__control--is-disabled'] {
+      background-color: rgb(238, 238, 238);
+    }
   }
   /* style react-select to resemble a regular input */
   div[class*='-container']:not([class*='filter-select']) {
@@ -105,7 +109,7 @@
       color: rgba(0, 0, 0, 0.45);
     }
     div[class*='__single-value'] {
-      padding-top: calc(2rem - 4px);
+      padding-top: var(--select-with-placeholder-padding-top);
       position: initial;
       margin-left: auto;
       margin-right: auto;
@@ -122,6 +126,9 @@
       width: 100%;
       margin-left: auto;
       margin-right: auto;
+    }
+    &[class*='__value-container--is-multi'] {
+      padding-top: var(--select-with-placeholder-padding-top);
     }
   }
   div[class*='__menu'] {

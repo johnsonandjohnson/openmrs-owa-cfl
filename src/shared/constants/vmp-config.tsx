@@ -40,5 +40,6 @@ export const DEFAULT_VMP_CONFIG = {
   irisScore: null,
   addressFields: {}
 };
+export const DEFAULT_REGIMEN_UPDATE_PERMITTED = true;
 export const EMPTY_COUNTRY = { fields: [{}] };
 export const COUNTRY_OPTIONS = _.sortBy(getData(), 'name').map(({ name }) => ({ label: name, value: name }));

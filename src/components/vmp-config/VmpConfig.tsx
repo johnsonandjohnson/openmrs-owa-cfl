@@ -2,7 +2,14 @@ import React from 'react';
 import { connect } from 'react-redux';
 import './VmpConfig.scss';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { DEFAULT_AUTH_STEPS, DEFAULT_SYNC_SCOPES, DEFAULT_VMP_CONFIG, EMPTY_COUNTRY, SETTING_KEY } from '../../shared/constants/vmp-config';
+import {
+  DEFAULT_AUTH_STEPS,
+  DEFAULT_REGIMEN_UPDATE_PERMITTED,
+  DEFAULT_SYNC_SCOPES,
+  DEFAULT_VMP_CONFIG,
+  EMPTY_COUNTRY,
+  SETTING_KEY
+} from '../../shared/constants/vmp-config';
 import { createSetting, getSettingByQuery, updateSetting } from '../../redux/reducers/setttings';
 import { parseJson } from '../../shared/util/json-util';
 import '../Inputs.scss';
@@ -13,7 +20,7 @@ import { IVmpConfig } from '../../shared/models/vmp-config';
 import { extractEventValue, getPlaceholder, validateRegex } from '../../shared/util/form-util';
 import _ from 'lodash';
 import { successToast, errorToast } from '@bit/soldevelo-omrs.cfl-components.toast-handler';
-import { TEN, ZERO } from 'src/shared/constants/input';
+import { TEN, ZERO } from '../../shared/constants/input';
 import { ConfirmationModal } from '../common/form/ConfirmationModal';
 import { getPatientLinkedRegimens } from '../../redux/reducers/patient';
 import { SyncScope } from './SyncScope';
@@ -244,7 +251,7 @@ class VmpConfig extends React.Component<IVmpConfigProps, IVmpConfigState> {
   closeModal = () => this.setState({ isModalOpen: false });
 
   render() {
-    const { intl, appError, appLoading, loading, patientLinkedRegimens, syncScopes, authSteps } = this.props;
+    const { intl, appError, appLoading, loading, patientLinkedRegimens, syncScopes, authSteps, regimenUpdatePermitted } = this.props;
     const { config, savedRegimen, showValidationErrors } = this.state;
     return (
       <div className="vmp-config">
@@ -300,6 +307,7 @@ class VmpConfig extends React.Component<IVmpConfigProps, IVmpConfigState> {
                   openModal={this.openModal}
                   closeModal={this.closeModal}
                   onValueChange={this.onValueChange}
+                  readOnly={!regimenUpdatePermitted}
                 />
               </div>
               <div className="section">
@@ -346,6 +354,8 @@ class VmpConfig extends React.Component<IVmpConfigProps, IVmpConfigState> {
 const mapStateToProps = ({ apps, settings, cflPatient }) => ({
   syncScopes: (apps.vmpConfig && apps.vmpConfig.syncScopes) || DEFAULT_SYNC_SCOPES,
   authSteps: (apps.vmpConfig && apps.vmpConfig.authSteps) || DEFAULT_AUTH_STEPS,
+  regimenUpdatePermitted:
+    apps.vmpConfig?.regimenUpdatePermitted !== undefined ? apps.vmpConfig.regimenUpdatePermitted : DEFAULT_REGIMEN_UPDATE_PERMITTED,
   appError: apps.errorMessage,
   appLoading: apps.loading,
   error: apps.errorMessage,

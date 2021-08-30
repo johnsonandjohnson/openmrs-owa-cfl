@@ -96,6 +96,7 @@
         "label": "Iris Scan"
       }
     ],
-    "dosingVisitTypes": ["Dosing"]
+    "dosingVisitTypes": ["Dosing"],
+    "regimenUpdatePermitted": true
   }
 }
