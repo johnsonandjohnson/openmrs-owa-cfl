@@ -517,9 +517,8 @@ class VmpVaccinationSchedule extends React.Component<IVmpVaccinationScheduleProp
 }
 
 const mapStateToProps = ({ apps, settings, visit }) => ({
-  dosingVisitTypes: (apps.vmpConfig && apps.vmpConfig.dosingVisitTypes) || DEFAULT_DOSING_VISIT_TYPES,
-  regimenUpdatePermitted:
-    apps.vmpConfig?.regimenUpdatePermitted !== undefined ? apps.vmpConfig.regimenUpdatePermitted : DEFAULT_REGIMEN_UPDATE_PERMITTED,
+  dosingVisitTypes: apps?.vmpConfig?.dosingVisitTypes ?? DEFAULT_DOSING_VISIT_TYPES,
+  regimenUpdatePermitted: apps?.vmpConfig?.regimenUpdatePermitted ?? DEFAULT_REGIMEN_UPDATE_PERMITTED,
   appError: apps.errorMessage,
   appLoading: apps.loading,
   error: apps.errorMessage,

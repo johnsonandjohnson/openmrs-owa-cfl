@@ -46,25 +46,23 @@ const SortableMultiSelect = props => {
         MultiValueLabel: SortableMultiValueLabel
       }}
       closeMenuOnSelect={false}
-      styles={
-        props.isDisabled
-          ? {
-              ...props.styles,
-              indicatorsContainer: base => ({
-                ...base,
-                display: NONE
-              }),
-              multiValueLabel: base => ({
-                ...base,
-                paddingRight: READONLY_VALUE_LABEL_PADDING_RIGHT
-              }),
-              multiValueRemove: base => ({
-                ...base,
-                display: NONE
-              })
-            }
-          : props.styles
-      }
+      {...(props.isDisabled && {
+        styles: {
+          ...props.styles,
+          indicatorsContainer: base => ({
+            ...base,
+            display: NONE
+          }),
+          multiValueLabel: base => ({
+            ...base,
+            paddingRight: READONLY_VALUE_LABEL_PADDING_RIGHT
+          }),
+          multiValueRemove: base => ({
+            ...base,
+            display: NONE
+          })
+        }
+      })}
     />
   );
 };
