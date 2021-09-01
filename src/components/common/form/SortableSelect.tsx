@@ -4,6 +4,9 @@ import Select, { components } from 'react-select';
 import { SortableContainer, SortableElement, SortableHandle } from 'react-sortable-hoc';
 import { swapPositions } from '../../../shared/util/array-util';
 
+const NONE = 'none';
+const READONLY_VALUE_LABEL_PADDING_RIGHT = 6;
+
 export const SortableMultiValue = SortableElement(props => {
   // this prevents the menu from being opened/closed when the user clicks
   // on a value to begin dragging it. ideally, detecting a click (instead of
@@ -43,6 +46,23 @@ const SortableMultiSelect = props => {
         MultiValueLabel: SortableMultiValueLabel
       }}
       closeMenuOnSelect={false}
+      {...(props.isDisabled && {
+        styles: {
+          ...props.styles,
+          indicatorsContainer: base => ({
+            ...base,
+            display: NONE
+          }),
+          multiValueLabel: base => ({
+            ...base,
+            paddingRight: READONLY_VALUE_LABEL_PADDING_RIGHT
+          }),
+          multiValueRemove: base => ({
+            ...base,
+            display: NONE
+          })
+        }
+      })}
     />
   );
 };
