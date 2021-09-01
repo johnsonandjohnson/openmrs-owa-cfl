@@ -1,3 +1,9 @@
+:root {
+  --default-button-border-color: #6c757d;
+  --default-button-line-height: 1.5;
+  --default-button-border-radius: 4px;
+}
+
 /** Fonts **/
 @font-face {
   font-family: 'CircularStd';
@@ -259,7 +265,7 @@ button.btn {
   font-size: 11px !important;
   text-transform: uppercase;
   background: #00455c;
-  border-color: #6c757d !important;
+  border-color: var(--default-button-border-color) !important;
 }
 
 button.btn:hover {
@@ -268,6 +274,14 @@ button.btn:hover {
 
 button.btn.cancel:hover {
   background-color: transparent;
+}
+
+#content button.cancel {
+  background: transparent;
+  color: black;
+  padding: 0.5rem 1.85rem;
+  border-radius: var(--default-button-border-radius);
+  line-height: var(--default-button-line-height);
 }
 
 .info-container,
@@ -689,12 +703,11 @@ tr:hover td:not(.allergyStatus) {
 #content button,
 #allergy > #actions > input {
   background: #00455c;
-  border-color: #6c757d !important;
+  border-color: var(--default-button-border-color) !important;
   font-size: 11px !important;
   text-transform: uppercase;
 }
 
-#content button.cancel,
 #allergy > #actions > input.cancel,
 #body-wrapper #content.container-fluid input.cancel {
   background: none !important;
@@ -729,13 +742,13 @@ tr:hover td:not(.allergyStatus) {
   font-family: CircularStd;
   background: #d5d5d5 !important;
   font-size: 11px !important;
-  border: 1px solid #6c757d !important;
+  border: 1px solid var(--default-button-border-color) !important;
   padding: 0.5rem 1.25rem !important;
   color: black;
   margin-right: 0.75rem !important;
   background: white !important;
-  border-radius: 4px !important;
-  line-height: 1.5;
+  border-radius: var(--default-button-border-radius) !important;
+  line-height: var(--default-button-line-height);
 }
 
 #types.button-group > .button.active {

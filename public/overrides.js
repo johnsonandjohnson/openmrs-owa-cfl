@@ -120,7 +120,7 @@ function redesignAllergyUI() {
     }
     const cancelButton = document.querySelector('#content > button.cancel');
     if (!!cancelButton) {
-      cancelButton.parentElement.removeChild(cancelButton);
+      cancelButton.classList.add('btn');
     }
     const htmlLines = [
       '<div class="allergies-container">',
