@@ -207,8 +207,7 @@ class RegistrationForm extends React.Component<IRegistrationProps, IRegistration
   };
 
   stepButtons = stepNumber => isValid => {
-    const { isCaregiver } = this.props;
-    const person = isCaregiver ? 'caregiver' : 'patient';
+    const person = this.props.isCaregiver ? 'caregiver' : 'patient';
     const stepCount = this.steps().length;
     return (
       <div className="step-buttons">
