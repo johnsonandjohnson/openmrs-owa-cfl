@@ -207,22 +207,33 @@ class RegistrationForm extends React.Component<IRegistrationProps, IRegistration
   };
 
   stepButtons = stepNumber => isValid => {
+    const person = this.props.isCaregiver ? 'caregiver' : 'patient';
     const stepCount = this.steps().length;
     return (
       <div className="step-buttons">
         {stepNumber > 0 ? (
-          <Button onClick={e => this.setStep(stepNumber - 1)}>
+          <Button id={`${person}-previous-button`} onClick={() => this.setStep(stepNumber - 1)}>
             <FormattedMessage id="registerPatient.previous" />
           </Button>
         ) : (
           <div />
         )}
         {stepNumber < stepCount ? (
-          <Button onClick={this.onNextClick(isValid)} disabled={!isValid || stepNumber >= stepCount + 1} className="next">
+          <Button
+            id={`${person}-next-button`}
+            onClick={this.onNextClick(isValid)}
+            disabled={!isValid || stepNumber >= stepCount + 1}
+            className="next"
+          >
             <FormattedMessage id="registerPatient.next" />
           </Button>
         ) : (
-          <Button onClick={this.onConfirmClick} className="next" disabled={this.props.loading || !this.isFormValid()}>
+          <Button
+            id={`${person}-confirm-button`}
+            onClick={this.onConfirmClick}
+            className="next"
+            disabled={this.props.loading || !this.isFormValid()}
+          >
             <FormattedMessage id="registerPatient.confirm" />
           </Button>
         )}

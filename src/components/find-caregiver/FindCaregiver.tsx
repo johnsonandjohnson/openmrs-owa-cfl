@@ -81,6 +81,7 @@ class FindCaregiver extends React.Component<ICaregiversProps, ICaregiversState> 
             <FormGroup className="caregiver-search">
               <img src={searchIcon} alt="search" className="search-icon" />
               <Input
+                id="search-caregiver"
                 placeholder={this.props.intl.formatMessage({
                   id: 'findCaregiver.searchInputPlaceholder'
                 })}
