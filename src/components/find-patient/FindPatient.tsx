@@ -83,6 +83,7 @@ class FindPatient extends React.Component<IPatientsProps, IPatientsState> {
             <FormGroup className="patient-search">
               <img src={searchIcon} alt="search" className="search-icon" />
               <Input
+                id="search-patient"
                 placeholder={this.props.intl.formatMessage({
                   id: 'findPatient.searchInputPlaceholder'
                 })}
