@@ -210,7 +210,7 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
             </div>
             <div className="col-6 px-5">
               <Switch
-                id={`${configurationIdx}-sms-upon-registration-switch`}
+                id={`sms-upon-registration-switch-${configurationIdx}`}
                 intl={intl}
                 labelTranslationId="notificationConfiguration.uponRegistration"
                 checked={shouldSendSmsUponRegistration}
@@ -219,7 +219,7 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
                 onChange={this.onChange(configurationIdx, SEND_SMS_UPON_REGISTRATION_PROPERTY_NAME)}
               />
               <Switch
-                id={`${configurationIdx}-sms-visit-reminder-switch`}
+                id={`sms-visit-reminder-switch-${configurationIdx}`}
                 intl={intl}
                 labelTranslationId="notificationConfiguration.visitReminder.switch"
                 checked={shouldSendSmsReminder}
@@ -264,7 +264,7 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
             </div>
             <div className="col-6 px-5">
               <Switch
-                id={`${configurationIdx}-call-upon-registration-switch`}
+                id={`call-upon-registration-switch-${configurationIdx}`}
                 intl={intl}
                 labelTranslationId="notificationConfiguration.uponRegistration"
                 checked={shouldPerformCallUponRegistration}
@@ -273,7 +273,7 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
                 onChange={this.onChange(configurationIdx, PERFORM_CALL_UPON_REGISTRATION_PROPERTY_NAME)}
               />
               <Switch
-                id={`${configurationIdx}-call-visit-reminder-switch`}
+                id={`call-visit-reminder-switch-${configurationIdx}`}
                 intl={intl}
                 labelTranslationId="notificationConfiguration.visitReminder.switch"
                 checked={shouldSendCallReminder}
