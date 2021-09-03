@@ -703,6 +703,7 @@ tr:hover td:not(.allergyStatus) {
 #content button,
 #allergy > #actions > input {
   background: #00455c;
+  color: white;
   border-color: var(--default-button-border-color) !important;
   font-size: 11px !important;
   text-transform: uppercase;
