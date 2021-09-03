@@ -5,6 +5,7 @@ import './Switch.scss';
 import 'rc-switch/assets/index.css';
 
 export const Switch = ({
+  id,
   intl,
   onChange,
   checkedTranslationId,
@@ -14,11 +15,11 @@ export const Switch = ({
   disabled = false
 }) => (
   <div className="inline-fields switch-with-label">
-    <label htmlFor="switch">
+    <label htmlFor={id}>
       <FormattedMessage id={labelTranslationId} />
     </label>
     <ReactSwitch
-      id="switch"
+      id={id}
       onChange={onChange}
       onClick={onChange}
       disabled={disabled}

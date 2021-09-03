@@ -210,6 +210,7 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
             </div>
             <div className="col-6 px-5">
               <Switch
+                id={`sms-upon-registration-switch-${configurationIdx}`}
                 intl={intl}
                 labelTranslationId="notificationConfiguration.uponRegistration"
                 checked={shouldSendSmsUponRegistration}
@@ -218,6 +219,7 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
                 onChange={this.onChange(configurationIdx, SEND_SMS_UPON_REGISTRATION_PROPERTY_NAME)}
               />
               <Switch
+                id={`sms-visit-reminder-switch-${configurationIdx}`}
                 intl={intl}
                 labelTranslationId="notificationConfiguration.visitReminder.switch"
                 checked={shouldSendSmsReminder}
@@ -262,6 +264,7 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
             </div>
             <div className="col-6 px-5">
               <Switch
+                id={`call-upon-registration-switch-${configurationIdx}`}
                 intl={intl}
                 labelTranslationId="notificationConfiguration.uponRegistration"
                 checked={shouldPerformCallUponRegistration}
@@ -270,6 +273,7 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
                 onChange={this.onChange(configurationIdx, PERFORM_CALL_UPON_REGISTRATION_PROPERTY_NAME)}
               />
               <Switch
+                id={`call-visit-reminder-switch-${configurationIdx}`}
                 intl={intl}
                 labelTranslationId="notificationConfiguration.visitReminder.switch"
                 checked={shouldSendCallReminder}
@@ -445,7 +449,7 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
         showPlaceholder={!!configurationName}
         value={!!configurationName ? configurationName : ''}
         wrapperClassName="flex-1"
-        disabled
+        readOnly
       />
     );
     const bodyComponent = [
