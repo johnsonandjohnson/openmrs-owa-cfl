@@ -43,3 +43,4 @@ export const DEFAULT_VMP_CONFIG = {
 export const DEFAULT_REGIMEN_UPDATE_PERMITTED = true;
 export const EMPTY_COUNTRY = { fields: [{}] };
 export const COUNTRY_OPTIONS = _.sortBy(getData(), 'name').map(({ name }) => ({ label: name, value: name }));
+export const ORDERED_ADDRESS_FIELD_PARTS = ['field', 'type', 'name', 'displayOrder'];

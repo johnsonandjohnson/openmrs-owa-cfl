@@ -8,7 +8,8 @@ import {
   DEFAULT_SYNC_SCOPES,
   DEFAULT_VMP_CONFIG,
   EMPTY_COUNTRY,
-  SETTING_KEY
+  SETTING_KEY,
+  ORDERED_ADDRESS_FIELD_PARTS
 } from '../../shared/constants/vmp-config';
 import { createSetting, getSettingByQuery, updateSetting } from '../../redux/reducers/setttings';
 import { parseJson } from '../../shared/util/json-util';
@@ -125,9 +126,13 @@ class VmpConfig extends React.Component<IVmpConfigProps, IVmpConfigState> {
     config.addressFields = !!config.addressFields
       ? config.addressFields.reduce((map, obj) => {
           if (!!obj.countryName) {
-            const fields = obj.fields || [];
-            fields.forEach((field, i) => (field.displayOrder = i + 1));
-            map[obj.countryName] = fields;
+            map[obj.countryName] = (obj.fields || []).map((field, i) => {
+              field.displayOrder = i + 1;
+              return ORDERED_ADDRESS_FIELD_PARTS.reduce((obj, key) => {
+                obj[key] = field[key];
+                return obj;
+              }, {});
+            });
           }
           return map;
         }, {})
