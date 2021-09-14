@@ -5,5 +5,9 @@
 
   label {
     font-weight: normal;
+
+    &:hover {
+      cursor: pointer;
+    }
   }
 }
