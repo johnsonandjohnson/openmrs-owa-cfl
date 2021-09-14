@@ -27,13 +27,14 @@ class Input extends React.Component<IInputProps, IFieldState> {
     const placeholder = getPlaceholder(intl, label, name, required);
     const props = getCommonInputProps(this.props, placeholder);
     const errorMessage = this.getErrorMessage(inputValue);
+
     return (
       <div className={`${className} input-container`}>
         <PhoneInput
           {...props}
           ref={this.inputRef}
           international
-          countryCallingCodeEditable={false}
+          countryCallingCodeEditable={true}
           numberInputProps={{ className: props.className }}
           className={null}
         />
