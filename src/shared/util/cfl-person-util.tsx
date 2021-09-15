@@ -17,6 +17,7 @@ import {
 import { extractValue } from './omrs-entity-util';
 import { formatDate } from './date-util';
 import { formatPhoneNumberIntl } from 'react-phone-number-input';
+import { getPhoneNumberWithPlusSign } from '../../shared/util/person-util';
 
 export const extractAttribute = (entity, type) => {
   if (!entity) {
@@ -44,7 +45,7 @@ export const columnContent = (person, column, intl) => {
       return person && (person.patientIdentifier || person.personIdentifier);
     case PHONE_NUMBER: {
       const phoneNumber = extractAttribute(person, TELEPHONE_NUMBER_ATTRIBUTE_TYPE);
-      return formatPhoneNumberIntl(phoneNumber) || phoneNumber;
+      return formatPhoneNumberIntl(getPhoneNumberWithPlusSign(phoneNumber)) || phoneNumber;
     }
     case PERSON_LANGUAGE:
       return extractAttribute(person, PERSON_LANGUAGE_ATTRIBUTE_TYPE);

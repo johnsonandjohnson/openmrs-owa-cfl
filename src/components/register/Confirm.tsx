@@ -8,6 +8,7 @@ import _ from 'lodash';
 import { BIRTHDATE_FIELD, ESTIMATED_BIRTHDATE_FIELDS, LOCATIONS_OPTION_SOURCE, RELATIVES_FIELD_TYPE } from './Step';
 import { formatDate } from '../../shared/util/date-util';
 import { formatPhoneNumberIntl } from 'react-phone-number-input';
+import { getPhoneNumberWithPlusSign } from '../../shared/util/person-util';
 
 export interface IConfirmProps extends StateProps, DispatchProps {
   intl: any;
@@ -74,7 +75,7 @@ class Confirm extends React.Component<IConfirmProps> {
       }
     }
     if (field.type === 'phone' && !!val) {
-      return formatPhoneNumberIntl(val);
+      return formatPhoneNumberIntl(getPhoneNumberWithPlusSign(val));
     }
     return val;
   };
