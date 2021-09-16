@@ -7,6 +7,7 @@ import _ from 'lodash';
 import Field from './inputs/Field';
 import { isPossiblePhoneNumber } from 'react-phone-number-input';
 import { searchLocations } from '../../redux/reducers/location';
+import { getPhoneNumberWithPlusSign } from '../../shared/util/person-util';
 
 export interface IStepProps extends StateProps, DispatchProps {
   intl: any;
@@ -96,7 +97,7 @@ class Step extends React.Component<IStepProps, IStepState> {
     const value = patient[field.name];
     let isInvalid = field.required && !value;
     if (field.type === PHONE_FIELD_TYPE && !!value) {
-      isInvalid = !isPossiblePhoneNumber(value);
+      isInvalid = !isPossiblePhoneNumber(getPhoneNumberWithPlusSign(value));
     }
     if (field.regex) {
       const re = new RegExp(field.regex);
