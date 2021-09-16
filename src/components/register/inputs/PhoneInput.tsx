@@ -23,7 +23,7 @@ class Input extends React.Component<IInputProps, IFieldState> {
     }
   };
 
-  removePlusSign = phoneNumber => phoneNumber && phoneNumber.length > 0 && phoneNumber.substring(PLUS_SIGN_LENGTH);
+  removePlusSign = phoneNumber => phoneNumber && phoneNumber.substring(PLUS_SIGN_LENGTH);
 
   render = () => {
     const { intl, field, isInvalid, isDirty, className, value, patient } = this.props;
