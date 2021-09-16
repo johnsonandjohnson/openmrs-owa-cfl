@@ -102,17 +102,17 @@ class Step extends React.Component<IStepProps, IStepState> {
   validateField = field => {
     const { patient } = this.props;
     const value = patient[field.name];
-    const patientIdentifierType = this.matchPatientIdentifierType(field);
-    const regx = field.regex || patientIdentifierType?.format;
+    const patientIdentifierType = this.getPatientIdentifierType(field);
+    const regex = field.regex || patientIdentifierType?.format;
     let isInvalid = field.required && !value;
 
     if (field.type === PHONE_FIELD_TYPE && !!value) {
       isInvalid = !isPossiblePhoneNumber(value);
     }
 
-    if (regx) {
-      const re = new RegExp(regx);
-      const isRequired = field.reqired || patientIdentifierType.required;
+    if (regex) {
+      const re = new RegExp(regex);
+      const isRequired = field.required || patientIdentifierType.required;
       isInvalid = !isRequired && !value ? false : !re.test(value);
     }
 
@@ -163,7 +163,7 @@ class Step extends React.Component<IStepProps, IStepState> {
     }
   };
 
-  matchPatientIdentifierType = field => this.props.patientIdentifierTypes.find(type => type.name === field.name && type.format);
+  getPatientIdentifierType = field => this.props.patientIdentifierTypes.find(type => type.name === field.name && type.format);
 
   render() {
     const { stepDefinition, patient } = this.props;
@@ -180,7 +180,7 @@ class Step extends React.Component<IStepProps, IStepState> {
             {_.map(stepDefinition.fields, (field, i) => {
               const selectOptions = this.getOptions(field);
               const additionalProps = {} as any;
-              const patientIdentifierType = this.matchPatientIdentifierType(field);
+              const patientIdentifierType = this.getPatientIdentifierType(field);
 
               if (i === stepDefinition.fields.length - 1 || (field.name === BIRTHDATE_FIELD && !!patient[BIRTHDATE_FIELD])) {
                 additionalProps.onKeyDown = this.handleLastFieldKeyDown;
