@@ -19,7 +19,7 @@ class Input extends React.Component<IInputProps, IFieldState> {
   };
 
   render = () => {
-    const { intl, field, isInvalid, isDirty, className, value, patient } = this.props;
+    const { intl, field, isInvalid, isDirty, className, value, patient, message } = this.props;
     const { name, required, type, label } = field;
     const hasValue = !!value || !!patient[field.name];
     const placeholder = getPlaceholder(intl, label, name, required);
@@ -33,7 +33,7 @@ class Input extends React.Component<IInputProps, IFieldState> {
       <div className={`${className} input-container`}>
         <input {...props} />
         {hasValue && <span className="placeholder">{placeholder}</span>}
-        {isDirty && isInvalid && <ValidationError hasValue={hasValue} field={field} />}
+        {isDirty && isInvalid && <ValidationError hasValue={hasValue} field={field} message={message} />}
       </div>
     );
   };

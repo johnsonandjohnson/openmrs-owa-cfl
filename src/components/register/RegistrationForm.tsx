@@ -11,7 +11,7 @@ import Check from '../../assets/img/check.svg';
 import CheckCircle from '../../assets/img/check-circle.svg';
 import { editPatient, editPerson, register, registerPerson, updateRelationships } from '../../redux/reducers/registration';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
-import { getPatient } from '../../redux/reducers/patient';
+import { getPatient, getPatientIdentifierTypes } from '../../redux/reducers/patient';
 import { getPerson, getPersonRelationships } from '../../redux/reducers/person';
 import defaultSteps from './patientDefaultSteps.json';
 import caregiverDefaultSteps from './caregiverDefaultSteps.json';
@@ -47,6 +47,8 @@ class RegistrationForm extends React.Component<IRegistrationProps, IRegistration
   patient = () => (this.props.isCaregiver ? this.props.person : this.props.patient);
 
   componentDidMount() {
+    this.props.getPatientIdentifierTypes();
+
     if (this.isEdit()) {
       this.props.getPersonRelationships(this.props.match.params.id);
       if (this.props.isCaregiver) {
@@ -161,6 +163,7 @@ class RegistrationForm extends React.Component<IRegistrationProps, IRegistration
             onPatientChange={this.onPatientChange}
             stepButtons={this.stepButtons(i)}
             stepDefinition={stepDefinition}
+            patientIdentifierTypes={this.props.patientIdentifierTypes}
             setValidity={this.setValidity(i)}
             setStep={this.setStep}
             stepNumber={i}
@@ -305,11 +308,12 @@ const mapStateToProps = ({ registration, cflPatient, cflPerson, apps }) => ({
   message: registration.message,
   id: registration.id,
   patient: cflPatient.patient,
+  patientIdentifierTypes: cflPatient.patientIdentifierTypes,
   person: cflPerson.person,
   personRelationships: cflPerson.personRelationships,
   patientSteps: apps.patientRegistrationSteps || defaultSteps,
   caregiverSteps: apps.caregiverRegistrationSteps || caregiverDefaultSteps,
-  settingsLoading: apps.loading
+  settingsLoading: apps.loading || cflPatient.loading
 });
 
 const mapDispatchToProps = {
@@ -320,7 +324,8 @@ const mapDispatchToProps = {
   editPatient,
   editPerson,
   updateRelationships,
-  getPersonRelationships
+  getPersonRelationships,
+  getPatientIdentifierTypes
 };
 
 type StateProps = ReturnType<typeof mapStateToProps>;
