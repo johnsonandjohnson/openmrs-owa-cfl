@@ -8,8 +8,7 @@ export const ACTION_TYPES = {
   GET_PATIENT: 'patient/GET_PATIENT',
   RESET_PATIENTS: 'patient/RESET_PATIENTS',
   GET_PATIENT_RELATIONSHIPS: 'patient/GET_PATIENT_RELATIONSHIPS',
-  GET_PATIENT_LINKED_REGIMENS: 'patient/GET_PATIENT_LINKED_REGIMENS',
-  GET_PATIENT_IDENTIFIER_TYPES: 'patient/GET_PATIENT_IDENTIFIER_TYPE'
+  GET_PATIENT_LINKED_REGIMENS: 'patient/GET_PATIENT_LINKED_REGIMENS'
 };
 
 const initialState = {
@@ -23,8 +22,7 @@ const initialState = {
   hasNext: false,
   hasPrev: false,
   q: '',
-  patientLinkedRegimens: [],
-  patientIdentifierTypes: []
+  patientLinkedRegimens: []
 };
 
 const reducer = (state = initialState, action) => {
@@ -39,11 +37,6 @@ const reducer = (state = initialState, action) => {
         ...state,
         loading: true,
         q: action.meta.q
-      };
-    case REQUEST(ACTION_TYPES.GET_PATIENT_IDENTIFIER_TYPES):
-      return {
-        ...state,
-        loading: true
       };
     case FAILURE(ACTION_TYPES.SEARCH_PATIENTS):
       return {
@@ -80,12 +73,6 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         patientLinkedRegimens: action.payload.data
-      };
-    case SUCCESS(ACTION_TYPES.GET_PATIENT_IDENTIFIER_TYPES):
-      return {
-        ...state,
-        patientIdentifierTypes: action.payload.data.results,
-        loading: false
       };
     case ACTION_TYPES.RESET_PATIENTS:
       return {
@@ -137,11 +124,6 @@ export const getPatientLinkedRegimens = () => {
 
 export const reset = () => ({
   type: ACTION_TYPES.RESET_PATIENTS
-});
-
-export const getPatientIdentifierTypes = () => ({
-  type: ACTION_TYPES.GET_PATIENT_IDENTIFIER_TYPES,
-  payload: axios.get('/openmrs/ws/rest/v1/patientidentifiertype?v=default')
 });
 
 export default reducer;

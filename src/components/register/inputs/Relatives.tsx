@@ -60,6 +60,7 @@ class Relatives extends React.Component<IRelativesProps, IRelativesState> {
 
   componentDidMount() {
     this.props.getRelationshipTypes();
+    this.props.reset();
   }
 
   componentDidUpdate(prevProps: Readonly<IRelativesProps>, prevState: Readonly<IRelativesState>, snapshot?: any) {

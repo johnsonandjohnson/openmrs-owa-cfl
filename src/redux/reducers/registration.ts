@@ -7,7 +7,8 @@ import { GENERIC_ERROR_MESSAGE } from '../../shared/constants/error';
 export const ACTION_TYPES = {
   REGISTER: 'registration/REGISTER',
   UPDATE_RELATIONSHIPS: 'registration/UPDATE_RELATIONSHIPS',
-  UPDATE_PROFILE: 'registration/UPDATE_PROFILE'
+  UPDATE_PROFILE: 'registration/UPDATE_PROFILE',
+  GET_PATIENT_IDENTIFIER_TYPES: 'registration/GET_PATIENT_IDENTIFIER_TYPE'
 };
 
 const initialState = {
@@ -15,13 +16,15 @@ const initialState = {
   success: false,
   message: null,
   errors: [],
-  id: null
+  id: null,
+  patientIdentifierTypes: []
 };
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case REQUEST(ACTION_TYPES.REGISTER):
     case REQUEST(ACTION_TYPES.UPDATE_PROFILE):
+    case REQUEST(ACTION_TYPES.GET_PATIENT_IDENTIFIER_TYPES):
       return {
         ...state,
         loading: true
@@ -45,6 +48,12 @@ const reducer = (state = initialState, action) => {
         success: true,
         loading: false,
         id: data
+      };
+    case SUCCESS(ACTION_TYPES.GET_PATIENT_IDENTIFIER_TYPES):
+      return {
+        ...state,
+        patientIdentifierTypes: action.payload.data.results,
+        loading: false
       };
     default: {
       return state;
@@ -116,5 +125,10 @@ export const updateRelationships = person => {
     payload: axios.post(requestUrl, querystring.stringify(formData))
   };
 };
+
+export const getPatientIdentifierTypes = () => ({
+  type: ACTION_TYPES.GET_PATIENT_IDENTIFIER_TYPES,
+  payload: axios.get('/openmrs/ws/rest/v1/patientidentifiertype?v=default')
+});
 
 export default reducer;

@@ -9,9 +9,16 @@ import { IPatient } from '../../shared/models/patient';
 import { extractPatientOrPersonData, extractPersonRelationships } from '../../shared/util/patient-util';
 import Check from '../../assets/img/check.svg';
 import CheckCircle from '../../assets/img/check-circle.svg';
-import { editPatient, editPerson, register, registerPerson, updateRelationships } from '../../redux/reducers/registration';
+import {
+  editPatient,
+  editPerson,
+  register,
+  registerPerson,
+  updateRelationships,
+  getPatientIdentifierTypes
+} from '../../redux/reducers/registration';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
-import { getPatient, getPatientIdentifierTypes } from '../../redux/reducers/patient';
+import { getPatient } from '../../redux/reducers/patient';
 import { getPerson, getPersonRelationships } from '../../redux/reducers/person';
 import defaultSteps from './patientDefaultSteps.json';
 import caregiverDefaultSteps from './caregiverDefaultSteps.json';
@@ -307,13 +314,13 @@ const mapStateToProps = ({ registration, cflPatient, cflPerson, apps }) => ({
   success: registration.success,
   message: registration.message,
   id: registration.id,
+  patientIdentifierTypes: registration.patientIdentifierTypes,
   patient: cflPatient.patient,
-  patientIdentifierTypes: cflPatient.patientIdentifierTypes,
   person: cflPerson.person,
   personRelationships: cflPerson.personRelationships,
   patientSteps: apps.patientRegistrationSteps || defaultSteps,
   caregiverSteps: apps.caregiverRegistrationSteps || caregiverDefaultSteps,
-  settingsLoading: apps.loading || cflPatient.loading
+  settingsLoading: apps.loading || registration.loading
 });
 
 const mapDispatchToProps = {
