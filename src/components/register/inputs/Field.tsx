@@ -20,6 +20,7 @@ export interface IFieldProps {
   isInvalid: boolean;
   isDirty: boolean;
   onKeyDown?: any;
+  message?: string;
 }
 
 // tslint:disable-next-line:no-empty-interface

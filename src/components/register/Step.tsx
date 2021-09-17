@@ -9,6 +9,13 @@ import { isPossiblePhoneNumber } from 'react-phone-number-input';
 import { searchLocations } from '../../redux/reducers/location';
 import { getPhoneNumberWithPlusSign } from '../../shared/util/person-util';
 
+export interface IPatientIdentifierType {
+  format: RegExp;
+  formatDescription: string;
+  required: boolean;
+  name: string;
+}
+
 export interface IStepProps extends StateProps, DispatchProps {
   intl: any;
   patient: IPatient;
@@ -18,6 +25,7 @@ export interface IStepProps extends StateProps, DispatchProps {
   setValidity: any;
   setStep: any;
   stepNumber: number;
+  patientIdentifierTypes: IPatientIdentifierType[];
 }
 
 export interface IStepState {
@@ -95,21 +103,29 @@ class Step extends React.Component<IStepProps, IStepState> {
   validateField = field => {
     const { patient } = this.props;
     const value = patient[field.name];
+    const patientIdentifierType = this.getPatientIdentifierType(field);
+    const regex = field.regex || patientIdentifierType?.format;
     let isInvalid = field.required && !value;
+
     if (field.type === PHONE_FIELD_TYPE && !!value) {
       isInvalid = !isPossiblePhoneNumber(getPhoneNumberWithPlusSign(value));
     }
-    if (field.regex) {
-      const re = new RegExp(field.regex);
-      isInvalid = !re.test(value);
+
+    if (regex) {
+      const re = new RegExp(regex);
+      const isRequired = field.required || patientIdentifierType.required;
+      isInvalid = !isRequired && !value ? false : !re.test(value);
     }
+
     if (BIRTHDATE_FIELD === field.name || ESTIMATED_BIRTHDATE_FIELDS.includes(field.name)) {
       // if estimation was made, don't require exact birthdate
       const usesEstimate = ESTIMATED_BIRTHDATE_FIELDS.every(fieldName => !!this.props.patient[fieldName]);
+
       if (usesEstimate) {
         return false;
       }
     }
+
     return isInvalid;
   };
 
@@ -148,9 +164,12 @@ class Step extends React.Component<IStepProps, IStepState> {
     }
   };
 
+  getPatientIdentifierType = field => this.props.patientIdentifierTypes.find(type => type.name === field.name && type.format);
+
   render() {
     const { stepDefinition, patient } = this.props;
     const { invalidFields, dirtyFields } = this.state;
+
     return (
       <>
         <div className="step-fields" key={stepDefinition.name}>
@@ -162,9 +181,16 @@ class Step extends React.Component<IStepProps, IStepState> {
             {_.map(stepDefinition.fields, (field, i) => {
               const selectOptions = this.getOptions(field);
               const additionalProps = {} as any;
+              const patientIdentifierType = this.getPatientIdentifierType(field);
+
               if (i === stepDefinition.fields.length - 1 || (field.name === BIRTHDATE_FIELD && !!patient[BIRTHDATE_FIELD])) {
                 additionalProps.onKeyDown = this.handleLastFieldKeyDown;
               }
+
+              if (patientIdentifierType) {
+                additionalProps.message = patientIdentifierType.formatDescription;
+              }
+
               return field.type === SEPARATOR_FIELD_TYPE ? (
                 <p className={field.class || 'col-7 offset-5 col-sm-10 offset-sm-2 mb-5 mt-5'} key={`field-${i}`}>
                   {field.label}
@@ -190,7 +216,7 @@ class Step extends React.Component<IStepProps, IStepState> {
   }
 }
 
-const mapStateToProps = ({ settings, location }) => ({
+const mapStateToProps = ({ location }) => ({
   locations: location.locations
 });
 
