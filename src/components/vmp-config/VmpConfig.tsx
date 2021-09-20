@@ -113,6 +113,9 @@ class VmpConfig extends React.Component<IVmpConfigProps, IVmpConfigState> {
     if (!config.authSteps || config.authSteps.length === 0) {
       config.authSteps = [{}];
     }
+
+    config = _.defaults(config, DEFAULT_VMP_CONFIG);
+
     this.setState({
       config,
       savedRegimen: _.clone(config.vaccine),

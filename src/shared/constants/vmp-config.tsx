@@ -38,7 +38,8 @@ export const DEFAULT_VMP_CONFIG = {
   personLanguages: [],
   authSteps: [],
   irisScore: null,
-  addressFields: {}
+  addressFields: {},
+  participantIDRegex: ''
 };
 export const DEFAULT_REGIMEN_UPDATE_PERMITTED = true;
 export const EMPTY_COUNTRY = { fields: [{}] };
