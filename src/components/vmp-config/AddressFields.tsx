@@ -87,7 +87,7 @@ export function AddressFields({ intl, config, onValueChange }) {
         const addressParts = country.fields || [];
         addressParts.sort((ap1, ap2) => ap1.displayOrder || 0 > ap2.displayOrder || 0);
         return (
-          <div key={`addressField-${i}`} className="country">
+          <div key={`addressField-${i}`} className="country" data-testid="country">
             <div className="delete-button-container d-flex justify-content-end">
               <button className="btn btn-primary" onClick={deleteCountry(i)}>
                 <FormattedMessage id="vmpConfig.delete" />
@@ -124,12 +124,14 @@ export function AddressFields({ intl, config, onValueChange }) {
                       title={intl.formatMessage({ id: 'vmpConfig.moveUp' })}
                       aria-hidden="true"
                       onClick={moveAddressPart(i, j, -1)}
+                      data-testid="up-button"
                     />
                     <span
                       className={`glyphicon glyphicon-chevron-down ${j === addressParts.length - 1 ? 'disabled' : ''}`}
                       title={intl.formatMessage({ id: 'vmpConfig.moveDown' })}
                       aria-hidden="true"
                       onClick={moveAddressPart(i, j, 1)}
+                      data-testid="down-button"
                     />
                   </div>
                   <SelectWithPlaceholder
