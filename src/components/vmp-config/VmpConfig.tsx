@@ -7,7 +7,6 @@ import {
   DEFAULT_REGIMEN_UPDATE_PERMITTED,
   DEFAULT_SYNC_SCOPES,
   DEFAULT_VMP_CONFIG,
-  EMPTY_COUNTRY,
   SETTING_KEY,
   ORDERED_ADDRESS_FIELD_PARTS
 } from '../../shared/constants/vmp-config';
@@ -52,7 +51,7 @@ export interface IVmpConfigState {
 const MS_IN_A_MINUTE = 1000 * 60;
 const MS_IN_A_DAY = MS_IN_A_MINUTE * 60 * 24;
 
-class VmpConfig extends React.Component<IVmpConfigProps, IVmpConfigState> {
+export class VmpConfig extends React.Component<IVmpConfigProps, IVmpConfigState> {
   state = {
     config: {} as IVmpConfig,
     savedRegimen: [],
@@ -83,36 +82,18 @@ class VmpConfig extends React.Component<IVmpConfigProps, IVmpConfigState> {
 
   extractConfigData = () => {
     let config = parseJson(this.props.config);
-    if (!config || config.length === 0) {
-      config = _.cloneDeep(DEFAULT_VMP_CONFIG);
-      if (!!this.props.syncScopes && this.props.syncScopes.length > 0) {
-        config.syncScope = this.props.syncScopes[0].value;
-      }
-    }
-    if (!!config.operatorCredentialsRetentionTime) {
-      config.operatorCredentialsRetentionTime = config.operatorCredentialsRetentionTime / MS_IN_A_DAY;
-    }
-    if (!!config.operatorOfflineSessionTimeout) {
-      config.operatorOfflineSessionTimeout = config.operatorOfflineSessionTimeout / MS_IN_A_MINUTE;
-    }
-    const addressFields = config.addressFields || {};
+    config = _.defaults(config, DEFAULT_VMP_CONFIG);
+    const addressFields = config.addressFields;
+
     // make it a list so it's possible to maintain the order while replacing country name
     config.addressFields = Object.keys(addressFields).map(countryName => ({
       countryName,
       fields: addressFields[countryName]
     }));
-    if (config.addressFields.length === 0) {
-      config.addressFields = [_.cloneDeep(EMPTY_COUNTRY)];
-    }
-    if (!config.manufacturers || config.manufacturers.length === 0) {
-      config.manufacturers = [{}];
-    }
-    if (!config.vaccine || config.vaccine.length === 0) {
-      config.vaccine = [{}];
-    }
-    if (!config.authSteps || config.authSteps.length === 0) {
-      config.authSteps = [{}];
-    }
+
+    config.operatorCredentialsRetentionTime = config.operatorCredentialsRetentionTime / MS_IN_A_DAY;
+    config.operatorOfflineSessionTimeout = config.operatorOfflineSessionTimeout / MS_IN_A_MINUTE;
+
     this.setState({
       config,
       savedRegimen: _.clone(config.vaccine),
