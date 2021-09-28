@@ -24,11 +24,15 @@ class Input extends React.Component<IInputProps, IFieldState> {
     const hasValue = !!value || !!patient[field.name];
     const placeholder = getPlaceholder(intl, label, name, required);
     const props = getCommonInputProps(this.props, placeholder);
+
     props['disabled'] = this.isDisabled(patient, name);
+    props['data-testid'] = this.props['data-testid'] || name;
+
     if (type === 'number') {
       // Firefox doesn't support number inputs
       props['pattern'] = '[1-9]';
     }
+
     return (
       <div className={`${className} input-container`}>
         <input {...props} />

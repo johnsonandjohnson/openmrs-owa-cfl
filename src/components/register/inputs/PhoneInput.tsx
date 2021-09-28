@@ -33,6 +33,8 @@ class Input extends React.Component<IInputProps, IFieldState> {
     const props = getCommonInputProps(this.props, placeholder);
     const errorMessage = this.getErrorMessage(inputValue);
 
+    props['data-testid'] = this.props['data-testid'] || name;
+
     return (
       <div className={`${className} input-container`}>
         <PhoneInput

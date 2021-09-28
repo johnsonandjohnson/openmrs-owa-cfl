@@ -46,6 +46,9 @@ class Select extends React.Component<ISelectProps, IFieldState> {
     const hasValue = !!value || !!patient[field.name];
     const placeholder = getPlaceholder(intl, label, name, required);
     const props = getCommonInputProps(this.props, placeholder);
+
+    props['data-testid'] = this.props['data-testid'] || name;
+
     return (
       <div className={`${className} input-container`}>
         <ReactstrapInput
