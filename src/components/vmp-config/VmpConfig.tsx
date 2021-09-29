@@ -151,6 +151,7 @@ class VmpConfig extends React.Component<IVmpConfigProps, IVmpConfigState> {
     if (!!config.vaccine) {
       config.vaccine = config.vaccine.filter(vc => !!vc.name);
       config.vaccine.forEach(vc => {
+        vc.name = vc.name.trim();
         vc.manufacturers = !!vc.manufacturers ? vc.manufacturers.filter(vcm => !!vcm) : [];
       });
     }
