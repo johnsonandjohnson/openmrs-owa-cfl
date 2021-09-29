@@ -27,7 +27,7 @@ import Confirm from './Confirm';
 import queryString from 'query-string';
 import { redirectUrl } from '../../shared/util/url-util';
 import { PATIENT_PAGE_URL } from '../../shared/constants/openmrs';
-import { SETTING_KEY as VMP_CONFIG_SETTING_KEY } from 'src/shared/constants/vmp-config';
+import { SETTING_KEY as VMP_CONFIG_SETTING_KEY } from '../../shared/constants/vmp-config';
 import { getSettingByQuery } from '../../redux/reducers/setttings';
 
 export interface IRegistrationProps extends StateProps, DispatchProps, RouteComponentProps<{ id?: string }> {
@@ -165,11 +165,11 @@ class RegistrationForm extends React.Component<IRegistrationProps, IRegistration
   };
 
   stepForm = () => {
-    let vaccinOptions = [];
+    let regimenOptions = [];
 
     if (this.props.settings?.setting?.value) {
-      const { vaccine } = JSON.parse(this.props.settings.setting.value);
-      vaccinOptions = vaccine.map(vaccination => vaccination['name']);
+      const { vaccine: regimens } = JSON.parse(this.props.settings.setting.value);
+      regimenOptions = regimens.map(regimen => regimen['name']);
     }
 
     return (
@@ -185,7 +185,7 @@ class RegistrationForm extends React.Component<IRegistrationProps, IRegistration
               setValidity={this.setValidity(i)}
               setStep={this.setStep}
               stepNumber={i}
-              vaccine={vaccinOptions}
+              regimen={regimenOptions}
             />
           </div>
         ))}

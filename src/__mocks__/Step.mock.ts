@@ -30,7 +30,7 @@ export const props = {
   stepButtons: jest.fn(),
   stepDefinition: {},
   setStep: jest.fn(),
-  vaccine: [],
+  regimen: [],
   setValidity: jest.fn(),
   stepNumber: 0,
   onKeyDown: jest.fn()
@@ -131,33 +131,15 @@ export const locationStep = {
 export const locationProps = [
   {
     uuid: '3b7617c9-778f-4f48-83e7-5514eb6ed946',
-    display: 'Dopemu Clinic',
-    links: [
-      {
-        rel: 'self',
-        uri: 'http://localhost:8080/openmrs/ws/rest/v1/location/3b7617c9-778f-4f48-83e7-5514eb6ed946'
-      }
-    ]
+    display: 'Dopemu Clinic'
   },
   {
     uuid: 'ae3b788e-1d66-46f7-941d-e3a8fb9fd278',
-    display: 'Hooglede Clinic',
-    links: [
-      {
-        rel: 'self',
-        uri: 'http://localhost:8080/openmrs/ws/rest/v1/location/ae3b788e-1d66-46f7-941d-e3a8fb9fd278'
-      }
-    ]
+    display: 'Hooglede Clinic'
   },
   {
     uuid: '4ee5702b-69c7-42b9-9a18-5fe14dead8c3',
-    display: 'Mumbai Clinic',
-    links: [
-      {
-        rel: 'self',
-        uri: 'http://localhost:8080/openmrs/ws/rest/v1/location/4ee5702b-69c7-42b9-9a18-5fe14dead8c3'
-      }
-    ]
+    display: 'Mumbai Clinic'
   }
 ];
 export const vaccineProps = ['Covid 1D vaccine', 'Covid 2D vaccine', 'Covid 3D vaccine'];

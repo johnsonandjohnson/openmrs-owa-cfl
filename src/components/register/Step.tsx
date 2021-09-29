@@ -8,6 +8,7 @@ import Field from './inputs/Field';
 import { isPossiblePhoneNumber } from 'react-phone-number-input';
 import { searchLocations } from '../../redux/reducers/location';
 import { getPhoneNumberWithPlusSign } from '../../shared/util/person-util';
+import { EMPTY_STRING } from '../../shared/constants/input';
 
 export interface IPatientIdentifierType {
   format: string;
@@ -26,7 +27,7 @@ export interface IStepProps extends StateProps, DispatchProps {
   setStep: any;
   stepNumber: number;
   patientIdentifierTypes: IPatientIdentifierType[];
-  vaccine: string[];
+  regimen: string[];
 }
 
 export interface IStepState {
@@ -66,12 +67,12 @@ export class Step extends React.Component<IStepProps, IStepState> {
     const { stepDefinition } = this.props;
     const optionSources = stepDefinition.fields ? stepDefinition.fields.map(field => field.optionSource).filter(os => !!os) : [];
     if (optionSources.includes(LOCATIONS_OPTION_SOURCE)) {
-      this.props.searchLocations('');
+      this.props.searchLocations(EMPTY_STRING);
     }
   };
 
   getOptions = field => {
-    const { optionSource = '' } = field;
+    const { optionSource = EMPTY_STRING } = field;
     const { locations } = this.props;
     let { options = [] } = field;
 
@@ -80,9 +81,7 @@ export class Step extends React.Component<IStepProps, IStepState> {
         value: l.uuid,
         label: l.display
       }));
-    }
-
-    if (this.props[optionSource]?.length) {
+    } else if (this.props[optionSource]?.length) {
       options = this.props[optionSource];
     }
 

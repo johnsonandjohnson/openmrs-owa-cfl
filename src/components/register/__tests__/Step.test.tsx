@@ -1,6 +1,5 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import { Step } from '../Step';
 import { IntlProvider } from 'react-intl';
 import { Provider } from 'react-redux';
@@ -59,10 +58,79 @@ describe('<Step />', () => {
     it('should render input with empty name value', () => {
       const { fields } = fullNameStep;
       const [first] = fields;
-      let input = screen.getByTestId(first.name);
+      const input = screen.getByTestId(first.name) as HTMLInputElement;
 
-      //@ts-ignore
       expect(input.value).toBe('');
+    });
+  });
+
+  describe('with non default values', () => {
+    it('should render input first name with proper value', () => {
+      const name = 'Jan';
+      const { fields } = fullNameStep;
+      const [first] = fields;
+
+      render(
+        <Provider store={store}>
+          <IntlProvider locale="en" messages={messages}>
+            <Step {...{ ...props, patient: { ...props.patient, givenName: name }, stepDefinition: fullNameStep }} />
+          </IntlProvider>
+        </Provider>
+      );
+
+      const input = screen.getByTestId(first.name) as HTMLInputElement;
+
+      expect(input.value).toBe(name);
+    });
+
+    it('should render location step', () => {
+      const { fields } = locationStep;
+      const [first] = fields;
+      const { name } = first;
+
+      render(
+        <Provider store={store}>
+          <IntlProvider locale="en" messages={messages}>
+            <Step {...{ ...props, locations: locationProps, stepDefinition: locationStep }} />
+          </IntlProvider>
+        </Provider>
+      );
+
+      expect(screen.getByTestId(name)).toBeInTheDocument();
+    });
+
+    it('should render vaccination step', () => {
+      const { fields } = vaccinationStep;
+      const [first] = fields;
+      const { name } = first;
+
+      render(
+        <Provider store={store}>
+          <IntlProvider locale="en" messages={messages}>
+            <Step {...{ ...props, vaccine: vaccineProps, stepDefinition: vaccinationStep }} />
+          </IntlProvider>
+        </Provider>
+      );
+
+      expect(screen.getByTestId(name)).toBeInTheDocument();
+    });
+
+    it('should render address step', () => {
+      const { fields } = addressStep;
+
+      render(
+        <Provider store={store}>
+          <IntlProvider locale="en" messages={messages}>
+            <Step {...{ ...props, patient: { ...props.patient, ...addressProps }, stepDefinition: addressStep }} />
+          </IntlProvider>
+        </Provider>
+      );
+
+      fields.forEach(({ name }) => {
+        const input = screen.getByTestId(name) as HTMLInputElement;
+
+        expect(input.value).toBe(addressProps[name]);
+      });
     });
 
     it('should render identifier step', () => {
@@ -112,72 +180,6 @@ describe('<Step />', () => {
 
       expect(screen.getByTestId(name)).toBeInTheDocument();
     });
-  });
-
-  describe('with non default values', () => {
-    it('should render input first name with proper value', () => {
-      const name = 'Jan';
-      const { fields } = fullNameStep;
-      const [first] = fields;
-
-      render(
-        <Provider store={store}>
-          <IntlProvider locale="en" messages={messages}>
-            <Step {...{ ...props, patient: { ...props.patient, givenName: name }, stepDefinition: fullNameStep }} />
-          </IntlProvider>
-        </Provider>
-      );
-
-      //@ts-ignore
-      expect(screen.getByTestId(first.name).value).toBe(name);
-    });
-
-    it('should render location step', () => {
-      const { fields } = locationStep;
-      const [first] = fields;
-      const { name } = first;
-
-      render(
-        <Provider store={store}>
-          <IntlProvider locale="en" messages={messages}>
-            <Step {...{ ...props, locations: locationProps, stepDefinition: locationStep }} />
-          </IntlProvider>
-        </Provider>
-      );
-
-      expect(screen.getByTestId(name)).toBeInTheDocument();
-    });
-
-    it('should render vaccination step', () => {
-      const { fields } = vaccinationStep;
-      const [first] = fields;
-      const { name } = first;
-
-      render(
-        <Provider store={store}>
-          <IntlProvider locale="en" messages={messages}>
-            <Step {...{ ...props, vaccine: vaccineProps, stepDefinition: vaccinationStep }} />
-          </IntlProvider>
-        </Provider>
-      );
-
-      expect(screen.getByTestId(name)).toBeInTheDocument();
-    });
-
-    it('should render address step', () => {
-      const { fields } = addressStep;
-
-      render(
-        <Provider store={store}>
-          <IntlProvider locale="en" messages={messages}>
-            <Step {...{ ...props, patient: { ...props.patient, ...addressProps }, stepDefinition: addressStep }} />
-          </IntlProvider>
-        </Provider>
-      );
-
-      //@ts-ignore
-      fields.forEach(({ name }) => expect(screen.getByTestId(name).value).toBe(addressProps[name]));
-    });
 
     describe('Birthdate step', () => {
       const estimatedYears = 32;
@@ -211,13 +213,15 @@ describe('<Step />', () => {
       });
 
       it('should render with estimated birthdate years', () => {
-        //@ts-ignore
-        expect(screen.getByTestId('birthdateYears').value).toBe(String(estimatedYears));
+        const input = screen.getByTestId('birthdateYears') as HTMLInputElement;
+
+        expect(input.value).toBe(String(estimatedYears));
       });
 
       it('should render with estimated birthdate months', () => {
-        //@ts-ignore
-        expect(screen.getByTestId('birthdateMonths').value).toBe(String(estimatedMonths));
+        const input = screen.getByTestId('birthdateMonths') as HTMLInputElement;
+
+        expect(input.value).toBe(String(estimatedMonths));
       });
     });
   });

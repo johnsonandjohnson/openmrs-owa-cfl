@@ -46,8 +46,7 @@ class Select extends React.Component<ISelectProps, IFieldState> {
     const hasValue = !!value || !!patient[field.name];
     const placeholder = getPlaceholder(intl, label, name, required);
     const props = getCommonInputProps(this.props, placeholder);
-
-    props['data-testid'] = this.props['data-testid'] || name;
+    const dataTestId = this.props['data-testid'] || name;
 
     return (
       <div className={`${className} input-container`}>
@@ -55,6 +54,7 @@ class Select extends React.Component<ISelectProps, IFieldState> {
           {...props}
           className={'form-control ' + (isDirty && isInvalid ? 'invalid ' : ' ') + (!value && !patient[name] ? 'placeholder' : '')}
           type="select"
+          data-testid={dataTestId}
         >
           {this.getSelectOptions(field, placeholder)}
         </ReactstrapInput>
