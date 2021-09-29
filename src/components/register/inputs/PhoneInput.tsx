@@ -32,6 +32,7 @@ class Input extends React.Component<IInputProps, IFieldState> {
     const placeholder = getPlaceholder(intl, label, name, required);
     const props = getCommonInputProps(this.props, placeholder);
     const errorMessage = this.getErrorMessage(inputValue);
+    const dataTestId = this.props['data-testid'] || name;
 
     return (
       <div className={`${className} input-container`}>
@@ -43,6 +44,7 @@ class Input extends React.Component<IInputProps, IFieldState> {
           international
           numberInputProps={{ className: props.className }}
           className={null}
+          data-testid={dataTestId}
         />
         {inputValue.length > 0 && <span className="placeholder">{placeholder}</span>}
         {((isDirty && isInvalid) || errorMessage) && (

@@ -8,9 +8,10 @@ import Field from './inputs/Field';
 import { isPossiblePhoneNumber } from 'react-phone-number-input';
 import { searchLocations } from '../../redux/reducers/location';
 import { getPhoneNumberWithPlusSign } from '../../shared/util/person-util';
+import { EMPTY_STRING } from '../../shared/constants/input';
 
 export interface IPatientIdentifierType {
-  format: RegExp;
+  format: string;
   formatDescription: string;
   required: boolean;
   name: string;
@@ -26,6 +27,7 @@ export interface IStepProps extends StateProps, DispatchProps {
   setStep: any;
   stepNumber: number;
   patientIdentifierTypes: IPatientIdentifierType[];
+  regimens: string[];
 }
 
 export interface IStepState {
@@ -40,7 +42,7 @@ export const PHONE_FIELD_TYPE = 'phone';
 export const BIRTHDATE_FIELD = 'birthdate';
 export const ESTIMATED_BIRTHDATE_FIELDS = ['birthdateYears', 'birthdateMonths'];
 
-class Step extends React.Component<IStepProps, IStepState> {
+export class Step extends React.Component<IStepProps, IStepState> {
   state = {
     invalidFields: [] as any[],
     dirtyFields: [] as any[]
@@ -65,20 +67,25 @@ class Step extends React.Component<IStepProps, IStepState> {
     const { stepDefinition } = this.props;
     const optionSources = stepDefinition.fields ? stepDefinition.fields.map(field => field.optionSource).filter(os => !!os) : [];
     if (optionSources.includes(LOCATIONS_OPTION_SOURCE)) {
-      this.props.searchLocations('');
+      this.props.searchLocations(EMPTY_STRING);
     }
   };
 
   getOptions = field => {
-    const { optionSource } = field;
+    const { optionSource = EMPTY_STRING } = field;
     const { locations } = this.props;
+    let { options = [] } = field;
+
     if (optionSource === LOCATIONS_OPTION_SOURCE && locations) {
       return locations.map(l => ({
         value: l.uuid,
         label: l.display
       }));
+    } else if (this.props[optionSource]?.length) {
+      options = this.props[optionSource];
     }
-    return field.options || [];
+
+    return options;
   };
 
   getClassName = field => {
@@ -204,6 +211,7 @@ class Step extends React.Component<IStepProps, IStepState> {
                   className={this.getClassName(field)}
                   selectOptions={selectOptions}
                   key={`field-${i}`}
+                  data-testid={field.name}
                   {...additionalProps}
                 />
               );
