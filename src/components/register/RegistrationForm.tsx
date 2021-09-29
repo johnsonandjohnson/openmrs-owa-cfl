@@ -185,7 +185,7 @@ class RegistrationForm extends React.Component<IRegistrationProps, IRegistration
               setValidity={this.setValidity(i)}
               setStep={this.setStep}
               stepNumber={i}
-              regimen={regimenOptions}
+              regimens={regimenOptions}
             />
           </div>
         ))}

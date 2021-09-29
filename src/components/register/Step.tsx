@@ -27,7 +27,7 @@ export interface IStepProps extends StateProps, DispatchProps {
   setStep: any;
   stepNumber: number;
   patientIdentifierTypes: IPatientIdentifierType[];
-  regimen: string[];
+  regimens: string[];
 }
 
 export interface IStepState {
