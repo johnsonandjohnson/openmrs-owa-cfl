@@ -32,6 +32,7 @@ import { AuthSteps } from './AuthSteps';
 import { IrisScore } from './IrisScore';
 import { AddressFields } from './AddressFields';
 import { AllowManualParticipantIDEntry, ParticipantIDRegex } from './ParticipantId';
+import { EnableBiometricOnlySearchWithoutPhone } from './SearchWithoutPhone';
 
 export interface IVmpConfigProps extends StateProps, DispatchProps, RouteComponentProps {
   intl: any;
@@ -308,6 +309,9 @@ export class VmpConfig extends React.Component<IVmpConfigProps, IVmpConfigState>
               </div>
               <div className="section">
                 <AllowManualParticipantIDEntry intl={intl} config={config} onValueChange={this.onValueChange} />
+              </div>
+              <div className="section">
+                <EnableBiometricOnlySearchWithoutPhone intl={intl} config={config} onValueChange={this.onValueChange} />
               </div>
               <div className="section">
                 <ParticipantIDRegex intl={intl} config={config} onValueChange={this.onValueChange} />
