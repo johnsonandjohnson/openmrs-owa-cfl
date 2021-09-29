@@ -253,11 +253,11 @@ export class VmpConfig extends React.Component<IVmpConfigProps, IVmpConfigState>
             <Spinner />
           ) : (
             <>
-              <div className="section">
+              <div className="section" data-testid="syncScopeSection">
                 <SyncScope intl={intl} syncScopes={syncScopes} config={config} onValueChange={this.onValueChange} />
               </div>
               <div className="inline-sections">
-                <div className="section">
+                <div className="section" data-testid="operatorCredentialsOfflineRetentionTimeSection">
                   <OperatorCredentialsOfflineRetentionTime
                     intl={intl}
                     config={config}
@@ -265,7 +265,7 @@ export class VmpConfig extends React.Component<IVmpConfigProps, IVmpConfigState>
                     onNumberValueChange={this.onNumberValueChange}
                   />
                 </div>
-                <div className="section">
+                <div className="section" data-testid="operatorSessionTimeoutSection">
                   <OperatorSessionTimeout
                     intl={intl}
                     config={config}
@@ -274,7 +274,7 @@ export class VmpConfig extends React.Component<IVmpConfigProps, IVmpConfigState>
                   />
                 </div>
               </div>
-              <div className="section">
+              <div className="section" data-testid="manufacturersSection">
                 <Manufacturers
                   intl={intl}
                   config={config}
@@ -284,7 +284,7 @@ export class VmpConfig extends React.Component<IVmpConfigProps, IVmpConfigState>
                   onValueChange={this.onValueChange}
                 />
               </div>
-              <div className="section">
+              <div className="section" data-testid="regimenSection">
                 <Regimen
                   intl={intl}
                   config={config}
@@ -298,38 +298,38 @@ export class VmpConfig extends React.Component<IVmpConfigProps, IVmpConfigState>
                   readOnly={!regimenUpdatePermitted}
                 />
               </div>
-              <div className="section">
+              <div className="section" data-testid="canUseDifferentManufacturersSection">
                 <CanUseDifferentManufacturers intl={intl} config={config} onValueChange={this.onValueChange} />
               </div>
-              <div className="section">
+              <div className="section" data-testid="personLanguagesSection">
                 <PersonLanguages intl={intl} config={config} onValueChange={this.onValueChange} />
               </div>
-              <div className="section">
+              <div className="section" data-testid="authStepsSection">
                 <AuthSteps intl={intl} config={config} options={authSteps} onValueChange={this.onValueChange} />
               </div>
-              <div className="section">
+              <div className="section" data-testid="allowManualParticipantIDEntrySection">
                 <AllowManualParticipantIDEntry intl={intl} config={config} onValueChange={this.onValueChange} />
               </div>
-              <div className="section">
+              <div className="section" data-testid="enableBiometricOnlySearchWithoutPhoneSection">
                 <EnableBiometricOnlySearchWithoutPhone intl={intl} config={config} onValueChange={this.onValueChange} />
               </div>
-              <div className="section">
+              <div className="section" data-testid="participantIDRegexSection">
                 <ParticipantIDRegex intl={intl} config={config} onValueChange={this.onValueChange} />
               </div>
-              <div className="section">
+              <div className="section" data-testid="irisScoreSection">
                 <IrisScore intl={intl} config={config} onNumberValueChange={this.onNumberValueChange} />
               </div>
-              <div className="section">
+              <div className="section" data-testid="addressFieldsSection">
                 <AddressFields intl={intl} config={config} onValueChange={this.onValueChange} />
               </div>
               <div className="mt-5 pb-5">
                 <div className="d-inline">
-                  <Button className="cancel" onClick={this.return}>
+                  <Button className="cancel" onClick={this.return} data-testid="cancelButton">
                     <FormattedMessage id="vmpConfig.return" />
                   </Button>
                 </div>
                 <div className="d-inline pull-right confirm-button-container">
-                  <Button className="save" onClick={this.save} disabled={loading}>
+                  <Button className="save" onClick={this.save} disabled={loading} data-testid="saveButton">
                     <FormattedMessage id="vmpConfig.save" />
                   </Button>
                 </div>
