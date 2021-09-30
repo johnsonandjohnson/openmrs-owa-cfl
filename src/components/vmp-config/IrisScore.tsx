@@ -28,6 +28,7 @@ export function IrisScore({ intl, config, onNumberValueChange }) {
           className="iris-score"
           min={ZERO}
           max={HUNDRED}
+          data-testid="irisScoreInput"
         />
       </div>
     </>
