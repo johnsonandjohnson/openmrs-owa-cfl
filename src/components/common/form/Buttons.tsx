@@ -6,8 +6,8 @@ export interface IButtonsProps {
   options: any[];
   entity: any;
   fieldName: any;
-  onChange: any;
-  onKeyDown?: any;
+  onChange: (value) => void;
+  onKeyDown?: () => void;
 }
 
 export const Buttons = (props: IButtonsProps) => {
@@ -24,7 +24,10 @@ export const Buttons = (props: IButtonsProps) => {
             <Button
               onClick={handleOnChange(value)}
               className={`select-button w-100 ${entity[fieldName] === value ? 'active' : ''}`}
-              onKeyDown={!!onKeyDown && i === options.length - 1 && onKeyDown}
+              {...(!!onKeyDown &&
+                i === options.length - 1 && {
+                  onKeyDown
+                })}
             >
               {label}
             </Button>
