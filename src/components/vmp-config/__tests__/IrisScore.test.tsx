@@ -28,7 +28,7 @@ describe('<IrisScore />', () => {
     });
   });
 
-  describe('with none default values', () => {
+  describe('with non-default values', () => {
     it('should render input with provided value', () => {
       const irisScoreValue = '40';
 
