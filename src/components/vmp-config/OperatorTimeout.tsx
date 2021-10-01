@@ -25,6 +25,7 @@ export function OperatorCredentialsOfflineRetentionTime({ intl, config, getPlace
         type="number"
         pattern="[1-9]"
         min={ONE}
+        data-testid="operatorCredentialsOfflineRetentionTimeInput"
       />
     </>
   );
@@ -50,6 +51,7 @@ export function OperatorSessionTimeout({ intl, config, getPlaceholder, onNumberV
         type="number"
         pattern="[1-9]"
         min={ONE}
+        data-testid="operatorOfflineSessionTimeoutInput"
       />
     </>
   );

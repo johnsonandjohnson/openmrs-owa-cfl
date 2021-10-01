@@ -18,7 +18,7 @@ export function PersonLanguages({ intl, config, onValueChange }) {
 
   return (
     <>
-      <Label>
+      <Label data-testid="personLanguagesLabel">
         <FormattedMessage id="vmpConfig.personLanguages" />
         <span
           className="glyphicon glyphicon-info-sign ml-2"
