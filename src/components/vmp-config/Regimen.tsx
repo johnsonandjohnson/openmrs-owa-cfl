@@ -13,22 +13,27 @@ const EMPTY_REGIMEN = { name: '', manufacturers: [] };
 export function Regimen({
   intl,
   config,
+  vaccinationSchedule,
   savedRegimen,
   patientLinkedRegimens,
   showValidationErrors,
   isRegimenNameDuplicated,
+  readOnly = false,
   openModal,
   closeModal,
   onValueChange,
-  readOnly = false
+  onVaccinationScheduleChange
 }) {
   const { vaccine, manufacturers } = config;
+
   const onVaccineChange = (i, fieldName, isMultiselect) => e => {
     vaccine[i][fieldName] = isMultiselect ? e.map(option => option.label) : extractEventValue(e);
     onValueChange('vaccine')(vaccine);
   };
 
   const removeRegimen = idx => {
+    // delete a regimen together with a corresponding vaccination schedule (if exists)
+    onVaccinationScheduleChange(vaccinationSchedule.filter(vs => vs.name !== vaccine[idx].name));
     vaccine.splice(idx, 1);
     if (vaccine.length === 0) {
       addRegimen();
