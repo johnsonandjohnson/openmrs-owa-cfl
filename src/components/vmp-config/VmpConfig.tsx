@@ -7,9 +7,10 @@ import {
   DEFAULT_REGIMEN_UPDATE_PERMITTED,
   DEFAULT_SYNC_SCOPES,
   DEFAULT_VMP_CONFIG,
-  SETTING_KEY,
+  SETTING_KEY as VMP_CONFIG_SETTING_KEY,
   ORDERED_ADDRESS_FIELD_PARTS
 } from '../../shared/constants/vmp-config';
+import { VMP_VACCINATION_SCHEDULE_SETTING_KEY } from '../../shared/constants/vmp-vaccination-schedule';
 import { createSetting, getSettingByQuery, updateSetting } from '../../redux/reducers/setttings';
 import { parseJson } from '../../shared/util/json-util';
 import '../Inputs.scss';
@@ -33,13 +34,17 @@ import { IrisScore } from './IrisScore';
 import { AddressFields } from './AddressFields';
 import { AllowManualParticipantIDEntry, ParticipantIDRegex } from './ParticipantId';
 import { EnableBiometricOnlySearchWithoutPhone } from './SearchWithoutPhone';
+import { IVmpVaccinationSchedule } from 'src/shared/models/vmp-vaccination-schedule';
 
 export interface IVmpConfigProps extends StateProps, DispatchProps, RouteComponentProps {
   intl: any;
 }
 
 export interface IVmpConfigState {
-  config: IVmpConfig;
+  vmpConfig: IVmpConfig;
+  vmpConfigSetting: {};
+  vmpVaccinationSchedule: IVmpVaccinationSchedule[];
+  vmpVaccinationScheduleSetting: {};
   savedRegimen: any[];
   showValidationErrors: boolean;
   isModalOpen: boolean;
@@ -54,7 +59,10 @@ const MS_IN_A_DAY = MS_IN_A_MINUTE * 60 * 24;
 
 export class VmpConfig extends React.Component<IVmpConfigProps, IVmpConfigState> {
   state = {
-    config: {} as IVmpConfig,
+    vmpConfig: {} as IVmpConfig,
+    vmpConfigSetting: { uuid: null, value: null },
+    vmpVaccinationSchedule: [],
+    vmpVaccinationScheduleSetting: { uuid: null, value: null },
     savedRegimen: [],
     showValidationErrors: false,
     isModalOpen: false,
@@ -65,7 +73,8 @@ export class VmpConfig extends React.Component<IVmpConfigProps, IVmpConfigState>
   };
 
   componentDidMount() {
-    this.props.getSettingByQuery(SETTING_KEY);
+    this.props.getSettingByQuery(VMP_CONFIG_SETTING_KEY);
+    this.props.getSettingByQuery(VMP_VACCINATION_SCHEDULE_SETTING_KEY);
     this.props.getPatientLinkedRegimens();
   }
 
@@ -83,27 +92,36 @@ export class VmpConfig extends React.Component<IVmpConfigProps, IVmpConfigState>
 
   extractConfigData = () => {
     let config = parseJson(this.props.config);
-    config = _.defaults(config, DEFAULT_VMP_CONFIG);
-    const addressFields = config.addressFields;
 
-    // make it a list so it's possible to maintain the order while replacing country name
-    config.addressFields = Object.keys(addressFields).map(countryName => ({
-      countryName,
-      fields: addressFields[countryName]
-    }));
+    if (this.props.setting?.property === VMP_CONFIG_SETTING_KEY) {
+      config = _.defaults(config, DEFAULT_VMP_CONFIG);
+      const addressFields = config.addressFields;
 
-    config.operatorCredentialsRetentionTime = config.operatorCredentialsRetentionTime / MS_IN_A_DAY;
-    config.operatorOfflineSessionTimeout = config.operatorOfflineSessionTimeout / MS_IN_A_MINUTE;
+      // make it a list so it's possible to maintain the order while replacing country name
+      config.addressFields = Object.keys(addressFields).map(countryName => ({
+        countryName,
+        fields: addressFields[countryName]
+      }));
 
-    this.setState({
-      config,
-      savedRegimen: _.clone(config.vaccine),
-      showValidationErrors: false
-    });
+      config.operatorCredentialsRetentionTime = config.operatorCredentialsRetentionTime / MS_IN_A_DAY;
+      config.operatorOfflineSessionTimeout = config.operatorOfflineSessionTimeout / MS_IN_A_MINUTE;
+
+      this.setState({
+        vmpConfig: config,
+        vmpConfigSetting: this.props.setting,
+        savedRegimen: _.clone(config.vaccine),
+        showValidationErrors: false
+      });
+    } else if (this.props.setting?.property === VMP_VACCINATION_SCHEDULE_SETTING_KEY) {
+      this.setState({
+        vmpVaccinationSchedule: config,
+        vmpVaccinationScheduleSetting: this.props.setting
+      });
+    }
   };
 
   generateConfig = () => {
-    const config = _.cloneDeep(this.state.config);
+    const config = _.cloneDeep(this.state.vmpConfig);
     // revert address fields back to a map
     config.addressFields = !!config.addressFields
       ? config.addressFields.reduce((map, obj) => {
@@ -147,22 +165,24 @@ export class VmpConfig extends React.Component<IVmpConfigProps, IVmpConfigState>
   };
 
   onValueChange = name => e => {
-    const { config } = this.state;
-    config[name] = extractEventValue(e);
+    const { vmpConfig } = this.state;
+    vmpConfig[name] = extractEventValue(e);
     this.setState({
-      config
+      vmpConfig
     });
   };
 
+  onVaccinationScheduleChange = vmpVaccinationSchedule => this.setState({ vmpVaccinationSchedule });
+
   onNumberValueChange = (name, min?, max?) => e => {
-    const { config } = this.state;
+    const { vmpConfig } = this.state;
     const extractedEventValue = extractEventValue(e);
     const value = !!extractedEventValue ? Number.parseInt(extractedEventValue, TEN) : !!min ? min : ZERO;
     if (Number.isInteger(value)) {
       if ((min !== null && value < min) || (max !== null && value > max)) return;
-      config[name] = value;
+      vmpConfig[name] = value;
       this.setState({
-        config
+        vmpConfig
       });
     }
   };
@@ -174,7 +194,7 @@ export class VmpConfig extends React.Component<IVmpConfigProps, IVmpConfigState>
   scrollToTop = () => window.scrollTo({ top: ZERO, behavior: 'smooth' });
 
   isFormValid = () => {
-    const { manufacturers, vaccine } = this.state.config;
+    const { manufacturers, vaccine } = this.state.vmpConfig;
     return (
       !manufacturers.some(manufacturer => !manufacturer.name || !validateRegex(manufacturer.barcodeRegex) || !manufacturer.barcodeRegex) &&
       !vaccine.some(regimen => !regimen.name || !regimen.manufacturers.length) &&
@@ -183,15 +203,19 @@ export class VmpConfig extends React.Component<IVmpConfigProps, IVmpConfigState>
   };
 
   save = () => {
-    const { setting } = this.props;
+    const { vmpVaccinationSchedule, vmpConfigSetting, vmpVaccinationScheduleSetting } = this.state;
     if (this.isFormValid()) {
       const config = this.generateConfig();
       const configJson = JSON.stringify(config);
-      if (setting && setting.uuid) {
-        setting.value = configJson;
-        this.props.updateSetting(setting);
+      if (vmpConfigSetting?.uuid) {
+        vmpConfigSetting.value = configJson;
+        this.props.updateSetting(vmpConfigSetting);
       } else {
-        this.props.createSetting(SETTING_KEY, configJson);
+        this.props.createSetting(VMP_CONFIG_SETTING_KEY, configJson);
+      }
+      if (vmpVaccinationScheduleSetting?.uuid) {
+        vmpVaccinationScheduleSetting.value = JSON.stringify(vmpVaccinationSchedule);
+        this.props.updateSetting(vmpVaccinationScheduleSetting);
       }
     } else {
       this.setState({
@@ -240,7 +264,7 @@ export class VmpConfig extends React.Component<IVmpConfigProps, IVmpConfigState>
 
   render() {
     const { intl, appError, appLoading, loading, patientLinkedRegimens, syncScopes, authSteps, regimenUpdatePermitted } = this.props;
-    const { config, savedRegimen, showValidationErrors } = this.state;
+    const { vmpConfig, vmpVaccinationSchedule, savedRegimen, showValidationErrors } = this.state;
     return (
       <div className="vmp-config">
         {this.modal()}
@@ -249,18 +273,18 @@ export class VmpConfig extends React.Component<IVmpConfigProps, IVmpConfigState>
         </h2>
         <div className="error">{appError}</div>
         <div className="inner-content">
-          {appLoading || (loading && !config) ? (
+          {appLoading || (loading && !vmpConfig) ? (
             <Spinner />
           ) : (
             <>
               <div className="section" data-testid="syncScopeSection">
-                <SyncScope intl={intl} syncScopes={syncScopes} config={config} onValueChange={this.onValueChange} />
+                <SyncScope intl={intl} syncScopes={syncScopes} config={vmpConfig} onValueChange={this.onValueChange} />
               </div>
               <div className="inline-sections">
                 <div className="section" data-testid="operatorCredentialsOfflineRetentionTimeSection">
                   <OperatorCredentialsOfflineRetentionTime
                     intl={intl}
-                    config={config}
+                    config={vmpConfig}
                     getPlaceholder={getPlaceholder}
                     onNumberValueChange={this.onNumberValueChange}
                   />
@@ -268,7 +292,7 @@ export class VmpConfig extends React.Component<IVmpConfigProps, IVmpConfigState>
                 <div className="section" data-testid="operatorSessionTimeoutSection">
                   <OperatorSessionTimeout
                     intl={intl}
-                    config={config}
+                    config={vmpConfig}
                     getPlaceholder={getPlaceholder}
                     onNumberValueChange={this.onNumberValueChange}
                   />
@@ -277,7 +301,7 @@ export class VmpConfig extends React.Component<IVmpConfigProps, IVmpConfigState>
               <div className="section" data-testid="manufacturersSection">
                 <Manufacturers
                   intl={intl}
-                  config={config}
+                  config={vmpConfig}
                   showValidationErrors={showValidationErrors}
                   openModal={this.openModal}
                   closeModal={this.closeModal}
@@ -287,40 +311,42 @@ export class VmpConfig extends React.Component<IVmpConfigProps, IVmpConfigState>
               <div className="section" data-testid="regimenSection">
                 <Regimen
                   intl={intl}
-                  config={config}
+                  config={vmpConfig}
+                  vaccinationSchedule={vmpVaccinationSchedule}
                   savedRegimen={savedRegimen}
                   patientLinkedRegimens={patientLinkedRegimens}
                   showValidationErrors={showValidationErrors}
                   isRegimenNameDuplicated={this.isRegimenNameDuplicated}
+                  readOnly={!regimenUpdatePermitted}
                   openModal={this.openModal}
                   closeModal={this.closeModal}
                   onValueChange={this.onValueChange}
-                  readOnly={!regimenUpdatePermitted}
+                  onVaccinationScheduleChange={this.onVaccinationScheduleChange}
                 />
               </div>
               <div className="section" data-testid="canUseDifferentManufacturersSection">
-                <CanUseDifferentManufacturers intl={intl} config={config} onValueChange={this.onValueChange} />
+                <CanUseDifferentManufacturers intl={intl} config={vmpConfig} onValueChange={this.onValueChange} />
               </div>
               <div className="section" data-testid="personLanguagesSection">
-                <PersonLanguages intl={intl} config={config} onValueChange={this.onValueChange} />
+                <PersonLanguages intl={intl} config={vmpConfig} onValueChange={this.onValueChange} />
               </div>
               <div className="section" data-testid="authStepsSection">
-                <AuthSteps intl={intl} config={config} options={authSteps} onValueChange={this.onValueChange} />
+                <AuthSteps intl={intl} config={vmpConfig} options={authSteps} onValueChange={this.onValueChange} />
               </div>
               <div className="section" data-testid="allowManualParticipantIDEntrySection">
-                <AllowManualParticipantIDEntry intl={intl} config={config} onValueChange={this.onValueChange} />
+                <AllowManualParticipantIDEntry intl={intl} config={vmpConfig} onValueChange={this.onValueChange} />
               </div>
               <div className="section" data-testid="enableBiometricOnlySearchWithoutPhoneSection">
-                <EnableBiometricOnlySearchWithoutPhone intl={intl} config={config} onValueChange={this.onValueChange} />
+                <EnableBiometricOnlySearchWithoutPhone intl={intl} config={vmpConfig} onValueChange={this.onValueChange} />
               </div>
               <div className="section" data-testid="participantIDRegexSection">
-                <ParticipantIDRegex intl={intl} config={config} onValueChange={this.onValueChange} />
+                <ParticipantIDRegex intl={intl} config={vmpConfig} onValueChange={this.onValueChange} />
               </div>
               <div className="section" data-testid="irisScoreSection">
-                <IrisScore intl={intl} config={config} onNumberValueChange={this.onNumberValueChange} />
+                <IrisScore intl={intl} config={vmpConfig} onNumberValueChange={this.onNumberValueChange} />
               </div>
               <div className="section" data-testid="addressFieldsSection">
-                <AddressFields intl={intl} config={config} onValueChange={this.onValueChange} />
+                <AddressFields intl={intl} config={vmpConfig} onValueChange={this.onValueChange} />
               </div>
               <div className="mt-5 pb-5">
                 <div className="d-inline">
