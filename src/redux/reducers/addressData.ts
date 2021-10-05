@@ -17,7 +17,8 @@ const initialState = {
   totalCount: ZERO,
   loadingAddressData: false,
   downloadableAddressData: [],
-  errorMessage: null
+  errorMessage: null,
+  addressDataUploading: false
 };
 
 const reducer = (state = initialState, action) => {
@@ -58,7 +59,8 @@ const reducer = (state = initialState, action) => {
         hasNextPage: false,
         totalCount: ZERO,
         loadingAddressData: true,
-        addressDataUploaded: false
+        addressDataUploaded: false,
+        addressDataUploading: true
       };
     case FAILURE(ACTION_TYPES.POST_ADDRESS_DATA):
       return {
@@ -70,7 +72,8 @@ const reducer = (state = initialState, action) => {
         ...state,
         addressDataUploaded: true,
         loadingAddressData: false,
-        errorMessage: null
+        errorMessage: null,
+        addressDataUploading: false
       };
     default:
       return state;

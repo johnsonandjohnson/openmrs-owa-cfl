@@ -38,7 +38,6 @@ export interface IVmpAddressDataState {
   isOverwriteAddressData: boolean;
   page: number;
   isDownloadableAddressDataValid: boolean;
-  isNewAddressDataUploading: boolean;
 }
 
 class VmpAddressData extends React.Component<IVmpAddressDataProps, IVmpAddressDataState> {
@@ -53,8 +52,7 @@ class VmpAddressData extends React.Component<IVmpAddressDataProps, IVmpAddressDa
     rejectedFile: null,
     isOverwriteAddressData: false,
     page: 0,
-    isDownloadableAddressDataValid: false,
-    isNewAddressDataUploading: false
+    isDownloadableAddressDataValid: false
   };
 
   componentDidMount() {
@@ -67,7 +65,7 @@ class VmpAddressData extends React.Component<IVmpAddressDataProps, IVmpAddressDa
       successToast(intl.formatMessage({ id: 'vmpAddressData.upload.success' }));
       this.setState({ page: ZERO, isDownloadableAddressDataValid: false }, () => this.props.getAddressDataPage(this.state.page));
     } else if (prevProps.downloadableAddressData !== downloadableAddressData) {
-      this.setState({ isDownloadableAddressDataValid: true, isNewAddressDataUploading: false }, this.triggerAddressDataDownload);
+      this.setState({ isDownloadableAddressDataValid: true }, this.triggerAddressDataDownload);
     } else if (prevProps.error !== error) {
       errorToast(error);
     }
@@ -85,7 +83,6 @@ class VmpAddressData extends React.Component<IVmpAddressDataProps, IVmpAddressDa
       modalBody: { id: `vmpAddressData.upload.overwriteAddressData.${isOverwriteAddressData}.modalBody` },
       onModalConfirm: () => {
         this.props.postAddressData(acceptedFile, isOverwriteAddressData);
-        this.setState({ isNewAddressDataUploading: true });
         this.closeModal();
       },
       onModalCancel: this.closeModal
@@ -96,16 +93,13 @@ class VmpAddressData extends React.Component<IVmpAddressDataProps, IVmpAddressDa
 
   onOverwriteAddressDataChange = event => this.setState({ isOverwriteAddressData: event.target.value === STRING_TRUE });
 
-  switchPage = page => this.setState({ page, isNewAddressDataUploading: false }, () => this.props.getAddressDataPage(this.state.page));
+  switchPage = page => this.setState({ page }, () => this.props.getAddressDataPage(this.state.page));
 
   columnContent = (entity, column) => entity[ADDRESS_DATA_TABLE_COLUMNS.indexOf(column)];
 
   triggerAddressDataDownload = () => downloadCsv(this.props.downloadableAddressData, null, DEFAULT_DOWNLOAD_FILENAME);
 
-  downloadAddressData = () =>
-    this.setState({ isNewAddressDataUploading: false }, () =>
-      this.state.isDownloadableAddressDataValid ? this.triggerAddressDataDownload() : this.props.getAddressData()
-    );
+  downloadAddressData = () => (this.state.isDownloadableAddressDataValid ? this.triggerAddressDataDownload() : this.props.getAddressData());
 
   confirmationModal = () => (
     <ConfirmationModal
@@ -180,11 +174,10 @@ class VmpAddressData extends React.Component<IVmpAddressDataProps, IVmpAddressDa
   );
 
   uploadedFileTable = () => {
-    const { page, isNewAddressDataUploading } = this.state;
-    const { totalCount, addressDataLoading, addressDataUploaded, addressData, hasNextPage } = this.props;
+    const { page } = this.state;
+    const { totalCount, addressDataLoading, addressDataUploading, addressData, hasNextPage } = this.props;
     const isTotalCountMoreThanZero = totalCount > ZERO;
-    const isAddressDataUploaded = addressDataUploaded && isNewAddressDataUploading;
-    const displaySpinner = addressDataLoading && (!isTotalCountMoreThanZero || isAddressDataUploaded);
+    const displaySpinner = addressDataLoading && (!isTotalCountMoreThanZero || addressDataUploading);
 
     return (
       <div className="section table-section">
@@ -257,6 +250,7 @@ const mapStateToProps = ({ apps, addressData }) => ({
   appLoading: apps.loading,
   error: apps.errorMessage,
   addressDataLoading: addressData.loadingAddressData,
+  addressDataUploading: addressData.addressDataUploading,
   addressDataUploaded: addressData.addressDataUploaded,
   addressData: addressData.addressData,
   hasNextPage: addressData.hasNextPage,
