@@ -9,6 +9,21 @@
     padding-bottom: 5em;
   }
 
+  .upload-button {
+    display: flex;
+    justify-content: flex-end;
+
+    .spinner-border {
+      width: 1.3rem;
+      height: 1.3rem;
+      vertical-align: -0.6em;
+    }
+
+    button {
+      margin-left: 0.5em;
+    }
+  }
+
   .upload-error {
     clear: both;
     margin-top: 1em;
@@ -18,6 +33,7 @@
 
   .table-section {
     border: 1px solid #e5e5e5;
+    text-align: center;
 
     .title-section {
       display: flex;

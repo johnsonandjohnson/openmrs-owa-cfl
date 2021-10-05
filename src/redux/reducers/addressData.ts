@@ -11,14 +11,14 @@ export const ACTION_TYPES = {
 };
 
 const initialState = {
-  uploading: false,
   addressData: [],
   currentPage: ONE,
   hasNextPage: false,
   totalCount: ZERO,
   loadingAddressData: false,
   downloadableAddressData: [],
-  errorMessage: null
+  errorMessage: null,
+  addressDataUploading: false
 };
 
 const reducer = (state = initialState, action) => {
@@ -48,12 +48,19 @@ const reducer = (state = initialState, action) => {
         addressData: currentPage === ONE ? data : [...state.addressData, ...data],
         hasNextPage: action.payload.data.nextPage,
         currentPage,
-        totalCount: action.payload.data.totalCount
+        totalCount: action.payload.data.totalCount,
+        loadingAddressData: false
       };
     case REQUEST(ACTION_TYPES.POST_ADDRESS_DATA):
       return {
         ...state,
-        addressDataUploaded: false
+        addressData: [],
+        currentPage: ONE,
+        hasNextPage: false,
+        totalCount: ZERO,
+        loadingAddressData: true,
+        addressDataUploaded: false,
+        addressDataUploading: true
       };
     case FAILURE(ACTION_TYPES.POST_ADDRESS_DATA):
       return {
@@ -64,7 +71,9 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         addressDataUploaded: true,
-        errorMessage: null
+        loadingAddressData: false,
+        errorMessage: null,
+        addressDataUploading: false
       };
     default:
       return state;

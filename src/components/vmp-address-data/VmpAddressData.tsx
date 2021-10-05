@@ -146,43 +146,61 @@ class VmpAddressData extends React.Component<IVmpAddressDataProps, IVmpAddressDa
 
   uploadButton = () => (
     <div className="upload-button-wrapper">
-      <Button onClick={this.onUpload} disabled={!this.state.acceptedFile} className="pull-right">
-        <FormattedMessage id="vmp.upload.button" />
-      </Button>
+      <div className="upload-button">
+        {this.props.addressDataUploading && (
+          <div className="spinner">
+            <Spinner />
+          </div>
+        )}
+        <Button onClick={this.onUpload} disabled={this.props.addressDataUploading || !this.state.acceptedFile} className="pull-right">
+          <FormattedMessage id="vmp.upload.button" />
+        </Button>
+      </div>
       <p className="upload-error pull-right">{this.props.uploadError}</p>
     </div>
   );
 
-  downloadButton = () => (
-    <Button onClick={this.downloadAddressData} disabled={!this.props.totalCount} className="cancel">
+  downloadButton = disabled => (
+    <Button onClick={this.downloadAddressData} disabled={disabled || !this.props.totalCount} className="cancel">
       <FormattedMessage id="vmp.download.button" />
     </Button>
   );
 
-  uploadedFileTable = () => (
-    <div className="section table-section">
-      <div className="title-section">
-        <h2>
-          <FormattedMessage id="vmpAddressData.table.title" />
-        </h2>
-        {this.downloadButton()}
+  uploadedFileTable = () => {
+    const { page } = this.state;
+    const { totalCount, addressDataLoading, addressDataUploading, addressData, hasNextPage } = this.props;
+    const isTotalCountMoreThanZero = totalCount > ZERO;
+    const displaySpinner = addressDataLoading && (!isTotalCountMoreThanZero || addressDataUploading);
+
+    return (
+      <div className="section table-section">
+        <div className="title-section">
+          <h2>
+            <FormattedMessage id="vmpAddressData.table.title" />
+          </h2>
+          {this.downloadButton(displaySpinner)}
+        </div>
+        {displaySpinner ? (
+          <div className="spinner">
+            <Spinner />
+          </div>
+        ) : isTotalCountMoreThanZero ? (
+          <InfiniteTable
+            columns={ADDRESS_DATA_TABLE_COLUMNS}
+            entities={addressData}
+            columnContent={this.columnContent}
+            hasNext={hasNextPage}
+            currentPage={page}
+            switchPage={this.switchPage}
+          />
+        ) : (
+          <p className="address-data-empty">
+            <FormattedMessage id="vmpAddressData.upload.addressDataEmpty" />
+          </p>
+        )}
       </div>
-      {this.props.totalCount > ZERO ? (
-        <InfiniteTable
-          columns={ADDRESS_DATA_TABLE_COLUMNS}
-          entities={this.props.addressData}
-          columnContent={this.columnContent}
-          hasNext={this.props.hasNextPage}
-          currentPage={this.state.page}
-          switchPage={this.switchPage}
-        />
-      ) : (
-        <p className="address-data-empty">
-          <FormattedMessage id="vmpAddressData.upload.addressDataEmpty" />
-        </p>
-      )}
-    </div>
-  );
+    );
+  };
 
   render() {
     const { appError, appLoading } = this.props;
@@ -195,7 +213,9 @@ class VmpAddressData extends React.Component<IVmpAddressDataProps, IVmpAddressDa
         <div className="error">{appError}</div>
         <div className="inner-content">
           {appLoading ? (
-            <Spinner />
+            <div className="spinner">
+              <Spinner />
+            </div>
           ) : (
             <div className="section">
               <h2>
@@ -222,6 +242,8 @@ const mapStateToProps = ({ apps, addressData }) => ({
   appError: apps.errorMessage,
   appLoading: apps.loading,
   error: apps.errorMessage,
+  addressDataLoading: addressData.loadingAddressData,
+  addressDataUploading: addressData.addressDataUploading,
   addressDataUploaded: addressData.addressDataUploaded,
   addressData: addressData.addressData,
   hasNextPage: addressData.hasNextPage,
