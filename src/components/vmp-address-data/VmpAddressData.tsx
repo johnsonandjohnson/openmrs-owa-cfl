@@ -38,7 +38,7 @@ export interface IVmpAddressDataState {
   isOverwriteAddressData: boolean;
   page: number;
   isDownloadableAddressDataValid: boolean;
-  isNewAddressDataUploaded: boolean;
+  isNewAddressDataUploading: boolean;
 }
 
 class VmpAddressData extends React.Component<IVmpAddressDataProps, IVmpAddressDataState> {
@@ -54,7 +54,7 @@ class VmpAddressData extends React.Component<IVmpAddressDataProps, IVmpAddressDa
     isOverwriteAddressData: false,
     page: 0,
     isDownloadableAddressDataValid: false,
-    isNewAddressDataUploaded: false
+    isNewAddressDataUploading: false
   };
 
   componentDidMount() {
@@ -67,7 +67,7 @@ class VmpAddressData extends React.Component<IVmpAddressDataProps, IVmpAddressDa
       successToast(intl.formatMessage({ id: 'vmpAddressData.upload.success' }));
       this.setState({ page: ZERO, isDownloadableAddressDataValid: false }, () => this.props.getAddressDataPage(this.state.page));
     } else if (prevProps.downloadableAddressData !== downloadableAddressData) {
-      this.setState({ isDownloadableAddressDataValid: true }, this.triggerAddressDataDownload);
+      this.setState({ isDownloadableAddressDataValid: true, isNewAddressDataUploading: false }, this.triggerAddressDataDownload);
     } else if (prevProps.error !== error) {
       errorToast(error);
     }
@@ -85,7 +85,7 @@ class VmpAddressData extends React.Component<IVmpAddressDataProps, IVmpAddressDa
       modalBody: { id: `vmpAddressData.upload.overwriteAddressData.${isOverwriteAddressData}.modalBody` },
       onModalConfirm: () => {
         this.props.postAddressData(acceptedFile, isOverwriteAddressData);
-        this.setState({ isNewAddressDataUploaded: true });
+        this.setState({ isNewAddressDataUploading: true });
         this.closeModal();
       },
       onModalCancel: this.closeModal
@@ -96,13 +96,16 @@ class VmpAddressData extends React.Component<IVmpAddressDataProps, IVmpAddressDa
 
   onOverwriteAddressDataChange = event => this.setState({ isOverwriteAddressData: event.target.value === STRING_TRUE });
 
-  switchPage = page => this.setState({ page, isNewAddressDataUploaded: false }, () => this.props.getAddressDataPage(this.state.page));
+  switchPage = page => this.setState({ page, isNewAddressDataUploading: false }, () => this.props.getAddressDataPage(this.state.page));
 
   columnContent = (entity, column) => entity[ADDRESS_DATA_TABLE_COLUMNS.indexOf(column)];
 
   triggerAddressDataDownload = () => downloadCsv(this.props.downloadableAddressData, null, DEFAULT_DOWNLOAD_FILENAME);
 
-  downloadAddressData = () => (this.state.isDownloadableAddressDataValid ? this.triggerAddressDataDownload() : this.props.getAddressData());
+  downloadAddressData = () =>
+    this.setState({ isNewAddressDataUploading: false }, () =>
+      this.state.isDownloadableAddressDataValid ? this.triggerAddressDataDownload() : this.props.getAddressData()
+    );
 
   confirmationModal = () => (
     <ConfirmationModal
@@ -156,7 +159,11 @@ class VmpAddressData extends React.Component<IVmpAddressDataProps, IVmpAddressDa
     return (
       <div className="upload-button-wrapper">
         <div className="upload-button">
-          {displaySpinner && <Spinner />}
+          {displaySpinner && (
+            <div className="spinner">
+              <Spinner />
+            </div>
+          )}
           <Button onClick={this.onUpload} disabled={isDisabled} className="pull-right">
             <FormattedMessage id="vmp.upload.button" />
           </Button>
@@ -173,10 +180,10 @@ class VmpAddressData extends React.Component<IVmpAddressDataProps, IVmpAddressDa
   );
 
   uploadedFileTable = () => {
-    const { page, isNewAddressDataUploaded } = this.state;
+    const { page, isNewAddressDataUploading } = this.state;
     const { totalCount, addressDataLoading, addressDataUploaded, addressData, hasNextPage } = this.props;
     const isTotalCountMoreThanZero = totalCount > ZERO;
-    const isAddressDataUploaded = addressDataUploaded && isNewAddressDataUploaded;
+    const isAddressDataUploaded = addressDataUploaded && isNewAddressDataUploading;
     const displaySpinner = addressDataLoading && (!isTotalCountMoreThanZero || isAddressDataUploaded);
 
     return (
@@ -187,8 +194,11 @@ class VmpAddressData extends React.Component<IVmpAddressDataProps, IVmpAddressDa
           </h2>
           {this.downloadButton(displaySpinner)}
         </div>
-        {displaySpinner && <Spinner />}
-        {isTotalCountMoreThanZero ? (
+        {displaySpinner ? (
+          <div className="spinner">
+            <Spinner />
+          </div>
+        ) : isTotalCountMoreThanZero ? (
           <InfiniteTable
             columns={ADDRESS_DATA_TABLE_COLUMNS}
             entities={addressData}
@@ -217,7 +227,9 @@ class VmpAddressData extends React.Component<IVmpAddressDataProps, IVmpAddressDa
         <div className="error">{appError}</div>
         <div className="inner-content">
           {appLoading ? (
-            <Spinner />
+            <div className="spinner">
+              <Spinner />
+            </div>
           ) : (
             <div className="section">
               <h2>

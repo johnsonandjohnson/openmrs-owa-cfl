@@ -53,6 +53,11 @@ const reducer = (state = initialState, action) => {
     case REQUEST(ACTION_TYPES.POST_ADDRESS_DATA):
       return {
         ...state,
+        addressData: [],
+        currentPage: ONE,
+        hasNextPage: false,
+        totalCount: ZERO,
+        loadingAddressData: true,
         addressDataUploaded: false
       };
     case FAILURE(ACTION_TYPES.POST_ADDRESS_DATA):
@@ -64,6 +69,7 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         addressDataUploaded: true,
+        loadingAddressData: false,
         errorMessage: null
       };
     default:
