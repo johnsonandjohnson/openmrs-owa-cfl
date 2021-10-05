@@ -11,7 +11,6 @@ export const ACTION_TYPES = {
 };
 
 const initialState = {
-  uploading: false,
   addressData: [],
   currentPage: ONE,
   hasNextPage: false,
@@ -48,7 +47,8 @@ const reducer = (state = initialState, action) => {
         addressData: currentPage === ONE ? data : [...state.addressData, ...data],
         hasNextPage: action.payload.data.nextPage,
         currentPage,
-        totalCount: action.payload.data.totalCount
+        totalCount: action.payload.data.totalCount,
+        loadingAddressData: false
       };
     case REQUEST(ACTION_TYPES.POST_ADDRESS_DATA):
       return {

@@ -30,7 +30,7 @@ export const props = {
   stepButtons: jest.fn(),
   stepDefinition: {},
   setStep: jest.fn(),
-  regimen: [],
+  regimens: [],
   setValidity: jest.fn(),
   stepNumber: 0,
   onKeyDown: jest.fn()

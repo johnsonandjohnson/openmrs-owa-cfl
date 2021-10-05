@@ -9,6 +9,15 @@
     padding-bottom: 5em;
   }
 
+  .upload-button {
+    display: flex;
+    justify-content: flex-end;
+
+    button {
+      margin-left: 0.5em;
+    }
+  }
+
   .upload-error {
     clear: both;
     margin-top: 1em;
