@@ -5,6 +5,7 @@ import { IFieldProps, IFieldState } from './Field';
 import ValidationError from './ValidationError';
 import { getCommonInputProps, getPlaceholder } from '../../../shared/util/patient-form-util';
 import { BIRTHDATE_FIELD, ESTIMATED_BIRTHDATE_FIELDS } from '../Step';
+import InputMask from 'react-input-mask';
 
 export interface IInputProps extends StateProps, DispatchProps, IFieldProps {
   intl: any;
@@ -20,7 +21,7 @@ class Input extends React.Component<IInputProps, IFieldState> {
 
   render = () => {
     const { intl, field, isInvalid, isDirty, className, value, patient, message } = this.props;
-    const { name, required, type, label } = field;
+    const { name, required, type, label, mask } = field;
     const hasValue = !!value || !!patient[field.name];
     const placeholder = getPlaceholder(intl, label, name, required);
     const props = getCommonInputProps(this.props, placeholder);
@@ -35,7 +36,7 @@ class Input extends React.Component<IInputProps, IFieldState> {
 
     return (
       <div className={`${className} input-container`}>
-        <input {...props} />
+        <InputMask {...props} mask={mask} maskChar={null} value={props.value} onChange={props.onChange} />
         {hasValue && <span className="placeholder">{placeholder}</span>}
         {isDirty && isInvalid && <ValidationError hasValue={hasValue} field={field} message={message} />}
       </div>
