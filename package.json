@@ -93,6 +93,7 @@
     "react-dom": "^16.4.2",
     "react-dropzone": "^11.3.4",
     "react-infinite-scroll-component": "^6.1.0",
+    "react-input-mask": "^2.0.4",
     "react-intl": "^5.13.2",
     "react-phone-number-input": "^3.1.17",
     "react-redux": "^5.1.2",
