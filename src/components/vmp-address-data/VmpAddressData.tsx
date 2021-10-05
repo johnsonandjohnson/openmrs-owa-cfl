@@ -20,7 +20,6 @@ import {
 } from 'src/shared/constants/vmp-address-data';
 import downloadCsv from 'download-csv';
 import Dropzone from '../common/dropzone/Dropzone';
-import { isNil } from 'lodash';
 
 export interface IVmpAddressDataProps extends StateProps, DispatchProps, RouteComponentProps {
   intl: any;
@@ -145,27 +144,21 @@ class VmpAddressData extends React.Component<IVmpAddressDataProps, IVmpAddressDa
     </div>
   );
 
-  uploadButton = () => {
-    const { addressDataUploaded } = this.props;
-    const displaySpinner = !isNil(addressDataUploaded) && !addressDataUploaded;
-    const isDisabled = displaySpinner || !this.state.acceptedFile;
-
-    return (
-      <div className="upload-button-wrapper">
-        <div className="upload-button">
-          {displaySpinner && (
-            <div className="spinner">
-              <Spinner />
-            </div>
-          )}
-          <Button onClick={this.onUpload} disabled={isDisabled} className="pull-right">
-            <FormattedMessage id="vmp.upload.button" />
-          </Button>
-        </div>
-        <p className="upload-error pull-right">{this.props.uploadError}</p>
+  uploadButton = () => (
+    <div className="upload-button-wrapper">
+      <div className="upload-button">
+        {this.props.addressDataUploading && (
+          <div className="spinner">
+            <Spinner />
+          </div>
+        )}
+        <Button onClick={this.onUpload} disabled={this.props.addressDataUploading || !this.state.acceptedFile} className="pull-right">
+          <FormattedMessage id="vmp.upload.button" />
+        </Button>
       </div>
-    );
-  };
+      <p className="upload-error pull-right">{this.props.uploadError}</p>
+    </div>
+  );
 
   downloadButton = disabled => (
     <Button onClick={this.downloadAddressData} disabled={disabled || !this.props.totalCount} className="cancel">
