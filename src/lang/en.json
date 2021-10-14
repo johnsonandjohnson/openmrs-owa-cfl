@@ -37,8 +37,6 @@
   },
   "vmpConfig": {
     "title": "Manage Configuration",
-    "save": "Save",
-    "return": "Return",
     "syncScope": "Sync Scope",
     "syncScopeTooltip": "Defines if the tablet will sync data for the specific site or the whole country (depends on the size of the study).",
     "operatorCredentialsOfflineRetentionTime": "Operator Credentials Offline Retention Time",
@@ -197,7 +195,6 @@
     "set": "SET",
     "active": "Active",
     "inactive": "Inactive",
-    "return": "Return",
     "addNew": "Add new Condition",
     "remove": "Remove Condition",
     "removeConfirmation": "Are you sure you want to remove condition for this patient?",
@@ -215,8 +212,7 @@
     "condition": "Condition",
     "onsetDate": "Onset Date",
     "endDate": "End date",
-    "cancel": "Cancel",
-    "save": "Save"
+    "cancel": "Cancel"
   },
   "columnNames": {
     "patientIdentifier": "Identifier",
@@ -446,6 +442,24 @@
     },
     "success": "Configuration saved successfully!"
   },
+  "locations": {
+    "location": {
+      "title": "Add New Location",
+      "name": "Location Name",
+      "description": "Description",
+      "address1": "Address (line 1)",
+      "address2": "Address (line 2)",
+      "cityVillage": "City/Village",
+      "stateProvince": "State/Province",
+      "postalCode": "Postal Code",
+      "country": "Country",
+      "delete": "Delete Location",
+      "error": {
+        "required": "Required",
+        "nameUnique": "The name should be unique. Please try again."
+      }
+    }
+  },
   "common": {
     "yes": "Yes",
     "no": "No",
@@ -464,6 +478,10 @@
     "switch": {
       "on": "on",
       "off": "off"
-    }
+    },
+    "return": "Return",
+    "save": "Save",
+    "true": "True",
+    "false": "False"
   }
 }

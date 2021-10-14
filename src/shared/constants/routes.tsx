@@ -12,8 +12,14 @@ import VmpAddressData from '../../components/vmp-address-data/VmpAddressData';
 import VmpTranslations from '../../components/vmp-translations/VmpTranslations';
 import NotificationConfiguration from '../../components/notification-configuration/NotificationConfiguration';
 import NotificationTemplates from '../../components/notification-templates/NotificationTemplates';
+import Location from '../../components/locations/location';
 
 export const routeConfig = [
+  {
+    path: '/locations/location',
+    component: Location,
+    breadcrumb: 'locations.location.title'
+  },
   {
     path: '/conditions/:patientUuid/manage',
     component: Condition,

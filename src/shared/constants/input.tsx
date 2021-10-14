@@ -6,3 +6,5 @@ export const TEN = 10;
 export const HUNDRED = 100;
 export const EMPTY_STRING = '';
 export const DEFAULT_TIME_FORMAT = 'HH:mm';
+export const STRING_TRUE = 'true';
+export const STRING_FALSE = 'false';

@@ -11,13 +11,8 @@ import { ConfirmationModal } from '../common/form/ConfirmationModal';
 import { successToast, errorToast } from '@bit/soldevelo-omrs.cfl-components.toast-handler';
 import InfiniteTable from '../common/InfiniteTable';
 import { getAddressDataPage, getAddressData, postAddressData } from '../../redux/reducers/addressData';
-import {
-  ACCEPTED_FILE_EXTENSIONS,
-  ADDRESS_DATA_TABLE_COLUMNS,
-  DEFAULT_DOWNLOAD_FILENAME,
-  STRING_FALSE,
-  STRING_TRUE
-} from 'src/shared/constants/vmp-address-data';
+import { ACCEPTED_FILE_EXTENSIONS, ADDRESS_DATA_TABLE_COLUMNS, DEFAULT_DOWNLOAD_FILENAME } from '../../shared/constants/vmp-address-data';
+import { STRING_FALSE, STRING_TRUE } from '../../shared/constants/input';
 import downloadCsv from 'download-csv';
 import Dropzone from '../common/dropzone/Dropzone';
 

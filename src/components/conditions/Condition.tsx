@@ -275,7 +275,7 @@ class Condition extends React.Component<IConditionsProps, IConditionsState> {
           </div>
           <div className="d-inline pull-right confirm-button-container">
             <Button className="save" onClick={this.save} disabled={!this.state.concept}>
-              <FormattedMessage id="manageCondition.save" />
+              <FormattedMessage id="common.save" />
             </Button>
           </div>
         </div>

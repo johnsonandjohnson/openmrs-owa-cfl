@@ -67,7 +67,7 @@ export class Step extends React.Component<IStepProps, IStepState> {
     const { stepDefinition } = this.props;
     const optionSources = stepDefinition.fields ? stepDefinition.fields.map(field => field.optionSource).filter(os => !!os) : [];
     if (optionSources.includes(LOCATIONS_OPTION_SOURCE)) {
-      this.props.searchLocations(EMPTY_STRING);
+      this.props.searchLocations();
     }
   };
 

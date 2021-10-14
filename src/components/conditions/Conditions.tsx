@@ -199,7 +199,7 @@ class Condition extends React.Component<IConditionsProps, IConditionsState> {
         <div className="mt-5">
           <div className="d-inline">
             <a href={this.redirectUrl()} className="cancel btn">
-              <FormattedMessage id={'conditions.return'} />
+              <FormattedMessage id={'common.return'} />
             </a>
           </div>
           <div className="d-inline pull-right confirm-button-container">

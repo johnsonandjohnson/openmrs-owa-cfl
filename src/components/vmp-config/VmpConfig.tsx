@@ -35,6 +35,7 @@ import { AddressFields } from './AddressFields';
 import { AllowManualParticipantIDEntry, ParticipantIDRegex } from './ParticipantId';
 import { EnableBiometricOnlySearchWithoutPhone } from './SearchWithoutPhone';
 import { IVmpVaccinationSchedule } from 'src/shared/models/vmp-vaccination-schedule';
+import { scrollToTop } from 'src/shared/util/window-util';
 
 export interface IVmpConfigProps extends StateProps, DispatchProps, RouteComponentProps {
   intl: any;
@@ -191,8 +192,6 @@ export class VmpConfig extends React.Component<IVmpConfigProps, IVmpConfigState>
     window.location.href = ROOT_URL;
   };
 
-  scrollToTop = () => window.scrollTo({ top: ZERO, behavior: 'smooth' });
-
   isFormValid = () => {
     const { manufacturers, vaccine } = this.state.vmpConfig;
     return (
@@ -224,7 +223,7 @@ export class VmpConfig extends React.Component<IVmpConfigProps, IVmpConfigState>
         modalBody: { id: 'vmpConfig.error.configurationInvalid' },
         onModalConfirm: () => {
           this.closeModal();
-          this.scrollToTop();
+          scrollToTop();
         },
         onModalCancel: null,
         showValidationErrors: true
@@ -351,12 +350,12 @@ export class VmpConfig extends React.Component<IVmpConfigProps, IVmpConfigState>
               <div className="mt-5 pb-5">
                 <div className="d-inline">
                   <Button className="cancel" onClick={this.return} data-testid="cancelButton">
-                    <FormattedMessage id="vmpConfig.return" />
+                    <FormattedMessage id="common.return" />
                   </Button>
                 </div>
                 <div className="d-inline pull-right confirm-button-container">
                   <Button className="save" onClick={this.save} disabled={loading} data-testid="saveButton">
-                    <FormattedMessage id="vmpConfig.save" />
+                    <FormattedMessage id="common.save" />
                   </Button>
                 </div>
               </div>
