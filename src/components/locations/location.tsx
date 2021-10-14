@@ -39,7 +39,7 @@ const BOOLEAN_RADIOS_PREFERRED_HANDLER = 'org.openmrs.web.attribute.handler.Bool
 const DROPDOWN_PREFERRED_HANDLER = 'org.openmrs.web.attribute.handler.SpecifiedTextOptionsDropdownHandler';
 const TEXTAREA_PREFERRED_HANDLER = 'org.openmrs.web.attribute.handler.LongFreeTextTextareaHandler';
 
-const Location = (props: ILocationProps) => {
+export const Location = (props: ILocationProps) => {
   const [location, setLocation] = useState(DEFAULT_LOCATION);
   const [showValidationErrors, setShowValidationErrors] = useState(false);
 
@@ -165,6 +165,7 @@ const Location = (props: ILocationProps) => {
                     value={location.name}
                     onChange={onValueChange('name')}
                     className={cx({ invalid: showValidationErrors && (isLocationNameEmpty || isLocationNameDuplicated) })}
+                    data-testid="locationNameInput"
                   />
                   {showValidationErrors &&
                     (isLocationNameEmpty ? (
@@ -179,6 +180,7 @@ const Location = (props: ILocationProps) => {
                   showPlaceholder={!!location.description}
                   value={location.description}
                   onChange={onValueChange('description')}
+                  data-testid="locationDescriptionInput"
                 />
               </div>
               <div className="inline-fields">
@@ -188,6 +190,7 @@ const Location = (props: ILocationProps) => {
                   showPlaceholder={!!location.address1}
                   value={location.address1}
                   onChange={onValueChange('address1')}
+                  data-testid="locationAddress1Input"
                 />
                 <InputWithPlaceholder
                   key="locationAddress2Input"
@@ -195,6 +198,7 @@ const Location = (props: ILocationProps) => {
                   showPlaceholder={!!location.address2}
                   value={location.address2}
                   onChange={onValueChange('address2')}
+                  data-testid="locationAddress2Input"
                 />
               </div>
               <div className="inline-fields">
@@ -204,6 +208,7 @@ const Location = (props: ILocationProps) => {
                   showPlaceholder={!!location.cityVillage}
                   value={location.cityVillage}
                   onChange={onValueChange('cityVillage')}
+                  data-testid="locationCityVillageInput"
                 />
                 <InputWithPlaceholder
                   key="locationStateProvinceInput"
@@ -211,6 +216,7 @@ const Location = (props: ILocationProps) => {
                   showPlaceholder={!!location.stateProvince}
                   value={location.stateProvince}
                   onChange={onValueChange('stateProvince')}
+                  data-testid="locationStateProvinceInput"
                 />
               </div>
               <div className="inline-fields">
@@ -220,6 +226,7 @@ const Location = (props: ILocationProps) => {
                   showPlaceholder={!!location.postalCode}
                   value={location.postalCode}
                   onChange={onValueChange('postalCode')}
+                  data-testid="locationPostalCodeInput"
                 />
                 <div className="input-container">
                   <InputWithPlaceholder
@@ -229,6 +236,7 @@ const Location = (props: ILocationProps) => {
                     value={location.country}
                     onChange={onValueChange('country')}
                     className={cx({ invalid: showValidationErrors && isCountryEmpty })}
+                    data-testid="locationCountryInput"
                   />
                   {showValidationErrors && isCountryEmpty && <ValidationError message="locations.location.error.required" />}
                 </div>
@@ -241,12 +249,12 @@ const Location = (props: ILocationProps) => {
             </div>
             <div className="mt-5 pb-5">
               <div className="d-inline">
-                <Button className="cancel" onClick={onReturn}>
+                <Button className="cancel" onClick={onReturn} data-testid="returnButton">
                   <FormattedMessage id="common.return" />
                 </Button>
               </div>
               <div className="d-inline pull-right confirm-button-container">
-                <Button className="save" onClick={onSave}>
+                <Button className="save" onClick={onSave} data-testid="saveButton">
                   <FormattedMessage id="common.save" />
                 </Button>
               </div>
