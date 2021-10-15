@@ -446,12 +446,12 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
               <div className="mt-5 pb-5">
                 <div className="d-inline">
                   <Button className="cancel" onClick={this.return}>
-                    <FormattedMessage id="vmpConfig.return" />
+                    <FormattedMessage id="common.return" />
                   </Button>
                 </div>
                 <div className="d-inline pull-right confirm-button-container">
                   <Button className="save" onClick={this.onSave} disabled={this.isSaveDisabled()}>
-                    <FormattedMessage id="vmpConfig.save" />
+                    <FormattedMessage id="common.save" />
                   </Button>
                 </div>
               </div>

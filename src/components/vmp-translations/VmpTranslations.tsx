@@ -107,7 +107,7 @@ export class VmpTranslations extends React.Component<IVmpAddressDataProps, IVmpA
   loadTranslations = () => {
     this.props.getSettingByQuery(VMP_TRANSLATIONS_SETTING_KEY);
     this.props.getAddressData();
-    this.props.searchLocations(EMPTY_STRING);
+    this.props.searchLocations();
   };
 
   isRequestedSettingNotExist = (prevProps, props) =>
@@ -521,12 +521,12 @@ export class VmpTranslations extends React.Component<IVmpAddressDataProps, IVmpA
               <div className="mt-5 pb-5">
                 <div className="d-inline">
                   <Button className="cancel" onClick={this.onReturn}>
-                    <FormattedMessage id="vmpConfig.return" />
+                    <FormattedMessage id="common.return" />
                   </Button>
                 </div>
                 <div className="d-inline pull-right confirm-button-container">
                   <Button className="save" onClick={this.save} disabled={loading}>
-                    <FormattedMessage id="vmpConfig.save" />
+                    <FormattedMessage id="common.save" />
                   </Button>
                 </div>
               </div>
@@ -550,7 +550,7 @@ const mapStateToProps = ({ apps, settings, addressData, location }) => ({
   loadingAddressData: addressData.loadingAddressData,
   addressData: addressData.downloadableAddressData,
   locations: location.locations,
-  loadingLocations: location.loading
+  loadingLocations: location.loadingLocations
 });
 
 const mapDispatchToProps = { getSettingByQuery, getAddressData, createSetting, updateSetting, searchLocations };

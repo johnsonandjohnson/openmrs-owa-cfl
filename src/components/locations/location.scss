@@ -1,0 +1,18 @@
+.inline-fields {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 1em;
+}
+
+.input-container {
+  flex: 1;
+  min-width: 120px;
+
+  &:not(:last-of-type) {
+    margin-right: 1em;
+  }
+
+  &.default-select-multi {
+    min-width: 250px;
+  }
+}

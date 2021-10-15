@@ -105,6 +105,13 @@ jqr &&
     if (!!htmlForm) {
       removeDatePickerPlaceholders(htmlForm);
     }
+    // AGRE-15: replace the URL of 'Add New Location' button on 'Manage Locations' page
+    if (this.URL.includes('locations/manageLocations.page')) {
+      const addNewLocationButton = document.querySelector('#content > a.button');
+      if (addNewLocationButton) {
+        addNewLocationButton.href = `${CFL_UI_BASE}index.html#/locations/location`;
+      }
+    }
   });
 
 function redesignAllergyUI() {
