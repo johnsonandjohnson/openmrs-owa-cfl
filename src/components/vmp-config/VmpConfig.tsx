@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import './VmpConfig.scss';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage, injectIntl, IntlShape } from 'react-intl';
 import {
   DEFAULT_AUTH_STEPS,
   DEFAULT_REGIMEN_UPDATE_PERMITTED,
@@ -34,11 +34,11 @@ import { IrisScore } from './IrisScore';
 import { AddressFields } from './AddressFields';
 import { AllowManualParticipantIDEntry, ParticipantIDRegex } from './ParticipantId';
 import { EnableBiometricOnlySearchWithoutPhone } from './SearchWithoutPhone';
-import { IVmpVaccinationSchedule } from 'src/shared/models/vmp-vaccination-schedule';
-import { scrollToTop } from 'src/shared/util/window-util';
+import { IVmpVaccinationSchedule } from '../../shared/models/vmp-vaccination-schedule';
+import { scrollToTop } from '../../shared/util/window-util';
 
 export interface IVmpConfigProps extends StateProps, DispatchProps, RouteComponentProps {
-  intl: any;
+  intl: IntlShape;
 }
 
 export interface IVmpConfigState {

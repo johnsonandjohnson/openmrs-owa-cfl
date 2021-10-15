@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import './location.scss';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage, injectIntl, IntlShape } from 'react-intl';
 import '../Inputs.scss';
 import { Button, Spinner } from 'reactstrap';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { ROOT_URL } from '../../shared/constants/openmrs';
 import { InputWithPlaceholder, RadioButtonsWithPlaceholder, SelectWithPlaceholder } from '../common/form/withPlaceholder';
 import { extractEventValue, selectDefaultTheme } from '../../shared/util/form-util';
-import { getLocationAttributeTypes, searchLocations, saveLocation } from '../../redux/reducers/location';
+import { getLocationAttributeTypes, searchLocations, saveLocation, ILocationState } from '../../redux/reducers/location';
 import { chunk } from 'lodash';
 import { ILocation, ILocationAttributeType } from '../../shared/models/location';
 import { STRING_FALSE, STRING_TRUE } from '../../shared/constants/input';
@@ -18,7 +18,12 @@ import { scrollToTop } from '../../shared/util/window-util';
 import cx from 'classnames';
 
 export interface ILocationProps extends StateProps, DispatchProps, RouteComponentProps {
-  intl: any;
+  intl: IntlShape;
+}
+
+interface IOption {
+  label: string;
+  value: string;
 }
 
 const DEFAULT_LOCATION: ILocation = {
@@ -42,6 +47,9 @@ const TEXTAREA_PREFERRED_HANDLER = 'org.openmrs.web.attribute.handler.LongFreeTe
 export const Location = (props: ILocationProps) => {
   const [location, setLocation] = useState(DEFAULT_LOCATION);
   const [showValidationErrors, setShowValidationErrors] = useState(false);
+  const {
+    intl: { formatMessage }
+  } = props;
 
   useEffect(() => {
     props.getLocationAttributeTypes();
@@ -54,7 +62,7 @@ export const Location = (props: ILocationProps) => {
   };
 
   const onSave = () => {
-    if (isLocationNameEmpty || isLocationNameDuplicated) {
+    if (isLocationNameEmpty || isLocationNameDuplicated || isCountryEmpty) {
       setShowValidationErrors(true);
       scrollToTop();
     } else props.saveLocation(location);
@@ -67,9 +75,9 @@ export const Location = (props: ILocationProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.success]);
 
-  const onValueChange = (name: string) => (event: any) => setLocation({ ...location, [name]: extractEventValue(event) });
+  const onValueChange = (name: string) => (event: ChangeEvent) => setLocation({ ...location, [name]: extractEventValue(event) });
 
-  const onAttributeValueChange = (uuid: string) => (event: any) => {
+  const onAttributeValueChange = (uuid: string) => (event: ChangeEvent | string) => {
     let attributes = location.attributes;
     const attribute = attributes.find(attribute => attribute.attributeType === uuid);
     const value = extractEventValue(event);
@@ -85,7 +93,7 @@ export const Location = (props: ILocationProps) => {
 
   const isLocationNameEmpty = !location.name;
 
-  const isLocationNameDuplicated = props.locations.map(location => location?.display?.toLowerCase()).includes(location.name?.toLowerCase());
+  const isLocationNameDuplicated = props.locations.map(location => location.display.toLowerCase()).includes(location.name.toLowerCase());
 
   const isCountryEmpty = !location.country;
 
@@ -99,15 +107,15 @@ export const Location = (props: ILocationProps) => {
 
     switch (locationAttributeType.preferredHandlerClassname) {
       case DROPDOWN_PREFERRED_HANDLER:
-        const options = locationAttributeType.handlerConfig
+        const options: Array<IOption> = locationAttributeType.handlerConfig
           .split(DROPDOWN_HANDLER_CONFIG_SEPARATOR)
           .map(value => ({ label: value, value }));
         return (
           <SelectWithPlaceholder
             placeholder={placeholder}
             showPlaceholder={!!value}
-            value={options.find(option => option.value === value)}
-            onChange={option => onChange(option.value)}
+            value={options.find(option => option[value])}
+            onChange={(option: IOption) => onChange(option.value)}
             options={options}
             wrapperClassName="flex-1"
             classNamePrefix="default-select"
@@ -118,10 +126,10 @@ export const Location = (props: ILocationProps) => {
         return (
           <RadioButtonsWithPlaceholder
             name={key}
-            onChange={event => onChange((event.target as HTMLInputElement).value === STRING_TRUE)}
+            onChange={onChange}
             options={[
-              { value: STRING_TRUE, label: props.intl.formatMessage({ id: 'common.true' }) },
-              { value: STRING_FALSE, label: props.intl.formatMessage({ id: 'common.false' }) }
+              { value: STRING_TRUE, label: formatMessage({ id: 'common.true' }) },
+              { value: STRING_FALSE, label: formatMessage({ id: 'common.false' }) }
             ]}
             placeholder={placeholder}
             showPlaceholder
@@ -160,7 +168,7 @@ export const Location = (props: ILocationProps) => {
                 <div className="input-container">
                   <InputWithPlaceholder
                     key="locationNameInput"
-                    placeholder={props.intl.formatMessage({ id: 'locations.location.name' })}
+                    placeholder={formatMessage({ id: 'locations.location.name' })}
                     showPlaceholder={!!location.name}
                     value={location.name}
                     onChange={onValueChange('name')}
@@ -176,7 +184,7 @@ export const Location = (props: ILocationProps) => {
                 </div>
                 <InputWithPlaceholder
                   key="locationDescriptionInput"
-                  placeholder={props.intl.formatMessage({ id: 'locations.location.description' })}
+                  placeholder={formatMessage({ id: 'locations.location.description' })}
                   showPlaceholder={!!location.description}
                   value={location.description}
                   onChange={onValueChange('description')}
@@ -186,7 +194,7 @@ export const Location = (props: ILocationProps) => {
               <div className="inline-fields">
                 <InputWithPlaceholder
                   key="locationAddress1Input"
-                  placeholder={props.intl.formatMessage({ id: 'locations.location.address1' })}
+                  placeholder={formatMessage({ id: 'locations.location.address1' })}
                   showPlaceholder={!!location.address1}
                   value={location.address1}
                   onChange={onValueChange('address1')}
@@ -194,7 +202,7 @@ export const Location = (props: ILocationProps) => {
                 />
                 <InputWithPlaceholder
                   key="locationAddress2Input"
-                  placeholder={props.intl.formatMessage({ id: 'locations.location.address2' })}
+                  placeholder={formatMessage({ id: 'locations.location.address2' })}
                   showPlaceholder={!!location.address2}
                   value={location.address2}
                   onChange={onValueChange('address2')}
@@ -204,7 +212,7 @@ export const Location = (props: ILocationProps) => {
               <div className="inline-fields">
                 <InputWithPlaceholder
                   key="locationCityVillageInput"
-                  placeholder={props.intl.formatMessage({ id: 'locations.location.cityVillage' })}
+                  placeholder={formatMessage({ id: 'locations.location.cityVillage' })}
                   showPlaceholder={!!location.cityVillage}
                   value={location.cityVillage}
                   onChange={onValueChange('cityVillage')}
@@ -212,7 +220,7 @@ export const Location = (props: ILocationProps) => {
                 />
                 <InputWithPlaceholder
                   key="locationStateProvinceInput"
-                  placeholder={props.intl.formatMessage({ id: 'locations.location.stateProvince' })}
+                  placeholder={formatMessage({ id: 'locations.location.stateProvince' })}
                   showPlaceholder={!!location.stateProvince}
                   value={location.stateProvince}
                   onChange={onValueChange('stateProvince')}
@@ -222,7 +230,7 @@ export const Location = (props: ILocationProps) => {
               <div className="inline-fields">
                 <InputWithPlaceholder
                   key="locationPostalCodeInput"
-                  placeholder={props.intl.formatMessage({ id: 'locations.location.postalCode' })}
+                  placeholder={formatMessage({ id: 'locations.location.postalCode' })}
                   showPlaceholder={!!location.postalCode}
                   value={location.postalCode}
                   onChange={onValueChange('postalCode')}
@@ -231,7 +239,7 @@ export const Location = (props: ILocationProps) => {
                 <div className="input-container">
                   <InputWithPlaceholder
                     key="locationCountryInput"
-                    placeholder={props.intl.formatMessage({ id: 'locations.location.country' })}
+                    placeholder={formatMessage({ id: 'locations.location.country' })}
                     showPlaceholder={!!location.country}
                     value={location.country}
                     onChange={onValueChange('country')}
@@ -266,14 +274,15 @@ export const Location = (props: ILocationProps) => {
   );
 };
 
-const mapStateToProps = ({ location }) => ({
-  loadingLocationAttributeTypes: location.loadingLocationAttributeTypes as boolean,
-  locationAttributeTypes: (location.locationAttributeTypes as Array<ILocationAttributeType>).filter(
-    locationAttributeType => !locationAttributeType.retired
-  ),
-  locations: location.locations as Array<any>,
-  success: location.success as boolean
-});
+const mapStateToProps = state => {
+  const location: ILocationState = state.location;
+  return {
+    loadingLocationAttributeTypes: location.loadingLocationAttributeTypes,
+    locationAttributeTypes: location.locationAttributeTypes.filter(locationAttributeType => !locationAttributeType.retired),
+    locations: location.locations,
+    success: location.success
+  };
+};
 
 const mapDispatchToProps = { getLocationAttributeTypes, searchLocations, saveLocation };
 

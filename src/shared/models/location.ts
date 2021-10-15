@@ -29,3 +29,8 @@ export interface ILocationAttributeTypeValue {
   attributeType: string;
   value: string;
 }
+
+export interface ILocationListItem {
+  uuid: string;
+  display: string;
+}

@@ -1,6 +1,7 @@
 import axios from 'axios';
-import { ILocation, ILocationAttributeType } from 'src/shared/models/location';
+import { ILocation, ILocationAttributeType, ILocationListItem } from '../../shared/models/location';
 import { FAILURE, REQUEST, SUCCESS } from '../action-type.util';
+import { AnyAction } from 'redux';
 
 export const ACTION_TYPES = {
   SEARCH_LOCATIONS: 'location/SEARCH_LOCATIONS',
@@ -8,9 +9,9 @@ export const ACTION_TYPES = {
   POST_LOCATION: 'location/POST_LOCATION'
 };
 
-interface ILocationState {
+export interface ILocationState {
   loadingLocations: boolean;
-  locations: Array<any>;
+  locations: Array<ILocationListItem>;
   errorMessage: string;
   locationAttributeTypes: Array<ILocationAttributeType>;
   loadingLocationAttributeTypes: boolean;
@@ -26,7 +27,7 @@ const initialState: ILocationState = {
   success: false
 };
 
-const reducer = (state = initialState, action) => {
+const reducer = (state = initialState, action: AnyAction) => {
   switch (action.type) {
     case REQUEST(ACTION_TYPES.SEARCH_LOCATIONS):
       return {
