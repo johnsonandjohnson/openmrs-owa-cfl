@@ -112,6 +112,7 @@ export const Location = (props: ILocationProps) => {
           .map(value => ({ label: value, value }));
         return (
           <SelectWithPlaceholder
+            key={key}
             placeholder={placeholder}
             showPlaceholder={!!value}
             value={options.find(option => option[value])}
@@ -125,6 +126,7 @@ export const Location = (props: ILocationProps) => {
       case BOOLEAN_RADIOS_PREFERRED_HANDLER:
         return (
           <RadioButtonsWithPlaceholder
+            key={key}
             name={key}
             onChange={onChange}
             options={[

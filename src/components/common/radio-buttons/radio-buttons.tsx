@@ -16,8 +16,8 @@ const RadioButtons = (props: IRadioButtonsProps) => (
   <div onChange={props.onChange} className="input-container radio-buttons">
     {props.options.map(option => (
       <div className="radio-button-wrapper" key={option.label}>
-        <input type="radio" id={option.value} name={props.name} value={option.value} className="radio-button" />
-        <label htmlFor={option.value}>{option.label}</label>
+        <input type="radio" id={`${option.value}-${props.name}`} name={props.name} value={option.value} className="radio-button" />
+        <label htmlFor={`${option.value}-${props.name}`}>{option.label}</label>
       </div>
     ))}
   </div>
