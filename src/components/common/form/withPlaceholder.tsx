@@ -3,7 +3,7 @@ import { Input } from 'reactstrap';
 import Select from 'react-select';
 import SortableMultiSelect from './SortableSelect';
 import TextareaAutosize from 'react-textarea-autosize';
-import RadioButtons from '../radio-buttons/radio-buttons';
+import RadioButtons from '../radio-buttons/RadioButtons';
 
 interface IWithPlaceholderProps {
   placeholder: string;

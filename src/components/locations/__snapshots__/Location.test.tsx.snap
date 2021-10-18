@@ -635,13 +635,13 @@ Object {
                   >
                     <input
                       class="radio-button"
-                      id="true"
+                      id="true-locationAttribute579e3246-c898-485a-a297-e0b16abdcb4a"
                       name="locationAttribute579e3246-c898-485a-a297-e0b16abdcb4a"
                       type="radio"
                       value="true"
                     />
                     <label
-                      for="true"
+                      for="true-locationAttribute579e3246-c898-485a-a297-e0b16abdcb4a"
                     >
                       common.true
                     </label>
@@ -651,13 +651,13 @@ Object {
                   >
                     <input
                       class="radio-button"
-                      id="false"
+                      id="false-locationAttribute579e3246-c898-485a-a297-e0b16abdcb4a"
                       name="locationAttribute579e3246-c898-485a-a297-e0b16abdcb4a"
                       type="radio"
                       value="false"
                     />
                     <label
-                      for="false"
+                      for="false-locationAttribute579e3246-c898-485a-a297-e0b16abdcb4a"
                     >
                       common.false
                     </label>
@@ -947,13 +947,13 @@ Object {
                 >
                   <input
                     class="radio-button"
-                    id="true"
+                    id="true-locationAttribute579e3246-c898-485a-a297-e0b16abdcb4a"
                     name="locationAttribute579e3246-c898-485a-a297-e0b16abdcb4a"
                     type="radio"
                     value="true"
                   />
                   <label
-                    for="true"
+                    for="true-locationAttribute579e3246-c898-485a-a297-e0b16abdcb4a"
                   >
                     common.true
                   </label>
@@ -963,13 +963,13 @@ Object {
                 >
                   <input
                     class="radio-button"
-                    id="false"
+                    id="false-locationAttribute579e3246-c898-485a-a297-e0b16abdcb4a"
                     name="locationAttribute579e3246-c898-485a-a297-e0b16abdcb4a"
                     type="radio"
                     value="false"
                   />
                   <label
-                    for="false"
+                    for="false-locationAttribute579e3246-c898-485a-a297-e0b16abdcb4a"
                   >
                     common.false
                   </label>

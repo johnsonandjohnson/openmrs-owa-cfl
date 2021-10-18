@@ -12,7 +12,7 @@ import VmpAddressData from '../../components/vmp-address-data/VmpAddressData';
 import VmpTranslations from '../../components/vmp-translations/VmpTranslations';
 import NotificationConfiguration from '../../components/notification-configuration/NotificationConfiguration';
 import NotificationTemplates from '../../components/notification-templates/NotificationTemplates';
-import Location from '../../components/locations/location';
+import Location from '../../components/locations/Location';
 
 export const routeConfig = [
   {

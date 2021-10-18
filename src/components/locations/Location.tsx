@@ -1,6 +1,6 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import './location.scss';
+import './Location.scss';
 import { FormattedMessage, injectIntl, IntlShape } from 'react-intl';
 import '../Inputs.scss';
 import { Button, Spinner } from 'reactstrap';

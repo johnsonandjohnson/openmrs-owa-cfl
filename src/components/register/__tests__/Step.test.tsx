@@ -20,7 +20,7 @@ import {
   vaccinationStep,
   vaccineProps,
   phoneNumberStep
-} from '../../../__mocks__/Step.mock';
+} from '../../../mocks/Step';
 
 const messages = flatten(en);
 const mockStore = configureMockStore();

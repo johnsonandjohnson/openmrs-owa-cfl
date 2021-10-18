@@ -1,10 +1,11 @@
 import React from 'react';
 import { IntlProvider } from 'react-intl';
 import { render } from '@testing-library/react';
-import { Location, ILocationProps } from './location';
+import { Location, ILocationProps } from './Location';
+import IntlShape from '../../mocks/Intl';
 
 const initialProps: ILocationProps = {
-  intl: { formatMessage: (message: { id: string }) => message.id },
+  intl: IntlShape,
   loadingLocationAttributeTypes: false,
   locationAttributeTypes: [],
   locations: [],
@@ -75,6 +76,7 @@ const props: ILocationProps = {
   ],
   locations: [
     {
+      uuid: '579e3246-c898-485a-a297-e0b16abdcb4a',
       display: 'testLocationName'
     }
   ]

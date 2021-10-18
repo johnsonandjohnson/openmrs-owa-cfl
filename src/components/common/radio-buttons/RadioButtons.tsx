@@ -1,5 +1,5 @@
 import React, { FormEvent } from 'react';
-import './radio-buttons.scss';
+import './RadioButtons.scss';
 
 interface IRadioButtonOption {
   value: string;

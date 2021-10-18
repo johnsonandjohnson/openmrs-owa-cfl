@@ -13,13 +13,13 @@ Object {
         >
           <input
             class="radio-button"
-            id="option1"
+            id="option1-testName"
             name="testName"
             type="radio"
             value="option1"
           />
           <label
-            for="option1"
+            for="option1-testName"
           >
             option1
           </label>
@@ -29,13 +29,13 @@ Object {
         >
           <input
             class="radio-button"
-            id="option2"
+            id="option2-testName"
             name="testName"
             type="radio"
             value="option2"
           />
           <label
-            for="option2"
+            for="option2-testName"
           >
             option2
           </label>
@@ -52,13 +52,13 @@ Object {
       >
         <input
           class="radio-button"
-          id="option1"
+          id="option1-testName"
           name="testName"
           type="radio"
           value="option1"
         />
         <label
-          for="option1"
+          for="option1-testName"
         >
           option1
         </label>
@@ -68,13 +68,13 @@ Object {
       >
         <input
           class="radio-button"
-          id="option2"
+          id="option2-testName"
           name="testName"
           type="radio"
           value="option2"
         />
         <label
-          for="option2"
+          for="option2-testName"
         >
           option2
         </label>
