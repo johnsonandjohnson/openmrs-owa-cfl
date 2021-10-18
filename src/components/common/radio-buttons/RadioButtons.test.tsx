@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import RadioButtons from './radio-buttons';
+import RadioButtons from './RadioButtons';
 
 test('should render match snapshot', () => {
   const options = [
