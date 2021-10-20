@@ -203,9 +203,9 @@ export const Location = (props: ILocationProps) => {
                   />
                   {showValidationErrors &&
                     (isLocationNameEmpty ? (
-                      <ValidationError message="locations.location.error.required" />
+                      <ValidationError message="common.error.required" />
                     ) : (
-                      isLocationNameDuplicated && <ValidationError message="locations.location.error.nameUnique" />
+                      isLocationNameDuplicated && <ValidationError message="common.error.nameUnique" />
                     ))}
                 </div>
                 <InputWithPlaceholder
@@ -272,7 +272,7 @@ export const Location = (props: ILocationProps) => {
                     className={cx({ invalid: showValidationErrors && isCountryEmpty })}
                     data-testid="locationCountryInput"
                   />
-                  {showValidationErrors && isCountryEmpty && <ValidationError message="locations.location.error.required" />}
+                  {showValidationErrors && isCountryEmpty && <ValidationError message="common.error.required" />}
                 </div>
               </div>
               {locationAttributeTypesGrouped?.map((locationAttributeTypesGroup, idx) => (

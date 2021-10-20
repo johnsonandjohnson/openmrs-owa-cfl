@@ -21,6 +21,8 @@ import visit from './visit';
 import addressData from './addressData';
 import provider from './provider';
 import messages from './messages';
+import role from './role';
+import user from './user';
 
 export default combineReducers({
   cflPatient,
@@ -38,6 +40,8 @@ export default combineReducers({
   person,
   patient,
   personStatus,
+  role,
+  user,
   customizeReducer,
   visit,
   addressData,
