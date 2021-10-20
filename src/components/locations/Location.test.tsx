@@ -10,11 +10,19 @@ const initialProps: ILocationProps = {
   locationAttributeTypes: [],
   locations: [],
   success: false,
+  loadingLocation: false,
+  editedLocation: null,
   getLocationAttributeTypes: jest.fn(),
   saveLocation: jest.fn(),
   searchLocations: jest.fn(),
+  getLocation: jest.fn(),
   history: null,
-  match: null,
+  match: {
+    params: {},
+    isExact: null,
+    path: null,
+    url: null
+  },
   location: null
 };
 

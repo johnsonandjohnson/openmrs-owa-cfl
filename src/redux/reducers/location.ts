@@ -5,6 +5,7 @@ import { AnyAction } from 'redux';
 
 export const ACTION_TYPES = {
   SEARCH_LOCATIONS: 'location/SEARCH_LOCATIONS',
+  GET_LOCATION: 'location/GET_LOCATION',
   GET_LOCATION_ATTRIBUTE_TYPES: 'location/GET_LOCATION_ATTRIBUTE_TYPES',
   POST_LOCATION: 'location/POST_LOCATION'
 };
@@ -16,6 +17,8 @@ export interface ILocationState {
   locationAttributeTypes: Array<ILocationAttributeType>;
   loadingLocationAttributeTypes: boolean;
   success: boolean;
+  loadingLocation: boolean;
+  location: ILocation;
 }
 
 const initialState: ILocationState = {
@@ -24,7 +27,9 @@ const initialState: ILocationState = {
   errorMessage: '',
   locationAttributeTypes: [],
   loadingLocationAttributeTypes: false,
-  success: false
+  success: false,
+  loadingLocation: false,
+  location: null
 };
 
 const reducer = (state = initialState, action: AnyAction) => {
@@ -33,6 +38,11 @@ const reducer = (state = initialState, action: AnyAction) => {
       return {
         ...state,
         loadingLocations: true
+      };
+    case REQUEST(ACTION_TYPES.GET_LOCATION):
+      return {
+        ...state,
+        loadingLocation: true
       };
     case REQUEST(ACTION_TYPES.GET_LOCATION_ATTRIBUTE_TYPES):
       return {
@@ -49,6 +59,12 @@ const reducer = (state = initialState, action: AnyAction) => {
         ...state,
         loadingLocations: false,
         locations: action.payload.data.results
+      };
+    case SUCCESS(ACTION_TYPES.GET_LOCATION):
+      return {
+        ...state,
+        loadingLocation: false,
+        location: action.payload.data.results[0]
       };
     case SUCCESS(ACTION_TYPES.GET_LOCATION_ATTRIBUTE_TYPES):
       return {
@@ -75,6 +91,11 @@ export const searchLocations = (q?: string) => {
   };
 };
 
+export const getLocation = (id: string) => ({
+  type: ACTION_TYPES.GET_LOCATION,
+  payload: axios.get(`/openmrs/ws/rest/v1/location?s=byId&id=${id}&v=full`)
+});
+
 export const getLocationAttributeTypes = () => ({
   type: ACTION_TYPES.GET_LOCATION_ATTRIBUTE_TYPES,
   payload: axios.get('/openmrs/ws/rest/v1/locationattributetype?v=full')
@@ -82,7 +103,7 @@ export const getLocationAttributeTypes = () => ({
 
 export const saveLocation = (location: ILocation) => ({
   type: ACTION_TYPES.POST_LOCATION,
-  payload: axios.post('/openmrs/ws/rest/v1/location', location)
+  payload: axios.post(`/openmrs/ws/rest/v1/location${location.uuid ? '/' + location.uuid : ''}`, location)
 });
 
 export default reducer;

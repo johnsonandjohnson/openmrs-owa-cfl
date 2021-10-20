@@ -8,7 +8,7 @@ import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { ROOT_URL } from '../../shared/constants/openmrs';
 import { InputWithPlaceholder, RadioButtonsWithPlaceholder, SelectWithPlaceholder } from '../common/form/withPlaceholder';
 import { extractEventValue, selectDefaultTheme } from '../../shared/util/form-util';
-import { getLocationAttributeTypes, searchLocations, saveLocation, ILocationState } from '../../redux/reducers/location';
+import { getLocationAttributeTypes, searchLocations, saveLocation, ILocationState, getLocation } from '../../redux/reducers/location';
 import { chunk } from 'lodash';
 import { ILocation, ILocationAttributeType } from '../../shared/models/location';
 import { STRING_FALSE, STRING_TRUE } from '../../shared/constants/input';
@@ -16,9 +16,14 @@ import { TextareaWithPlaceholder } from '../common/textarea/Textarea';
 import ValidationError from '../common/form/ValidationError';
 import { scrollToTop } from '../../shared/util/window-util';
 import cx from 'classnames';
+import _ from 'lodash';
 
 export interface ILocationProps extends StateProps, DispatchProps, RouteComponentProps {
   intl: IntlShape;
+}
+
+interface IUrlParams {
+  locationId: string;
 }
 
 interface IOption {
@@ -50,12 +55,22 @@ export const Location = (props: ILocationProps) => {
   const {
     intl: { formatMessage }
   } = props;
+  const { locationId } = props.match.params as IUrlParams;
 
   useEffect(() => {
     props.getLocationAttributeTypes();
     props.searchLocations();
+    if (locationId) {
+      props.getLocation(locationId);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (props.editedLocation) {
+      setLocation(props.editedLocation);
+    }
+  }, [props.editedLocation]);
 
   const onReturn = () => {
     window.location.href = `${ROOT_URL}adminui/metadata/locations/manageLocations.page`;
@@ -65,27 +80,32 @@ export const Location = (props: ILocationProps) => {
     if (isLocationNameEmpty || isLocationNameDuplicated || isCountryEmpty) {
       setShowValidationErrors(true);
       scrollToTop();
-    } else props.saveLocation(location);
+    } else {
+      const preparedLocation = _.cloneDeep(location) as ILocation;
+      preparedLocation.attributes = preparedLocation.attributes
+        .filter(attribute => attribute.value !== '')
+        .map(({ attributeType, value }) => ({ attributeType, value }));
+      props.saveLocation(preparedLocation);
+    }
   };
 
   useEffect(() => {
     if (props.success) {
       onReturn();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.success]);
 
   const onValueChange = (name: string) => (event: ChangeEvent) => setLocation({ ...location, [name]: extractEventValue(event) });
 
   const onAttributeValueChange = (uuid: string) => (event: ChangeEvent | string) => {
     let attributes = location.attributes;
-    const attribute = attributes.find(attribute => attribute.attributeType === uuid);
+    const attribute = attributes.find(attribute => attribute.attributeType.uuid === uuid);
     const value = extractEventValue(event);
 
     if (attribute) {
       attribute.value = value;
     } else {
-      attributes = [...location.attributes, { attributeType: uuid, value }];
+      attributes = [...location.attributes, { attributeType: { uuid }, value }];
     }
 
     setLocation({ ...location, attributes });
@@ -93,7 +113,10 @@ export const Location = (props: ILocationProps) => {
 
   const isLocationNameEmpty = !location.name;
 
-  const isLocationNameDuplicated = props.locations.map(location => location.display.toLowerCase()).includes(location.name.toLowerCase());
+  const isLocationNameDuplicated = props.locations
+    .filter(loc => loc.uuid !== location.uuid)
+    .map(loc => loc.display.toLowerCase())
+    .includes(location.name.toLowerCase());
 
   const isCountryEmpty = !location.country;
 
@@ -102,7 +125,7 @@ export const Location = (props: ILocationProps) => {
   const input = (locationAttributeType: ILocationAttributeType) => {
     const key = `locationAttribute${locationAttributeType.uuid}`;
     const placeholder = locationAttributeType.name;
-    const value = location.attributes.find(attribute => locationAttributeType.uuid === attribute.attributeType)?.value;
+    const value = location.attributes.find(attribute => locationAttributeType.uuid === attribute.attributeType.uuid)?.value;
     const onChange = onAttributeValueChange(locationAttributeType.uuid);
 
     switch (locationAttributeType.preferredHandlerClassname) {
@@ -115,7 +138,7 @@ export const Location = (props: ILocationProps) => {
             key={key}
             placeholder={placeholder}
             showPlaceholder={!!value}
-            value={options.find(option => option[value])}
+            value={options.find(option => option.value === value)}
             onChange={(option: IOption) => onChange(option.value)}
             options={options}
             wrapperClassName="flex-1"
@@ -133,6 +156,7 @@ export const Location = (props: ILocationProps) => {
               { value: STRING_TRUE, label: formatMessage({ id: 'common.true' }) },
               { value: STRING_FALSE, label: formatMessage({ id: 'common.false' }) }
             ]}
+            value={value?.toString()}
             placeholder={placeholder}
             showPlaceholder
           />
@@ -156,7 +180,7 @@ export const Location = (props: ILocationProps) => {
   return (
     <div id="location">
       <h2>
-        <FormattedMessage id="locations.location.title" />
+        <FormattedMessage id={`locations.location.${locationId ? 'edit' : 'create'}.title`} />
       </h2>
       <div className="inner-content">
         {props.loadingLocationAttributeTypes ? (
@@ -282,11 +306,13 @@ const mapStateToProps = state => {
     loadingLocationAttributeTypes: location.loadingLocationAttributeTypes,
     locationAttributeTypes: location.locationAttributeTypes.filter(locationAttributeType => !locationAttributeType.retired),
     locations: location.locations,
-    success: location.success
+    success: location.success,
+    loadingLocation: location.loadingLocation,
+    editedLocation: location.location
   };
 };
 
-const mapDispatchToProps = { getLocationAttributeTypes, searchLocations, saveLocation };
+const mapDispatchToProps = { getLocationAttributeTypes, searchLocations, saveLocation, getLocation };
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;

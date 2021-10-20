@@ -9,6 +9,7 @@ interface IRadioButtonOption {
 export interface IRadioButtonsProps {
   name: string;
   options: Array<IRadioButtonOption>;
+  value: string;
   onChange: (event: FormEvent) => void;
 }
 
@@ -16,7 +17,14 @@ const RadioButtons = (props: IRadioButtonsProps) => (
   <div onChange={props.onChange} className="input-container radio-buttons">
     {props.options.map(option => (
       <div className="radio-button-wrapper" key={option.label}>
-        <input type="radio" id={`${option.value}-${props.name}`} name={props.name} value={option.value} className="radio-button" />
+        <input
+          type="radio"
+          id={`${option.value}-${props.name}`}
+          name={props.name}
+          value={option.value}
+          className="radio-button"
+          checked={props.value === option.value}
+        />
         <label htmlFor={`${option.value}-${props.name}`}>{option.label}</label>
       </div>
     ))}

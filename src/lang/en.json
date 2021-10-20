@@ -444,7 +444,8 @@
   },
   "locations": {
     "location": {
-      "title": "Add New Location",
+      "create.title": "Add New Location",
+      "edit.title": "Edit Location",
       "name": "Location Name",
       "description": "Description",
       "address1": "Address (line 1)",

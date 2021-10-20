@@ -16,9 +16,14 @@ import Location from '../../components/locations/Location';
 
 export const routeConfig = [
   {
-    path: '/locations/location',
+    path: '/locations/edit-location/:locationId',
     component: Location,
-    breadcrumb: 'locations.location.title'
+    breadcrumb: 'locations.location.edit.title'
+  },
+  {
+    path: '/locations/create-location',
+    component: Location,
+    breadcrumb: 'locations.location.create.title'
   },
   {
     path: '/conditions/:patientUuid/manage',
