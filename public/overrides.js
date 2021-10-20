@@ -105,11 +105,19 @@ jqr &&
     if (!!htmlForm) {
       removeDatePickerPlaceholders(htmlForm);
     }
-    // AGRE-15: replace the URL of 'Add New Location' button on 'Manage Locations' page
+    // AGRE-15: replace URLs of 'Add New Location' and 'Edit' buttons on 'Manage Locations' page
     if (this.URL.includes('locations/manageLocations.page')) {
       const addNewLocationButton = document.querySelector('#content > a.button');
       if (addNewLocationButton) {
-        addNewLocationButton.href = `${CFL_UI_BASE}index.html#/locations/location`;
+        addNewLocationButton.href = `${CFL_UI_BASE}index.html#/locations/create-location`;
+      }
+      const editLocationButtons = document.querySelectorAll('#content #list-locations .edit-action');
+      if (editLocationButtons) {
+        editLocationButtons.forEach(button => {
+          const regexp = /(?<=locationId=).+(?=&)/;
+          const locationId = button.getAttribute('onclick')?.match(regexp)[0];
+          button.setAttribute('onclick', `location.href='${CFL_UI_BASE}index.html#/locations/edit-location/${locationId}'`);
+        });
       }
     }
   });

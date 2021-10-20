@@ -1,4 +1,5 @@
 export interface ILocation {
+  uuid?: string;
   name: string;
   description: string;
   address1: string;
@@ -26,7 +27,7 @@ export interface ILocationAttributeType {
 }
 
 export interface ILocationAttributeTypeValue {
-  attributeType: string;
+  attributeType: { uuid: string };
   value: string;
 }
 

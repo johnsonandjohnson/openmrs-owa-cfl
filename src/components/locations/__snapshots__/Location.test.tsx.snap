@@ -9,7 +9,7 @@ Object {
         id="location"
       >
         <h2>
-          locations.location.title
+          locations.location.create.title
         </h2>
         <div
           class="inner-content"
@@ -173,7 +173,7 @@ Object {
       id="location"
     >
       <h2>
-        locations.location.title
+        locations.location.create.title
       </h2>
       <div
         class="inner-content"
@@ -394,7 +394,7 @@ Object {
         id="location"
       >
         <h2>
-          locations.location.title
+          locations.location.create.title
         </h2>
         <div
           class="inner-content"
@@ -706,7 +706,7 @@ Object {
       id="location"
     >
       <h2>
-        locations.location.title
+        locations.location.create.title
       </h2>
       <div
         class="inner-content"
