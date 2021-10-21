@@ -183,7 +183,7 @@ export const Location = (props: ILocationProps) => {
         <FormattedMessage id={`locations.location.${locationId ? 'edit' : 'create'}.title`} />
       </h2>
       <div className="inner-content">
-        {props.loadingLocationAttributeTypes ? (
+        {props.loadingLocationAttributeTypes || props.loadingLocation ? (
           <div className="spinner">
             <Spinner />
           </div>

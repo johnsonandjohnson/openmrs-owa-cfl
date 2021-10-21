@@ -114,9 +114,12 @@ jqr &&
       const editLocationButtons = document.querySelectorAll('#content #list-locations .edit-action');
       if (editLocationButtons) {
         editLocationButtons.forEach(button => {
-          const regexp = /(?<=locationId=).+(?=&)/;
-          const locationId = button.getAttribute('onclick')?.match(regexp)[0];
-          button.setAttribute('onclick', `location.href='${CFL_UI_BASE}index.html#/locations/edit-location/${locationId}'`);
+          const buttonOnClick = button.getAttribute('onclick');
+          if (buttonOnClick && buttonOnClick.includes('locationId')) {
+            const regexp = /(?<=locationId=).+(?=&)/;
+            const locationId = buttonOnClick.match(regexp)[0];
+            button.setAttribute('onclick', `location.href='${CFL_UI_BASE}index.html#/locations/edit-location/${locationId}'`);
+          }
         });
       }
     }
