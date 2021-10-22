@@ -12,7 +12,7 @@ import {
   CONFIRM_PASSWORD_FIELD,
   LOCATION_FIELD,
   PASSWORD_FIELD,
-  USER_NAME_FIELD,
+  USERNAME_FIELD,
   USER_ROLE_FIELD
 } from '../../shared/constants/user-account';
 
@@ -24,8 +24,8 @@ const UserAccountDetails = ({
   locations,
   forcePassword,
   setForcePassword,
-  fields: {
-    userName: { value: userNameValue, isValid: isUserNameValid, error: userNameError },
+  userAccount: {
+    username: { value: usernameValue, isValid: isUserNameValid, error: userNameError },
     locations: { value: locationsValue, isValid: isLocationsValid, error: locationsError },
     userRole: { value: userRoleValue, isValid: isUserRoleValid, error: userRoleError },
     password: { value: passwordValue, isValid: isPasswordValid, error: passwordError },
@@ -42,10 +42,10 @@ const UserAccountDetails = ({
       <div className="details">
         <div className="grid-1">
           <InputWithPlaceholder
-            placeholder={formatMessage({ id: `userAccount.userAccountDetails.${USER_NAME_FIELD}` })}
-            showPlaceholder={!!userNameValue}
-            value={userNameValue}
-            onChange={onValueChange(USER_NAME_FIELD)}
+            placeholder={formatMessage({ id: `userAccount.userAccountDetails.${USERNAME_FIELD}` })}
+            showPlaceholder={!!usernameValue}
+            value={usernameValue}
+            onChange={onValueChange(USERNAME_FIELD)}
             type="text"
             className={cx({ invalid: !isUserNameValid })}
           />
@@ -105,10 +105,8 @@ const UserAccountDetails = ({
           {!isConfirmPasswordValid && <ValidationError message={confirmPasswordError} />}
         </div>
       </div>
-      <Label className={cx('force-password-change', { hide: userNameValue && !dirtyFields.length })}>
-        <Input type="checkbox" className="hide" onClick={() => setForcePassword(!forcePassword)} checked={forcePassword} />
-        <i className="bi bi-app"></i>
-        <i className={cx('bi bi-check2', { hide: !forcePassword })}></i>
+      <Label className={cx('force-password-change', { hide: usernameValue && !dirtyFields.length })}>
+        <Input type="checkbox" onClick={() => setForcePassword(!forcePassword)} checked={forcePassword} />
         <FormattedMessage id="userAccount.userAccountDetails.forcePasswordChange" tagName="span" />
       </Label>
     </>

@@ -11,28 +11,28 @@ export interface IDetailsOption {
   uuid: string;
 }
 
-interface IValidationFields {
+interface IValidationField {
   isValid: boolean;
   error: string;
 }
 
-interface IUserAccountInput extends IValidationFields {
+interface IUserAccountInput extends IValidationField {
   value: string;
 }
 
-interface IUserAccountSelectLocations extends IValidationFields {
+interface IUserAccountSelectLocations extends IValidationField {
   value: ISelectOption[];
 }
-interface IUserAccountSelectRole extends IValidationFields {
+interface IUserAccountSelectRole extends IValidationField {
   value: ISelectOption;
 }
 
-export interface IUserAccountFields {
+export interface IUserAccount {
   familyName: IUserAccountInput;
   givenName: IUserAccountInput;
   phone: IUserAccountInput;
   email: IUserAccountInput;
-  userName: IUserAccountInput;
+  username: IUserAccountInput;
   locations: IUserAccountSelectLocations;
   userRole: IUserAccountSelectRole;
   password: IUserAccountInput;
@@ -42,7 +42,7 @@ export interface IUserAccountFields {
 export interface IDetails {
   intl: IntlShape;
   onValueChange: (name: string) => (e: FormEvent) => void;
-  fields: IUserAccountFields;
+  userAccount: IUserAccount;
   dirtyFields?: string[];
   roles?: IDetailsOption[];
   locations?: IDetailsOption[];

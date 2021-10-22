@@ -61,9 +61,9 @@ export const getUsers = () => ({
   payload: axios.get('/openmrs/ws/rest/v1/user')
 });
 
-export const getUserByPersonId = (personIdParam: string) => ({
+export const getUserByPersonId = (personId: string) => ({
   type: ACTION_TYPES.GET_USER,
-  payload: axios.get(`/openmrs/ws/rest/v1/user?s=byPerson&${personIdParam}&v=full`)
+  payload: axios.get(`/openmrs/ws/rest/v1/user?s=byPerson&personId=${personId}&v=full`)
 });
 
 export const saveUser = (data: {}, uuid: string) => ({

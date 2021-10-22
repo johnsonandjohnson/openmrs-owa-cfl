@@ -1,4 +1,4 @@
-.user-account {
+#user-account {
   &.edit .person,
   .details,
   .PhoneInput {
@@ -38,26 +38,12 @@
       grid-area: 3 / 2 / 4 / 3;
     }
     .force-password-change {
-      margin-top: 20px;
-      cursor: pointer;
-      position: relative;
-      display: inline-block;
-
-      .bi-app {
-        color: #ced4da;
-        font-size: 20px;
-      }
-
-      .bi-check2 {
-        position: absolute;
-        color: #00455c;
-        left: 0;
-        top: -4px;
-        font-size: 25px;
-      }
+      display: flex;
+      align-items: center;
+      margin-top: 1em;
 
       span {
-        padding-left: 5px;
+        margin-left: 0.5em;
       }
     }
   }

@@ -12,7 +12,7 @@ import { EMAIL_FIELD, FAMILY_NAME_FIELD, GIVEN_NAME_FIELD, PHONE_FIELD } from '.
 const RersonDetails = ({
   intl: { formatMessage },
   onValueChange,
-  fields: {
+  userAccount: {
     familyName: { value: familyNameValue, isValid: isFamilyNameValid, error: familyNameError },
     givenName: { value: givenNameValue, isValid: isGivenNameValid, error: givenNameError },
     phone: { value: phoneValue, isValid: isPhoneValid, error: phoneError },
