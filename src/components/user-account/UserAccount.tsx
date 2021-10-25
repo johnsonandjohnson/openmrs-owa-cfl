@@ -87,7 +87,7 @@ const UserAccount = (props: ILocationProps) => {
 
   const [userAccount, setUserAccount] = useState<IUserAccount>(DEFAULT_USER_VALUES);
   const [dirtyFields, setDirtyFields] = useState<string[]>([]);
-  const [forcePassword, setForcePassword] = useState(false);
+  const [forcePassword, setForcePassword] = useState(true);
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
 
   useEffect(() => {
@@ -143,6 +143,7 @@ const UserAccount = (props: ILocationProps) => {
         password: { ...userAccount.password, value: DEFAULT_EDIT_USER_PASSWORD },
         confirmPassword: { ...userAccount.confirmPassword, value: DEFAULT_EDIT_USER_PASSWORD }
       });
+      setForcePassword(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [person, currentUser]);
@@ -201,6 +202,7 @@ const UserAccount = (props: ILocationProps) => {
           isFieldValid = false;
           errorMessage = 'common.error.invalidPassword';
         }
+        person && !forcePassword && setForcePassword(true);
         break;
       case CONFIRM_PASSWORD_FIELD:
         if (userAccount.password.value !== fieldValue) {
@@ -209,7 +211,6 @@ const UserAccount = (props: ILocationProps) => {
         }
     }
 
-    setForcePassword(true);
     setUserAccount({ ...userAccount, [name]: { ...userAccount[name], value: fieldValue, isValid: isFieldValid, error: errorMessage } });
     setDirtyFields(uniq([...dirtyFields, name]));
   };
