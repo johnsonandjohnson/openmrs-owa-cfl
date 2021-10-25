@@ -221,6 +221,7 @@ const UserAccount = (props: ILocationProps) => {
     const isFormValid = Object.values(userAccount).every(({ value, isValid }) => value && isValid);
 
     if (isFormValid) {
+      const isPasswordFieldDirty = dirtyFields.find(field => field === PASSWORD_FIELD);
       const personAttributes = [];
       telephoneNumberAtributeTypeUuid &&
         personAttributes.push({
@@ -236,7 +237,7 @@ const UserAccount = (props: ILocationProps) => {
       saveUser(
         {
           username: userAccount.username.value,
-          ...(dirtyFields.find(field => field === PASSWORD_FIELD) && { password: userAccount.password.value }),
+          ...(!person && isPasswordFieldDirty && { password: userAccount.password.value }),
           userProperties: {
             forcePassword: String(forcePassword),
             locationUuid: userAccount?.locations.value.map(({ value }) => value).join(',')
@@ -258,7 +259,8 @@ const UserAccount = (props: ILocationProps) => {
             ]
           }
         },
-        currentUser?.uuid
+        currentUser?.uuid,
+        person && isPasswordFieldDirty && { newPassword: userAccount.password.value }
       );
     } else {
       errorToast(intl.formatMessage({ id: 'userAccount.accountNotSaved' }));
