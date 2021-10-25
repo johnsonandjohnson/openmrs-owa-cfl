@@ -123,6 +123,24 @@ jqr &&
         });
       }
     }
+
+    if (this.URL.includes('accounts/manageAccounts.page')) {
+      const addNewUserAccount = document.querySelector('#content > a.button');
+      const editUsersAccount = document.querySelectorAll('#list-accounts .icon-pencil.edit-action');
+
+      if (addNewUserAccount) {
+        addNewUserAccount.href = `${CFL_UI_BASE}index.html#/user-account`;
+      }
+
+      if (editUsersAccount.length) {
+        editUsersAccount.forEach(editUserAccout => {
+          const currentLocationHref = editUserAccout.getAttribute('onclick');
+          const personIdPosition = currentLocationHref.indexOf('personId=');
+          const newLocationHref = currentLocationHref.slice(personIdPosition, currentLocationHref.length - 2);
+          editUserAccout.onclick = () => (this.location.href = `${CFL_UI_BASE}index.html#/user-account?${newLocationHref}`);
+        });
+      }
+    }
   });
 
 function redesignAllergyUI() {

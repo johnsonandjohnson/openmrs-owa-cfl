@@ -13,6 +13,7 @@ import VmpTranslations from '../../components/vmp-translations/VmpTranslations';
 import NotificationConfiguration from '../../components/notification-configuration/NotificationConfiguration';
 import NotificationTemplates from '../../components/notification-templates/NotificationTemplates';
 import Location from '../../components/locations/Location';
+import UserAccount from '../../components/user-account/UserAccount';
 
 export const routeConfig = [
   {
@@ -24,6 +25,11 @@ export const routeConfig = [
     path: '/locations/create-location',
     component: Location,
     breadcrumb: 'locations.location.create.title'
+  },
+  {
+    path: '/user-account',
+    component: UserAccount,
+    breadcrumb: 'userAccount.title'
   },
   {
     path: '/conditions/:patientUuid/manage',

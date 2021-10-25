@@ -454,11 +454,7 @@
       "stateProvince": "State/Province",
       "postalCode": "Postal Code",
       "country": "Country",
-      "delete": "Delete Location",
-      "error": {
-        "required": "Required",
-        "nameUnique": "The name should be unique. Please try again."
-      }
+      "delete": "Delete Location"
     }
   },
   "common": {
@@ -474,7 +470,12 @@
     },
     "required": "(Required)",
     "error": {
-      "required": "Required"
+      "required": "Required",
+      "nameUnique": "The name should be unique. Please try again.",
+      "nameInvalid": "Username is invalid. It must be between 2 and 50 characters. Only letters, digits, '.', '-', and '_' are allowed.",
+      "invalidEmail": "The email address is invalid. Please correct it.",
+      "invalidPassword": "Your entered password does not match the needed complexity. It should be minimum 8 characters long and contain at least: one upper and one lower case characters, one digit. Please try again.",
+      "confirmPassword": "Your entered passwords do not match. Please try again."
     },
     "switch": {
       "on": "on",
@@ -484,5 +485,39 @@
     "save": "Save",
     "true": "True",
     "false": "False"
+  },
+  "userAccount": {
+    "title": "User Account",
+    "add": "Add New Account",
+    "edit": "Edit Account",
+    "accountNotSaved": "Not all fields have been filled in correctly. Please try again.",
+    "auditInfo": {
+      "title": "Audit info",
+      "created": "Created By {creator} On {date}",
+      "changedBy": "Changed By {changedBy} On {date}"
+    },
+    "personDetails": {
+      "title": "Person Details",
+      "familyName": "Family Name",
+      "givenName": "Given Name",
+      "phone": "Phone",
+      "email": "Email"
+    },
+    "userAccountDetails": {
+      "title": "User Account Details",
+      "username": "Username",
+      "locations": "Locations",
+      "userRole": "User Role",
+      "password": "Password",
+      "confirmPassword": "Confirm Password",
+      "forcePasswordChange": "Force Password Change"
+    },
+    "deleteAccount": {
+      "label": "Delete Account",
+      "confirmationModal": {
+        "header": "Warning",
+        "body": "Are you sure you want to delete this account?"
+      }
+    }
   }
 }

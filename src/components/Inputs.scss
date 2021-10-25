@@ -20,6 +20,7 @@
 #app #location,
 #app .notification-configuration,
 #app .notification-templates,
+#app #user-account,
 #app .vmp-config,
 #app .vmp-vaccination-schedule,
 #app .vmp-address-data,
@@ -52,7 +53,7 @@
       }
     }
   }
-  input:not(:placeholder-shown),
+  input:not([type='checkbox']):not(:placeholder-shown),
   select:not(.placeholder):not([class*='react-datepicker__']):not(.filter-select),
   textarea:not(:placeholder-shown) {
     padding-top: 2rem;
@@ -68,6 +69,12 @@
   textarea:focus,
   select:focus {
     outline: none !important;
+  }
+  input[type='checkbox'] {
+    cursor: pointer;
+    &:focus {
+      border: var(--input-border) !important;
+    }
   }
   .input-container {
     position: relative;
