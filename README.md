@@ -17,7 +17,7 @@ In order to add cfl-ui icons to the home dashboard:
 * App ID: `cflui.findPatient`, Definition: [click here](public/app/findPatient.json)
 * App ID: `cflui.registerCaregiver`, Definition: [click here](public/app/registerCaregiver.json)
 * App ID: `cflui.findCaregiver`, Definition: [click here](public/app/findCaregiver.json)
-* App ID: `cflui.vmpConfig`, Definition: [click here](public/app/vmpConfig.json)
+* App ID: `cflui.configureMetadataApps`, Definition: [click here](public/app/configureMetadataApps.json)
 
 ## Available Scripts
 

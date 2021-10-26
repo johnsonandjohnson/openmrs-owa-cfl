@@ -1,13 +1,13 @@
 {
-  "id": "cflui.vmpConfig",
-  "description": "CFL UI",
+  "id": "cflui.configureMetadataApps",
+  "description": "CFL UI Configure Metadata Apps",
   "order": 1,
   "extensions": [
     {
       "id": "cflUi.adminGroup",
       "extensionPointId": "org.openmrs.module.adminui.adminGroups",
       "type": "group",
-      "label": "VMP",
+      "label": "CFL",
       "icon": "icon-book"
     },
     {
@@ -80,6 +80,10 @@
       {
         "value": "site",
         "label": "Site"
+      },
+      {
+        "value": "cluster",
+        "label": "Cluster"
       }
     ],
     "authSteps": [

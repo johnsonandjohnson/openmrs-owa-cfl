@@ -16,6 +16,10 @@ export const DEFAULT_SYNC_SCOPES = [
   {
     value: 'site',
     label: 'Site'
+  },
+  {
+    value: 'cluster',
+    label: 'Cluster'
   }
 ];
 export const DEFAULT_AUTH_STEPS = [
