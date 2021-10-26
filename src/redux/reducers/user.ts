@@ -66,9 +66,12 @@ export const getUserByPersonId = (personId: string) => ({
   payload: axios.get(`/openmrs/ws/rest/v1/user?s=byPerson&personId=${personId}&v=full`)
 });
 
-export const saveUser = (data: {}, uuid: string) => ({
+export const saveUser = (data: {}, uuid: string, newPassword?: string) => ({
   type: ACTION_TYPES.POST_USER,
-  payload: axios.post(`/openmrs/ws/rest/v1/user/${uuid ? uuid : ''}`, data)
+  payload: Promise.all([
+    axios.post(`/openmrs/ws/rest/v1/user/${uuid ? uuid : ''}`, data),
+    newPassword && axios.post(`/openmrs/ws/rest/v1/password/${uuid}`, { newPassword })
+  ])
 });
 
 export const deleteUser = (uuid: string) => ({

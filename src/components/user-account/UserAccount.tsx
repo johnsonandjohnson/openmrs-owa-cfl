@@ -87,7 +87,7 @@ const UserAccount = (props: ILocationProps) => {
 
   const [userAccount, setUserAccount] = useState<IUserAccount>(DEFAULT_USER_VALUES);
   const [dirtyFields, setDirtyFields] = useState<string[]>([]);
-  const [forcePassword, setForcePassword] = useState(false);
+  const [forcePassword, setForcePassword] = useState(true);
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
 
   useEffect(() => {
@@ -143,6 +143,7 @@ const UserAccount = (props: ILocationProps) => {
         password: { ...userAccount.password, value: DEFAULT_EDIT_USER_PASSWORD },
         confirmPassword: { ...userAccount.confirmPassword, value: DEFAULT_EDIT_USER_PASSWORD }
       });
+      setForcePassword(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [person, currentUser]);
@@ -201,6 +202,7 @@ const UserAccount = (props: ILocationProps) => {
           isFieldValid = false;
           errorMessage = 'common.error.invalidPassword';
         }
+        person && !forcePassword && setForcePassword(true);
         break;
       case CONFIRM_PASSWORD_FIELD:
         if (userAccount.password.value !== fieldValue) {
@@ -209,7 +211,6 @@ const UserAccount = (props: ILocationProps) => {
         }
     }
 
-    setForcePassword(true);
     setUserAccount({ ...userAccount, [name]: { ...userAccount[name], value: fieldValue, isValid: isFieldValid, error: errorMessage } });
     setDirtyFields(uniq([...dirtyFields, name]));
   };
@@ -221,6 +222,7 @@ const UserAccount = (props: ILocationProps) => {
     const isFormValid = Object.values(userAccount).every(({ value, isValid }) => value && isValid);
 
     if (isFormValid) {
+      const isPasswordFieldDirty = dirtyFields.find(field => field === PASSWORD_FIELD);
       const personAttributes = [];
       telephoneNumberAtributeTypeUuid &&
         personAttributes.push({
@@ -236,7 +238,7 @@ const UserAccount = (props: ILocationProps) => {
       saveUser(
         {
           username: userAccount.username.value,
-          ...(dirtyFields.find(field => field === PASSWORD_FIELD) && { password: userAccount.password.value }),
+          ...(!person && isPasswordFieldDirty && { password: userAccount.password.value }),
           userProperties: {
             forcePassword: String(forcePassword),
             locationUuid: userAccount?.locations.value.map(({ value }) => value).join(',')
@@ -258,7 +260,8 @@ const UserAccount = (props: ILocationProps) => {
             ]
           }
         },
-        currentUser?.uuid
+        currentUser?.uuid,
+        person && isPasswordFieldDirty && userAccount.password.value
       );
     } else {
       errorToast(intl.formatMessage({ id: 'userAccount.accountNotSaved' }));
@@ -316,6 +319,7 @@ const UserAccount = (props: ILocationProps) => {
                 roles={roles}
                 setForcePassword={setForcePassword}
                 forcePassword={forcePassword}
+                isEdit={!!person}
               />
             </div>
             <div className="buttons mt-5 pb-5">

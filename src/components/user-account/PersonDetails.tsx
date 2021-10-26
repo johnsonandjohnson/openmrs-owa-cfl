@@ -9,7 +9,7 @@ import 'react-phone-number-input/style.css';
 import cx from 'classnames';
 import { EMAIL_FIELD, FAMILY_NAME_FIELD, GIVEN_NAME_FIELD, PHONE_FIELD } from '../../shared/constants/user-account';
 
-const RersonDetails = ({
+const PersonDetails = ({
   intl: { formatMessage },
   onValueChange,
   userAccount: {
@@ -73,4 +73,4 @@ const RersonDetails = ({
   </>
 );
 
-export default RersonDetails;
+export default PersonDetails;

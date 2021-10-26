@@ -47,6 +47,7 @@ export interface IDetails {
   roles?: IDetailsOption[];
   locations?: IDetailsOption[];
   forcePassword?: boolean;
+  isEdit?: boolean;
   setForcePassword?: Dispatch<SetStateAction<boolean>>;
 }
 

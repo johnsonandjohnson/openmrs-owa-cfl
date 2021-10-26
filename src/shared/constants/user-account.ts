@@ -1,7 +1,7 @@
 export const PERSON_ID_LOOKUP_STRING = 'personId=';
 export const EMAIL_REGEX = /^(([^<>()\\[\]\\.,;:\s@"]+(\.[^<>()\\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 export const PASSWORD_REGEX = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
-export const USERNAME_REGEX = /^[\w\d\\_][\w\d\\_\\-\\.]{1,49}$/;
+export const USERNAME_REGEX = /^[\w\d\\_][\w\d\\_.-]{1,49}$/;
 export const SETTING_ATTRIBUTE_TYPE_PREFIX = 'cfl.person.attributeType';
 export const SETTING_TELEPHONE_NUMBER_ATRRIBUTE_TYPE = `${SETTING_ATTRIBUTE_TYPE_PREFIX}.telephoneNumberUuid`;
 export const SETTING_EMAIL_ADDRESS_ATRRIBUTE_TYPE = `${SETTING_ATTRIBUTE_TYPE_PREFIX}.emailAddressUuid`;
