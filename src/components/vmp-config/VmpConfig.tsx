@@ -368,9 +368,9 @@ export class VmpConfig extends React.Component<IVmpConfigProps, IVmpConfigState>
 }
 
 const mapStateToProps = ({ apps, settings, cflPatient }) => ({
-  syncScopes: apps?.vmpConfig?.syncScopes ?? DEFAULT_SYNC_SCOPES,
-  authSteps: apps?.vmpConfig?.authSteps ?? DEFAULT_AUTH_STEPS,
-  regimenUpdatePermitted: apps?.vmpConfig?.regimenUpdatePermitted ?? DEFAULT_REGIMEN_UPDATE_PERMITTED,
+  syncScopes: apps?.vmpSyncScopes ?? DEFAULT_SYNC_SCOPES,
+  authSteps: apps?.vmpAuthSteps ?? DEFAULT_AUTH_STEPS,
+  regimenUpdatePermitted: apps?.vmpRegimenUpdatePermitted ?? DEFAULT_REGIMEN_UPDATE_PERMITTED,
   appError: apps.errorMessage,
   appLoading: apps.loading,
   error: apps.errorMessage,

@@ -7,12 +7,7 @@ import {
   FIND_PATIENT_APP,
   REGISTER_CAREGIVER_APP,
   REGISTER_PATIENT_APP,
-  VMP_CONFIG_APP,
-  VMP_VACCINATION_SCHEDULE_APP,
-  VMP_ADDRESS_DATA_APP,
-  VMP_TRANSLATIONS_APP,
-  NOTIFICATION_CONFIGURATION_APP,
-  NOTIFICATION_TEMPLATES_APP
+  CONFIGURE_METADATA_APPS
 } from '../../shared/constants/app';
 
 export const ACTION_TYPES = {
@@ -27,12 +22,10 @@ const initialState = {
   findCaregiverTableColumns: null,
   patientRegistrationSteps: null,
   caregiverRegistrationSteps: null,
-  vmpConfig: null,
-  vmpVaccinationSchedule: null,
-  vmpAddressData: null,
-  vmpTranslations: null,
-  notificationConfiguration: null,
-  notificationTemplates: null
+  vmpSyncScopes: null,
+  vmpAuthSteps: null,
+  vmpDosingVisitTypes: null,
+  vmpRegimenUpdatePermitted: null
 };
 
 export const getAppsState = apps => ({
@@ -41,12 +34,10 @@ export const getAppsState = apps => ({
   findCaregiverTableColumns: getAppConfig(apps, FIND_CAREGIVER_APP)?.tableColumns,
   patientRegistrationSteps: getAppConfig(apps, REGISTER_PATIENT_APP)?.steps,
   caregiverRegistrationSteps: getAppConfig(apps, REGISTER_CAREGIVER_APP)?.steps,
-  vmpConfig: getAppConfig(apps, VMP_CONFIG_APP),
-  vmpVaccinationSchedule: getAppConfig(apps, VMP_VACCINATION_SCHEDULE_APP),
-  vmpAddressData: getAppConfig(apps, VMP_ADDRESS_DATA_APP),
-  vmpTranslations: getAppConfig(apps, VMP_TRANSLATIONS_APP),
-  notificationConfiguration: getAppConfig(apps, NOTIFICATION_CONFIGURATION_APP),
-  notificationTemplates: getAppConfig(apps, NOTIFICATION_TEMPLATES_APP)
+  vmpSyncScopes: getAppConfig(apps, CONFIGURE_METADATA_APPS)?.syncScopes,
+  vmpAuthSteps: getAppConfig(apps, CONFIGURE_METADATA_APPS)?.authSteps,
+  vmpDosingVisitTypes: getAppConfig(apps, CONFIGURE_METADATA_APPS)?.dosingVisitTypes,
+  vmpRegimenUpdatePermitted: getAppConfig(apps, CONFIGURE_METADATA_APPS)?.regimenUpdatePermitted
 });
 
 const reducer = (state = initialState, action) => {
