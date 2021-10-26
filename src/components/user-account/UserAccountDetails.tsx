@@ -24,6 +24,7 @@ const UserAccountDetails = ({
   locations,
   forcePassword,
   setForcePassword,
+  isEdit,
   userAccount: {
     username: { value: usernameValue, isValid: isUserNameValid, error: userNameError },
     locations: { value: locationsValue, isValid: isLocationsValid, error: locationsError },
@@ -105,7 +106,7 @@ const UserAccountDetails = ({
           {!isConfirmPasswordValid && <ValidationError message={confirmPasswordError} />}
         </div>
       </div>
-      <Label className={cx('force-password-change', { hide: usernameValue && !dirtyFields.length })}>
+      <Label className={cx('force-password-change', { hide: isEdit && !dirtyFields.find(field => field === PASSWORD_FIELD) })}>
         <Input type="checkbox" onClick={() => setForcePassword(!forcePassword)} checked={forcePassword} />
         <FormattedMessage id="userAccount.userAccountDetails.forcePasswordChange" tagName="span" />
       </Label>

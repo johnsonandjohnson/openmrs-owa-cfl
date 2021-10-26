@@ -261,7 +261,7 @@ const UserAccount = (props: ILocationProps) => {
           }
         },
         currentUser?.uuid,
-        person && isPasswordFieldDirty && { newPassword: userAccount.password.value }
+        person && isPasswordFieldDirty && userAccount.password.value
       );
     } else {
       errorToast(intl.formatMessage({ id: 'userAccount.accountNotSaved' }));
@@ -319,6 +319,7 @@ const UserAccount = (props: ILocationProps) => {
                 roles={roles}
                 setForcePassword={setForcePassword}
                 forcePassword={forcePassword}
+                isEdit={!!person}
               />
             </div>
             <div className="buttons mt-5 pb-5">
