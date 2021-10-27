@@ -115,10 +115,10 @@ const UserAccount = (props: ILocationProps) => {
       } = person;
       const {
         username,
-        allRoles,
+        roles,
         userProperties: { locationUuid: locationUuidString }
       } = currentUser;
-      const [userRole] = allRoles;
+      const [userRole] = roles;
       const { display: label, uuid: value } = userRole;
       // editing an account through Legacy UI results in 'null' string being added to 'locationUuid' user property
       const fixedLocationUuidString = locationUuidString?.replace(/null/g, '');

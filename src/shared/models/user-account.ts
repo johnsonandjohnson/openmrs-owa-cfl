@@ -64,7 +64,7 @@ export interface IAudit {
 
 export interface ICurrentUser {
   username: string;
-  allRoles: IDetailsOption[];
+  roles: IDetailsOption[];
   uuid: string;
   auditInfo: IAudit;
   person: {
