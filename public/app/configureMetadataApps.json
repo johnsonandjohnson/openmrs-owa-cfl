@@ -31,11 +31,11 @@
       }
     },
     {
-      "id": "cflUi.vmpAddressDataLink",
+      "id": "cflUi.addressDataLink",
       "extensionPointId": "org.openmrs.module.adminui.adminLinks",
       "type": "link",
       "label": "Manage Address Data",
-      "url": "owa/cfl-ui/index.html#/vmp-address-data",
+      "url": "owa/cfl-ui/index.html#/address-data",
       "extensionParams": {
         "group": "cflUi.adminGroup"
       }

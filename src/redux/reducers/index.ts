@@ -18,7 +18,7 @@ import concept from './concept';
 import condition from './condition';
 import breadcrumbs from './breadcrumbs';
 import visit from './visit';
-import addressData from './addressData';
+import addressData from './address-data';
 import provider from './provider';
 import messages from './messages';
 import role from './role';

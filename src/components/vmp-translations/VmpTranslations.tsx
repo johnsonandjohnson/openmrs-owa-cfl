@@ -8,7 +8,7 @@ import { Button, Spinner, Table } from 'reactstrap';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { ConfirmationModal } from '../common/form/ConfirmationModal';
 import { successToast, errorToast } from '@bit/soldevelo-omrs.cfl-components.toast-handler';
-import { getAddressData } from '../../redux/reducers/addressData';
+import { getAddressData } from '../../redux/reducers/address-data';
 import Dropzone from '../common/dropzone/Dropzone';
 import { createSetting, getSettingByQuery, updateSetting } from '../../redux/reducers/setttings';
 import { IVmpConfig } from 'src/shared/models/vmp-config';
@@ -38,11 +38,11 @@ const LANGUAGES_ALLOWED_LIST_DELIMITER = ',';
 const LANGUAGE_FILTER_EMPTY_VALUE = { label: EMPTY_STRING, value: null };
 const CSV_FILE_DEFAULT_COLUMN_LABEL = 'default';
 
-export interface IVmpAddressDataProps extends StateProps, DispatchProps, RouteComponentProps {
+export interface IVmpTranslationsProps extends StateProps, DispatchProps, RouteComponentProps {
   intl: any;
 }
 
-export interface IVmpAddressDataState {
+export interface IVmpTranslationsState {
   isConfirmationModalOpen: boolean;
   confirmationModalHeader: {};
   confirmationModalBody: {};
@@ -62,7 +62,7 @@ export interface IVmpAddressDataState {
   isDirty: boolean;
 }
 
-export class VmpTranslations extends React.Component<IVmpAddressDataProps, IVmpAddressDataState> {
+export class VmpTranslations extends React.Component<IVmpTranslationsProps, IVmpTranslationsState> {
   state = {
     isConfirmationModalOpen: false,
     confirmationModalHeader: { id: EMPTY_STRING },
@@ -87,7 +87,7 @@ export class VmpTranslations extends React.Component<IVmpAddressDataProps, IVmpA
     this.loadTranslations();
   }
 
-  componentDidUpdate(prevProps: Readonly<IVmpAddressDataProps>, prevState: Readonly<IVmpAddressDataState>, snapshot?: any) {
+  componentDidUpdate(prevProps: Readonly<IVmpTranslationsProps>, prevState: Readonly<IVmpTranslationsState>, snapshot?: any) {
     const { intl, config, addressData, locations, loading, success, error } = this.props;
     if (prevProps.config !== config || this.isRequestedSettingNotExist(prevProps, this.props)) {
       this.extractTranslations();
@@ -308,7 +308,7 @@ export class VmpTranslations extends React.Component<IVmpAddressDataProps, IVmpA
   uploadButton = () => (
     <div className="upload-button-wrapper">
       <Button onClick={this.onUpload} disabled={!this.state.acceptedFile} className="pull-right">
-        <FormattedMessage id="vmp.upload.button" />
+        <FormattedMessage id="vmpTranslations.upload.button" />
       </Button>
     </div>
   );
@@ -353,7 +353,7 @@ export class VmpTranslations extends React.Component<IVmpAddressDataProps, IVmpA
 
   downloadButton = () => (
     <Button onClick={this.onDownloadTranslations} disabled={!this.props.config} className="cancel">
-      <FormattedMessage id="vmp.download.button" />
+      <FormattedMessage id="vmpTranslations.download.button" />
     </Button>
   );
 
@@ -444,14 +444,14 @@ export class VmpTranslations extends React.Component<IVmpAddressDataProps, IVmpA
   };
 
   uploadedFileTable = () => {
-    const { intl, config } = this.props;
+    const { intl } = this.props;
     const { translations } = this.state;
     return (
       <div className="section table-section">
         <div className="title-section">{this.downloadButton()}</div>
         {this.filters()}
         {this.addLanguageButton()}
-        {config ? (
+        {Object.keys(translations).length ? (
           <Table borderless striped responsive className="table">
             <thead>
               <tr>
@@ -482,8 +482,8 @@ export class VmpTranslations extends React.Component<IVmpAddressDataProps, IVmpA
             </tbody>
           </Table>
         ) : (
-          <p className="address-data-empty">
-            <FormattedMessage id="vmpAddressData.upload.addressDataEmpty" />
+          <p className="data-empty">
+            <FormattedMessage id="vmpTranslations.table.empty" />
           </p>
         )}
       </div>
