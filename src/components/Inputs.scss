@@ -14,6 +14,7 @@
   --select-with-placeholder-padding-top: calc(2rem - 4px);
 }
 
+#app #address-data,
 #app .register-patient,
 #app .conditions,
 #app .condition,
@@ -23,7 +24,6 @@
 #app #user-account,
 #app .vmp-config,
 #app .vmp-vaccination-schedule,
-#app .vmp-address-data,
 #app .vmp-translations,
 .modal {
   input:not([type='checkbox']):not([class*='filter-input']),

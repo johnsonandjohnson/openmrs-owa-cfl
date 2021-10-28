@@ -40,7 +40,7 @@ export default function Dropzone({ acceptedFileExt, instructionMessageId, onFile
                 <FormattedMessage id={instructionMessageId} />
               </div>
               <Button>
-                <FormattedMessage id="vmp.dropzone.openFileDialog" />
+                <FormattedMessage id="dropzone.openFileDialog" />
               </Button>
             </div>
           </section>
@@ -51,7 +51,7 @@ export default function Dropzone({ acceptedFileExt, instructionMessageId, onFile
           <>
             <div className={`d-inline ${!!acceptedFile ? 'accepted-file' : 'rejected-file'}`}>
               <FormattedMessage
-                id={`vmp.dropzone.${!!acceptedFile ? 'acceptedFile' : 'rejectedFile'}`}
+                id={`dropzone.${!!acceptedFile ? 'acceptedFile' : 'rejectedFile'}`}
                 values={{ b: (...text) => <b>{text}</b> }}
               />
             </div>

@@ -20,20 +20,10 @@
     "title": "Find Caregiver Record",
     "searchInputPlaceholder": "Search by Id, name or phone number"
   },
-  "vmp": {
-    "dropzone": {
-      "openFileDialog": "Open File Dialog",
-      "acceptedFile": "Accepted File:",
-      "rejectedFile": "Rejected File:"
-    },
-    "upload": {
-      "button": "Upload file"
-    },
-    "download": {
-      "csvFileSample": "csv file sample",
-      "txtFileSample": "txt file sample",
-      "button": "Download file"
-    }
+  "dropzone": {
+    "openFileDialog": "Open File Dialog",
+    "acceptedFile": "Accepted File:",
+    "rejectedFile": "Rejected File:"
   },
   "vmpConfig": {
     "title": "Manage Configuration",
@@ -125,7 +115,7 @@
       "body": "Changing the Regimen will affect current configuration.{br}Do you want to proceed?"
     }
   },
-  "vmpAddressData": {
+  "addressData": {
     "title": "Manage Address Data",
     "upload": {
       "title": "Upload Address Data",
@@ -144,13 +134,19 @@
         }
       },
       "success": "Address data uploaded successfully",
-      "addressDataEmpty": "There is no file to be displayed yet"
+      "addressDataEmpty": "There is no file to be displayed yet",
+      "button": "Upload file"
     },
     "dropzone": {
       "instruction": "Drag and drop Address Data file here. The file should be in .csv or .txt format."
     },
     "table": {
       "title": "Uploaded File"
+    },
+    "download": {
+      "csvFileSample": "csv file sample",
+      "txtFileSample": "txt file sample",
+      "button": "Download file"
     }
   },
   "vmpTranslations": {
@@ -162,7 +158,8 @@
       "title": "Upload File",
       "instruction1": "Please upload file in <b>.csv</b> format. The file should contain <b>comma delimiter</b>.",
       "modalHeader": "Uploading new file",
-      "modalBody": "Are you sure you want to overwrite existing data?"
+      "modalBody": "Are you sure you want to overwrite existing data?",
+      "button": "Upload file"
     },
     "table": {
       "defaultLanguage": "Default",
@@ -170,7 +167,8 @@
       "filter": {
         "phrase": "Search by phrase",
         "language": "Search by language"
-      }
+      },
+      "empty": "There is no file to be displayed yet"
     },
     "addLanguage": {
       "title": "Add language",
@@ -186,7 +184,8 @@
     },
     "download": {
       "modalHeader": "Warning",
-      "modalBody": "You haven’t saved the changes. The downloaded file might not be complete.{br}Do you want to continue?"
+      "modalBody": "You haven’t saved the changes. The downloaded file might not be complete.{br}Do you want to continue?",
+      "button": "Download file"
     }
   },
   "conditions": {

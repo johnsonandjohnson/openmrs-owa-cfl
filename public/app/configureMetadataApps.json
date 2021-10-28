@@ -1,13 +1,13 @@
 {
-  "id": "cflui.vmpConfig",
-  "description": "CFL UI",
+  "id": "cflui.configureMetadataApps",
+  "description": "CFL UI Configure Metadata Apps",
   "order": 1,
   "extensions": [
     {
       "id": "cflUi.adminGroup",
       "extensionPointId": "org.openmrs.module.adminui.adminGroups",
       "type": "group",
-      "label": "VMP",
+      "label": "CFL",
       "icon": "icon-book"
     },
     {
@@ -31,11 +31,11 @@
       }
     },
     {
-      "id": "cflUi.vmpAddressDataLink",
+      "id": "cflUi.addressDataLink",
       "extensionPointId": "org.openmrs.module.adminui.adminLinks",
       "type": "link",
       "label": "Manage Address Data",
-      "url": "owa/cfl-ui/index.html#/vmp-address-data",
+      "url": "owa/cfl-ui/index.html#/address-data",
       "extensionParams": {
         "group": "cflUi.adminGroup"
       }
@@ -80,6 +80,10 @@
       {
         "value": "site",
         "label": "Site"
+      },
+      {
+        "value": "cluster",
+        "label": "Cluster"
       }
     ],
     "authSteps": [

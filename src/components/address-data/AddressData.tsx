@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import './VmpAddressData.scss';
+import './AddressData.scss';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import '../Inputs.scss';
 import { Button, Spinner } from 'reactstrap';
@@ -10,17 +10,17 @@ import { ZERO } from '../../shared/constants/input';
 import { ConfirmationModal } from '../common/form/ConfirmationModal';
 import { successToast, errorToast } from '@bit/soldevelo-omrs.cfl-components.toast-handler';
 import InfiniteTable from '../common/InfiniteTable';
-import { getAddressDataPage, getAddressData, postAddressData } from '../../redux/reducers/addressData';
-import { ACCEPTED_FILE_EXTENSIONS, ADDRESS_DATA_TABLE_COLUMNS, DEFAULT_DOWNLOAD_FILENAME } from '../../shared/constants/vmp-address-data';
+import { getAddressDataPage, getAddressData, postAddressData } from '../../redux/reducers/address-data';
+import { ACCEPTED_FILE_EXTENSIONS, ADDRESS_DATA_TABLE_COLUMNS, DEFAULT_DOWNLOAD_FILENAME } from '../../shared/constants/address-data';
 import { STRING_FALSE, STRING_TRUE } from '../../shared/constants/input';
 import downloadCsv from 'download-csv';
 import Dropzone from '../common/dropzone/Dropzone';
 
-export interface IVmpAddressDataProps extends StateProps, DispatchProps, RouteComponentProps {
+export interface IAddressDataProps extends StateProps, DispatchProps, RouteComponentProps {
   intl: any;
 }
 
-export interface IVmpAddressDataState {
+export interface IAddressDataState {
   isModalOpen: boolean;
   modalHeader: {};
   modalBody: {};
@@ -34,7 +34,7 @@ export interface IVmpAddressDataState {
   isDownloadableAddressDataValid: boolean;
 }
 
-class VmpAddressData extends React.Component<IVmpAddressDataProps, IVmpAddressDataState> {
+class AddressData extends React.Component<IAddressDataProps, IAddressDataState> {
   state = {
     isModalOpen: false,
     modalHeader: { id: '', values: {} },
@@ -53,10 +53,10 @@ class VmpAddressData extends React.Component<IVmpAddressDataProps, IVmpAddressDa
     this.props.getAddressDataPage(this.state.page);
   }
 
-  componentDidUpdate(prevProps: Readonly<IVmpAddressDataProps>, prevState: Readonly<IVmpAddressDataState>, snapshot?: any) {
+  componentDidUpdate(prevProps: Readonly<IAddressDataProps>, prevState: Readonly<IAddressDataState>, snapshot?: any) {
     const { intl, error, addressDataUploaded, downloadableAddressData } = this.props;
     if (!prevProps.addressDataUploaded && addressDataUploaded) {
-      successToast(intl.formatMessage({ id: 'vmpAddressData.upload.success' }));
+      successToast(intl.formatMessage({ id: 'addressData.upload.success' }));
       this.setState({ page: ZERO, isDownloadableAddressDataValid: false }, () => this.props.getAddressDataPage(this.state.page));
     } else if (prevProps.downloadableAddressData !== downloadableAddressData) {
       this.setState({ isDownloadableAddressDataValid: true }, this.triggerAddressDataDownload);
@@ -73,8 +73,8 @@ class VmpAddressData extends React.Component<IVmpAddressDataProps, IVmpAddressDa
     const { acceptedFile, isOverwriteAddressData } = this.state;
     this.setState({
       isModalOpen: true,
-      modalHeader: { id: `vmpAddressData.upload.overwriteAddressData.${isOverwriteAddressData}.modalHeader` },
-      modalBody: { id: `vmpAddressData.upload.overwriteAddressData.${isOverwriteAddressData}.modalBody` },
+      modalHeader: { id: `addressData.upload.overwriteAddressData.${isOverwriteAddressData}.modalHeader` },
+      modalBody: { id: `addressData.upload.overwriteAddressData.${isOverwriteAddressData}.modalBody` },
       onModalConfirm: () => {
         this.props.postAddressData(acceptedFile, isOverwriteAddressData);
         this.closeModal();
@@ -108,16 +108,16 @@ class VmpAddressData extends React.Component<IVmpAddressDataProps, IVmpAddressDa
   instructions = () => (
     <>
       <p>
-        <FormattedMessage id="vmpAddressData.upload.instruction1" values={{ b: (...text) => <b>{text}</b> }} />
+        <FormattedMessage id="addressData.upload.instruction1" values={{ b: (...text) => <b>{text}</b> }} />
       </p>
       <p className="d-inline">
-        <FormattedMessage id="vmpAddressData.upload.instruction2" />
+        <FormattedMessage id="addressData.upload.instruction2" />
       </p>
-      <a href={`${ROOT_URL}/owa/cfl-ui/vmp-address-data/address-data-sample-file.csv`} download className="ml-2">
-        <FormattedMessage id="vmp.download.csvFileSample" />
+      <a href={`${ROOT_URL}owa/cfl-ui/address-data/address-data-sample-file.csv`} download className="ml-2">
+        <FormattedMessage id="addressData.download.csvFileSample" />
       </a>
-      <a href={`${ROOT_URL}/owa/cfl-ui/vmp-address-data/address-data-sample-file.txt`} download className="ml-2">
-        <FormattedMessage id="vmp.download.txtFileSample" />
+      <a href={`${ROOT_URL}owa/cfl-ui/address-data/address-data-sample-file.txt`} download className="ml-2">
+        <FormattedMessage id="addressData.download.txtFileSample" />
       </a>
     </>
   );
@@ -127,13 +127,13 @@ class VmpAddressData extends React.Component<IVmpAddressDataProps, IVmpAddressDa
       <div className="radio-button-wrapper">
         <input type="radio" id="overwrite-false" value={STRING_FALSE} name="overwriteAddressData" className="radio-button" defaultChecked />
         <label htmlFor="overwrite-false">
-          <FormattedMessage id="vmpAddressData.upload.overwriteAddressData.false.radioLabel" />
+          <FormattedMessage id="addressData.upload.overwriteAddressData.false.radioLabel" />
         </label>
       </div>
       <div className="radio-button-wrapper">
         <input type="radio" id="overwrite-true" value={STRING_TRUE} name="overwriteAddressData" className="radio-button" />
         <label htmlFor="overwrite-true">
-          <FormattedMessage id="vmpAddressData.upload.overwriteAddressData.true.radioLabel" />
+          <FormattedMessage id="addressData.upload.overwriteAddressData.true.radioLabel" />
         </label>
       </div>
     </div>
@@ -148,7 +148,7 @@ class VmpAddressData extends React.Component<IVmpAddressDataProps, IVmpAddressDa
           </div>
         )}
         <Button onClick={this.onUpload} disabled={this.props.addressDataUploading || !this.state.acceptedFile} className="pull-right">
-          <FormattedMessage id="vmp.upload.button" />
+          <FormattedMessage id="addressData.upload.button" />
         </Button>
       </div>
       <p className="upload-error pull-right">{this.props.uploadError}</p>
@@ -157,7 +157,7 @@ class VmpAddressData extends React.Component<IVmpAddressDataProps, IVmpAddressDa
 
   downloadButton = disabled => (
     <Button onClick={this.downloadAddressData} disabled={disabled || !this.props.totalCount} className="cancel">
-      <FormattedMessage id="vmp.download.button" />
+      <FormattedMessage id="addressData.download.button" />
     </Button>
   );
 
@@ -171,7 +171,7 @@ class VmpAddressData extends React.Component<IVmpAddressDataProps, IVmpAddressDa
       <div className="section table-section">
         <div className="title-section">
           <h2>
-            <FormattedMessage id="vmpAddressData.table.title" />
+            <FormattedMessage id="addressData.table.title" />
           </h2>
           {this.downloadButton(displaySpinner)}
         </div>
@@ -190,7 +190,7 @@ class VmpAddressData extends React.Component<IVmpAddressDataProps, IVmpAddressDa
           />
         ) : (
           <p className="address-data-empty">
-            <FormattedMessage id="vmpAddressData.upload.addressDataEmpty" />
+            <FormattedMessage id="addressData.upload.addressDataEmpty" />
           </p>
         )}
       </div>
@@ -200,10 +200,10 @@ class VmpAddressData extends React.Component<IVmpAddressDataProps, IVmpAddressDa
   render() {
     const { appError, appLoading } = this.props;
     return (
-      <div className="vmp-address-data">
+      <div id="address-data">
         {this.confirmationModal()}
         <h2>
-          <FormattedMessage id="vmpAddressData.title" />
+          <FormattedMessage id="addressData.title" />
         </h2>
         <div className="error">{appError}</div>
         <div className="inner-content">
@@ -214,12 +214,12 @@ class VmpAddressData extends React.Component<IVmpAddressDataProps, IVmpAddressDa
           ) : (
             <div className="section">
               <h2>
-                <FormattedMessage id="vmpAddressData.upload.title" />
+                <FormattedMessage id="addressData.upload.title" />
               </h2>
               {this.instructions()}
               <Dropzone
                 acceptedFileExt={ACCEPTED_FILE_EXTENSIONS}
-                instructionMessageId="vmpAddressData.dropzone.instruction"
+                instructionMessageId="addressData.dropzone.instruction"
                 onFileAccepted={acceptedFile => this.setState({ acceptedFile })}
               />
               {this.overwriteAddressDataRadioButtons()}
@@ -252,4 +252,4 @@ const mapDispatchToProps = { getAddressDataPage, getAddressData, postAddressData
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
 
-export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(withRouter(VmpAddressData)));
+export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(withRouter(AddressData)));

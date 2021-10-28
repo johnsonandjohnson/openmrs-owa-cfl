@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { ONE, ZERO } from '../../shared/constants/input';
-import { DEFAULT_DELIMITER } from '../../shared/constants/vmp-address-data';
+import { DEFAULT_DELIMITER } from '../../shared/constants/address-data';
 import { FAILURE, REQUEST, SUCCESS } from '../action-type.util';
 import { DEFAULT_PAGE_SIZE } from '../page.util';
 
