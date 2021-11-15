@@ -518,5 +518,27 @@
         "body": "Are you sure you want to delete this account?"
       }
     }
+  },
+  "manageRegimens": {
+    "title": "Manage Regimens",
+    "regimenName": "Regimen Name",
+    "drugName": "Drug Name",
+    "drugAbbreviation": "Drug Abbreviation",
+    "doseUnitType": "Dose Unit Type",
+    "numberOfUnits": "Number Of Units",
+    "frequency": "Frequency",
+    "addNewRegimen": "Add New Regimen",
+    "deleteRegimenModal": {
+      "header": "Warning",
+      "body": "Are you sure you want to delete this regimen?"
+    },
+    "deleteDrugModal": {
+      "header": "Warning",
+      "body": "Are you sure you want to delete this drug?"
+    },
+    "regimenDeleted": "The regimen has been deleted.",
+    "drugDeleted": "The drug has been deleted.",
+    "regimensNotSave": "The regimens have not been saved. Please try again.",
+    "regimensSaved": "The regimens have been saved."
   }
 }
