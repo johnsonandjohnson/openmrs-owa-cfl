@@ -11,9 +11,10 @@ import { IConcept } from '../../shared/models/concept';
 import { IDrugListItem } from '../../shared/models/drugs';
 import { IFrequency } from '../../shared/models/order-frequency';
 import { setEditedRegimens, setRegimens, setDrugToDelete, setConfirmationModal } from '../../redux/reducers/manage-regimens';
-import { cloneDeep, uniq, isNull } from 'lodash';
+import { cloneDeep, uniq } from 'lodash';
 import { extractEventValue } from '../../shared/util/form-util';
 import { DEFAULT_DRUG_CONFIGURATION, DELETE_DRUG_MODAL, DOSE, DRUGS, DRUG_DETAILS } from '../../shared/constants/manage-regimens';
+import { EMPTY_STRING } from '../../shared/constants/input';
 
 interface IDrugProps extends StateProps, DispatchProps {
   intl: IntlShape;
@@ -57,8 +58,7 @@ const Drug = ({
 
       if (name === DRUG_DETAILS) {
         const { abbreviation } = drugsList.find(({ uuid }) => uuid === extractedValue.value);
-        const abbreviationValue = !isNull(abbreviation) ? abbreviation : '';
-        clonedRegimens[regimenIdx][DRUGS][drugIdx][name].abbreviation = abbreviationValue;
+        clonedRegimens[regimenIdx][DRUGS][drugIdx][name].abbreviation = abbreviation ?? EMPTY_STRING;
       }
 
       if (name !== DOSE) {

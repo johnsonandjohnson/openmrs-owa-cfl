@@ -30,7 +30,7 @@ const reducer = (state = initialState, action) => {
         ...state,
         loading: {
           ...state.loading,
-          concepts: false
+          concepts: true
         }
       };
     case REQUEST(ACTION_TYPES.GET_CONCEPT):
@@ -38,18 +38,34 @@ const reducer = (state = initialState, action) => {
         ...state,
         loading: {
           ...state.loading,
-          concept: false
+          concept: true
         }
       };
     case FAILURE(ACTION_TYPES.SEARCH_CONCEPTS):
+      return {
+        ...state,
+        loading: {
+          ...state.loading,
+          concepts: false
+        },
+        errorMessage: action.payload.message
+      };
     case FAILURE(ACTION_TYPES.GET_CONCEPT):
       return {
-        ...initialState,
+        ...state,
+        loading: {
+          ...state.loading,
+          concept: false
+        },
         errorMessage: action.payload.message
       };
     case SUCCESS(ACTION_TYPES.SEARCH_CONCEPTS):
       return {
-        ...initialState,
+        ...state,
+        loading: {
+          ...state.loading,
+          concepts: false
+        },
         query: action.meta.q,
         concepts: action.payload.data.results
       };

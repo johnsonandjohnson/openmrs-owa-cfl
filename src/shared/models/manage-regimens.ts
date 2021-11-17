@@ -1,17 +1,19 @@
 import { FormEvent } from 'react';
 
-export interface IDrugDetails {
+export interface IDrugExtendedDetails extends IDrugCommonDetails {
+  abbreviation: string;
+}
+export interface IDrugCommonDetails {
   label: string;
   value: string;
-  abbreviation?: string;
   isValid: boolean;
 }
 export interface IDrug {
   uuid?: string;
-  drugDetails: IDrugDetails;
-  doseUnits: IDrugDetails;
+  drugDetails: IDrugExtendedDetails;
+  doseUnits: IDrugCommonDetails;
   dose: string;
-  frequency: IDrugDetails;
+  frequency: IDrugCommonDetails;
 }
 export interface IRegimen {
   regimenName: string;
