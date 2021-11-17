@@ -4,5 +4,5 @@ export interface IFrequency {
 }
 export interface IOrderFrequencyState {
   loading: boolean;
-  frequency: IFrequency[];
+  frequencies: IFrequency[];
 }

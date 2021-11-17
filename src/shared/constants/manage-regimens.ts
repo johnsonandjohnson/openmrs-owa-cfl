@@ -12,10 +12,10 @@ export const ORDER_SET_CUSTOM_V = 'display,uuid,orderSetMembers';
 export const ORDER_FREQUENCY_CUSTOM_V = 'display,uuid';
 export const DRUGS_LIST_CUSTOM_V = 'display,uuid,abbreviation,concept';
 export const CONCEPT_CUSTOM_V = 'uuid,setMembers';
-export const REGIMEN_DESCRIPTION = 'Manage regimens with drugs';
+export const REGIMEN_TO_SAVE_DESCRIPTION = 'Manage regimens with drugs';
 export const RETURN_LOCATION = '/openmrs/adminui/metadata/configureMetadata.page';
 export const OPERATOR_ALL = 'ALL';
-export const DEFAULT_MODAL_CONFIGURATION = { open: false, type: DELETE_REGIMEN_MODAL };
+export const CLOSED_MODAL_CONFIGURATION = { open: false, type: DELETE_REGIMEN_MODAL };
 export const DEFAULT_OPTION_CONFIGURATION = { label: '', value: '', isValid: true };
 export const DEFAULT_DRUG_CONFIGURATION = {
   drugDetails: { ...DEFAULT_OPTION_CONFIGURATION, abbreviation: '' },
@@ -29,12 +29,12 @@ export const DEFAULT_MANAGE_REGIMEN_CONFIGURATION = {
   isValid: true,
   drugs: [DEFAULT_DRUG_CONFIGURATION]
 };
-export const DEFAULT_REGIMEN_TO_DELETE = {
+export const INITIAL_REGIMEN_VALUE = {
   regimenUuid: '',
-  regimenIdx: 0
+  regimenIdx: null
 };
-export const DEFAULT_DRUG_TO_DELETE = {
-  ...DEFAULT_REGIMEN_TO_DELETE,
+export const INITIAL_DRUG_VALUE = {
+  ...INITIAL_REGIMEN_VALUE,
   drugUuid: '',
-  drugIdx: 0
+  drugIdx: null
 };

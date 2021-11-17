@@ -538,7 +538,7 @@
     },
     "regimenDeleted": "The regimen has been deleted.",
     "drugDeleted": "The drug has been deleted.",
-    "regimensNotSave": "The regimens have not been saved. Please try again.",
+    "regimensNotSaved": "The regimens have not been saved. Please try again.",
     "regimensSaved": "The regimens have been saved."
   }
 }

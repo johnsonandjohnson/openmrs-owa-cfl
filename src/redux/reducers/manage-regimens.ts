@@ -1,10 +1,10 @@
 import { AnyAction } from 'redux';
 import { IConfirmationModal, IDrugToDelete, IManageRegimensState, IRegimen, IRegimenToDelete } from '../../shared/models/manage-regimens';
 import {
-  DEFAULT_DRUG_TO_DELETE,
+  INITIAL_DRUG_VALUE,
   DEFAULT_MANAGE_REGIMEN_CONFIGURATION,
-  DEFAULT_MODAL_CONFIGURATION,
-  DEFAULT_REGIMEN_TO_DELETE
+  CLOSED_MODAL_CONFIGURATION,
+  INITIAL_REGIMEN_VALUE
 } from '../../shared/constants/manage-regimens';
 
 const ACTION_TYPES = {
@@ -18,9 +18,9 @@ const ACTION_TYPES = {
 const initialState: IManageRegimensState = {
   regimens: [DEFAULT_MANAGE_REGIMEN_CONFIGURATION],
   editedRegimens: [],
-  regimenToDelete: DEFAULT_REGIMEN_TO_DELETE,
-  drugToDelete: DEFAULT_DRUG_TO_DELETE,
-  confirmationModal: DEFAULT_MODAL_CONFIGURATION
+  regimenToDelete: INITIAL_REGIMEN_VALUE,
+  drugToDelete: INITIAL_DRUG_VALUE,
+  confirmationModal: CLOSED_MODAL_CONFIGURATION
 };
 
 const reducer = (state = initialState, action: AnyAction) => {

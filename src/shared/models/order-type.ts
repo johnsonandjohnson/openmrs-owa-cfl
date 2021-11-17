@@ -5,5 +5,5 @@ export interface IOrderType {
 }
 export interface IOrderTypeState {
   loading: boolean;
-  orderType: IOrderType[];
+  orderTypes: IOrderType[];
 }

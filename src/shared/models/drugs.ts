@@ -1,4 +1,4 @@
-export interface IDrugList {
+export interface IDrugListItem {
   display: string;
   uuid: string;
   abbreviation: string;
@@ -10,5 +10,5 @@ export interface IDrugList {
 
 export interface IDrugsState {
   loading: boolean;
-  drugsList: IDrugList[];
+  drugsList: IDrugListItem[];
 }

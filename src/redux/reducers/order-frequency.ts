@@ -4,26 +4,26 @@ import { REQUEST, SUCCESS } from '../action-type.util';
 import { IOrderFrequencyState } from '../../shared/models/order-frequency';
 
 const ACTION_TYPES = {
-  GET_ORDER_FREQUENCY: 'order-frequency/GET_ORDER_FREQUENCY'
+  GET_ORDER_FREQUENCies: 'order-frequency/GET_ORDER_FREQUENCies'
 };
 
 const initialState: IOrderFrequencyState = {
   loading: false,
-  frequency: []
+  frequencies: []
 };
 
 const reducer = (state = initialState, action: AnyAction) => {
   switch (action.type) {
-    case REQUEST(ACTION_TYPES.GET_ORDER_FREQUENCY):
+    case REQUEST(ACTION_TYPES.GET_ORDER_FREQUENCies):
       return {
         ...state,
         loading: true
       };
-    case SUCCESS(ACTION_TYPES.GET_ORDER_FREQUENCY):
+    case SUCCESS(ACTION_TYPES.GET_ORDER_FREQUENCies):
       return {
         ...state,
         loading: false,
-        frequency: action.payload.data.results
+        frequencies: action.payload.data.results
       };
     default:
       return state;
@@ -32,7 +32,7 @@ const reducer = (state = initialState, action: AnyAction) => {
 
 export default reducer;
 
-export const getFrequency = (custom?: string) => ({
-  type: ACTION_TYPES.GET_ORDER_FREQUENCY,
+export const getFrequencies = (custom?: string) => ({
+  type: ACTION_TYPES.GET_ORDER_FREQUENCies,
   payload: axios.get(`/openmrs/ws/rest/v1/orderfrequency?v=${custom ? `custom:(${custom})` : 'full'}`)
 });

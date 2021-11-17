@@ -9,7 +9,7 @@ const ACTION_TYPES = {
 
 const initialState: IOrderTypeState = {
   loading: false,
-  orderType: []
+  orderTypes: []
 };
 
 const reducer = (state = initialState, action: AnyAction) => {
@@ -23,7 +23,7 @@ const reducer = (state = initialState, action: AnyAction) => {
       return {
         ...state,
         loading: false,
-        orderType: action.payload.data.results
+        orderTypes: action.payload.data.results
       };
     default:
       return state;

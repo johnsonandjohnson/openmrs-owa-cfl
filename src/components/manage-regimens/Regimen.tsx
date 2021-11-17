@@ -19,7 +19,7 @@ interface IRegimenProps extends StateProps, DispatchProps {
   isAllSectionsExpanded: boolean;
 }
 
-const Regimen: React.FC<IRegimenProps> = ({
+const Regimen = ({
   intl: { formatMessage },
   regimen: { regimenName, drugs, uuid: regimenUuid, isValid: isRegimenValid },
   regimens,
@@ -43,11 +43,7 @@ const Regimen: React.FC<IRegimenProps> = ({
       const extractedValue = extractEventValue(event);
 
       clonedRegimens[regimenIdx][REGIMEN_NAME] = extractedValue;
-      clonedRegimens[regimenIdx].isValid = true;
-
-      if (!extractedValue) {
-        clonedRegimens[regimenIdx].isValid = false;
-      }
+      clonedRegimens[regimenIdx].isValid = !!extractedValue;
 
       setRegimens(clonedRegimens);
       regimenUuid && setEditedRegimens(uniq([...editedRegimens, regimenUuid]));
@@ -60,30 +56,16 @@ const Regimen: React.FC<IRegimenProps> = ({
     setConfirmationModal({ open: true, type: DELETE_REGIMEN_MODAL });
   }, [regimenUuid, regimenIdx, setRegimenToDelete, setConfirmationModal]);
 
-  const headerComponent = (
-    <div className="input-container flex-1">
+  const headerComponent = (disabled: boolean = false) => (
+    <div className="input-container">
       <InputWithPlaceholder
         placeholder={formatMessage({ id: 'manageRegimens.regimenName' })}
         showPlaceholder={!!regimenName}
         value={regimenName}
         onChange={onChangeHandler(regimenIdx, regimenUuid)}
         className={!isRegimenValid ? 'invalid' : ''}
+        disabled={disabled}
         data-testid="regimenHeaderInput"
-      />
-      {!isRegimenValid && <ValidationError message="common.error.required" />}
-    </div>
-  );
-
-  const disableHeaderComponent = (
-    <div className="input-container flex-1">
-      <InputWithPlaceholder
-        placeholder={formatMessage({ id: 'manageRegimens.regimenName' })}
-        showPlaceholder={!!regimenName}
-        value={regimenName}
-        wrapperClassName="flex-1"
-        className={!isRegimenValid ? 'invalid' : ''}
-        disabled
-        data-testid="regimenHeaderDisabledInput"
       />
       {!isRegimenValid && <ValidationError message="common.error.required" />}
     </div>
@@ -96,8 +78,8 @@ const Regimen: React.FC<IRegimenProps> = ({
   return (
     <ExpandableSection
       key={`${regimenUuid}-${regimenIdx}`}
-      headerComponent={headerComponent}
-      disabledHeaderComponent={disableHeaderComponent}
+      headerComponent={headerComponent()}
+      disabledHeaderComponent={headerComponent(true)}
       bodyComponent={bodyComponent}
       isRemovable={true}
       onRemove={onRemoveRegimenHandler}

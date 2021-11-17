@@ -9,18 +9,18 @@ import {
   DEFAULT_DRUG_CONFIGURATION,
   DRUGS,
   DRUG_ORDER_TEMPLATE_TYPE,
-  DEFAULT_REGIMEN_TO_DELETE,
-  DEFAULT_DRUG_TO_DELETE,
+  INITIAL_REGIMEN_VALUE,
+  INITIAL_DRUG_VALUE,
   DELETE_REGIMEN_MODAL,
   DELETE_DRUG_MODAL,
-  DEFAULT_MODAL_CONFIGURATION,
+  CLOSED_MODAL_CONFIGURATION,
   DRUG_ORDER_TYPE_JAVA_CLASS_NAME,
   ORDER_TYPE_CUSTOM_V,
   ORDER_SET_CUSTOM_V,
   ORDER_FREQUENCY_CUSTOM_V,
   DRUGS_LIST_CUSTOM_V,
   CONCEPT_CUSTOM_V,
-  REGIMEN_DESCRIPTION,
+  REGIMEN_TO_SAVE_DESCRIPTION,
   RETURN_LOCATION,
   OPERATOR_ALL
 } from '../../shared/constants/manage-regimens';
@@ -35,7 +35,7 @@ import {
 import { getOrderSet, deleteOrderSet, saveOrderSet, deleteOrderSetMember } from '../../redux/reducers/order-set';
 import { getConcept } from '../../redux/reducers/concept';
 import { getDrugsList } from '../../redux/reducers/drugs';
-import { getFrequency } from '../../redux/reducers/order-frequency';
+import { getFrequencies } from '../../redux/reducers/order-frequency';
 import { getOrderType } from '../../redux/reducers/order-type';
 import { cloneDeep, uniq, without } from 'lodash';
 import '../Inputs.scss';
@@ -65,7 +65,7 @@ interface IStore {
   };
 }
 
-export interface IMangeRegimens extends StateProps, DispatchProps {
+export interface IMangeRegimensProps extends StateProps, DispatchProps {
   intl: IntlShape;
 }
 
@@ -89,7 +89,7 @@ export const ManageRegimens = ({
   deleteOrderSetMember,
   getSettings,
   getDrugsList,
-  getFrequency,
+  getFrequencies,
   getConcept,
   getOrderType,
   setRegimens,
@@ -97,7 +97,7 @@ export const ManageRegimens = ({
   setRegimenToDelete,
   setDrugToDelete,
   setConfirmationModal
-}: IMangeRegimens) => {
+}: IMangeRegimensProps) => {
   const [isAllSectionsExpanded, setIsAllSectionsExpanded] = useState(false);
   const onReturn = useCallback(() => (window.location.href = RETURN_LOCATION), []);
   const memoOrderSetList = useMemo(
@@ -105,10 +105,9 @@ export const ManageRegimens = ({
       orderSet.map(regimen => {
         const { display, orderSetMembers, uuid: regimenUuid } = regimen;
         const activeOrderSetMembers = orderSetMembers.filter(({ retired }) => !retired);
-        const parseDrugs = activeOrderSetMembers.map(orderSetMember => {
-          const { orderTemplate, uuid: drugUuid } = orderSetMember;
-          const parseOrderSetMember = JSON.parse(orderTemplate);
-          const { drug, doseUnits, dose, frequency } = parseOrderSetMember;
+        const parseDrugs = activeOrderSetMembers.map(({ orderTemplate, uuid: drugUuid }) => {
+          const parsedOrderSetMember = JSON.parse(orderTemplate);
+          const { drug, doseUnits, dose, frequency } = parsedOrderSetMember;
 
           return {
             uuid: drugUuid,
@@ -147,8 +146,8 @@ export const ManageRegimens = ({
     getOrderSet(ORDER_SET_CUSTOM_V);
     getOrderType(ORDER_TYPE_CUSTOM_V);
     getDrugsList(DRUGS_LIST_CUSTOM_V);
-    getFrequency(ORDER_FREQUENCY_CUSTOM_V);
-  }, [getDrugsList, getFrequency, getOrderSet, getOrderType, getSettings]);
+    getFrequencies(ORDER_FREQUENCY_CUSTOM_V);
+  }, [getDrugsList, getFrequencies, getOrderSet, getOrderType, getSettings]);
 
   useEffect(() => {
     !settingsLoading && drugDosingUnitsConcept?.value && getConcept(drugDosingUnitsConcept.value, CONCEPT_CUSTOM_V);
@@ -220,7 +219,6 @@ export const ManageRegimens = ({
 
       if (!regimenName) {
         clonedRegimens[regimenIdx].isValid = false;
-        isFormValid = true;
       }
 
       drugs.forEach((drug, drugIdx) => {
@@ -255,17 +253,17 @@ export const ManageRegimens = ({
     const isFormValid = validateEmptyFields();
 
     if (!isFormValid) {
-      return errorToast(formatMessage({ id: 'manageRegimens.regimensNotSave' }));
+      return errorToast(formatMessage({ id: 'manageRegimens.regimensNotSaved' }));
     }
 
     const newRegimens = regimens.filter(({ uuid }) => !uuid);
     const regimensToSave = editedRegimens.map(editedRegimen => regimens.find(({ uuid }) => editedRegimen === uuid)).concat(newRegimens);
 
-    const setDrugs = (regimen: IRegimen) =>
+    const getDrugs = (regimen: IRegimen) =>
       regimen.drugs.map(drug => {
         const { drugDetails, doseUnits, dose, frequency } = drug;
-        const findConcept = drugsList.find(drugList => drugList.uuid === drug.drugDetails.value);
-        const stringifiedOrderTemplate = {
+        const foundConcept = drugsList.find(drugList => drugList.uuid === drug.drugDetails.value);
+        const orderTemplate = {
           drug: {
             display: drugDetails.label,
             uuid: drugDetails.value,
@@ -284,35 +282,35 @@ export const ManageRegimens = ({
 
         return {
           orderType: drugOrderType,
-          orderTemplate: JSON.stringify(stringifiedOrderTemplate),
+          orderTemplate: JSON.stringify(orderTemplate),
           orderTemplateType: DRUG_ORDER_TEMPLATE_TYPE,
-          concept: findConcept.concept.uuid
+          concept: foundConcept.concept.uuid
         };
       });
 
-    const saveRegimen = (regimen: IRegimen) => ({
+    const regimenToSave = (regimen: IRegimen) => ({
       operator: OPERATOR_ALL,
       name: regimen.regimenName,
-      description: REGIMEN_DESCRIPTION,
-      orderSetMembers: setDrugs(regimen)
+      description: REGIMEN_TO_SAVE_DESCRIPTION,
+      orderSetMembers: getDrugs(regimen)
     });
 
-    regimensToSave.length && regimensToSave.forEach(regimen => saveOrderSet(regimen?.uuid, saveRegimen(regimen)));
+    regimensToSave.length && regimensToSave.forEach(regimen => saveOrderSet(regimenToSave(regimen), regimen?.uuid));
   }, [drugsList, editedRegimens, formatMessage, drugOrderType, regimens, saveOrderSet, validateEmptyFields]);
 
-  const onNoHandler = useCallback(() => setConfirmationModal(DEFAULT_MODAL_CONFIGURATION), [setConfirmationModal]);
+  const onNoHandler = useCallback(() => setConfirmationModal(CLOSED_MODAL_CONFIGURATION), [setConfirmationModal]);
   const onYesHandler = useCallback(() => {
     switch (confirmationModal.type) {
       case DELETE_REGIMEN_MODAL:
         onRemoveRegimenHandler(regimenToDelete);
-        setRegimenToDelete(DEFAULT_REGIMEN_TO_DELETE);
+        setRegimenToDelete(INITIAL_REGIMEN_VALUE);
         break;
       case DELETE_DRUG_MODAL:
         onRemoveDrugHandler(drugToDelete);
-        setDrugToDelete(DEFAULT_DRUG_TO_DELETE);
+        setDrugToDelete(INITIAL_DRUG_VALUE);
         break;
     }
-    setConfirmationModal(DEFAULT_MODAL_CONFIGURATION);
+    setConfirmationModal(CLOSED_MODAL_CONFIGURATION);
   }, [
     confirmationModal.type,
     drugToDelete,
@@ -387,10 +385,12 @@ export const ManageRegimens = ({
 const mapStateToProps = ({
   manageRegimens: { regimens, editedRegimens, regimenToDelete, drugToDelete, confirmationModal },
   orderSet: { loading: orderSetLoading, orderSet, success },
-  concept: { loading: conceptDoseTypesLoading },
+  concept: {
+    loading: { concept: conceptDoseTypesLoading }
+  },
   drugs: { loading: drugsLoading, drugsList },
-  orderFrequency: { loading: frequencyLoading, frequency },
-  orderType: { loading: orderTypeLoading, orderType },
+  orderFrequency: { loading: frequencyLoading },
+  orderType: { loading: orderTypeLoading, orderTypes },
   settings: { settings = [], loading: settingsLoading }
 }: IStore) => {
   const isRegimensLoading = [
@@ -407,9 +407,8 @@ const mapStateToProps = ({
     settingsLoading,
     orderSet,
     drugsList,
-    frequency,
     success,
-    drugOrderType: orderType.find(({ javaClassName = '' }) => javaClassName === DRUG_ORDER_TYPE_JAVA_CLASS_NAME),
+    drugOrderType: orderTypes.find(({ javaClassName = '' }) => javaClassName === DRUG_ORDER_TYPE_JAVA_CLASS_NAME),
     regimens,
     editedRegimens,
     regimenToDelete,
@@ -424,7 +423,7 @@ const mapDispatchToProps = {
   saveOrderSet,
   deleteOrderSetMember,
   getDrugsList,
-  getFrequency,
+  getFrequencies,
   getConcept,
   getSettings,
   getOrderType,

@@ -98,7 +98,7 @@ export const deleteOrderSet = (uuid: string) => ({
   payload: axios.delete(`/openmrs/ws/rest/v1/orderset/${uuid}`)
 });
 
-export const saveOrderSet = (uuid: string, orderSet: IOrderSetPayload) => ({
+export const saveOrderSet = (orderSet: IOrderSetPayload, uuid?: string) => ({
   type: ACTION_TYPES.SAVE_ORDER_SET,
   payload: axios.post(`/openmrs/ws/rest/v1/orderset/${uuid && uuid}`, orderSet)
 });

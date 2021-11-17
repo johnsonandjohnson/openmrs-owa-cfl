@@ -8,7 +8,7 @@ import { PlusMinusButtons } from '../common/form/PlusMinusButtons';
 import { selectDefaultTheme } from '../../shared/util/form-util';
 import { IDrug, OnChangeHandler } from '../../shared/models/manage-regimens';
 import { IConcept } from '../../shared/models/concept';
-import { IDrugList } from '../../shared/models/drugs';
+import { IDrugListItem } from '../../shared/models/drugs';
 import { IFrequency } from '../../shared/models/order-frequency';
 import { setEditedRegimens, setRegimens, setDrugToDelete, setConfirmationModal } from '../../redux/reducers/manage-regimens';
 import { cloneDeep, uniq } from 'lodash';
@@ -17,8 +17,8 @@ import { DEFAULT_DRUG_CONFIGURATION, DELETE_DRUG_MODAL, DOSE, DRUGS, DRUG_DETAIL
 
 interface IDrugProps extends StateProps, DispatchProps {
   intl: IntlShape;
-  drugsList: IDrugList[];
-  frequency: IFrequency[];
+  drugsList: IDrugListItem[];
+  frequencies: IFrequency[];
   conceptDoseTypes: IConcept;
   regimenUuid: string;
   regimenIdx: number;
@@ -30,7 +30,7 @@ const Drug = ({
   intl,
   intl: { formatMessage },
   drugsList,
-  frequency,
+  frequencies,
   conceptDoseTypes,
   regimens,
   editedRegimens,
@@ -61,11 +61,7 @@ const Drug = ({
       }
 
       if (name !== DOSE) {
-        clonedRegimens[regimenIdx][DRUGS][drugIdx][name].isValid = true;
-
-        if (!extractedValue) {
-          clonedRegimens[regimenIdx][DRUGS][drugIdx][name].isValid = false;
-        }
+        clonedRegimens[regimenIdx][DRUGS][drugIdx][name].isValid = !!extractedValue;
       }
 
       setRegimens(clonedRegimens);
@@ -90,7 +86,7 @@ const Drug = ({
       <div className="input-container flex-2">
         <SelectWithPlaceholder
           placeholder={formatMessage({ id: 'manageRegimens.drugName' })}
-          showPlaceholder={!!drugDetails.label}
+          showPlaceholder={!!getValue(drugDetails)}
           value={getValue(drugDetails)}
           onChange={onChangeHandler(regimenIdx, regimenUuid, 'drugDetails', drugIdx)}
           options={getOptions(drugsList)}
@@ -101,19 +97,19 @@ const Drug = ({
         />
         {!drugDetails.isValid && <ValidationError message="common.error.required" />}
       </div>
-      <div className="input-container flex-1">
+      <div className="input-container">
         <InputWithPlaceholder
           placeholder={formatMessage({ id: 'manageRegimens.drugAbbreviation' })}
           showPlaceholder={!!drugDetails.abbreviation}
           value={drugDetails.abbreviation}
-          disabled={true}
+          disabled
           data-testid="abbreviationInput"
         />
       </div>
-      <div className="input-container flex-1">
+      <div className="input-container">
         <SelectWithPlaceholder
           placeholder={formatMessage({ id: 'manageRegimens.doseUnitType' })}
-          showPlaceholder={!!doseUnits.label}
+          showPlaceholder={!!getValue(doseUnits)}
           value={getValue(doseUnits)}
           onChange={onChangeHandler(regimenIdx, regimenUuid, 'doseUnits', drugIdx)}
           options={getOptions(conceptDoseTypes?.setMembers)}
@@ -124,7 +120,7 @@ const Drug = ({
         />
         {!doseUnits.isValid && <ValidationError message="common.error.required" />}
       </div>
-      <div className="input-container flex-1">
+      <div className="input-container">
         <InputWithPlaceholder
           placeholder={formatMessage({ id: 'manageRegimens.numberOfUnits' })}
           showPlaceholder={!!dose}
@@ -138,13 +134,13 @@ const Drug = ({
         />
         {!Number(dose) && <ValidationError message="common.error.required" />}
       </div>
-      <div className="input-container flex-1">
+      <div className="input-container">
         <SelectWithPlaceholder
           placeholder={formatMessage({ id: 'manageRegimens.frequency' })}
-          showPlaceholder={!!drugFrequency.label}
+          showPlaceholder={!!getValue(drugFrequency)}
           value={getValue(drugFrequency)}
           onChange={onChangeHandler(regimenIdx, regimenUuid, 'frequency', drugIdx)}
-          options={getOptions(frequency)}
+          options={getOptions(frequencies)}
           wrapperClassName={cx({ invalid: !drugFrequency.isValid })}
           classNamePrefix="default-select"
           theme={selectDefaultTheme}
@@ -166,10 +162,10 @@ const mapStateToProps = ({
   manageRegimens: { regimens, editedRegimens },
   concept: { concept: conceptDoseTypes },
   drugs: { drugsList },
-  orderFrequency: { frequency }
+  orderFrequency: { frequencies }
 }) => ({
   drugsList,
-  frequency,
+  frequencies,
   conceptDoseTypes,
   regimens,
   editedRegimens
