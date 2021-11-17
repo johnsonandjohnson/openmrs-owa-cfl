@@ -16,12 +16,13 @@ const reducer = (state = initialState, action: AnyAction) => {
   switch (action.type) {
     case REQUEST(ACTION_TYPES.GET_DRUGS_LIST):
       return {
-        ...initialState,
+        ...state,
         loading: true
       };
     case SUCCESS(ACTION_TYPES.GET_DRUGS_LIST):
       return {
-        ...initialState,
+        ...state,
+        loading: false,
         drugsList: action.payload.data.results
       };
     default:
