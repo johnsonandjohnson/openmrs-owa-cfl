@@ -288,7 +288,7 @@ const mapStateToProps = ({ concept, settings, condition, cflPatient }) => ({
   concepts: concept.concepts,
   error: concept.errorMessage,
   conceptListClasses: settings.setting?.value,
-  conceptQuery: concept.q,
+  conceptQuery: concept.query,
   condition: condition.condition,
   conditionUpdated: condition.conditionUpdated,
   patient: cflPatient.patient

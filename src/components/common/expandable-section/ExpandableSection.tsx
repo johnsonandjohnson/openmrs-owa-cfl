@@ -29,11 +29,11 @@ export default function ExpandableSection({
         <div className="inline-fields col-6 pl-0">{isExpanded ? headerComponent : disabledHeaderComponent}</div>
         <div className="icon-buttons col-6">
           {isRemovable && !!onRemove && (
-            <Button className="icon-button" onClick={onRemove}>
+            <Button className="icon-button" onClick={onRemove} data-testid="removeExpandableSectionButton">
               <i className="bi bi-trash" />
             </Button>
           )}
-          <Button className="icon-button" onClick={() => setIsOpen(!isExpanded)}>
+          <Button className="icon-button" onClick={() => setIsOpen(!isExpanded)} data-testid="expandableSectionButton">
             <i className={`bi ${isExpanded ? 'bi-arrows-collapse' : 'bi-arrows-expand'}`} />
           </Button>
         </div>

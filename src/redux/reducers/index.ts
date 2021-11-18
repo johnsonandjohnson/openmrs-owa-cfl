@@ -23,6 +23,11 @@ import provider from './provider';
 import messages from './messages';
 import role from './role';
 import user from './user';
+import manageRegimens from './manage-regimens';
+import orderSet from './order-set';
+import drugs from './drugs';
+import orderFrequency from './order-frequency';
+import orderType from './order-type';
 
 export default combineReducers({
   cflPatient,
@@ -47,6 +52,11 @@ export default combineReducers({
   addressData,
   provider,
   messages,
+  manageRegimens,
+  orderSet,
+  drugs,
+  orderFrequency,
+  orderType,
   openmrs: openmrsReducers,
   form: reduxFormReducer
 });

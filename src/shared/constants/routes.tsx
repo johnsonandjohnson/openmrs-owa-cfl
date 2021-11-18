@@ -14,8 +14,14 @@ import NotificationConfiguration from '../../components/notification-configurati
 import NotificationTemplates from '../../components/notification-templates/NotificationTemplates';
 import Location from '../../components/locations/Location';
 import UserAccount from '../../components/user-account/UserAccount';
+import ManageRegimens from '../../components/manage-regimens/ManageRegimens';
 
 export const routeConfig = [
+  {
+    path: '/manage-regimens',
+    component: ManageRegimens,
+    breadcrumb: 'manageRegimens.title'
+  },
   {
     path: '/locations/edit-location/:locationId',
     component: Location,

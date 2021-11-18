@@ -1,16 +1,25 @@
 import axios from 'axios';
+import { IConceptState } from '../../shared/models/concept';
 
 import { FAILURE, REQUEST, SUCCESS } from '../action-type.util';
 
 export const ACTION_TYPES = {
   SEARCH_CONCEPTS: 'concept/SEARCH_CONCEPTS',
-  RESET_CONCEPTS: 'concept/RESET_CONCEPTS'
+  RESET_CONCEPTS: 'concept/RESET_CONCEPTS',
+  GET_CONCEPT: 'concept/GET_CONCEPT'
 };
 
-const initialState = {
-  loading: false,
-  q: '',
+const initialState: IConceptState = {
+  loading: {
+    concepts: false,
+    concept: false
+  },
+  query: '',
   concepts: [],
+  concept: {
+    uuid: '',
+    setMembers: []
+  },
   errorMessage: ''
 };
 
@@ -19,18 +28,55 @@ const reducer = (state = initialState, action) => {
     case REQUEST(ACTION_TYPES.SEARCH_CONCEPTS):
       return {
         ...state,
-        loading: true
+        loading: {
+          ...state.loading,
+          concepts: true
+        }
+      };
+    case REQUEST(ACTION_TYPES.GET_CONCEPT):
+      return {
+        ...state,
+        loading: {
+          ...state.loading,
+          concept: true
+        }
       };
     case FAILURE(ACTION_TYPES.SEARCH_CONCEPTS):
       return {
-        ...initialState,
+        ...state,
+        loading: {
+          ...state.loading,
+          concepts: false
+        },
+        errorMessage: action.payload.message
+      };
+    case FAILURE(ACTION_TYPES.GET_CONCEPT):
+      return {
+        ...state,
+        loading: {
+          ...state.loading,
+          concept: false
+        },
         errorMessage: action.payload.message
       };
     case SUCCESS(ACTION_TYPES.SEARCH_CONCEPTS):
       return {
-        ...initialState,
-        q: action.meta.q,
+        ...state,
+        loading: {
+          ...state.loading,
+          concepts: false
+        },
+        query: action.meta.q,
         concepts: action.payload.data.results
+      };
+    case SUCCESS(ACTION_TYPES.GET_CONCEPT):
+      return {
+        ...state,
+        loading: {
+          ...state.loading,
+          concept: false
+        },
+        concept: action.payload.data
       };
     case ACTION_TYPES.RESET_CONCEPTS:
       return {
@@ -52,6 +98,11 @@ export const searchConcepts = (q, conceptClasses) => {
     }
   };
 };
+
+export const getConcept = (uuid: string, custom?: string) => ({
+  type: ACTION_TYPES.GET_CONCEPT,
+  payload: axios.get(`/openmrs/ws/rest/v1/concept/${uuid}?v=${custom ? `custom:(${custom})` : 'full'}`)
+});
 
 export const reset = () => ({
   type: ACTION_TYPES.RESET_CONCEPTS

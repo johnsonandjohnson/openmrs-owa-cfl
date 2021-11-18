@@ -33,12 +33,12 @@ export const ConfirmationModal = (props: IConfirmationModalProps) => {
       </ModalBody>
       <ModalFooter className={`${!!onNo ? '' : 'justify-content-end'}`}>
         {!!onNo && (
-          <Button className="btn cancel" onClick={onNo}>
+          <Button className="btn cancel" onClick={onNo} data-testid="cancelModalButton">
             <FormattedMessage id="common.no" />
           </Button>
         )}
         {!!onYes && (
-          <Button className="btn btn-primary" onClick={onYes}>
+          <Button className="btn btn-primary" onClick={onYes} data-testid="confirmModalButton">
             <FormattedMessage id={`${!!onNo ? 'common.yes' : 'common.ok'}`} />
           </Button>
         )}

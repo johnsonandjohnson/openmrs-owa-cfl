@@ -1,0 +1,20 @@
+#manage-regimens {
+  .title {
+    display: flex;
+    justify-content: space-between;
+    padding: 1.5em 0;
+  }
+
+  .expandable-section-header {
+    padding-bottom: 2em;
+  }
+
+  .manage-regimen-row {
+    display: flex;
+    padding-bottom: 1em;
+
+    .flex-2 {
+      flex: 2;
+    }
+  }
+}
