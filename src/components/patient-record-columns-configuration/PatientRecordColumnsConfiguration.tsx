@@ -3,24 +3,30 @@ import ColumnRow from './ColumnRow';
 import { connect } from 'react-redux';
 import { FormattedMessage, injectIntl, IntlShape } from 'react-intl';
 import { Button, Spinner } from 'reactstrap';
-import { isNil, uniqWith, isEqual, cloneDeep } from 'lodash';
+import { uniqWith, isEqual, cloneDeep } from 'lodash';
 import { setAllPossibleColumns, setColumnsConfiguration } from '../../redux/reducers/columns-configuration';
 import { createSetting, getSettingByQuery, updateSetting } from '../../redux/reducers/setttings';
 import { IRegistrationStep } from '../../shared/models/registration-steps';
-import { COLUMNS_CONFIGURATION_SETTING_KEY, FIXED_COLUMNS, RETURN_LOCATION } from '../../shared/constants/columns-configuration';
+import {
+  ADJACENT_LOWER_AND_UPPER_LETTERS_REGEX,
+  COLUMNS_CONFIGURATION_SETTING_KEY,
+  FIRST_COLUMN_NAME_LETTERS_REGEX,
+  FIXED_COLUMNS,
+  RETURN_LOCATION
+} from '../../shared/constants/columns-configuration';
 import { IColumnConfiguration } from '../../shared/models/columns-configuration';
 import { EMPTY_STRING } from '../../shared/constants/input';
 import { ConfirmationModal } from '../common/form/ConfirmationModal';
 import { successToast, errorToast } from '@bit/soldevelo-omrs.cfl-components.toast-handler';
 import '../Inputs.scss';
-import './FindPatientRecordColumns.scss';
+import './PatientRecordColumnsConfiguration.scss';
 
 interface IStore {
   apps: {
     loading: boolean;
     patientRegistrationSteps: IRegistrationStep[];
   };
-  findPatientRecordColumns: {
+  patientRecordColumnsConfiguration: {
     columnsConfiguration: IColumnConfiguration[];
   };
   settings: {
@@ -33,11 +39,11 @@ interface IStore {
   };
 }
 
-interface IFindPatientRecordColumnsProps extends StateProps, DispatchProps {
+interface IPatientRecordColumnsConfigurationProps extends StateProps, DispatchProps {
   intl: IntlShape;
 }
 
-const FindPatientRecordColumns = ({
+const PatientRecordColumnsConfiguration = ({
   intl: { formatMessage },
   isAppLoading,
   patientRegistrationSteps,
@@ -51,7 +57,7 @@ const FindPatientRecordColumns = ({
   getSettingByQuery,
   createSetting,
   updateSetting
-}: IFindPatientRecordColumnsProps) => {
+}: IPatientRecordColumnsConfigurationProps) => {
   useEffect(() => {
     getSettingByQuery(COLUMNS_CONFIGURATION_SETTING_KEY);
   }, [getSettingByQuery]);
@@ -59,21 +65,23 @@ const FindPatientRecordColumns = ({
     settingValue && setColumnsConfiguration(JSON.parse(settingValue));
   }, [setColumnsConfiguration, settingValue]);
   useEffect(() => {
-    settingsSaved && successToast(formatMessage({ id: 'findPatientRecordColumns.configurationSaved' }));
+    settingsSaved && successToast(formatMessage({ id: 'patientRecordColumnsConfiguration.configurationSaved' }));
   }, [formatMessage, settingsSaved]);
   useEffect(() => {
-    if (!isNil(patientRegistrationSteps)) {
+    if (patientRegistrationSteps) {
       const columns = [...FIXED_COLUMNS];
 
       patientRegistrationSteps.map(({ fields }) =>
-        fields.map(({ name: fieldName }) => {
-          if (!fieldName) {
-            return false;
+        fields.forEach(({ name: fieldName }) => {
+          if (fieldName) {
+            const capitalizedFirstColumnNameLetter = fieldName.replace(
+              FIRST_COLUMN_NAME_LETTERS_REGEX,
+              str => str.charAt(0).toUpperCase() + str.substr(1)
+            );
+            const name = capitalizedFirstColumnNameLetter.replace(ADJACENT_LOWER_AND_UPPER_LETTERS_REGEX, '$1 $2');
+
+            columns.push({ label: name, value: fieldName });
           }
-
-          const name = fieldName.replace(/\w\S*/g, str => str.charAt(0).toUpperCase() + str.substr(1)).replace(/([a-z])([A-Z])/g, '$1 $2');
-
-          return columns.push({ label: name, value: fieldName });
         })
       );
 
@@ -84,24 +92,24 @@ const FindPatientRecordColumns = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const onReturnHandler = useCallback(() => (window.location.href = RETURN_LOCATION), []);
   const onSaveHandler = useCallback(() => setIsModalOpen(true), []);
-  const validationEmptyConfiguration = useCallback(() => {
+  const markConfigurationAsInvalid = useCallback(() => {
     const clonedColumnsConfiguration = cloneDeep(columnsConfiguration);
 
     clonedColumnsConfiguration[0].isValid = false;
 
-    errorToast(formatMessage({ id: 'findPatientRecordColumns.configurationNotSaved' }));
+    errorToast(formatMessage({ id: 'patientRecordColumnsConfiguration.configurationNotSaved' }));
     setColumnsConfiguration(clonedColumnsConfiguration);
     setIsModalOpen(false);
   }, [columnsConfiguration, formatMessage, setColumnsConfiguration]);
   const onNoHandler = useCallback(() => setIsModalOpen(false), []);
   const onYesHandler = useCallback(() => {
-    const omitEmptyColumnsConfiguration = columnsConfiguration.filter(({ value }) => value);
+    const omittedEmptyColumnsConfiguration = columnsConfiguration.filter(({ value }) => value);
 
-    if (!omitEmptyColumnsConfiguration.length) {
-      return validationEmptyConfiguration();
+    if (!omittedEmptyColumnsConfiguration.length) {
+      return markConfigurationAsInvalid();
     }
 
-    const config = omitEmptyColumnsConfiguration.map(({ label, value }) => ({ label, value }));
+    const config = omittedEmptyColumnsConfiguration.map(column => ({ label: column.label, value: column.value }));
     const configJson = JSON.stringify(config);
 
     if (isSettingExist) {
@@ -111,19 +119,19 @@ const FindPatientRecordColumns = ({
     }
 
     setIsModalOpen(false);
-  }, [columnsConfiguration, createSetting, isSettingExist, settingUuid, updateSetting, validationEmptyConfiguration]);
+  }, [columnsConfiguration, createSetting, isSettingExist, settingUuid, updateSetting, markConfigurationAsInvalid]);
 
   return (
-    <div id="columns-configuration" data-testid="columnsConfiguration">
+    <div id="patient-record-columns-configuration" data-testid="patientRecordcolumnsConfiguration">
       <ConfirmationModal
-        header={{ id: 'findPatientRecordColumns.modal.header' }}
-        body={{ id: 'findPatientRecordColumns.modal.body' }}
+        header={{ id: 'patientRecordColumnsConfiguration.modal.header' }}
+        body={{ id: 'patientRecordColumnsConfiguration.modal.body' }}
         onYes={onYesHandler}
         onNo={onNoHandler}
         isOpen={isModalOpen}
       />
       <div className="title">
-        <FormattedMessage id="findPatientRecordColumns.title" tagName="h2" />
+        <FormattedMessage id="patientRecordColumnsConfiguration.title" tagName="h2" />
       </div>
       {isAppLoading ? (
         <div className="spinner" data-testid="spinner">
@@ -133,7 +141,7 @@ const FindPatientRecordColumns = ({
         <>
           <div className="section">
             <div className="title">
-              <FormattedMessage id="findPatientRecordColumns.configureColumns" tagName="h4" />
+              <FormattedMessage id="patientRecordColumnsConfiguration.configureColumns" tagName="h4" />
             </div>
             <div className="columns">
               {columnsConfiguration.map((column, idx) => (
@@ -161,7 +169,7 @@ const FindPatientRecordColumns = ({
 
 const mapStateToProps = ({
   apps: { loading: isAppLoading, patientRegistrationSteps },
-  findPatientRecordColumns: { columnsConfiguration },
+  patientRecordColumnsConfiguration: { columnsConfiguration },
   settings: {
     success: settingsSaved,
     isSettingExist: { value: isSettingExist },
@@ -188,4 +196,4 @@ const mapDispatchToProps = {
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
 
-export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(FindPatientRecordColumns));
+export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(PatientRecordColumnsConfiguration));

@@ -129,7 +129,7 @@ const mapStateToProps = ({ cflPatient, settings: { setting } }) => ({
   hasPrev: cflPatient.hasPrev,
   currentPage: cflPatient.currentPage,
   totalCount: cflPatient.totalCount,
-  tableColumns: JSON.parse(setting?.value || 'null') ?? DEFAULT_COLUMNS
+  tableColumns: setting?.value ? JSON.parse(setting.value) : DEFAULT_COLUMNS
 });
 
 const mapDispatchToProps = { search, reset, getSettingByQuery };

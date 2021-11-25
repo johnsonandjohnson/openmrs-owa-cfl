@@ -14,14 +14,14 @@ export const columnContent = (patient, column, intl) => {
   if (attributesValue) {
     return column === TELEPHONE_NUMBER_ATTRIBUTE_TYPE
       ? formatPhoneNumberIntl(getPhoneNumberWithPlusSign(attributesValue))
+        ? getPhoneNumberWithPlusSign(attributesValue)
+        : attributesValue
       : attributesValue;
-  }
-
-  if (personValue) {
+  } else if (personValue) {
     return column === BIRTHDATE ? formatDate(intl, new Date(personValue)) : personValue;
+  } else {
+    return preferredName?.[column] || preferredAddress?.[column] || extractIdentifier(patient, column);
   }
-
-  return preferredName?.[column] || preferredAddress?.[column] || extractIdentifier(patient, column);
 };
 
 export const extractPatientOrPersonData = patient => {

@@ -541,13 +541,13 @@
     "regimensNotSaved": "The regimens have not been saved. Please try again.",
     "regimensSaved": "The regimens have been saved."
   },
-  "findPatientRecordColumns": {
+  "patientRecordColumnsConfiguration": {
     "title": "Manage Patient's Record Columns Configuration",
     "columnName": "Column Name",
     "configureColumns": "Configure Columns",
-    "configurationNotSaved": "The columns configuration have not been saved.",
+    "configurationNotSaved": "The columns configuration has not been saved.",
     "emptyColumnsConfiguration": "Please configure at least one column.",
-    "configurationSaved": "The columns configuration have been saved.",
+    "configurationSaved": "The columns configuration has been saved.",
     "modal": {
       "header": "Submit Columns Configuration",
       "body": "Are you sure you want to submit Columns Configuration for the Patient's Record?"

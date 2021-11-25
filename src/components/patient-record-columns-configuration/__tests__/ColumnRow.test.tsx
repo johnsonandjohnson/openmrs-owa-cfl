@@ -59,19 +59,35 @@ describe('<ColumnRow />', () => {
     });
 
     it('should move up column position', () => {
+      const expectedOrderColumns = [
+        { label: 'Identifier', value: 'OpenMRS ID' },
+        { label: 'Age', value: 'age' },
+        { label: 'Name', value: 'display' },
+        { label: 'Gender', value: 'gender' },
+        { label: 'Birthdate', value: 'birthdate' },
+        { label: 'Telephone Number', value: 'Telephone Number' }
+      ];
       const moveUpButton = screen.getByTestId('moveUpButton');
 
       userEvent.click(moveUpButton);
 
-      expect(props.columnIdx - 1).toBe(1);
+      expect(props.setColumnsConfiguration).toBeCalledWith(expectedOrderColumns);
     });
 
     it('should move down column position', () => {
+      const expectedOrderColumns = [
+        { label: 'Identifier', value: 'OpenMRS ID' },
+        { label: 'Name', value: 'display' },
+        { label: 'Gender', value: 'gender' },
+        { label: 'Age', value: 'age' },
+        { label: 'Birthdate', value: 'birthdate' },
+        { label: 'Telephone Number', value: 'Telephone Number' }
+      ];
       const moveUpButton = screen.getByTestId('moveDownButton');
 
       userEvent.click(moveUpButton);
 
-      expect(props.columnIdx + 1).toBe(3);
+      expect(props.setColumnsConfiguration).toBeCalledWith(expectedOrderColumns);
     });
   });
 

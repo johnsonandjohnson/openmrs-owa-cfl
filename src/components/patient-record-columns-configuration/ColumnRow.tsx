@@ -13,7 +13,7 @@ import { swapPositions } from '../../shared/util/array-util';
 import ValidationError from '../common/form/ValidationError';
 
 interface IStore {
-  findPatientRecordColumns: {
+  patientRecordColumnsConfiguration: {
     allPossibleColumns: IColumnConfiguration[];
     columnsConfiguration: IColumnConfiguration[];
   };
@@ -27,14 +27,14 @@ export interface IColumnRowProps extends StateProps, DispatchProps {
 
 export const ColumnRow = ({
   intl,
-  intl: { formatMessage },
   allPossibleColumns,
   columnsConfiguration,
   column,
   columnIdx,
   setColumnsConfiguration
 }: IColumnRowProps) => {
-  const getValue = column.value ? column : null;
+  const { formatMessage } = intl;
+  const columnValue = column.value ? column : null;
   const getOptions = useCallback(() => differenceWith(allPossibleColumns, columnsConfiguration, isEqual), [
     allPossibleColumns,
     columnsConfiguration
@@ -100,12 +100,12 @@ export const ColumnRow = ({
           />
         </div>
         <SelectWithPlaceholder
-          placeholder={formatMessage({ id: 'findPatientRecordColumns.columnName' })}
-          showPlaceholder={!!getValue}
-          value={getValue}
+          placeholder={formatMessage({ id: 'patientRecordColumnsConfiguration.columnName' })}
+          showPlaceholder={!!columnValue}
+          value={columnValue}
           onChange={onChangeHandler}
           options={getOptions()}
-          wrapperClassName={cx({ invalid: !getValue && !column.isValid })}
+          wrapperClassName={cx({ invalid: !columnValue && !column.isValid })}
           classNamePrefix="default-select"
           theme={selectDefaultTheme}
           data-testid="columnSelect"
@@ -117,12 +117,12 @@ export const ColumnRow = ({
           isPlusButtonVisible={columnIdx === columnsConfiguration.length - 1}
         />
       </div>
-      {!getValue && !column.isValid && <ValidationError message={'findPatientRecordColumns.emptyColumnsConfiguration'} />}
+      {!columnValue && !column.isValid && <ValidationError message={'patientRecordColumnsConfiguration.emptyColumnsConfiguration'} />}
     </>
   );
 };
 
-const mapStateToProps = ({ findPatientRecordColumns: { allPossibleColumns, columnsConfiguration } }: IStore) => ({
+const mapStateToProps = ({ patientRecordColumnsConfiguration: { allPossibleColumns, columnsConfiguration } }: IStore) => ({
   allPossibleColumns,
   columnsConfiguration
 });
