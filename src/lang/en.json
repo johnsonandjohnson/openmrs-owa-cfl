@@ -67,8 +67,6 @@
     "delete": "Delete",
     "success": "Configuration saved successfully!",
     "addNew": "Add new",
-    "moveUp": "Move up",
-    "moveDown": "Move down",
     "error": {
       "header": "Error",
       "configurationInvalid": "Some fields are not entered correctly. Please check the configuration.",
@@ -461,6 +459,8 @@
     "no": "No",
     "ok": "Ok",
     "cancel": "Cancel",
+    "moveUp": "Move up",
+    "moveDown": "Move down",
     "ordinalSuffix": {
       "st": "st",
       "nd": "nd",
@@ -540,5 +540,17 @@
     "drugDeleted": "The drug has been deleted.",
     "regimensNotSaved": "The regimens have not been saved. Please try again.",
     "regimensSaved": "The regimens have been saved."
+  },
+  "findPatientRecordColumns": {
+    "title": "Manage Patient's Record Columns Configuration",
+    "columnName": "Column Name",
+    "configureColumns": "Configure Columns",
+    "configurationNotSaved": "The columns configuration have not been saved.",
+    "emptyColumnsConfiguration": "Please configure at least one column.",
+    "configurationSaved": "The columns configuration have been saved.",
+    "modal": {
+      "header": "Submit Columns Configuration",
+      "body": "Are you sure you want to submit Columns Configuration for the Patient's Record?"
+    }
   }
 }

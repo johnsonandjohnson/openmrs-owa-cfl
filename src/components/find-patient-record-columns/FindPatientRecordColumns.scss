@@ -1,0 +1,36 @@
+#columns-configuration {
+  .title {
+    padding: 1.5em 0;
+  }
+  .section {
+    padding: 1.5em;
+    .title {
+      padding: 0 0 0.5em;
+
+      h4 {
+        color: var(--main-color);
+      }
+    }
+    .column-row {
+      .order-icons {
+        justify-content: center;
+        padding-right: 1em;
+
+        .glyphicon-chevron-up,
+        .glyphicon-chevron-down {
+          cursor: pointer;
+        }
+
+        .glyphicon-chevron-up {
+          margin-bottom: 0.5em;
+        }
+      }
+
+      .action-icons-inner {
+        img {
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}

@@ -91,10 +91,10 @@ describe('AddressFields', () => {
       } = props;
       const [first] = addressFields;
 
-      expect(screen.getAllByTestId('remove-item').length).toEqual(first.fields.length);
+      expect(screen.getAllByTestId('removeItem').length).toEqual(first.fields.length);
     });
 
-    it('should render button add new field', () => expect(screen.getByTestId('add-item')).toBeInTheDocument());
+    it('should render button add new field', () => expect(screen.getByTestId('addItem')).toBeInTheDocument());
 
     it('should render disabled up button on first addres field', () => {
       const [firstField] = screen.getAllByTestId('up-button');

@@ -10,7 +10,7 @@ export interface IValidationErrorProps {
 function ValidationError(props: IValidationErrorProps) {
   const { intl, message, required } = props;
   return (
-    <span className="error field-error">
+    <span className="error field-error" data-testid="fieldError">
       {intl.formatMessage({
         id: required ? 'common.error.required' : message
       })}

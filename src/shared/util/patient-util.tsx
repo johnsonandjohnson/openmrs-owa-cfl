@@ -1,22 +1,27 @@
-import { PATIENT_IDENTIFIER } from '../constants/patient';
-import { extractAttributes, extractIdentifiers, extractValue } from './omrs-entity-util';
-import { columnContent as personColumnContent } from './person-util';
+import { BIRTHDATE, TELEPHONE_NUMBER_ATTRIBUTE_TYPE } from '../constants/patient';
+import { extractAttribute, extractAttributes, extractIdentifier, extractIdentifiers } from './omrs-entity-util';
+import { getPhoneNumberWithPlusSign } from './person-util';
 import { IPatient } from '../models/patient';
+import { formatDate } from './date-util';
+import { formatPhoneNumberIntl } from 'react-phone-number-input';
 
 export const columnContent = (patient, column, intl) => {
-  // extract the value from person first
-  const content = patient.person && personColumnContent(patient.person, column, intl);
-  if (!!content) {
-    return content;
-  } else {
-    // extract the value from patient otherwise
-    switch (column) {
-      case PATIENT_IDENTIFIER:
-        return patient.identifiers && patient.identifiers[0].identifier;
-      default:
-        return extractValue(patient[column]);
-    }
+  const { person } = patient;
+  const { preferredAddress, preferredName } = person;
+  const attributesValue = extractAttribute(person, column);
+  const personValue = person[column];
+
+  if (attributesValue) {
+    return column === TELEPHONE_NUMBER_ATTRIBUTE_TYPE
+      ? formatPhoneNumberIntl(getPhoneNumberWithPlusSign(attributesValue))
+      : attributesValue;
   }
+
+  if (personValue) {
+    return column === BIRTHDATE ? formatDate(intl, new Date(personValue)) : personValue;
+  }
+
+  return preferredName?.[column] || preferredAddress?.[column] || extractIdentifier(patient, column);
 };
 
 export const extractPatientOrPersonData = patient => {

@@ -12,7 +12,7 @@ export function PlusMinusButtons({ intl, onPlusClick, onMinusClick, isPlusButton
           alt="remove"
           className="remove-item"
           onClick={onMinusClick}
-          data-testid="remove-item"
+          data-testid="removeItem"
         />
         {isPlusButtonVisible && (
           <img
@@ -21,7 +21,7 @@ export function PlusMinusButtons({ intl, onPlusClick, onMinusClick, isPlusButton
             alt="add"
             className="mx-2 add-item"
             onClick={onPlusClick}
-            data-testid="add-item"
+            data-testid="addItem"
           />
         )}
       </div>

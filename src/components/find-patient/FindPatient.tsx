@@ -7,11 +7,12 @@ import './FindPatient.scss';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import searchIcon from '../../assets/img/search.png';
 import { columnContent } from '../../shared/util/patient-util';
-import { DEFAULT_FIND_PATIENT_TABLE_COLUMNS } from '../../shared/constants/patient';
 import { SEARCH_INPUT_DELAY, SEARCH_INPUT_MIN_CHARS } from '../../shared/constants/input';
 import { helperText } from '../../shared/util/table-util';
 import { PATIENT_PAGE_URL } from '../../shared/constants/openmrs';
 import InfiniteTable from '../common/InfiniteTable';
+import { COLUMNS_CONFIGURATION_SETTING_KEY, DEFAULT_COLUMNS } from '../../shared/constants/columns-configuration';
+import { getSettingByQuery } from '../../redux/reducers/setttings';
 
 export interface IPatientsProps extends StateProps, DispatchProps {
   intl: any;
@@ -28,7 +29,7 @@ class FindPatient extends React.Component<IPatientsProps, IPatientsState> {
     page: 0
   };
 
-  searchAfterDelay = _.debounce(e => {
+  searchAfterDelay = _.debounce(() => {
     if (this.state.query.length >= SEARCH_INPUT_MIN_CHARS) {
       this.props.search(this.state.query, this.state.page);
     }
@@ -36,6 +37,7 @@ class FindPatient extends React.Component<IPatientsProps, IPatientsState> {
 
   componentDidMount() {
     this.props.reset();
+    this.props.getSettingByQuery(COLUMNS_CONFIGURATION_SETTING_KEY);
   }
 
   search = () => {
@@ -103,7 +105,7 @@ class FindPatient extends React.Component<IPatientsProps, IPatientsState> {
             </div>
             {this.props.totalCount > 0 && (
               <InfiniteTable
-                columns={this.props.tableColumns.split(',')}
+                columns={this.props.tableColumns}
                 entities={this.props.patients}
                 columnContent={columnContent}
                 hasNext={this.props.hasNext}
@@ -119,7 +121,7 @@ class FindPatient extends React.Component<IPatientsProps, IPatientsState> {
   }
 }
 
-const mapStateToProps = ({ cflPatient, apps }) => ({
+const mapStateToProps = ({ cflPatient, settings: { setting } }) => ({
   patients: cflPatient.patients,
   loading: cflPatient.loading,
   error: cflPatient.errorMessage,
@@ -127,10 +129,10 @@ const mapStateToProps = ({ cflPatient, apps }) => ({
   hasPrev: cflPatient.hasPrev,
   currentPage: cflPatient.currentPage,
   totalCount: cflPatient.totalCount,
-  tableColumns: (apps.findPatientTableColumns && apps.findPatientTableColumns) || DEFAULT_FIND_PATIENT_TABLE_COLUMNS
+  tableColumns: JSON.parse(setting?.value || 'null') ?? DEFAULT_COLUMNS
 });
 
-const mapDispatchToProps = { search, reset };
+const mapDispatchToProps = { search, reset, getSettingByQuery };
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;

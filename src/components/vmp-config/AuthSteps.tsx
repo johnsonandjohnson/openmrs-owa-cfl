@@ -48,13 +48,13 @@ export function AuthSteps({ intl, config, options, onValueChange }) {
           <div className="d-flex flex-column order-icons">
             <span
               className={`glyphicon glyphicon-chevron-up ${i === 0 ? 'disabled' : ''}`}
-              title={intl.formatMessage({ id: 'vmpConfig.moveUp' })}
+              title={intl.formatMessage({ id: 'common.moveUp' })}
               aria-hidden="true"
               onClick={moveAuthStep(i, -1)}
             />
             <span
               className={`glyphicon glyphicon-chevron-down ${i === authSteps.length - 1 ? 'disabled' : ''}`}
-              title={intl.formatMessage({ id: 'vmpConfig.moveDown' })}
+              title={intl.formatMessage({ id: 'common.moveDown' })}
               aria-hidden="true"
               onClick={moveAuthStep(i, 1)}
             />
