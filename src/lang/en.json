@@ -541,7 +541,7 @@
     "regimensNotSaved": "The regimens have not been saved. Please try again.",
     "regimensSaved": "The regimens have been saved."
   },
-  "patientRecordColumnsConfiguration": {
+  "findPatientColumnsConfiguration": {
     "title": "Manage Patient's Record Columns Configuration",
     "columnName": "Column Name",
     "configureColumns": "Configure Columns",

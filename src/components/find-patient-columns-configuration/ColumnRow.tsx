@@ -13,7 +13,7 @@ import { swapPositions } from '../../shared/util/array-util';
 import ValidationError from '../common/form/ValidationError';
 
 interface IStore {
-  patientRecordColumnsConfiguration: {
+  findPatientColumnsConfiguration: {
     allPossibleColumns: IColumnConfiguration[];
     columnsConfiguration: IColumnConfiguration[];
   };
@@ -100,7 +100,7 @@ export const ColumnRow = ({
           />
         </div>
         <SelectWithPlaceholder
-          placeholder={formatMessage({ id: 'patientRecordColumnsConfiguration.columnName' })}
+          placeholder={formatMessage({ id: 'findPatientColumnsConfiguration.columnName' })}
           showPlaceholder={!!columnValue}
           value={columnValue}
           onChange={onChangeHandler}
@@ -117,12 +117,12 @@ export const ColumnRow = ({
           isPlusButtonVisible={columnIdx === columnsConfiguration.length - 1}
         />
       </div>
-      {!columnValue && !column.isValid && <ValidationError message={'patientRecordColumnsConfiguration.emptyColumnsConfiguration'} />}
+      {!columnValue && !column.isValid && <ValidationError message={'findPatientColumnsConfiguration.emptyColumnsConfiguration'} />}
     </>
   );
 };
 
-const mapStateToProps = ({ patientRecordColumnsConfiguration: { allPossibleColumns, columnsConfiguration } }: IStore) => ({
+const mapStateToProps = ({ findPatientColumnsConfiguration: { allPossibleColumns, columnsConfiguration } }: IStore) => ({
   allPossibleColumns,
   columnsConfiguration
 });
