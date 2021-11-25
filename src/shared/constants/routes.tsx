@@ -24,7 +24,7 @@ export const routeConfig = [
     breadcrumb: 'findPatientRecordColumns.title'
   },
   {
-    path: '/manage-regimens',
+    path: '/regimens',
     component: ManageRegimens,
     breadcrumb: 'manageRegimens.title'
   },
