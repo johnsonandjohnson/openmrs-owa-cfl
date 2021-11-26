@@ -5,9 +5,10 @@ import { Spinner, Table } from 'reactstrap';
 import React from 'react';
 import _ from 'lodash';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import { IColumnConfiguration } from '../../shared/models/columns-configuration';
 
 export interface InfiniteTableProps {
-  columns: string[];
+  columns: string[] | IColumnConfiguration[];
   entities: object[];
   columnContent: any;
   hasNext: boolean;
@@ -23,6 +24,8 @@ const InfiniteTable = (props: InfiniteTableProps) => {
       window.location.href = props.getRecordLink(entity);
     }
   };
+  const isColumnObject = props.columns[0]?.constructor === Object;
+
   return (
     <InfiniteScroll
       dataLength={props.entities.length}
@@ -37,19 +40,23 @@ const InfiniteTable = (props: InfiniteTableProps) => {
       <Table borderless striped responsive className="table">
         <thead>
           <tr>
-            {_.map(props.columns, column => (
-              <th>
-                <FormattedMessage id={`columnNames.${column}`} />
-              </th>
+            {_.map(props.columns, (column, i) => (
+              <th key={i}>{isColumnObject ? column.label : <FormattedMessage id={`columnNames.${column}`} />}</th>
             ))}
           </tr>
         </thead>
         <tbody>
           {_.map(props.entities, (entity, i) => (
             <tr key={i} onClick={() => handleRowClick(entity)}>
-              {_.map(props.columns, column => (
-                <td className={!!props.getRecordLink ? 'td-clickable' : undefined}>{props.columnContent(entity, column, intl)}</td>
-              ))}
+              {_.map(props.columns, column => {
+                const columnValue = isColumnObject ? column.value : column;
+
+                return (
+                  <td key={columnValue} className={!!props.getRecordLink ? 'td-clickable' : undefined}>
+                    {props.columnContent(entity, columnValue, intl)}
+                  </td>
+                );
+              })}
             </tr>
           ))}
         </tbody>

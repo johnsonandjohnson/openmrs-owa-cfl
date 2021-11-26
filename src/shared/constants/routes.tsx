@@ -15,10 +15,16 @@ import NotificationTemplates from '../../components/notification-templates/Notif
 import Location from '../../components/locations/Location';
 import UserAccount from '../../components/user-account/UserAccount';
 import ManageRegimens from '../../components/manage-regimens/ManageRegimens';
+import FindPatientColumnsConfiguration from '../../components/find-patient-columns-configuration/FindPatientColumnsConfiguration';
 
 export const routeConfig = [
   {
-    path: '/manage-regimens',
+    path: '/patient-record-columns-configuration',
+    component: FindPatientColumnsConfiguration,
+    breadcrumb: 'findPatientColumnsConfiguration.title'
+  },
+  {
+    path: '/regimens',
     component: ManageRegimens,
     breadcrumb: 'manageRegimens.title'
   },
