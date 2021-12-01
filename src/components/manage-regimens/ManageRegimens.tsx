@@ -50,6 +50,7 @@ import { IConceptState } from '../../shared/models/concept';
 import { IDrugsState } from '../../shared/models/drugs';
 import { IOrderFrequencyState } from '../../shared/models/order-frequency';
 import { IOrderTypeState } from '../../shared/models/order-type';
+import { EMPTY_STRING } from '../../shared/constants/input';
 
 interface IStore {
   manageRegimens: IManageRegimensState;
@@ -191,7 +192,7 @@ export const ManageRegimens = ({
 
         if (isRegimenNameUnique(clonedRegimenName, clonedRegimenIdx, filteredRegimens)) {
           clonedRegimens[clonedRegimenIdx].isValid = true;
-          clonedRegimens[clonedRegimenIdx].errorMessage = '';
+          clonedRegimens[clonedRegimenIdx].errorMessage = EMPTY_STRING;
         }
       });
 
@@ -234,7 +235,7 @@ export const ManageRegimens = ({
     clonedRegimens.forEach((regimen, regimenIdx) => {
       const { regimenName, drugs, isValid } = regimen;
 
-      clonedRegimens[regimenIdx].errorMessage = '';
+      clonedRegimens[regimenIdx].errorMessage = EMPTY_STRING;
       clonedRegimens[regimenIdx].isValid = true;
 
       if (!regimenName || (!isValid && !isRegimenNameUnique(regimenName, regimenIdx))) {
@@ -430,7 +431,7 @@ const mapStateToProps = ({
     orderSet,
     drugsList,
     success,
-    drugOrderType: orderTypes.find(({ javaClassName = '' }) => javaClassName === DRUG_ORDER_TYPE_JAVA_CLASS_NAME),
+    drugOrderType: orderTypes.find(({ javaClassName = EMPTY_STRING }) => javaClassName === DRUG_ORDER_TYPE_JAVA_CLASS_NAME),
     regimens,
     editedRegimens,
     regimenToDelete,

@@ -2,6 +2,7 @@ import React, { useCallback } from 'react';
 import Drug from './Drug';
 import ValidationError from '../common/form/ValidationError';
 import ExpandableSection from '../common/expandable-section/ExpandableSection';
+import cx from 'classnames';
 import { connect } from 'react-redux';
 import { injectIntl, IntlShape } from 'react-intl';
 import { InputWithPlaceholder } from '../common/form/withPlaceholder';
@@ -17,6 +18,7 @@ import {
 import { extractEventValue } from '../../shared/util/form-util';
 import { cloneDeep, uniq } from 'lodash';
 import { setEditedRegimens, setRegimens, setRegimenToDelete, setConfirmationModal } from '../../redux/reducers/manage-regimens';
+import { EMPTY_STRING } from '../../shared/constants/input';
 
 interface IRegimenProps extends StateProps, DispatchProps {
   intl: IntlShape;
@@ -52,7 +54,7 @@ const Regimen = ({
 
       clonedRegimens[regimenIdx][REGIMEN_NAME] = extractedValue;
       clonedRegimens[regimenIdx].isValid = !!extractedValue;
-      clonedRegimens[regimenIdx].errorMessage = '';
+      clonedRegimens[regimenIdx].errorMessage = EMPTY_STRING;
 
       if (!extractedValue) {
         clonedRegimens[regimenIdx].errorMessage = FIELD_REQUIRED_ERROR_MESSAGE;
@@ -79,7 +81,7 @@ const Regimen = ({
         showPlaceholder={!!regimenName}
         value={regimenName}
         onChange={onChangeHandler(regimenIdx, regimenUuid)}
-        className={!isRegimenValid ? 'invalid' : ''}
+        className={cx({ invalid: !isRegimenValid })}
         disabled={disabled}
         data-testid="regimenHeaderInput"
       />
