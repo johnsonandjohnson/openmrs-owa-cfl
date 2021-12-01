@@ -539,7 +539,10 @@
     "regimenDeleted": "The regimen has been deleted.",
     "drugDeleted": "The drug has been deleted.",
     "regimensNotSaved": "The regimens have not been saved. Please try again.",
-    "regimensSaved": "The regimens have been saved."
+    "regimensSaved": "The regimens have been saved.",
+    "error": {
+      "regimenNameUnique": "The regimen name should be unique. Please try again."
+    }
   },
   "findPatientColumnsConfiguration": {
     "title": "Manage Patient's Record Columns Configuration",

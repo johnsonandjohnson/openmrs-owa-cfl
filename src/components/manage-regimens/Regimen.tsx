@@ -6,7 +6,14 @@ import { connect } from 'react-redux';
 import { injectIntl, IntlShape } from 'react-intl';
 import { InputWithPlaceholder } from '../common/form/withPlaceholder';
 import { IRegimen, OnChangeHandler } from '../../shared/models/manage-regimens';
-import { DEFAULT_DRUG_CONFIGURATION, DELETE_REGIMEN_MODAL, DRUGS, REGIMEN_NAME } from '../../shared/constants/manage-regimens';
+import {
+  DEFAULT_DRUG_CONFIGURATION,
+  DELETE_REGIMEN_MODAL,
+  DRUGS,
+  FIELD_REQUIRED_ERROR_MESSAGE,
+  REGIMEN_NAME,
+  REGIMEN_NAME_ERROR_MESSAGE
+} from '../../shared/constants/manage-regimens';
 import { extractEventValue } from '../../shared/util/form-util';
 import { cloneDeep, uniq } from 'lodash';
 import { setEditedRegimens, setRegimens, setRegimenToDelete, setConfirmationModal } from '../../redux/reducers/manage-regimens';
@@ -21,7 +28,7 @@ interface IRegimenProps extends StateProps, DispatchProps {
 
 const Regimen = ({
   intl: { formatMessage },
-  regimen: { regimenName, drugs, uuid: regimenUuid, isValid: isRegimenValid },
+  regimen: { regimenName, drugs, uuid: regimenUuid, isValid: isRegimenValid, errorMessage },
   regimens,
   editedRegimens,
   regimenIdx,
@@ -41,9 +48,18 @@ const Regimen = ({
     (regimenIdx, regimenUuid) => event => {
       const clonedRegimens = cloneDeep(regimens);
       const extractedValue = extractEventValue(event);
+      const isRegimenNameUnique = clonedRegimens.every(({ regimenName }) => regimenName.toLowerCase() !== extractedValue.toLowerCase());
 
       clonedRegimens[regimenIdx][REGIMEN_NAME] = extractedValue;
       clonedRegimens[regimenIdx].isValid = !!extractedValue;
+      clonedRegimens[regimenIdx].errorMessage = '';
+
+      if (!extractedValue) {
+        clonedRegimens[regimenIdx].errorMessage = FIELD_REQUIRED_ERROR_MESSAGE;
+      } else if (!isRegimenNameUnique) {
+        clonedRegimens[regimenIdx].isValid = false;
+        clonedRegimens[regimenIdx].errorMessage = REGIMEN_NAME_ERROR_MESSAGE;
+      }
 
       setRegimens(clonedRegimens);
       regimenUuid && setEditedRegimens(uniq([...editedRegimens, regimenUuid]));
@@ -67,7 +83,7 @@ const Regimen = ({
         disabled={disabled}
         data-testid="regimenHeaderInput"
       />
-      {!isRegimenValid && <ValidationError message="common.error.required" />}
+      {!isRegimenValid && <ValidationError message={errorMessage} />}
     </div>
   );
 

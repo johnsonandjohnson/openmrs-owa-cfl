@@ -13,7 +13,14 @@ import { IFrequency } from '../../shared/models/order-frequency';
 import { setEditedRegimens, setRegimens, setDrugToDelete, setConfirmationModal } from '../../redux/reducers/manage-regimens';
 import { cloneDeep, uniq } from 'lodash';
 import { extractEventValue } from '../../shared/util/form-util';
-import { DEFAULT_DRUG_CONFIGURATION, DELETE_DRUG_MODAL, DOSE, DRUGS, DRUG_DETAILS } from '../../shared/constants/manage-regimens';
+import {
+  DEFAULT_DRUG_CONFIGURATION,
+  DELETE_DRUG_MODAL,
+  DOSE,
+  DRUGS,
+  DRUG_DETAILS,
+  FIELD_REQUIRED_ERROR_MESSAGE
+} from '../../shared/constants/manage-regimens';
 import { EMPTY_STRING } from '../../shared/constants/input';
 
 interface IDrugProps extends StateProps, DispatchProps {
@@ -96,7 +103,7 @@ const Drug = ({
           theme={selectDefaultTheme}
           data-testid="drugNameSelect"
         />
-        {!drugDetails.isValid && <ValidationError message="common.error.required" />}
+        {!drugDetails.isValid && <ValidationError message={FIELD_REQUIRED_ERROR_MESSAGE} />}
       </div>
       <div className="input-container">
         <InputWithPlaceholder
@@ -119,7 +126,7 @@ const Drug = ({
           theme={selectDefaultTheme}
           data-testid="doseUnitsSelect"
         />
-        {!doseUnits.isValid && <ValidationError message="common.error.required" />}
+        {!doseUnits.isValid && <ValidationError message={FIELD_REQUIRED_ERROR_MESSAGE} />}
       </div>
       <div className="input-container">
         <InputWithPlaceholder
@@ -133,7 +140,7 @@ const Drug = ({
           className={cx({ invalid: !Number(dose) })}
           data-testid="doseInput"
         />
-        {!Number(dose) && <ValidationError message="common.error.required" />}
+        {!Number(dose) && <ValidationError message={FIELD_REQUIRED_ERROR_MESSAGE} />}
       </div>
       <div className="input-container">
         <SelectWithPlaceholder
@@ -147,7 +154,7 @@ const Drug = ({
           theme={selectDefaultTheme}
           data-testid="frequencySelect"
         />
-        {!drugFrequency.isValid && <ValidationError message="common.error.required" />}
+        {!drugFrequency.isValid && <ValidationError message={FIELD_REQUIRED_ERROR_MESSAGE} />}
       </div>
       <PlusMinusButtons
         intl={intl}
