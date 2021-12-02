@@ -127,18 +127,31 @@ jqr &&
     if (this.URL.includes('accounts/manageAccounts.page')) {
       const addNewUserAccount = document.querySelector('#content > a.button');
       const editUsersAccount = document.querySelectorAll('#list-accounts .icon-pencil.edit-action');
+      const overrideEditUserAccountLinks = editUserAccoutLinks =>
+        editUserAccoutLinks.forEach(editUserAccoutLink => {
+          const currentLocationHref = editUserAccoutLink.getAttribute('onclick');
+          const personIdPosition = currentLocationHref.indexOf('personId=');
+          const personId = currentLocationHref.slice(personIdPosition, currentLocationHref.length - 2);
+
+          editUserAccoutLink.onclick = () => (document.location.href = `${CFL_UI_BASE}index.html#/user-account?${personId}`);
+        });
 
       if (addNewUserAccount) {
         addNewUserAccount.href = `${CFL_UI_BASE}index.html#/user-account`;
       }
 
       if (editUsersAccount.length) {
-        editUsersAccount.forEach(editUserAccout => {
-          const currentLocationHref = editUserAccout.getAttribute('onclick');
-          const personIdPosition = currentLocationHref.indexOf('personId=');
-          const newLocationHref = currentLocationHref.slice(personIdPosition, currentLocationHref.length - 2);
-          editUserAccout.onclick = () => (this.location.href = `${CFL_UI_BASE}index.html#/user-account?${newLocationHref}`);
-        });
+        const pagination = document.querySelector('#list-accounts_wrapper > .datatables-info-and-pg');
+
+        overrideEditUserAccountLinks(editUsersAccount);
+
+        if (pagination) {
+          pagination.addEventListener('click', function () {
+            const editUserAccountIcons = document.querySelectorAll('#list-accounts .icon-pencil.edit-action');
+
+            overrideEditUserAccountLinks(editUserAccountIcons);
+          });
+        }
       }
     }
   });
