@@ -219,7 +219,7 @@ const UserAccount = (props: ILocationProps) => {
 
   const onSave = () => {
     validateEmptyFields();
-    const isFormValid = Object.values(userAccount).every(({ value, isValid }) => value && isValid);
+    const isFormValid = Object.values(userAccount).every(({ value, isValid }) => (value?.length || value?.value) && isValid);
 
     if (isFormValid) {
       const isPasswordFieldDirty = dirtyFields.find(field => field === PASSWORD_FIELD);
