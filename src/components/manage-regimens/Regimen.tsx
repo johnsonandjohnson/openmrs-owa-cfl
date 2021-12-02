@@ -13,7 +13,7 @@ import {
   DRUGS,
   FIELD_REQUIRED_ERROR_MESSAGE,
   REGIMEN_NAME,
-  REGIMEN_NAME_ERROR_MESSAGE
+  UNIQUE_REGIMEN_NAME_ERROR_MESSAGE
 } from '../../shared/constants/manage-regimens';
 import { extractEventValue } from '../../shared/util/form-util';
 import { cloneDeep, uniq } from 'lodash';
@@ -60,7 +60,7 @@ const Regimen = ({
         clonedRegimens[regimenIdx].errorMessage = FIELD_REQUIRED_ERROR_MESSAGE;
       } else if (!isRegimenNameUnique) {
         clonedRegimens[regimenIdx].isValid = false;
-        clonedRegimens[regimenIdx].errorMessage = REGIMEN_NAME_ERROR_MESSAGE;
+        clonedRegimens[regimenIdx].errorMessage = UNIQUE_REGIMEN_NAME_ERROR_MESSAGE;
       }
 
       setRegimens(clonedRegimens);
