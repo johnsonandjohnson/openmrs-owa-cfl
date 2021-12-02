@@ -24,7 +24,7 @@ import {
   RETURN_LOCATION,
   OPERATOR_ALL,
   FIELD_REQUIRED_ERROR_MESSAGE,
-  REGIMEN_NAME_ERROR_MESSAGE
+  UNIQUE_REGIMEN_NAME_ERROR_MESSAGE
 } from '../../shared/constants/manage-regimens';
 import { getSettings } from '../../redux/reducers/setttings';
 import {
@@ -173,8 +173,10 @@ export const ManageRegimens = ({
   }, [savedOrderSet, onReturn]);
 
   const isRegimenNameUnique = useCallback(
-    (clonedRegimenName, clonedRegimenIdx, clonedRegimens = regimens) =>
-      clonedRegimens.every(({ regimenName }, regimenIdx) => (regimenIdx !== clonedRegimenIdx ? regimenName !== clonedRegimenName : true)),
+    (regimenNameReceived, regimenIdxReceived, regimensReceived = regimens) =>
+      regimensReceived.every(({ regimenName }, regimenIdx) =>
+        regimenIdx !== regimenIdxReceived ? regimenName !== regimenNameReceived : true
+      ),
     [regimens]
   );
 
@@ -188,9 +190,9 @@ export const ManageRegimens = ({
       }
 
       clonedRegimens.forEach(({ regimenName: clonedRegimenName }, clonedRegimenIdx) => {
-        const filteredRegimens = regimens.filter(({ uuid }, idx) => (regimenUuid ? uuid !== regimenUuid : idx !== regimenIdx));
+        const otherRegimens = regimens.filter(({ uuid }, idx) => (regimenUuid ? uuid !== regimenUuid : idx !== regimenIdx));
 
-        if (isRegimenNameUnique(clonedRegimenName, clonedRegimenIdx, filteredRegimens)) {
+        if (isRegimenNameUnique(clonedRegimenName, clonedRegimenIdx, otherRegimens)) {
           clonedRegimens[clonedRegimenIdx].isValid = true;
           clonedRegimens[clonedRegimenIdx].errorMessage = EMPTY_STRING;
         }
@@ -241,7 +243,7 @@ export const ManageRegimens = ({
       if (!regimenName || (!isValid && !isRegimenNameUnique(regimenName, regimenIdx))) {
         clonedRegimens[regimenIdx].isValid = false;
         isFormValid = false;
-        clonedRegimens[regimenIdx].errorMessage = !regimenName ? FIELD_REQUIRED_ERROR_MESSAGE : REGIMEN_NAME_ERROR_MESSAGE;
+        clonedRegimens[regimenIdx].errorMessage = !regimenName ? FIELD_REQUIRED_ERROR_MESSAGE : UNIQUE_REGIMEN_NAME_ERROR_MESSAGE;
       }
 
       drugs.forEach((drug, drugIdx) => {
