@@ -16,7 +16,7 @@ import { extractEventValue } from '../../shared/util/form-util';
 import { DEFAULT_DRUG_CONFIGURATION, DELETE_DRUG_MODAL, DOSE, DRUGS, DRUG_DETAILS } from '../../shared/constants/manage-regimens';
 import { EMPTY_STRING } from '../../shared/constants/input';
 
-interface IDrugProps extends StateProps, DispatchProps {
+export interface IDrugProps extends StateProps, DispatchProps {
   intl: IntlShape;
   drugsList: IDrugListItem[];
   frequencies: IFrequency[];
@@ -27,9 +27,8 @@ interface IDrugProps extends StateProps, DispatchProps {
   drugIdx: number;
 }
 
-const Drug = ({
+export const Drug = ({
   intl,
-  intl: { formatMessage },
   drugsList,
   frequencies,
   conceptDoseTypes,
@@ -44,6 +43,7 @@ const Drug = ({
   setConfirmationModal,
   setDrugToDelete
 }: IDrugProps) => {
+  const { formatMessage } = intl;
   const getOptions = useMemo(
     () => (options: { display: string; uuid: string }[] = []) => options.map(option => ({ label: option?.display, value: option?.uuid })),
     []
@@ -84,7 +84,7 @@ const Drug = ({
 
   return (
     <div key={`${regimenUuid}-${drugIdx}`} className="manage-regimen-row">
-      <div className="input-container flex-2">
+      <div className="input-container flex-2" data-testid="drugNameSelect">
         <SelectWithPlaceholder
           placeholder={formatMessage({ id: 'manageRegimens.drugName' })}
           showPlaceholder={!!getValue(drugDetails)}
@@ -94,7 +94,6 @@ const Drug = ({
           wrapperClassName={cx({ invalid: !drugDetails.isValid })}
           classNamePrefix="default-select"
           theme={selectDefaultTheme}
-          data-testid="drugNameSelect"
         />
         {!drugDetails.isValid && <ValidationError message="common.error.required" />}
       </div>
@@ -107,7 +106,7 @@ const Drug = ({
           data-testid="abbreviationInput"
         />
       </div>
-      <div className="input-container">
+      <div className="input-container" data-testid="doseUnitsSelect">
         <SelectWithPlaceholder
           placeholder={formatMessage({ id: 'manageRegimens.doseUnitType' })}
           showPlaceholder={!!getValue(doseUnits)}
@@ -117,7 +116,6 @@ const Drug = ({
           wrapperClassName={cx({ invalid: !doseUnits.isValid })}
           classNamePrefix="default-select"
           theme={selectDefaultTheme}
-          data-testid="doseUnitsSelect"
         />
         {!doseUnits.isValid && <ValidationError message="common.error.required" />}
       </div>
@@ -135,7 +133,7 @@ const Drug = ({
         />
         {!Number(dose) && <ValidationError message="common.error.required" />}
       </div>
-      <div className="input-container">
+      <div className="input-container" data-testid="frequencySelect">
         <SelectWithPlaceholder
           placeholder={formatMessage({ id: 'manageRegimens.frequency' })}
           showPlaceholder={!!getValue(drugFrequency)}
@@ -145,7 +143,6 @@ const Drug = ({
           wrapperClassName={cx({ invalid: !drugFrequency.isValid })}
           classNamePrefix="default-select"
           theme={selectDefaultTheme}
-          data-testid="frequencySelect"
         />
         {!drugFrequency.isValid && <ValidationError message="common.error.required" />}
       </div>
