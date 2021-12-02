@@ -22,7 +22,9 @@ import {
   CONCEPT_CUSTOM_V,
   REGIMEN_TO_SAVE_DESCRIPTION,
   RETURN_LOCATION,
-  OPERATOR_ALL
+  OPERATOR_ALL,
+  FIELD_REQUIRED_ERROR_MESSAGE,
+  UNIQUE_REGIMEN_NAME_ERROR_MESSAGE
 } from '../../shared/constants/manage-regimens';
 import { getSettings } from '../../redux/reducers/setttings';
 import {
@@ -48,6 +50,7 @@ import { IConceptState } from '../../shared/models/concept';
 import { IDrugsState } from '../../shared/models/drugs';
 import { IOrderFrequencyState } from '../../shared/models/order-frequency';
 import { IOrderTypeState } from '../../shared/models/order-type';
+import { EMPTY_STRING } from '../../shared/constants/input';
 
 interface IStore {
   manageRegimens: IManageRegimensState;
@@ -169,6 +172,14 @@ export const ManageRegimens = ({
     savedOrderSet && onReturn();
   }, [savedOrderSet, onReturn]);
 
+  const isRegimenNameUnique = useCallback(
+    (regimenNameReceived, regimenIdxReceived, regimensReceived = regimens) =>
+      regimensReceived.every(({ regimenName }, regimenIdx) =>
+        regimenIdx !== regimenIdxReceived ? regimenName !== regimenNameReceived : true
+      ),
+    [regimens]
+  );
+
   const onRemoveRegimenHandler = useCallback(
     ({ regimenUuid, regimenIdx }: IRegimenToDelete) => {
       const clonedRegimens = cloneDeep(regimens);
@@ -178,6 +189,15 @@ export const ManageRegimens = ({
         clonedRegimens.push(DEFAULT_MANAGE_REGIMEN_CONFIGURATION);
       }
 
+      clonedRegimens.forEach(({ regimenName: clonedRegimenName }, clonedRegimenIdx) => {
+        const otherRegimens = regimens.filter(({ uuid }, idx) => (regimenUuid ? uuid !== regimenUuid : idx !== regimenIdx));
+
+        if (isRegimenNameUnique(clonedRegimenName, clonedRegimenIdx, otherRegimens)) {
+          clonedRegimens[clonedRegimenIdx].isValid = true;
+          clonedRegimens[clonedRegimenIdx].errorMessage = EMPTY_STRING;
+        }
+      });
+
       setRegimens(clonedRegimens);
 
       if (regimenUuid) {
@@ -185,7 +205,7 @@ export const ManageRegimens = ({
         deleteOrderSet(regimenUuid);
       }
     },
-    [regimens, setRegimens, setEditedRegimens, editedRegimens, deleteOrderSet]
+    [regimens, setRegimens, isRegimenNameUnique, setEditedRegimens, editedRegimens, deleteOrderSet]
   );
 
   const onRemoveDrugHandler = useCallback(
@@ -215,10 +235,15 @@ export const ManageRegimens = ({
     let isFormValid = true;
 
     clonedRegimens.forEach((regimen, regimenIdx) => {
-      const { regimenName, drugs } = regimen;
+      const { regimenName, drugs, isValid } = regimen;
 
-      if (!regimenName) {
+      clonedRegimens[regimenIdx].errorMessage = EMPTY_STRING;
+      clonedRegimens[regimenIdx].isValid = true;
+
+      if (!regimenName || (!isValid && !isRegimenNameUnique(regimenName, regimenIdx))) {
         clonedRegimens[regimenIdx].isValid = false;
+        isFormValid = false;
+        clonedRegimens[regimenIdx].errorMessage = !regimenName ? FIELD_REQUIRED_ERROR_MESSAGE : UNIQUE_REGIMEN_NAME_ERROR_MESSAGE;
       }
 
       drugs.forEach((drug, drugIdx) => {
@@ -247,7 +272,7 @@ export const ManageRegimens = ({
 
     setRegimens(clonedRegimens);
     return isFormValid;
-  }, [regimens, setRegimens]);
+  }, [isRegimenNameUnique, regimens, setRegimens]);
 
   const onSave = useCallback(() => {
     const isFormValid = validateEmptyFields();
@@ -408,7 +433,7 @@ const mapStateToProps = ({
     orderSet,
     drugsList,
     success,
-    drugOrderType: orderTypes.find(({ javaClassName = '' }) => javaClassName === DRUG_ORDER_TYPE_JAVA_CLASS_NAME),
+    drugOrderType: orderTypes.find(({ javaClassName = EMPTY_STRING }) => javaClassName === DRUG_ORDER_TYPE_JAVA_CLASS_NAME),
     regimens,
     editedRegimens,
     regimenToDelete,

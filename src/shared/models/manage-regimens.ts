@@ -20,6 +20,7 @@ export interface IRegimen {
   uuid: string;
   isValid: boolean;
   drugs: IDrug[];
+  errorMessage?: string;
 }
 export interface IManageRegimensState {
   regimens: IRegimen[];
