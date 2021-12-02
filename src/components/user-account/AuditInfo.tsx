@@ -5,7 +5,7 @@ import moment from 'moment';
 import { IAudit } from '../../shared/models/user-account';
 import { DEFAULT_AUDIT_DATE_FORMAT } from '../../shared/constants/user-account';
 
-interface IAuditInfo {
+export interface IAuditInfo {
   intl: IntlShape;
   audit: IAudit;
 }
@@ -18,7 +18,7 @@ const AuditInfo = ({ intl, audit }: IAuditInfo) => {
       <Label className="mb-5">
         <FormattedMessage id="userAccount.auditInfo.title" tagName="span" />
       </Label>
-      <p className="pb-3">
+      <p className="pb-3" data-testid="userAccountCreatedBy">
         {intl.formatMessage(
           { id: 'userAccount.auditInfo.created' },
           {
@@ -27,7 +27,7 @@ const AuditInfo = ({ intl, audit }: IAuditInfo) => {
           }
         )}
       </p>
-      <p className="pb-3">
+      <p className="pb-3" data-testid="userAccountChangedBy">
         {intl.formatMessage(
           { id: 'userAccount.auditInfo.changedBy' },
           {

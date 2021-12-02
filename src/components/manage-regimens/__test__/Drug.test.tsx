@@ -3,7 +3,7 @@ import en from '../../../lang/en.json';
 import flatten from 'flat';
 import userEvent from '@testing-library/user-event';
 import { drugProps, invalidEmptyDrugProps } from '../../../mocks/Drug';
-import { render, screen, waitForElement } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
 import { Drug } from '../Drug';
 import '@testing-library/jest-dom';
