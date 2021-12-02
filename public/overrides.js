@@ -127,13 +127,13 @@ jqr &&
     if (this.URL.includes('accounts/manageAccounts.page')) {
       const addNewUserAccount = document.querySelector('#content > a.button');
       const editUsersAccount = document.querySelectorAll('#list-accounts .icon-pencil.edit-action');
-      const overrideEditUserAccountLinks = editUserAccoutLink =>
-        editUserAccoutLink.forEach(editUserAccout => {
-          const currentLocationHref = editUserAccout.getAttribute('onclick');
+      const overrideEditUserAccountLinks = editUserAccoutLinks =>
+        editUserAccoutLinks.forEach(editUserAccoutLink => {
+          const currentLocationHref = editUserAccoutLink.getAttribute('onclick');
           const personIdPosition = currentLocationHref.indexOf('personId=');
-          const newLocationHref = currentLocationHref.slice(personIdPosition, currentLocationHref.length - 2);
+          const personId = currentLocationHref.slice(personIdPosition, currentLocationHref.length - 2);
 
-          editUserAccout.onclick = () => (document.location.href = `${CFL_UI_BASE}index.html#/user-account?${newLocationHref}`);
+          editUserAccoutLink.onclick = () => (document.location.href = `${CFL_UI_BASE}index.html#/user-account?${personId}`);
         });
 
       if (addNewUserAccount) {
