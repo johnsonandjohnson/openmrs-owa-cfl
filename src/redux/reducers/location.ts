@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ILocation, ILocationAttributeType, ILocationListItem } from '../../shared/models/location';
+import { ILocation, ILocationState } from '../../shared/models/location';
 import { FAILURE, REQUEST, SUCCESS } from '../action-type.util';
 import { AnyAction } from 'redux';
 
@@ -9,17 +9,6 @@ export const ACTION_TYPES = {
   GET_LOCATION_ATTRIBUTE_TYPES: 'location/GET_LOCATION_ATTRIBUTE_TYPES',
   POST_LOCATION: 'location/POST_LOCATION'
 };
-
-export interface ILocationState {
-  loadingLocations: boolean;
-  locations: Array<ILocationListItem>;
-  errorMessage: string;
-  locationAttributeTypes: Array<ILocationAttributeType>;
-  loadingLocationAttributeTypes: boolean;
-  success: boolean;
-  loadingLocation: boolean;
-  location: ILocation;
-}
 
 const initialState: ILocationState = {
   loadingLocations: false,

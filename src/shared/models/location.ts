@@ -35,3 +35,14 @@ export interface ILocationListItem {
   uuid: string;
   display: string;
 }
+
+export interface ILocationState {
+  loadingLocations: boolean;
+  locations: Array<ILocationListItem>;
+  errorMessage: string;
+  locationAttributeTypes: Array<ILocationAttributeType>;
+  loadingLocationAttributeTypes: boolean;
+  success: boolean;
+  loadingLocation: boolean;
+  location: ILocation;
+}
