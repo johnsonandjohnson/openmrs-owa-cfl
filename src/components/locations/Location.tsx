@@ -8,18 +8,44 @@ import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { ROOT_URL } from '../../shared/constants/openmrs';
 import { InputWithPlaceholder, RadioButtonsWithPlaceholder, SelectWithPlaceholder } from '../common/form/withPlaceholder';
 import { extractEventValue, selectDefaultTheme } from '../../shared/util/form-util';
-import { getLocationAttributeTypes, searchLocations, saveLocation, ILocationState, getLocation } from '../../redux/reducers/location';
-import { chunk } from 'lodash';
-import { ILocation, ILocationAttributeType } from '../../shared/models/location';
+import { getLocationAttributeTypes, searchLocations, saveLocation, getLocation } from '../../redux/reducers/location';
+import { chunk, cloneDeep, uniq } from 'lodash';
+import { ILocation, ILocationAttributeType, ILocationListItem } from '../../shared/models/location';
 import { STRING_FALSE, STRING_TRUE } from '../../shared/constants/input';
 import { TextareaWithPlaceholder } from '../common/textarea/Textarea';
 import ValidationError from '../common/form/ValidationError';
 import { scrollToTop } from '../../shared/util/window-util';
 import cx from 'classnames';
-import _ from 'lodash';
+import { getSettingByQuery } from '../../redux/reducers/setttings';
+import {
+  BOOLEAN_RADIOS_PREFERRED_HANDLER,
+  COLUMNS,
+  DEFAULT_LOCATION,
+  DROPDOWN_HANDLER_CONFIG_SEPARATOR,
+  DROPDOWN_PREFERRED_HANDLER,
+  LOCATION_DEFAULT_TAG_LIST_SETTING_KEY,
+  TEXTAREA_PREFERRED_HANDLER
+} from '../../shared/constants/location';
 
 export interface ILocationProps extends StateProps, DispatchProps, RouteComponentProps {
   intl: IntlShape;
+}
+
+interface IStore {
+  location: {
+    loadingLocations: boolean;
+    locations: Array<ILocationListItem>;
+    errorMessage: string;
+    locationAttributeTypes: Array<ILocationAttributeType>;
+    loadingLocationAttributeTypes: boolean;
+    success: boolean;
+    loadingLocation: boolean;
+    location: ILocation;
+  };
+  settings: {
+    loading: boolean;
+    setting: { value: string } | null;
+  };
 }
 
 interface IUrlParams {
@@ -30,24 +56,6 @@ interface IOption {
   label: string;
   value: string;
 }
-
-const DEFAULT_LOCATION: ILocation = {
-  name: '',
-  description: '',
-  address1: '',
-  address2: '',
-  cityVillage: '',
-  stateProvince: '',
-  country: '',
-  postalCode: '',
-  tags: [],
-  attributes: []
-};
-const COLUMNS = 2;
-const DROPDOWN_HANDLER_CONFIG_SEPARATOR = ',';
-const BOOLEAN_RADIOS_PREFERRED_HANDLER = 'org.openmrs.web.attribute.handler.BooleanFieldGenDatatypeHandler';
-const DROPDOWN_PREFERRED_HANDLER = 'org.openmrs.web.attribute.handler.SpecifiedTextOptionsDropdownHandler';
-const TEXTAREA_PREFERRED_HANDLER = 'org.openmrs.web.attribute.handler.LongFreeTextTextareaHandler';
 
 export const Location = (props: ILocationProps) => {
   const [location, setLocation] = useState(DEFAULT_LOCATION);
@@ -60,6 +68,7 @@ export const Location = (props: ILocationProps) => {
   useEffect(() => {
     props.getLocationAttributeTypes();
     props.searchLocations();
+    props.getSettingByQuery(LOCATION_DEFAULT_TAG_LIST_SETTING_KEY);
     if (locationId) {
       props.getLocation(locationId);
     }
@@ -77,14 +86,25 @@ export const Location = (props: ILocationProps) => {
   };
 
   const onSave = () => {
-    if (isLocationNameEmpty || isLocationNameDuplicated || isCountryEmpty) {
+    const requiredLocationAttributeTypes = props.locationAttributeTypes.filter(
+      locationAttributeType => locationAttributeType.minOccurs === 1
+    );
+    const allRequiredLocationAttributeTypesFilled = requiredLocationAttributeTypes.every(({ uuid: requiredLocationAttributeTypeUuid }) =>
+      location.attributes.find(({ attributeType, value }) => requiredLocationAttributeTypeUuid === attributeType.uuid && value)
+    );
+
+    if (isLocationNameEmpty || isLocationNameDuplicated || isCountryEmpty || !allRequiredLocationAttributeTypesFilled) {
       setShowValidationErrors(true);
       scrollToTop();
     } else {
-      const preparedLocation = _.cloneDeep(location) as ILocation;
+      const preparedLocation = cloneDeep(location) as ILocation;
+      const locationDefaultTags = props.settingValue ? JSON.parse(props.settingValue) : [];
+
       preparedLocation.attributes = preparedLocation.attributes
         .filter(attribute => attribute.value !== '')
         .map(({ attributeType, value }) => ({ attributeType, value }));
+      preparedLocation.tags = uniq([...preparedLocation.tags, ...locationDefaultTags]);
+
       props.saveLocation(preparedLocation);
     }
   };
@@ -126,6 +146,8 @@ export const Location = (props: ILocationProps) => {
     const key = `locationAttribute${locationAttributeType.uuid}`;
     const placeholder = locationAttributeType.name;
     const value = location.attributes.find(attribute => locationAttributeType.uuid === attribute.attributeType.uuid)?.value;
+    const isRequired = locationAttributeType.minOccurs === 1;
+    const isInvalid = isRequired && !value;
     const onChange = onAttributeValueChange(locationAttributeType.uuid);
 
     switch (locationAttributeType.preferredHandlerClassname) {
@@ -134,17 +156,20 @@ export const Location = (props: ILocationProps) => {
           .split(DROPDOWN_HANDLER_CONFIG_SEPARATOR)
           .map(value => ({ label: value, value }));
         return (
-          <SelectWithPlaceholder
-            key={key}
-            placeholder={placeholder}
-            showPlaceholder={!!value}
-            value={options.find(option => option.value === value)}
-            onChange={(option: IOption) => onChange(option.value)}
-            options={options}
-            wrapperClassName="flex-1"
-            classNamePrefix="default-select"
-            theme={selectDefaultTheme}
-          />
+          <div className="input-container">
+            <SelectWithPlaceholder
+              key={key}
+              placeholder={placeholder}
+              showPlaceholder={!!value}
+              value={options.find(option => option.value === value)}
+              onChange={(option: IOption) => onChange(option.value)}
+              options={options}
+              wrapperClassName={cx('flex-1', { invalid: showValidationErrors && isInvalid })}
+              classNamePrefix="default-select"
+              theme={selectDefaultTheme}
+            />
+            {showValidationErrors && isInvalid && <ValidationError message="common.error.required" />}
+          </div>
         );
       case BOOLEAN_RADIOS_PREFERRED_HANDLER:
         return (
@@ -163,17 +188,33 @@ export const Location = (props: ILocationProps) => {
         );
       case TEXTAREA_PREFERRED_HANDLER:
         return (
-          <TextareaWithPlaceholder
-            key={key}
-            placeholder={placeholder}
-            showPlaceholder={!!value}
-            value={value}
-            onChange={onChange}
-            isResizable
-          />
+          <div className="input-container">
+            <TextareaWithPlaceholder
+              key={key}
+              className={cx(showValidationErrors && isInvalid)}
+              placeholder={placeholder}
+              showPlaceholder={!!value}
+              value={value}
+              onChange={onChange}
+              isResizable
+            />
+            {showValidationErrors && isInvalid && <ValidationError message="common.error.required" />}
+          </div>
         );
       default:
-        return <InputWithPlaceholder key={key} placeholder={placeholder} showPlaceholder={!!value} value={value} onChange={onChange} />;
+        return (
+          <div className="input-container">
+            <InputWithPlaceholder
+              key={key}
+              className={cx({ invalid: showValidationErrors && isInvalid })}
+              placeholder={placeholder}
+              showPlaceholder={!!value}
+              value={value}
+              onChange={onChange}
+            />
+            {showValidationErrors && isInvalid && <ValidationError message="common.error.required" />}
+          </div>
+        );
     }
   };
 
@@ -183,7 +224,7 @@ export const Location = (props: ILocationProps) => {
         <FormattedMessage id={`locations.location.${locationId ? 'edit' : 'create'}.title`} />
       </h2>
       <div className="inner-content">
-        {props.loadingLocationAttributeTypes || props.loadingLocation ? (
+        {props.isLocationLoading ? (
           <div className="spinner">
             <Spinner />
           </div>
@@ -300,19 +341,19 @@ export const Location = (props: ILocationProps) => {
   );
 };
 
-const mapStateToProps = state => {
-  const location: ILocationState = state.location;
-  return {
-    loadingLocationAttributeTypes: location.loadingLocationAttributeTypes,
-    locationAttributeTypes: location.locationAttributeTypes.filter(locationAttributeType => !locationAttributeType.retired),
-    locations: location.locations,
-    success: location.success,
-    loadingLocation: location.loadingLocation,
-    editedLocation: location.location
-  };
-};
+const mapStateToProps = ({
+  location: { loadingLocationAttributeTypes, locationAttributeTypes, locations, success, loadingLocation, location: editedLocation },
+  settings: { loading: settingLoading, setting }
+}: IStore) => ({
+  isLocationLoading: [loadingLocationAttributeTypes, loadingLocation, settingLoading].some(value => value),
+  locationAttributeTypes: locationAttributeTypes.filter(locationAttributeType => !locationAttributeType.retired),
+  locations,
+  success,
+  editedLocation,
+  settingValue: setting?.value
+});
 
-const mapDispatchToProps = { getLocationAttributeTypes, searchLocations, saveLocation, getLocation };
+const mapDispatchToProps = { getLocationAttributeTypes, searchLocations, saveLocation, getLocation, getSettingByQuery };
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
