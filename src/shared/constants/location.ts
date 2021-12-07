@@ -1,5 +1,6 @@
 import { ILocation } from '../models/location';
 
+export const REQUIRED_OCCURRENCE = 1;
 export const COLUMNS = 2;
 export const DROPDOWN_HANDLER_CONFIG_SEPARATOR = ',';
 export const BOOLEAN_RADIOS_PREFERRED_HANDLER = 'org.openmrs.web.attribute.handler.BooleanFieldGenDatatypeHandler';

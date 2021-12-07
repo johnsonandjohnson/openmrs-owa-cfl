@@ -24,7 +24,8 @@ import {
   DROPDOWN_HANDLER_CONFIG_SEPARATOR,
   DROPDOWN_PREFERRED_HANDLER,
   LOCATION_DEFAULT_TAG_LIST_SETTING_KEY,
-  TEXTAREA_PREFERRED_HANDLER
+  TEXTAREA_PREFERRED_HANDLER,
+  REQUIRED_OCCURRENCE
 } from '../../shared/constants/location';
 
 export interface ILocationProps extends StateProps, DispatchProps, RouteComponentProps {
@@ -87,7 +88,7 @@ export const Location = (props: ILocationProps) => {
 
   const onSave = () => {
     const requiredLocationAttributeTypes = props.locationAttributeTypes.filter(
-      locationAttributeType => locationAttributeType.minOccurs === 1
+      locationAttributeType => locationAttributeType.minOccurs === REQUIRED_OCCURRENCE
     );
     const isAllRequiredLocationAttributeTypesFilled = requiredLocationAttributeTypes.every(({ uuid: requiredLocationAttributeTypeUuid }) =>
       location.attributes.find(({ attributeType, value }) => requiredLocationAttributeTypeUuid === attributeType.uuid && value)
@@ -146,7 +147,7 @@ export const Location = (props: ILocationProps) => {
     const key = `locationAttribute${locationAttributeType.uuid}`;
     const placeholder = locationAttributeType.name;
     const value = location.attributes.find(attribute => locationAttributeType.uuid === attribute.attributeType.uuid)?.value;
-    const isRequired = locationAttributeType.minOccurs === 1;
+    const isRequired = locationAttributeType.minOccurs === REQUIRED_OCCURRENCE;
     const isInvalid = isRequired && !value;
     const onChange = onAttributeValueChange(locationAttributeType.uuid);
 
@@ -345,7 +346,7 @@ const mapStateToProps = ({
   location: { loadingLocationAttributeTypes, locationAttributeTypes, locations, success, loadingLocation, location: editedLocation },
   settings: { loading: settingLoading, setting }
 }: IStore) => ({
-  isLocationLoading: [loadingLocationAttributeTypes, loadingLocation, settingLoading].some(value => value),
+  isLocationLoading: loadingLocationAttributeTypes || loadingLocation || settingLoading,
   locationAttributeTypes: locationAttributeTypes.filter(locationAttributeType => !locationAttributeType.retired),
   locations,
   success,
