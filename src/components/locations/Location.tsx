@@ -89,11 +89,11 @@ export const Location = (props: ILocationProps) => {
     const requiredLocationAttributeTypes = props.locationAttributeTypes.filter(
       locationAttributeType => locationAttributeType.minOccurs === 1
     );
-    const allRequiredLocationAttributeTypesFilled = requiredLocationAttributeTypes.every(({ uuid: requiredLocationAttributeTypeUuid }) =>
+    const isAllRequiredLocationAttributeTypesFilled = requiredLocationAttributeTypes.every(({ uuid: requiredLocationAttributeTypeUuid }) =>
       location.attributes.find(({ attributeType, value }) => requiredLocationAttributeTypeUuid === attributeType.uuid && value)
     );
 
-    if (isLocationNameEmpty || isLocationNameDuplicated || isCountryEmpty || !allRequiredLocationAttributeTypesFilled) {
+    if (isLocationNameEmpty || isLocationNameDuplicated || isCountryEmpty || !isAllRequiredLocationAttributeTypesFilled) {
       setShowValidationErrors(true);
       scrollToTop();
     } else {
