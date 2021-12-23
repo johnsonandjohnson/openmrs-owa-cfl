@@ -9,7 +9,7 @@ import { getConcept } from '../../../redux/reducers/concept';
 import { getSettingByQuery } from '../../../redux/reducers/setttings';
 import { getCommonInputProps, getPlaceholder } from '../../../shared/util/patient-form-util';
 import { IConceptState } from '../../../shared/models/concept';
-import { CONCEPT_CUSTOM_V } from '../../../shared/constants/manage-regimens';
+import { CONCEPT_CUSTOM_REPRESENTATION } from '../../../shared/constants/manage-regimens';
 
 export interface ISelectProps extends StateProps, DispatchProps, IFieldProps {
   intl: IntlShape;
@@ -48,7 +48,7 @@ export const Select = (props: ISelectProps) => {
 
   useEffect(() => {
     if (isConceptOptionSource) {
-      getConcept(optionUuid, CONCEPT_CUSTOM_V);
+      getConcept(optionUuid, CONCEPT_CUSTOM_REPRESENTATION);
     } else if (isGlobalPropertyOptionSource) {
       getSettingByQuery(optionUuid);
     }
