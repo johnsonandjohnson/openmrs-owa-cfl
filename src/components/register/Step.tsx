@@ -27,7 +27,6 @@ export interface IStepProps extends StateProps, DispatchProps {
   setStep: any;
   stepNumber: number;
   patientIdentifierTypes: IPatientIdentifierType[];
-  regimens: string[];
 }
 
 export interface IStepState {
@@ -72,17 +71,14 @@ export class Step extends React.Component<IStepProps, IStepState> {
   };
 
   getOptions = field => {
-    const { optionSource = EMPTY_STRING } = field;
+    const { optionSource = EMPTY_STRING, options = [] } = field;
     const { locations } = this.props;
-    let { options = [] } = field;
 
     if (optionSource === LOCATIONS_OPTION_SOURCE && locations) {
       return locations.map(l => ({
         value: l.uuid,
         label: l.display
       }));
-    } else if (this.props[optionSource]?.length) {
-      options = this.props[optionSource];
     }
 
     return options;

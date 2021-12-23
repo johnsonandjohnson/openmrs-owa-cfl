@@ -27,8 +27,6 @@ import Confirm from './Confirm';
 import queryString from 'query-string';
 import { redirectUrl } from '../../shared/util/url-util';
 import { PATIENT_PAGE_URL } from '../../shared/constants/openmrs';
-import { SETTING_KEY as VMP_CONFIG_SETTING_KEY } from '../../shared/constants/vmp-config';
-import { getSettingByQuery } from '../../redux/reducers/setttings';
 
 export interface IRegistrationProps extends StateProps, DispatchProps, RouteComponentProps<{ id?: string }> {
   intl: any;
@@ -57,7 +55,6 @@ class RegistrationForm extends React.Component<IRegistrationProps, IRegistration
 
   componentDidMount() {
     this.props.getPatientIdentifierTypes();
-    this.props.getSettingByQuery(VMP_CONFIG_SETTING_KEY);
 
     if (this.isEdit()) {
       this.props.getPersonRelationships(this.props.match.params.id);
@@ -164,43 +161,33 @@ class RegistrationForm extends React.Component<IRegistrationProps, IRegistration
     );
   };
 
-  stepForm = () => {
-    let regimenOptions = [];
-
-    if (this.props.settings?.setting?.value) {
-      const { vaccine: regimens } = JSON.parse(this.props.settings.setting.value);
-      regimenOptions = regimens.map(regimen => regimen['name']);
-    }
-
-    return (
-      <Form className="h-100 w-100">
-        {_.map(this.steps(), (stepDefinition, i) => (
-          <div className={`step-content ${i === this.state.step ? '' : 'd-none'}`} key={`step-${i}`}>
-            <Step
-              patient={this.state.patient}
-              onPatientChange={this.onPatientChange}
-              stepButtons={this.stepButtons(i)}
-              stepDefinition={stepDefinition}
-              patientIdentifierTypes={this.props.patientIdentifierTypes}
-              setValidity={this.setValidity(i)}
-              setStep={this.setStep}
-              stepNumber={i}
-              regimens={regimenOptions}
-            />
-          </div>
-        ))}
-        <div className={`step-content ${this.steps().length === this.state.step ? '' : 'd-none'}`} key={`step-${this.steps().length}`}>
-          <Confirm
+  stepForm = () => (
+    <Form className="h-100 w-100">
+      {_.map(this.steps(), (stepDefinition, i) => (
+        <div className={`step-content ${i === this.state.step ? '' : 'd-none'}`} key={`step-${i}`}>
+          <Step
             patient={this.state.patient}
             onPatientChange={this.onPatientChange}
-            stepButtons={this.stepButtons(this.steps().length)}
-            steps={this.steps()}
-            isCaregiver={this.props.isCaregiver}
+            stepButtons={this.stepButtons(i)}
+            stepDefinition={stepDefinition}
+            patientIdentifierTypes={this.props.patientIdentifierTypes}
+            setValidity={this.setValidity(i)}
+            setStep={this.setStep}
+            stepNumber={i}
           />
         </div>
-      </Form>
-    );
-  };
+      ))}
+      <div className={`step-content ${this.steps().length === this.state.step ? '' : 'd-none'}`} key={`step-${this.steps().length}`}>
+        <Confirm
+          patient={this.state.patient}
+          onPatientChange={this.onPatientChange}
+          stepButtons={this.stepButtons(this.steps().length)}
+          steps={this.steps()}
+          isCaregiver={this.props.isCaregiver}
+        />
+      </div>
+    </Form>
+  );
 
   onNextClick = isValid => e => {
     if (isValid) {
@@ -322,7 +309,7 @@ class RegistrationForm extends React.Component<IRegistrationProps, IRegistration
   }
 }
 
-const mapStateToProps = ({ registration, cflPatient, cflPerson, apps, settings }) => ({
+const mapStateToProps = ({ registration, cflPatient, cflPerson, apps }) => ({
   loading: registration.loading,
   success: registration.success,
   message: registration.message,
@@ -333,8 +320,7 @@ const mapStateToProps = ({ registration, cflPatient, cflPerson, apps, settings }
   personRelationships: cflPerson.personRelationships,
   patientSteps: apps.patientRegistrationSteps || defaultSteps,
   caregiverSteps: apps.caregiverRegistrationSteps || caregiverDefaultSteps,
-  settingsLoading: apps.loading || registration.loading,
-  settings
+  settingsLoading: apps.loading || registration.loading
 });
 
 const mapDispatchToProps = {
@@ -346,8 +332,7 @@ const mapDispatchToProps = {
   editPerson,
   updateRelationships,
   getPersonRelationships,
-  getPatientIdentifierTypes,
-  getSettingByQuery
+  getPatientIdentifierTypes
 };
 
 type StateProps = ReturnType<typeof mapStateToProps>;
