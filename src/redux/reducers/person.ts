@@ -82,10 +82,10 @@ export const search = (q, page = 0, limit = DEFAULT_PAGE_SIZE) => {
   };
 };
 
-const PERSON_CUSTOM_V = `personId,gender,age,birthdate,birthdateEstimated,preferredAddress,preferredName,attributes,uuid`;
+const PERSON_CUSTOM_REPRESENTATION = `personId,gender,age,birthdate,birthdateEstimated,preferredAddress,preferredName,attributes,uuid`;
 
 export const getPerson = id => {
-  const requestUrl = `/openmrs/ws/rest/v1/person/${id}?v=custom:(${PERSON_CUSTOM_V})`;
+  const requestUrl = `/openmrs/ws/rest/v1/person/${id}?v=custom:(${PERSON_CUSTOM_REPRESENTATION})`;
   return {
     type: ACTION_TYPES.GET_PERSON,
     payload: axios.get(requestUrl)

@@ -15,11 +15,11 @@ import {
   DELETE_DRUG_MODAL,
   CLOSED_MODAL_CONFIGURATION,
   DRUG_ORDER_TYPE_JAVA_CLASS_NAME,
-  ORDER_TYPE_CUSTOM_V,
-  ORDER_SET_CUSTOM_V,
-  ORDER_FREQUENCY_CUSTOM_V,
-  DRUGS_LIST_CUSTOM_V,
-  CONCEPT_CUSTOM_V,
+  ORDER_TYPE_CUSTOM_REPRESENTATION,
+  ORDER_SET_CUSTOM_REPRESENTATION,
+  ORDER_FREQUENCY_CUSTOM_REPRESENTATION,
+  DRUGS_LIST_CUSTOM_REPRESENTATION,
+  CONCEPT_CUSTOM_REPRESENTATION,
   REGIMEN_TO_SAVE_DESCRIPTION,
   RETURN_LOCATION,
   OPERATOR_ALL,
@@ -146,14 +146,14 @@ export const ManageRegimens = ({
 
   useEffect(() => {
     getSettings(DRUG_DOSING_UNITS_SETTING_KEY);
-    getOrderSet(ORDER_SET_CUSTOM_V);
-    getOrderType(ORDER_TYPE_CUSTOM_V);
-    getDrugsList(DRUGS_LIST_CUSTOM_V);
-    getFrequencies(ORDER_FREQUENCY_CUSTOM_V);
+    getOrderSet(ORDER_SET_CUSTOM_REPRESENTATION);
+    getOrderType(ORDER_TYPE_CUSTOM_REPRESENTATION);
+    getDrugsList(DRUGS_LIST_CUSTOM_REPRESENTATION);
+    getFrequencies(ORDER_FREQUENCY_CUSTOM_REPRESENTATION);
   }, [getDrugsList, getFrequencies, getOrderSet, getOrderType, getSettings]);
 
   useEffect(() => {
-    !settingsLoading && drugDosingUnitsConcept?.value && getConcept(drugDosingUnitsConcept.value, CONCEPT_CUSTOM_V);
+    !settingsLoading && drugDosingUnitsConcept?.value && getConcept(drugDosingUnitsConcept.value, CONCEPT_CUSTOM_REPRESENTATION);
   }, [settingsLoading, drugDosingUnitsConcept?.value, getConcept]);
 
   useEffect(() => {

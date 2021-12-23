@@ -96,10 +96,10 @@ export const search = (q, page = 0, limit = DEFAULT_PAGE_SIZE) => {
   };
 };
 
-const PATIENT_CUSTOM_V = `patientId,uuid,identifiers,person:(gender,age,birthdate,birthdateEstimated,preferredAddress,preferredName,attributes),attributes:(value,attributeType:(name))`;
+const PATIENT_CUSTOM_REPRESENTATION = `patientId,uuid,identifiers,person:(gender,age,birthdate,birthdateEstimated,preferredAddress,preferredName,attributes),attributes:(value,attributeType:(name))`;
 
 export const getPatient = id => {
-  const requestUrl = `/openmrs/ws/rest/v1/patient/${id}?v=custom:(${PATIENT_CUSTOM_V})`;
+  const requestUrl = `/openmrs/ws/rest/v1/patient/${id}?v=custom:(${PATIENT_CUSTOM_REPRESENTATION})`;
   return {
     type: ACTION_TYPES.GET_PATIENT,
     payload: axios.get(requestUrl)
