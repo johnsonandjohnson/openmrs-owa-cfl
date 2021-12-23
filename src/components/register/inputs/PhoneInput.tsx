@@ -27,7 +27,7 @@ class Input extends React.Component<IInputProps, IFieldState> {
 
   render = () => {
     const { intl, field, isInvalid, isDirty, className, value, patient } = this.props;
-    const { name, required, label } = field;
+    const { name, required, label, defaultCountry = '' } = field;
     const inputValue = getPhoneNumberWithPlusSign(value || patient[field.name] || '');
     const placeholder = getPlaceholder(intl, label, name, required);
     const props = getCommonInputProps(this.props, placeholder);
@@ -38,6 +38,7 @@ class Input extends React.Component<IInputProps, IFieldState> {
       <div className={`${className} input-container`}>
         <PhoneInput
           {...props}
+          defaultCountry={defaultCountry}
           value={inputValue}
           onChange={phoneNumber => props.onChange(this.removePlusSign(phoneNumber))}
           ref={this.inputRef}
@@ -46,7 +47,7 @@ class Input extends React.Component<IInputProps, IFieldState> {
           className={null}
           data-testid={dataTestId}
         />
-        {inputValue.length > 0 && <span className="placeholder">{placeholder}</span>}
+        {(inputValue.length > 0 || defaultCountry) && <span className="placeholder">{placeholder}</span>}
         {((isDirty && isInvalid) || errorMessage) && (
           <ValidationError hasValue={inputValue.length > 0} message={errorMessage} field={field} />
         )}
