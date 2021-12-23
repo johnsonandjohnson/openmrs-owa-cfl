@@ -43,16 +43,16 @@ export const Select = (props: ISelectProps) => {
   const placeholder = getPlaceholder(intl, label, name, required);
   const commonProps = getCommonInputProps(props, placeholder);
   const dataTestId = props['data-testid'] || name;
-  const isConcept = optionSource === CONCEPT;
-  const isGlobalProperty = optionSource === GLOBAL_PROPERTY;
+  const isConceptOptionSource = optionSource === CONCEPT;
+  const isGlobalPropertyOptionSource = optionSource === GLOBAL_PROPERTY;
 
   useEffect(() => {
-    if (isConcept) {
+    if (isConceptOptionSource) {
       getConcept(optionUuid, CONCEPT_CUSTOM_V);
-    } else if (isGlobalProperty) {
+    } else if (isGlobalPropertyOptionSource) {
       getSettingByQuery(optionUuid);
     }
-  }, [getConcept, getSettingByQuery, isConcept, isGlobalProperty, optionSource, optionUuid]);
+  }, [getConcept, getSettingByQuery, isConceptOptionSource, isGlobalPropertyOptionSource, optionSource, optionUuid]);
 
   useEffect(() => {
     if (!patient[name] && defaultOption) {
@@ -63,12 +63,10 @@ export const Select = (props: ISelectProps) => {
   const getSelectOptions = () => {
     let opts = selectOptions || options;
 
-    if (isGlobalProperty && settings?.setting?.value) {
+    if (isGlobalPropertyOptionSource && settings?.setting?.value) {
       const configParsed = JSON.parse(settings.setting.value);
       opts = configParsed[optionKey].map(({ name }) => name);
-    }
-
-    if (isConcept && concept?.concept?.setMembers.length) {
+    } else if (isConceptOptionSource && concept?.concept?.setMembers.length) {
       opts = concept.concept.setMembers.map(({ display }) => display).sort();
     }
 
