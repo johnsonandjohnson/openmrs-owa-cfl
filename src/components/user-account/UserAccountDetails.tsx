@@ -16,7 +16,7 @@ import {
   USER_ROLE_FIELD
 } from '../../shared/constants/user-account';
 
-const UserAccountDetails = ({
+export const UserAccountDetails = ({
   intl: { formatMessage },
   onValueChange,
   dirtyFields,
@@ -41,7 +41,7 @@ const UserAccountDetails = ({
         <FormattedMessage id="userAccount.userAccountDetails.title" tagName="span" />
       </Label>
       <div className="details">
-        <div className="grid-1">
+        <div className="grid-1" data-testid="userAccountDetailsUserName">
           <InputWithPlaceholder
             placeholder={formatMessage({ id: `userAccount.userAccountDetails.${USERNAME_FIELD}` })}
             showPlaceholder={!!usernameValue}
@@ -52,7 +52,7 @@ const UserAccountDetails = ({
           />
           {!isUserNameValid && <ValidationError message={userNameError} />}
         </div>
-        <div className="grid-2">
+        <div className="grid-2" data-testid="userAccountDetailsLocation">
           <SelectWithPlaceholder
             placeholder={formatMessage({ id: `userAccount.userAccountDetails.${LOCATION_FIELD}` })}
             showPlaceholder={!!locationsValue.length}
@@ -67,7 +67,7 @@ const UserAccountDetails = ({
           />
           {!isLocationsValid && <ValidationError message={locationsError} />}
         </div>
-        <div className="grid-3">
+        <div className="grid-3" data-testid="userAccountDetailsUserRole">
           <SelectWithPlaceholder
             placeholder={formatMessage({ id: `userAccount.userAccountDetails.${USER_ROLE_FIELD}` })}
             showPlaceholder={!!userRoleValue?.value}
@@ -81,7 +81,7 @@ const UserAccountDetails = ({
           />
           {!isUserRoleValid && <ValidationError message={userRoleError} />}
         </div>
-        <div className="grid-4">
+        <div className="grid-4" data-testid="userAccountDetailsPassword">
           <InputWithPlaceholder
             className={cx({ invalid: !isPasswordValid })}
             placeholder={formatMessage({ id: `userAccount.userAccountDetails.${PASSWORD_FIELD}` })}
@@ -93,7 +93,7 @@ const UserAccountDetails = ({
           />
           {!isPasswordValid && <ValidationError message={passwordError} />}
         </div>
-        <div className="grid-5">
+        <div className="grid-5" data-testid="userAccountDetailsConfirmPassword">
           <InputWithPlaceholder
             className={cx({ invalid: !isConfirmPasswordValid })}
             placeholder={formatMessage({ id: `userAccount.userAccountDetails.${CONFIRM_PASSWORD_FIELD}` })}
@@ -106,8 +106,16 @@ const UserAccountDetails = ({
           {!isConfirmPasswordValid && <ValidationError message={confirmPasswordError} />}
         </div>
       </div>
-      <Label className={cx('force-password-change', { hide: isEdit && !dirtyFields.find(field => field === PASSWORD_FIELD) })}>
-        <Input type="checkbox" onClick={() => setForcePassword(!forcePassword)} checked={forcePassword} />
+      <Label
+        className={cx('force-password-change', { hide: isEdit && !dirtyFields.find(field => field === PASSWORD_FIELD) })}
+        data-testid="userAccountDetailsForcePasswordChangeLabel"
+      >
+        <Input
+          type="checkbox"
+          onClick={() => setForcePassword(!forcePassword)}
+          checked={forcePassword}
+          data-testid="userAccountDetailsForcePasswordChangeInput"
+        />
         <FormattedMessage id="userAccount.userAccountDetails.forcePasswordChange" tagName="span" />
       </Label>
     </>
