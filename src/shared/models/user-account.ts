@@ -7,8 +7,8 @@ export interface ISelectOption {
 }
 
 export interface IDetailsOption {
-  display: string;
-  uuid: string;
+  display?: string;
+  uuid?: string;
 }
 
 interface IValidationField {

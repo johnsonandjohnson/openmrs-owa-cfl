@@ -70,8 +70,8 @@ const UserAccountDetails = ({
         <div className="grid-3">
           <SelectWithPlaceholder
             placeholder={formatMessage({ id: `userAccount.userAccountDetails.${USER_ROLE_FIELD}` })}
-            showPlaceholder={!!userRoleValue}
-            value={userRoleValue}
+            showPlaceholder={!!userRoleValue?.value}
+            value={userRoleValue?.value ? userRoleValue : null}
             options={getOptions(roles)}
             onChange={onValueChange(USER_ROLE_FIELD)}
             wrapperClassName={cx({ invalid: !isUserRoleValid })}
