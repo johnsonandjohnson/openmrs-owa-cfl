@@ -48,7 +48,7 @@ interface IStore {
   location: { locations: IDetailsOption[] };
   user: { loading: boolean; users: IDetailsOption[]; currentUser: ICurrentUser; success: boolean };
   settings: { settings: [{ property: string; value: string }]; loading: boolean };
-  cflPerson: { person: { preferredName: { familyName: string; givenName: string }; attributes: IPersonAttribute[] } };
+  cflPerson: { person: { preferredName: { familyName: string; givenName: string }; attributes: IPersonAttribute[]; gender: string } };
 }
 
 interface ILocationProps extends StateProps, DispatchProps, RouteComponentProps {
@@ -253,7 +253,7 @@ const UserAccount = (props: ILocationProps) => {
             }
           ],
           person: {
-            gender: GENDER_OTHER,
+            gender: person?.gender || GENDER_OTHER,
             attributes: personAttributes,
             names: [
               {
