@@ -48,7 +48,7 @@ interface IStore {
   location: { locations: IDetailsOption[] };
   user: { loading: boolean; users: IDetailsOption[]; currentUser: ICurrentUser; success: boolean };
   settings: { settings: [{ property: string; value: string }]; loading: boolean };
-  cflPerson: { person: { preferredName: { familyName: string; givenName: string }; attributes: IPersonAttribute[] } };
+  cflPerson: { person: { preferredName: { familyName: string; givenName: string }; attributes: IPersonAttribute[]; gender: string } };
 }
 
 interface ILocationProps extends StateProps, DispatchProps, RouteComponentProps {
@@ -115,15 +115,18 @@ const UserAccount = (props: ILocationProps) => {
       } = person;
       const {
         username,
-        roles,
+        roles = [],
         userProperties: { locationUuid: locationUuidString }
       } = currentUser;
-      const [userRole] = roles;
+      const [userRole = {}] = roles;
       const { display: label, uuid: value } = userRole;
       // editing an account through Legacy UI results in 'null' string being added to 'locationUuid' user property
       const fixedLocationUuidString = locationUuidString?.replace(/null/g, '');
       const locationUuids = !!fixedLocationUuidString
-        ? fixedLocationUuidString.split(',').map(locationUuid => locations.find(({ uuid }) => locationUuid === uuid))
+        ? fixedLocationUuidString
+            .split(',')
+            .map(locationUuid => locations.find(({ uuid }) => locationUuid === uuid))
+            .filter(Boolean)
         : [];
 
       setUserAccount({
@@ -138,7 +141,7 @@ const UserAccount = (props: ILocationProps) => {
           value: attributes.find(({ attributeType }) => attributeType.uuid === emailAddressAtributeTypeUuid)?.value
         },
         username: { ...userAccount.username, value: username },
-        locations: { ...userAccount.locations, value: locationUuids.map(option => ({ label: option.display, value: option.uuid })) },
+        locations: { ...userAccount.locations, value: locationUuids.map(option => ({ label: option?.display, value: option?.uuid })) },
         userRole: { ...userAccount.userRole, value: { label, value } },
         password: { ...userAccount.password, value: DEFAULT_EDIT_USER_PASSWORD },
         confirmPassword: { ...userAccount.confirmPassword, value: DEFAULT_EDIT_USER_PASSWORD }
@@ -250,7 +253,7 @@ const UserAccount = (props: ILocationProps) => {
             }
           ],
           person: {
-            gender: GENDER_OTHER,
+            gender: person?.gender || GENDER_OTHER,
             attributes: personAttributes,
             names: [
               {
