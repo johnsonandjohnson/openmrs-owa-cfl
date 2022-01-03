@@ -16,7 +16,7 @@ import {
   USER_ROLE_FIELD
 } from '../../shared/constants/user-account';
 
-export const UserAccountDetails = ({
+const UserAccountDetails = ({
   intl: { formatMessage },
   onValueChange,
   dirtyFields,

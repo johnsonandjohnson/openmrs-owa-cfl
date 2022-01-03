@@ -2,9 +2,9 @@ import React from 'react';
 import en from '../../../lang/en.json';
 import flatten from 'flat';
 import userEvent from '@testing-library/user-event';
+import UserAccountDetails from '../UserAccountDetails';
 import { render, screen } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
-import { UserAccountDetails } from '../UserAccountDetails';
 import {
   defaultProps,
   userAccountInvalidProps,
