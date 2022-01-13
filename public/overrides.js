@@ -6,6 +6,7 @@ const DATE_PICKER_PLACEHOLDER_REGEX = /\([dmy]{2,4}\/[dmy]{2,4}\/[dmy]{2,4}\)/g;
 // Vanilla JS overrides - both for core OpenMRS and OWAs
 window.addEventListener('load', redesignAllergyUI);
 window.addEventListener('load', addCollapseToTheHeader);
+window.addEventListener('load', redesignPatientDashboardWidgets);
 // Override Patient Header both on load and on page change (OWAs)
 window.addEventListener('load', overridePatientHeader);
 window.addEventListener('popstate', function (event) {
@@ -44,13 +45,6 @@ jqr &&
       const remainingContainersChildren = jqr('.info-container .info-section');
       remainingContainersChildren.detach().appendTo(firstInfoContainer);
     }
-    // replace 'None' with '-NO DATA-' in each widget
-    jqr('.info-body').each(function (index) {
-      const text = jqr(this).find('li').text().trim() || jqr(this).find('p').text().trim() || jqr(this).text().trim();
-      if (text === 'None' || text === 'Unknown' || text.length === 0) {
-        jqr(this).replaceWith("<div class='info-body empty'><span class='label'>-NO DATA-</span></div>");
-      }
-    });
     // replace the url of 'Patient profile', 'Caregiver profile' and 'Conditions'
     const searchParams = new URLSearchParams(window.location.search);
     if (searchParams.has('patientId')) {
@@ -201,6 +195,33 @@ function addCollapseToTheHeader() {
           ].join('\n')
         )
       );
+    }
+  });
+}
+
+/**
+ * replace 'None' with '-NO DATA-' in each widget
+ */
+function redesignPatientDashboardWidgets() {
+  const latestObservationsLoadingTimeout = 500;
+  const noDataLabel = "<div class='info-body empty'><span class='label'>-NO DATA-</span></div>";
+  const spinner = "<div class='info-body empty'><div class='spinner-border spinner-border-sm' /></div>";
+  jqr('.info-body').each((_, widgetBody) => {
+    if (!jqr(widgetBody).children('latestobsforconceptlist').length) {
+      const text = jqr(widgetBody).find('li').text().trim() || jqr(widgetBody).find('p').text().trim() || jqr(widgetBody).text().trim();
+      if (text === 'None' || text === 'Unknown' || text.length === 0) {
+        jqr(widgetBody).replaceWith(noDataLabel);
+      }
+    } else {
+      jqr(widgetBody).append(spinner);
+      setTimeout(() => {
+        const latestObservationsList = jqr(widgetBody).find('latestobsforconceptlist > ul').first();
+        if (latestObservationsList.children().length) {
+          jqr(widgetBody).children().last().remove();
+        } else {
+          jqr(widgetBody).replaceWith(noDataLabel);
+        }
+      }, latestObservationsLoadingTimeout);
     }
   });
 }
