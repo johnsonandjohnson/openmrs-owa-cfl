@@ -45,26 +45,22 @@ jqr &&
       remainingContainersChildren.detach().appendTo(firstInfoContainer);
     }
     // replace 'None' with '-NO DATA-' in each widget
-    const latestObservationsLoadingTimeout = 1000;
-    const noDataLabel = "<div class='info-body empty'><span class='label'>-NO DATA-</span></div>";
-    const spinner = "<div class='info-body empty'><div class='spinner-border spinner-border-sm' /></div>";
+    const noDataLabel = "<span class='label'>-NO DATA-</span>";
+    const emptyWidgetBody = `<div class='info-body empty'>${noDataLabel}</div>`;
 
     jqr('.info-body').each((_, widgetBody) => {
       if (!jqr(widgetBody).children('latestobsforconceptlist').length) {
         const text = jqr(widgetBody).find('li').text().trim() || jqr(widgetBody).find('p').text().trim() || jqr(widgetBody).text().trim();
         if (text === 'None' || text === 'Unknown' || text.length === 0) {
-          jqr(widgetBody).replaceWith(noDataLabel);
+          jqr(widgetBody).replaceWith(emptyWidgetBody);
         }
       } else {
-        jqr(widgetBody).append(spinner);
-        setTimeout(() => {
-          const latestObservationsList = jqr(widgetBody).find('latestobsforconceptlist > ul').first();
-          if (latestObservationsList.children().length) {
-            jqr(widgetBody).children().last().remove();
-          } else {
-            jqr(widgetBody).replaceWith(noDataLabel);
-          }
-        }, latestObservationsLoadingTimeout);
+        jqr(widgetBody).append(noDataLabel);
+        jqr(widgetBody).addClass('empty');
+        elementReady('latestobsforconceptlist > ul > li').then(() => {
+          jqr(widgetBody).children().last().remove();
+          jqr(widgetBody).removeClass('empty');
+        });
       }
     });
     // replace the url of 'Patient profile', 'Caregiver profile' and 'Conditions'
