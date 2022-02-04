@@ -49,15 +49,13 @@ jqr &&
     const emptyWidgetBody = `<div class='info-body empty'>${noDataLabel}</div>`;
 
     jqr('.info-body').each((_, widgetBody) => {
-      if (!jqr(widgetBody).children('latestobsforconceptlist').length) {
-        const text = jqr(widgetBody).find('li').text().trim() || jqr(widgetBody).find('p').text().trim() || jqr(widgetBody).text().trim();
-        if (text === 'None' || text === 'Unknown' || text.length === 0) {
-          jqr(widgetBody).replaceWith(emptyWidgetBody);
-        }
-      } else {
+      const text = jqr(widgetBody).find('li').text().trim() || jqr(widgetBody).find('p').text().trim() || jqr(widgetBody).text().trim();
+      if (text === 'None' || text === 'Unknown') {
+        jqr(widgetBody).replaceWith(emptyWidgetBody);
+      } else if (text.length === 0) {
         jqr(widgetBody).append(noDataLabel);
         jqr(widgetBody).addClass('empty');
-        elementReady('latestobsforconceptlist > ul > li').then(() => {
+        elementReady('ul > li', widgetBody).then(() => {
           jqr(widgetBody).children().last().remove();
           jqr(widgetBody).removeClass('empty');
         });
@@ -343,22 +341,22 @@ function htmlToElements(htmlString) {
  * @param notEmpty
  * @returns {Promise}
  */
-function elementReady(selector, notEmpty = false) {
+function elementReady(selector, parentElement = document, notEmpty = false) {
   return new Promise((resolve, reject) => {
-    let el = document.querySelector(selector);
+    let el = parentElement.querySelector(selector);
     if (el && (!notEmpty || !!el.textContent)) {
       resolve(el);
     }
     new MutationObserver((mutationRecords, observer) => {
       // Query for elements matching the specified selector
-      Array.from(document.querySelectorAll(selector)).forEach(element => {
+      Array.from(parentElement.querySelectorAll(selector)).forEach(element => {
         if (!notEmpty || !!element.textContent) {
           resolve(element);
           // Once we have resolved we don't need the observer anymore.
           observer.disconnect();
         }
       });
-    }).observe(document.documentElement, {
+    }).observe(parentElement === document ? document.documentElement : parentElement, {
       childList: true,
       subtree: true
     });
