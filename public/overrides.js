@@ -50,9 +50,9 @@ jqr &&
 
     jqr('.info-body').each((_, widgetBody) => {
       const text = jqr(widgetBody).find('li').text().trim() || jqr(widgetBody).find('p').text().trim() || jqr(widgetBody).text().trim();
-      if (text === 'None' || text === 'Unknown') {
+      if (text.toLowerCase() === 'none' || text.toLowerCase() === 'unknown') {
         jqr(widgetBody).replaceWith(emptyWidgetBody);
-      } else if (text.length === 0) {
+      } else if (!text.length) {
         jqr(widgetBody).append(noDataLabel);
         jqr(widgetBody).addClass('empty');
         elementReady('ul > li', widgetBody).then(() => {
