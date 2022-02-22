@@ -2,19 +2,17 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
-import { createSetting, getSettingByQuery, updateSetting } from '../../redux/reducers/setttings';
+import { CountryPropertyValue, getCountryProperties, setCountryPropertyValues } from '../../redux/reducers/countryProperty';
 import { getCallflowsProviders, getSmsProviders } from '../../redux/reducers/provider';
 import { Button, Label, Spinner } from 'reactstrap';
 import ExpandableSection from '../common/expandable-section/ExpandableSection';
 import { InputWithPlaceholder, SelectWithPlaceholder } from '../common/form/withPlaceholder';
 import { extractEventValue, selectDefaultTheme } from '../../shared/util/form-util';
-import { successToast, errorToast } from '@bit/soldevelo-omrs.cfl-components.toast-handler';
+import { errorToast, successToast } from '@bit/soldevelo-omrs.cfl-components.toast-handler';
 import _ from 'lodash';
-import { parseJson } from '../../shared/util/json-util';
 import { Switch } from '../common/switch/Switch';
 import Divider from '../common/divider/Divider';
 import { TimePicker } from '../common/time-picker/TimePicker';
-import moment from 'moment';
 import { PlusMinusButtons } from '../common/form/PlusMinusButtons';
 import { ConfirmationModal } from '../common/form/ConfirmationModal';
 import ValidationError from '../common/form/ValidationError';
@@ -22,23 +20,28 @@ import './NotificationConfiguration.scss';
 import '../Inputs.scss';
 import { COUNTRY_OPTIONS } from '../../shared/constants/vmp-config';
 import {
-  COUNTRY_SETTINGS_MAP_SETTING_KEY,
-  DEFAULT_COUNTRY_SETTINGS_MAP,
-  DEFAULT_COUNTRY_CONFIGURATION_NAME,
-  DEFAULT_COUNTRY_CONFIGURATION,
+  BEST_CONTACT_TIME_PROPERTY_NAME,
+  CALL_PROPERTY_NAME,
   CONFIGURATION_NAME_PROPERTY_NAME,
+  COUNTRY_CONFIGURATION_TO_PROPERTY_GETTER,
+  COUNTRY_CONFIGURATION_TO_PROPERTY_GETTER_DEFAULT,
+  COUNTRY_CONFIGURATION_TO_PROPERTY_MAPPING,
+  DEFAULT_COUNTRY_CONFIGURATION,
+  DEFAULT_COUNTRY_CONFIGURATION_NAME,
+  MESSAGES_COUNTRY_PROPERTIES_PREFIX,
   NOTIFICATION_TIME_WINDOW_FROM_PROPERTY_NAME,
   NOTIFICATION_TIME_WINDOW_TO_PROPERTY_NAME,
-  BEST_CONTACT_TIME_PROPERTY_NAME,
-  VISIT_REMINDER_PROPERTY_NAME,
-  SMS_PROPERTY_NAME,
-  SEND_SMS_UPON_REGISTRATION_PROPERTY_NAME,
-  SEND_SMS_REMINDER_PROPERTY_NAME,
-  CALL_PROPERTY_NAME,
   PERFORM_CALL_UPON_REGISTRATION_PROPERTY_NAME,
-  SEND_CALL_REMINDER_PROPERTY_NAME
+  PROPERTY_TO_COUNTRY_CONFIGURATION_GETTER,
+  PROPERTY_TO_COUNTRY_CONFIGURATION_GETTER_DEFAULT,
+  PROPERTY_TO_COUNTRY_CONFIGURATION_MAPPING,
+  SEND_CALL_REMINDER_PROPERTY_NAME,
+  SEND_SMS_REMINDER_PROPERTY_NAME,
+  SEND_SMS_UPON_REGISTRATION_PROPERTY_NAME,
+  SMS_PROPERTY_NAME,
+  VISIT_REMINDER_PROPERTY_NAME
 } from '../../shared/constants/notification-configuration';
-import { DEFAULT_TIME_FORMAT, ONE, TEN, ZERO } from '../../shared/constants/input';
+import { ONE, TEN, ZERO } from '../../shared/constants/input';
 import { ROOT_URL } from '../../shared/constants/openmrs';
 
 interface INotificationConfigurationProps extends StateProps, DispatchProps, RouteComponentProps {
@@ -59,17 +62,19 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
   };
 
   componentDidMount() {
-    this.props.getSettingByQuery(COUNTRY_SETTINGS_MAP_SETTING_KEY);
+    this.props.getCountryProperties(MESSAGES_COUNTRY_PROPERTIES_PREFIX);
     this.props.getCallflowsProviders();
     this.props.getSmsProviders();
   }
 
   componentDidUpdate(prevProps: Readonly<INotificationConfigurationProps>) {
-    const { intl, config, loading, success, error } = this.props;
-    if (prevProps.config !== config) {
-      this.extractConfigData();
+    const { intl, messageCountryProperties, loading, setValuesSuccess, error } = this.props;
+
+    if (prevProps.messageCountryProperties !== messageCountryProperties) {
+      this.extractCountryProperties();
     }
-    if (!prevProps.success && success) {
+
+    if (!prevProps.setValuesSuccess && setValuesSuccess) {
       successToast(intl.formatMessage({ id: 'notificationConfiguration.success' }));
       this.setState({ isAllSectionsExpanded: false });
     } else if (prevProps.error !== this.props.error && !loading) {
@@ -77,40 +82,52 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
     }
   }
 
-  extractConfigData = () => {
-    let config = parseJson(this.props.config);
-    config = !!config[ZERO] ? config[ZERO] : _.cloneDeep(DEFAULT_COUNTRY_SETTINGS_MAP);
-    const notificationConfiguration = [];
-    Object.keys(config).forEach(configurationName => {
-      const configuration = configurationName ? config[configurationName] : null;
-      if (configuration) {
-        configuration[CONFIGURATION_NAME_PROPERTY_NAME] = configurationName;
-        if (configuration.hasOwnProperty(NOTIFICATION_TIME_WINDOW_FROM_PROPERTY_NAME)) {
-          configuration[NOTIFICATION_TIME_WINDOW_FROM_PROPERTY_NAME] = moment(
-            configuration[NOTIFICATION_TIME_WINDOW_FROM_PROPERTY_NAME],
-            DEFAULT_TIME_FORMAT
-          );
-        }
-        if (configuration.hasOwnProperty(NOTIFICATION_TIME_WINDOW_TO_PROPERTY_NAME)) {
-          configuration[NOTIFICATION_TIME_WINDOW_TO_PROPERTY_NAME] = moment(
-            configuration[NOTIFICATION_TIME_WINDOW_TO_PROPERTY_NAME],
-            DEFAULT_TIME_FORMAT
-          );
-        }
-        if (configuration.hasOwnProperty(BEST_CONTACT_TIME_PROPERTY_NAME)) {
-          configuration[BEST_CONTACT_TIME_PROPERTY_NAME] = moment(configuration[BEST_CONTACT_TIME_PROPERTY_NAME], DEFAULT_TIME_FORMAT);
-        }
-        if (
-          !configuration.hasOwnProperty(VISIT_REMINDER_PROPERTY_NAME) ||
-          !Array.isArray(configuration[VISIT_REMINDER_PROPERTY_NAME]) ||
-          !configuration[VISIT_REMINDER_PROPERTY_NAME].length
-        ) {
-          configuration[VISIT_REMINDER_PROPERTY_NAME] = [ZERO];
-        }
-        notificationConfiguration.push(configuration);
-      }
-    });
+  extractCountryProperties = () => {
+    const messageCountryPropertiesMap = this.getMessageCountryPropertiesByCountry();
+    const notificationConfiguration = this.buildNotificationConfiguration(messageCountryPropertiesMap);
     this.setState({ notificationConfiguration });
+  };
+
+  getMessageCountryPropertiesByCountry = () =>
+    this.props.messageCountryProperties.reduce((map, property) => {
+      const countryConfigurationName = this.getCountryConfigurationName(property);
+
+      if (map[countryConfigurationName]) {
+        map[countryConfigurationName].push(property);
+      } else {
+        map[countryConfigurationName] = [property];
+      }
+      return map;
+    }, {});
+
+  getCountryConfigurationName = countryPropertyObj => {
+    if (countryPropertyObj.country) {
+      return countryPropertyObj.country.display;
+    } else {
+      return DEFAULT_COUNTRY_CONFIGURATION_NAME;
+    }
+  };
+
+  buildNotificationConfiguration = messageCountryPropertiesMap => {
+    const notificationConfiguration = [];
+
+    Object.keys(messageCountryPropertiesMap).forEach(configurationName => {
+      const configurationForCountry = _.cloneDeep(DEFAULT_COUNTRY_CONFIGURATION);
+      configurationForCountry[CONFIGURATION_NAME_PROPERTY_NAME] = configurationName;
+
+      messageCountryPropertiesMap[configurationName].forEach(singleCountryProperty => {
+        const singleCountryPropertyName = singleCountryProperty['name'];
+        const configurationPropertyName = COUNTRY_CONFIGURATION_TO_PROPERTY_MAPPING[singleCountryPropertyName];
+
+        const valueGetter =
+          COUNTRY_CONFIGURATION_TO_PROPERTY_GETTER[singleCountryPropertyName] ?? COUNTRY_CONFIGURATION_TO_PROPERTY_GETTER_DEFAULT;
+        configurationForCountry[configurationPropertyName] = valueGetter(singleCountryProperty['value']);
+      });
+
+      notificationConfiguration.push(configurationForCountry);
+    });
+
+    return notificationConfiguration;
   };
 
   isSaveDisabled = () => this.props.loading || this.state.notificationConfiguration.some(configuration => !configuration.name);
@@ -118,36 +135,80 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
   onSave = () => this.setState({ isConfirmationModalOpen: true });
 
   save = () => {
-    const { setting } = this.props;
+    const newMessageCountryPropertiesMap = this.extractCountryPropertyValuesMapFromState();
+    const toDeleteMessageCountryPropertiesMap = this.getCountryPropertyValuesToDelete(newMessageCountryPropertiesMap);
+
+    const allMessageCountryPropertiesMap = { ...newMessageCountryPropertiesMap, ...toDeleteMessageCountryPropertiesMap };
+    const allMessageCountryPropertyValues = this.flattenAllCountryPropertyValuesMap(allMessageCountryPropertiesMap);
+
+    this.props.setCountryPropertyValues(allMessageCountryPropertyValues);
+  };
+
+  extractCountryPropertyValuesMapFromState = () => {
     const { notificationConfiguration } = this.state;
-    const settingValue = [{}];
+    const newMessageCountryPropertiesMap = {};
+
     notificationConfiguration.forEach(configuration => {
       const { name, ...configurationProps } = configuration;
-      if (moment.isMoment(configurationProps[NOTIFICATION_TIME_WINDOW_FROM_PROPERTY_NAME])) {
-        configurationProps[NOTIFICATION_TIME_WINDOW_FROM_PROPERTY_NAME] = configurationProps[
-          NOTIFICATION_TIME_WINDOW_FROM_PROPERTY_NAME
-        ].format(DEFAULT_TIME_FORMAT);
-      }
-      if (moment.isMoment(configurationProps[NOTIFICATION_TIME_WINDOW_TO_PROPERTY_NAME])) {
-        configurationProps[NOTIFICATION_TIME_WINDOW_TO_PROPERTY_NAME] = configurationProps[
-          NOTIFICATION_TIME_WINDOW_TO_PROPERTY_NAME
-        ].format(DEFAULT_TIME_FORMAT);
-      }
-      if (moment.isMoment(configurationProps[BEST_CONTACT_TIME_PROPERTY_NAME])) {
-        configurationProps[BEST_CONTACT_TIME_PROPERTY_NAME] = configurationProps[BEST_CONTACT_TIME_PROPERTY_NAME].format(
-          DEFAULT_TIME_FORMAT
+
+      newMessageCountryPropertiesMap[name] = [];
+
+      Object.keys(configurationProps).forEach(notificationConfigurationPropertyName => {
+        const valueGetter =
+          PROPERTY_TO_COUNTRY_CONFIGURATION_GETTER[notificationConfigurationPropertyName] ??
+          PROPERTY_TO_COUNTRY_CONFIGURATION_GETTER_DEFAULT;
+
+        const countryPropertyValue = new CountryPropertyValue(
+          this.getCountryNameFromConfigurationName(configuration['name']),
+          PROPERTY_TO_COUNTRY_CONFIGURATION_MAPPING[notificationConfigurationPropertyName],
+          valueGetter(configuration[notificationConfigurationPropertyName])
         );
-      }
-      settingValue[ZERO][name] = configurationProps;
+
+        newMessageCountryPropertiesMap[name].push(countryPropertyValue);
+      });
     });
-    const settingValueJson = JSON.stringify(settingValue);
-    if (setting && setting.uuid) {
-      setting.value = settingValueJson;
-      this.props.updateSetting(setting);
-    } else {
-      this.props.createSetting(COUNTRY_SETTINGS_MAP_SETTING_KEY, settingValueJson);
-    }
+
+    return newMessageCountryPropertiesMap;
   };
+
+  getCountryPropertyValuesToDelete = newMessageCountryPropertiesMap => {
+    const toDeleteMessageCountryPropertiesMap = {};
+    this.props.messageCountryProperties.forEach(countryProperty => {
+      const configurationName = this.getCountryConfigurationName(countryProperty);
+
+      if (!newMessageCountryPropertiesMap.hasOwnProperty(configurationName)) {
+        const nullCountryPropertyValue = this.getNullCountryValue(
+          this.getCountryNameFromConfigurationName(configurationName),
+          countryProperty.name
+        );
+
+        if (!toDeleteMessageCountryPropertiesMap.hasOwnProperty(configurationName)) {
+          toDeleteMessageCountryPropertiesMap[configurationName] = [];
+        }
+
+        toDeleteMessageCountryPropertiesMap[configurationName].push(nullCountryPropertyValue);
+      }
+    });
+
+    return toDeleteMessageCountryPropertiesMap;
+  };
+
+  getCountryNameFromConfigurationName = configurationName =>
+    configurationName === DEFAULT_COUNTRY_CONFIGURATION_NAME ? null : configurationName;
+
+  flattenAllCountryPropertyValuesMap = allMessageCountryPropertiesMap => {
+    const allMessageCountryPropertyValues = [];
+    Object.keys(allMessageCountryPropertiesMap).forEach(countryPropertyValueArray => {
+      allMessageCountryPropertiesMap[countryPropertyValueArray].forEach(countryPropertyValue =>
+        allMessageCountryPropertyValues.push(countryPropertyValue)
+      );
+    });
+
+    return allMessageCountryPropertyValues;
+  };
+
+  /** Gets Country Property Value with null - used to inform BE that this property has to be retired. */
+  getNullCountryValue = (country, name) => new CountryPropertyValue(country, name, null);
 
   return = () => {
     window.location.href = ROOT_URL;
@@ -189,6 +250,7 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
     const smsProvider = !!configuration?.[SMS_PROPERTY_NAME] ? this.selectTextOption(configuration[SMS_PROPERTY_NAME]) : null;
     const shouldSendSmsUponRegistration = !!configuration?.[SEND_SMS_UPON_REGISTRATION_PROPERTY_NAME];
     const shouldSendSmsReminder = !!configuration?.[SEND_SMS_REMINDER_PROPERTY_NAME];
+
     return (
       <>
         <div className="py-3">
@@ -300,6 +362,7 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
       ? configuration[NOTIFICATION_TIME_WINDOW_TO_PROPERTY_NAME]
       : null;
     const bestContactTime = !!configuration?.[BEST_CONTACT_TIME_PROPERTY_NAME] ? configuration[BEST_CONTACT_TIME_PROPERTY_NAME] : null;
+
     return (
       <div className="inline-fields py-3">
         <div className="col-6 pl-0">
@@ -529,20 +592,19 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
   }
 }
 
-const mapStateToProps = ({ apps, settings, provider }) => ({
+const mapStateToProps = ({ apps, provider, countryProperty }) => ({
   appError: apps.errorMessage,
   appLoading: apps.loading,
   error: apps.errorMessage,
-  loading: settings.loading,
-  success: settings.success,
-  config: settings.setting?.value && settings.setting?.value,
-  setting: settings.setting,
-  isSettingExist: settings.isSettingExist,
+  loading: countryProperty.loading,
+  success: countryProperty.success,
   smsProviders: provider.smsProviders,
-  callflowsProviders: provider.callflowsProviders
+  callflowsProviders: provider.callflowsProviders,
+  messageCountryProperties: countryProperty.countryProperties,
+  setValuesSuccess: countryProperty.setValuesSuccess
 });
 
-const mapDispatchToProps = { getSettingByQuery, createSetting, updateSetting, getCallflowsProviders, getSmsProviders };
+const mapDispatchToProps = { getCountryProperties, setCountryPropertyValues, getCallflowsProviders, getSmsProviders };
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;

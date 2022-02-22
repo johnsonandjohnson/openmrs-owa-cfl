@@ -1,6 +1,9 @@
-import { ZERO } from './input';
+import { ZERO, DEFAULT_TIME_FORMAT } from './input';
+import { parseJson } from '../util/json-util';
+import moment from 'moment';
 
 export const COUNTRY_SETTINGS_MAP_SETTING_KEY = 'cfl.countrySettingsMap';
+export const MESSAGES_COUNTRY_PROPERTIES_PREFIX = 'message';
 export const DEFAULT_COUNTRY_CONFIGURATION_NAME = 'default';
 export const DEFAULT_COUNTRY_SETTINGS_MAP = { [DEFAULT_COUNTRY_CONFIGURATION_NAME]: {} };
 export const CONFIGURATION_NAME_PROPERTY_NAME = 'name';
@@ -28,4 +31,63 @@ export const DEFAULT_COUNTRY_CONFIGURATION = {
   [NOTIFICATION_TIME_WINDOW_TO_PROPERTY_NAME]: null,
   [BEST_CONTACT_TIME_PROPERTY_NAME]: null,
   [VISIT_REMINDER_PROPERTY_NAME]: [ZERO]
+};
+
+/** Maps Country Property name to the Notification Configuration property. */
+export const COUNTRY_CONFIGURATION_TO_PROPERTY_MAPPING = {
+  'messages.smsConfig': SMS_PROPERTY_NAME,
+  'messages.callConfig': CALL_PROPERTY_NAME,
+  'messages.performCallOnPatientRegistration': PERFORM_CALL_UPON_REGISTRATION_PROPERTY_NAME,
+  'messages.sendSmsOnPatientRegistration': SEND_SMS_UPON_REGISTRATION_PROPERTY_NAME,
+  'messages.shouldSendReminderViaCall': SEND_CALL_REMINDER_PROPERTY_NAME,
+  'messages.shouldSendReminderViaSms': SEND_SMS_REMINDER_PROPERTY_NAME,
+  'visits.shouldCreateFirstVisit': 'shouldCreateFirstVisit',
+  'visits.shouldCreateFutureVisit': 'shouldCreateFutureVisit',
+  'messages.patientNotificationTimeWindowFrom': NOTIFICATION_TIME_WINDOW_FROM_PROPERTY_NAME,
+  'messages.patientNotificationTimeWindowTo': NOTIFICATION_TIME_WINDOW_TO_PROPERTY_NAME,
+  [BEST_CONTACT_TIME_PROPERTY_NAME]: BEST_CONTACT_TIME_PROPERTY_NAME,
+  [VISIT_REMINDER_PROPERTY_NAME]: VISIT_REMINDER_PROPERTY_NAME
+};
+
+/** Default getter used to extract proper value from any Country Property value. */
+export const COUNTRY_CONFIGURATION_TO_PROPERTY_GETTER_DEFAULT = propertyValue => propertyValue;
+
+const safeTimeStringToMoment = value => (value ? moment(value, DEFAULT_TIME_FORMAT) : null);
+
+/** Getters used to extract Notification Configuration value from any Country Property value based on the property name. */
+export const COUNTRY_CONFIGURATION_TO_PROPERTY_GETTER = {
+  'messages.patientNotificationTimeWindowFrom': safeTimeStringToMoment,
+  'messages.patientNotificationTimeWindowTo': safeTimeStringToMoment,
+  [BEST_CONTACT_TIME_PROPERTY_NAME]: propertyValue => {
+    try {
+      return moment(parseJson(propertyValue)['global'], DEFAULT_TIME_FORMAT);
+    } catch (e) {
+      console.error(`Failed to read ${BEST_CONTACT_TIME_PROPERTY_NAME}, encountered value: ${propertyValue}`);
+      return moment();
+    }
+  },
+  [VISIT_REMINDER_PROPERTY_NAME]: propertyValue => (propertyValue ? propertyValue.split(',') : [])
+};
+
+/** Maps Notification Configuration property to Country Property by name; */
+export const PROPERTY_TO_COUNTRY_CONFIGURATION_MAPPING = Object.entries(COUNTRY_CONFIGURATION_TO_PROPERTY_MAPPING).reduce((map, entry) => {
+  map[entry[1]] = entry[0];
+  return map;
+}, {});
+
+/** Default getter used to extract proper value from Notification Configuration, for Country Property. */
+export const PROPERTY_TO_COUNTRY_CONFIGURATION_GETTER_DEFAULT = propertyValue => (propertyValue ? propertyValue.toString() : null);
+
+const safeMomentToTimeString = value =>
+  moment.isMoment(value) ? value.format(DEFAULT_TIME_FORMAT) : PROPERTY_TO_COUNTRY_CONFIGURATION_GETTER_DEFAULT(value);
+
+/** Getter used to extract proper value from Notification Configuration, for Country Property. */
+export const PROPERTY_TO_COUNTRY_CONFIGURATION_GETTER = {
+  [BEST_CONTACT_TIME_PROPERTY_NAME]: value => {
+    const timeAsString = safeMomentToTimeString(value);
+    return `{ "global": "${timeAsString}"}`;
+  },
+  [NOTIFICATION_TIME_WINDOW_FROM_PROPERTY_NAME]: safeMomentToTimeString,
+  [NOTIFICATION_TIME_WINDOW_TO_PROPERTY_NAME]: safeMomentToTimeString,
+  [VISIT_REMINDER_PROPERTY_NAME]: value => (value ? value.join() : null)
 };
