@@ -2,7 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
-import { CountryPropertyValue, getCountryProperties, setCountryPropertyValues } from '../../redux/reducers/countryProperty';
+import { ICountryProperty, ICountryPropertyValue } from '../../shared/models/country-property';
+import { getCountryProperties, setCountryPropertyValues } from '../../redux/reducers/countryProperty';
 import { getCallflowsProviders, getSmsProviders } from '../../redux/reducers/provider';
 import { Button, Label, Spinner } from 'reactstrap';
 import ExpandableSection from '../common/expandable-section/ExpandableSection';
@@ -43,6 +44,18 @@ import {
 } from '../../shared/constants/notification-configuration';
 import { ONE, TEN, ZERO } from '../../shared/constants/input';
 import { ROOT_URL } from '../../shared/constants/openmrs';
+
+interface IStore {
+  appError: string;
+  appLoading: boolean;
+  error: string;
+  loading: boolean;
+  success: boolean;
+  smsProviders: { name: string }[];
+  callflowsProviders: { name: string }[];
+  messageCountryProperties: ICountryProperty[];
+  setValuesSuccess: boolean;
+}
 
 interface INotificationConfigurationProps extends StateProps, DispatchProps, RouteComponentProps {
   intl: any;
@@ -89,34 +102,28 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
   };
 
   getMessageCountryPropertiesByCountry = () =>
-    this.props.messageCountryProperties.reduce((map, property) => {
+    this.props.messageCountryProperties.reduce((map: Map<string, ICountryProperty[]>, property: ICountryProperty) => {
       const countryConfigurationName = this.getCountryConfigurationName(property);
 
-      if (map[countryConfigurationName]) {
-        map[countryConfigurationName].push(property);
+      if (map.get(countryConfigurationName)) {
+        map.get(countryConfigurationName).push(property);
       } else {
-        map[countryConfigurationName] = [property];
+        map.set(countryConfigurationName, [property]);
       }
       return map;
-    }, {});
+    }, new Map<string, ICountryProperty[]>());
 
-  getCountryConfigurationName = countryPropertyObj => {
-    if (countryPropertyObj.country) {
-      return countryPropertyObj.country.display;
-    } else {
-      return DEFAULT_COUNTRY_CONFIGURATION_NAME;
-    }
-  };
+  getCountryConfigurationName = ({ country }) => (country ? country.display : DEFAULT_COUNTRY_CONFIGURATION_NAME);
 
-  buildNotificationConfiguration = messageCountryPropertiesMap => {
+  buildNotificationConfiguration = (messageCountryPropertiesMap: Map<string, ICountryProperty[]>) => {
     const notificationConfiguration = [];
 
-    Object.keys(messageCountryPropertiesMap).forEach(configurationName => {
+    messageCountryPropertiesMap.forEach((singleCountryProperties: ICountryProperty[], configurationName: string) => {
       const configurationForCountry = _.cloneDeep(DEFAULT_COUNTRY_CONFIGURATION);
       configurationForCountry[CONFIGURATION_NAME_PROPERTY_NAME] = configurationName;
 
-      messageCountryPropertiesMap[configurationName].forEach(singleCountryProperty => {
-        const singleCountryPropertyName = singleCountryProperty['name'];
+      singleCountryProperties.forEach((singleCountryProperty: ICountryProperty) => {
+        const singleCountryPropertyName = singleCountryProperty[CONFIGURATION_NAME_PROPERTY_NAME];
         const configurationPropertyName = COUNTRY_CONFIGURATION_TO_PROPERTY_MAPPING[singleCountryPropertyName];
 
         const valueGetter =
@@ -138,7 +145,10 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
     const newMessageCountryPropertiesMap = this.extractCountryPropertyValuesMapFromState();
     const toDeleteMessageCountryPropertiesMap = this.getCountryPropertyValuesToDelete(newMessageCountryPropertiesMap);
 
-    const allMessageCountryPropertiesMap = { ...newMessageCountryPropertiesMap, ...toDeleteMessageCountryPropertiesMap };
+    const allMessageCountryPropertiesMap = new Map([
+      ...Array.from(newMessageCountryPropertiesMap.entries()),
+      ...Array.from(toDeleteMessageCountryPropertiesMap.entries())
+    ]);
     const allMessageCountryPropertyValues = this.flattenAllCountryPropertyValuesMap(allMessageCountryPropertiesMap);
 
     this.props.setCountryPropertyValues(allMessageCountryPropertyValues);
@@ -146,60 +156,60 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
 
   extractCountryPropertyValuesMapFromState = () => {
     const { notificationConfiguration } = this.state;
-    const newMessageCountryPropertiesMap = {};
+    const newMessageCountryPropertiesMap = new Map<String, ICountryPropertyValue[]>();
 
     notificationConfiguration.forEach(configuration => {
       const { name, ...configurationProps } = configuration;
 
-      newMessageCountryPropertiesMap[name] = [];
+      newMessageCountryPropertiesMap.set(name, [] as ICountryPropertyValue[]);
 
       Object.keys(configurationProps).forEach(notificationConfigurationPropertyName => {
         const valueGetter =
           PROPERTY_TO_COUNTRY_CONFIGURATION_GETTER[notificationConfigurationPropertyName] ??
           PROPERTY_TO_COUNTRY_CONFIGURATION_GETTER_DEFAULT;
 
-        const countryPropertyValue = new CountryPropertyValue(
-          this.getCountryNameFromConfigurationName(configuration['name']),
-          PROPERTY_TO_COUNTRY_CONFIGURATION_MAPPING[notificationConfigurationPropertyName],
-          valueGetter(configuration[notificationConfigurationPropertyName])
-        );
+        const countryPropertyValue = {
+          country: this.getCountryNameFromConfigurationName(configuration[CONFIGURATION_NAME_PROPERTY_NAME]),
+          name: PROPERTY_TO_COUNTRY_CONFIGURATION_MAPPING[notificationConfigurationPropertyName],
+          value: valueGetter(configuration[notificationConfigurationPropertyName])
+        } as ICountryPropertyValue;
 
-        newMessageCountryPropertiesMap[name].push(countryPropertyValue);
+        newMessageCountryPropertiesMap.get(name).push(countryPropertyValue);
       });
     });
 
     return newMessageCountryPropertiesMap;
   };
 
-  getCountryPropertyValuesToDelete = newMessageCountryPropertiesMap => {
-    const toDeleteMessageCountryPropertiesMap = {};
+  getCountryPropertyValuesToDelete = (newMessageCountryPropertiesMap: Map<String, ICountryPropertyValue[]>) => {
+    const toDeleteMessageCountryPropertiesMap = new Map<String, ICountryPropertyValue[]>();
     this.props.messageCountryProperties.forEach(countryProperty => {
       const configurationName = this.getCountryConfigurationName(countryProperty);
 
-      if (!newMessageCountryPropertiesMap.hasOwnProperty(configurationName)) {
+      if (!newMessageCountryPropertiesMap.has(configurationName)) {
         const nullCountryPropertyValue = this.getNullCountryValue(
           this.getCountryNameFromConfigurationName(configurationName),
           countryProperty.name
         );
 
-        if (!toDeleteMessageCountryPropertiesMap.hasOwnProperty(configurationName)) {
-          toDeleteMessageCountryPropertiesMap[configurationName] = [];
+        if (!toDeleteMessageCountryPropertiesMap.has(configurationName)) {
+          toDeleteMessageCountryPropertiesMap.set(configurationName, [] as ICountryPropertyValue[]);
         }
 
-        toDeleteMessageCountryPropertiesMap[configurationName].push(nullCountryPropertyValue);
+        toDeleteMessageCountryPropertiesMap.get(configurationName).push(nullCountryPropertyValue);
       }
     });
 
     return toDeleteMessageCountryPropertiesMap;
   };
 
-  getCountryNameFromConfigurationName = configurationName =>
+  getCountryNameFromConfigurationName = (configurationName: string) =>
     configurationName === DEFAULT_COUNTRY_CONFIGURATION_NAME ? null : configurationName;
 
-  flattenAllCountryPropertyValuesMap = allMessageCountryPropertiesMap => {
-    const allMessageCountryPropertyValues = [];
-    Object.keys(allMessageCountryPropertiesMap).forEach(countryPropertyValueArray => {
-      allMessageCountryPropertiesMap[countryPropertyValueArray].forEach(countryPropertyValue =>
+  flattenAllCountryPropertyValuesMap = (allMessageCountryPropertiesMap: Map<String, ICountryPropertyValue[]>) => {
+    const allMessageCountryPropertyValues = [] as ICountryPropertyValue[];
+    allMessageCountryPropertiesMap.forEach((countryPropertyValues: ICountryPropertyValue[], countryName: string) => {
+      countryPropertyValues.forEach((countryPropertyValue: ICountryPropertyValue) =>
         allMessageCountryPropertyValues.push(countryPropertyValue)
       );
     });
@@ -208,7 +218,7 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
   };
 
   /** Gets Country Property Value with null - used to inform BE that this property has to be retired. */
-  getNullCountryValue = (country, name) => new CountryPropertyValue(country, name, null);
+  getNullCountryValue = (country, name) => ({ country, name } as ICountryPropertyValue);
 
   return = () => {
     window.location.href = ROOT_URL;
@@ -592,17 +602,18 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
   }
 }
 
-const mapStateToProps = ({ apps, provider, countryProperty }) => ({
-  appError: apps.errorMessage,
-  appLoading: apps.loading,
-  error: apps.errorMessage,
-  loading: countryProperty.loading,
-  success: countryProperty.success,
-  smsProviders: provider.smsProviders,
-  callflowsProviders: provider.callflowsProviders,
-  messageCountryProperties: countryProperty.countryProperties,
-  setValuesSuccess: countryProperty.setValuesSuccess
-});
+const mapStateToProps = ({ apps, provider, countryProperty }) =>
+  ({
+    appError: apps.errorMessage,
+    appLoading: apps.loading,
+    error: apps.errorMessage,
+    loading: countryProperty.loading,
+    success: countryProperty.success,
+    smsProviders: provider.smsProviders,
+    callflowsProviders: provider.callflowsProviders,
+    messageCountryProperties: countryProperty.countryProperties,
+    setValuesSuccess: countryProperty.setValuesSuccess
+  } as IStore);
 
 const mapDispatchToProps = { getCountryProperties, setCountryPropertyValues, getCallflowsProviders, getSmsProviders };
 

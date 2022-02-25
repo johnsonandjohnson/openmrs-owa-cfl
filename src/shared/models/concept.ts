@@ -4,6 +4,7 @@ export interface IConceptSetMember {
 }
 export interface IConcept {
   uuid: string;
+  display: string;
   setMembers: IConceptSetMember[];
 }
 

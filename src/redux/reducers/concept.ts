@@ -18,6 +18,7 @@ const initialState: IConceptState = {
   concepts: [],
   concept: {
     uuid: '',
+    display: '',
     setMembers: []
   },
   errorMessage: ''
