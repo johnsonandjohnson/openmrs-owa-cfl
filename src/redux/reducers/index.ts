@@ -4,6 +4,7 @@ import cflPerson from './person';
 import cflPeople from './cfl-people';
 import session from './session';
 import settings from './setttings';
+import countryProperty from './countryProperty';
 import location from './location';
 import relationshipType from './relationship-type';
 import registration from './registration';
@@ -36,6 +37,7 @@ export default combineReducers({
   cflPeople,
   session,
   settings,
+  countryProperty,
   location,
   relationshipType,
   registration,

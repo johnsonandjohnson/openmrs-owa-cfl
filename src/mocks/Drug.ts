@@ -10,6 +10,7 @@ const invalidDefaultDrugProps = {
 export const drugProps: IDrugProps = {
   conceptDoseTypes: {
     uuid: '162384AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
+    display: 'Dose Types',
     setMembers: [
       {
         display: 'Ampule(s)',
