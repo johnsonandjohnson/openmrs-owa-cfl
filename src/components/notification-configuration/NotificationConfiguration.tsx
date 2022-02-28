@@ -54,7 +54,7 @@ interface IStore {
   smsProviders: { name: string }[];
   callflowsProviders: { name: string }[];
   messageCountryProperties: ICountryProperty[];
-  setValuesSuccess: boolean;
+  isSetValuesSuccessful: boolean;
 }
 
 interface INotificationConfigurationProps extends StateProps, DispatchProps, RouteComponentProps {
@@ -81,13 +81,13 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
   }
 
   componentDidUpdate(prevProps: Readonly<INotificationConfigurationProps>) {
-    const { intl, messageCountryProperties, loading, setValuesSuccess, error } = this.props;
+    const { intl, messageCountryProperties, loading, isSetValuesSuccessful, error } = this.props;
 
     if (prevProps.messageCountryProperties !== messageCountryProperties) {
       this.extractCountryProperties();
     }
 
-    if (!prevProps.setValuesSuccess && setValuesSuccess) {
+    if (!prevProps.isSetValuesSuccessful && isSetValuesSuccessful) {
       successToast(intl.formatMessage({ id: 'notificationConfiguration.success' }));
       this.setState({ isAllSectionsExpanded: false });
     } else if (prevProps.error !== this.props.error && !loading) {
@@ -97,8 +97,7 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
 
   extractCountryProperties = () => {
     const messageCountryPropertiesMap = this.getMessageCountryPropertiesByCountry();
-    const notificationConfiguration = this.buildNotificationConfiguration(messageCountryPropertiesMap);
-    this.setState({ notificationConfiguration });
+    this.setState({ notificationConfiguration: this.buildNotificationConfiguration(messageCountryPropertiesMap) });
   };
 
   getMessageCountryPropertiesByCountry = () =>
@@ -128,7 +127,7 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
 
         const valueGetter =
           COUNTRY_CONFIGURATION_TO_PROPERTY_GETTER[singleCountryPropertyName] ?? COUNTRY_CONFIGURATION_TO_PROPERTY_GETTER_DEFAULT;
-        configurationForCountry[configurationPropertyName] = valueGetter(singleCountryProperty['value']);
+        configurationForCountry[configurationPropertyName] = valueGetter(singleCountryProperty?.value);
       });
 
       notificationConfiguration.push(configurationForCountry);
@@ -217,7 +216,7 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
     return allMessageCountryPropertyValues;
   };
 
-  /** Gets Country Property Value with null - used to inform BE that this property has to be retired. */
+  // Gets Country Property Value with null - used to inform BE that this property has to be retired.
   getNullCountryValue = (country, name) => ({ country, name } as ICountryPropertyValue);
 
   return = () => {
@@ -612,7 +611,7 @@ const mapStateToProps = ({ apps, provider, countryProperty }) =>
     smsProviders: provider.smsProviders,
     callflowsProviders: provider.callflowsProviders,
     messageCountryProperties: countryProperty.countryProperties,
-    setValuesSuccess: countryProperty.setValuesSuccess
+    isSetValuesSuccessful: countryProperty.isSetValuesSuccessful
   } as IStore);
 
 const mapDispatchToProps = { getCountryProperties, setCountryPropertyValues, getCallflowsProviders, getSmsProviders };

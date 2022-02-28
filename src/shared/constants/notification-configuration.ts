@@ -33,7 +33,7 @@ export const DEFAULT_COUNTRY_CONFIGURATION = {
   [VISIT_REMINDER_PROPERTY_NAME]: [ZERO]
 };
 
-/** Maps Country Property name to the Notification Configuration property. */
+// Maps Country Property name to the Notification Configuration property.
 export const COUNTRY_CONFIGURATION_TO_PROPERTY_MAPPING = {
   'messages.smsConfig': SMS_PROPERTY_NAME,
   'messages.callConfig': CALL_PROPERTY_NAME,
@@ -49,18 +49,20 @@ export const COUNTRY_CONFIGURATION_TO_PROPERTY_MAPPING = {
   [VISIT_REMINDER_PROPERTY_NAME]: VISIT_REMINDER_PROPERTY_NAME
 };
 
-/** Default getter used to extract proper value from any Country Property value. */
+// Default getter used to extract proper value from any Country Property value.
 export const COUNTRY_CONFIGURATION_TO_PROPERTY_GETTER_DEFAULT = propertyValue => propertyValue;
 
 const safeTimeStringToMoment = value => (value ? moment(value, DEFAULT_TIME_FORMAT) : null);
 
-/** Getters used to extract Notification Configuration value from any Country Property value based on the property name. */
+const BEST_CONTACT_TIME_VALUE_JSON_PROPERTY = 'global';
+
+// Getters used to extract Notification Configuration value from any Country Property value based on the property name.
 export const COUNTRY_CONFIGURATION_TO_PROPERTY_GETTER = {
   'messages.patientNotificationTimeWindowFrom': safeTimeStringToMoment,
   'messages.patientNotificationTimeWindowTo': safeTimeStringToMoment,
   [BEST_CONTACT_TIME_PROPERTY_NAME]: propertyValue => {
     try {
-      return moment(parseJson(propertyValue)['global'], DEFAULT_TIME_FORMAT);
+      return moment(parseJson(propertyValue)[BEST_CONTACT_TIME_VALUE_JSON_PROPERTY], DEFAULT_TIME_FORMAT);
     } catch (e) {
       console.error(`Failed to read ${BEST_CONTACT_TIME_PROPERTY_NAME}, encountered value: ${propertyValue}`);
       return moment();
@@ -69,23 +71,26 @@ export const COUNTRY_CONFIGURATION_TO_PROPERTY_GETTER = {
   [VISIT_REMINDER_PROPERTY_NAME]: propertyValue => (propertyValue ? propertyValue.split(',') : [])
 };
 
-/** Maps Notification Configuration property to Country Property by name; */
-export const PROPERTY_TO_COUNTRY_CONFIGURATION_MAPPING = Object.entries(COUNTRY_CONFIGURATION_TO_PROPERTY_MAPPING).reduce((map, entry) => {
-  map[entry[1]] = entry[0];
-  return map;
-}, {});
+// Maps Notification Configuration property to Country Property by name;
+export const PROPERTY_TO_COUNTRY_CONFIGURATION_MAPPING = Object.entries(COUNTRY_CONFIGURATION_TO_PROPERTY_MAPPING).reduce(
+  (map: {}, entry: string[]) => {
+    map[entry[1]] = entry[0];
+    return map;
+  },
+  {}
+);
 
-/** Default getter used to extract proper value from Notification Configuration, for Country Property. */
+// Default getter used to extract proper value from Notification Configuration, for Country Property.
 export const PROPERTY_TO_COUNTRY_CONFIGURATION_GETTER_DEFAULT = propertyValue => (propertyValue ? propertyValue.toString() : null);
 
 const safeMomentToTimeString = value =>
   moment.isMoment(value) ? value.format(DEFAULT_TIME_FORMAT) : PROPERTY_TO_COUNTRY_CONFIGURATION_GETTER_DEFAULT(value);
 
-/** Getter used to extract proper value from Notification Configuration, for Country Property. */
+// Getter used to extract proper value from Notification Configuration, for Country Property.
 export const PROPERTY_TO_COUNTRY_CONFIGURATION_GETTER = {
   [BEST_CONTACT_TIME_PROPERTY_NAME]: value => {
     const timeAsString = safeMomentToTimeString(value);
-    return `{ "global": "${timeAsString}"}`;
+    return `{ "${BEST_CONTACT_TIME_VALUE_JSON_PROPERTY}": "${timeAsString}"}`;
   },
   [NOTIFICATION_TIME_WINDOW_FROM_PROPERTY_NAME]: safeMomentToTimeString,
   [NOTIFICATION_TIME_WINDOW_TO_PROPERTY_NAME]: safeMomentToTimeString,

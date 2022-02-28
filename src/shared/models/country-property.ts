@@ -17,9 +17,7 @@ export interface ICountryPropertyValue {
 export interface ICountryPropertyState {
   loading: boolean;
   errorMessage: string;
-  countryProperty: ICountryProperty;
   countryProperties: ICountryProperty[];
   success: boolean;
-  isPropertyExist: { countryPropertyUrl: string; value: boolean };
-  setValuesSuccess: boolean;
+  isSetValuesSuccessful: boolean;
 }
