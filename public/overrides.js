@@ -136,35 +136,37 @@ jqr &&
 
     if (this.URL.includes('accounts/manageAccounts.page')) {
       const addNewUserAccount = document.querySelector('#content > a.button');
-      const editUsersAccount = document.querySelectorAll('#list-accounts .icon-pencil.edit-action');
-      const overrideEditUserAccountLinks = editUserAccoutLinks =>
-        editUserAccoutLinks.forEach(editUserAccoutLink => {
-          const currentLocationHref = editUserAccoutLink.getAttribute('onclick');
-          const personIdPosition = currentLocationHref.indexOf('personId=');
-          const personId = currentLocationHref.slice(personIdPosition, currentLocationHref.length - 2);
-
-          editUserAccoutLink.onclick = () => (document.location.href = `${CFL_UI_BASE}index.html#/user-account?${personId}`);
-        });
+      const editUserAccount = document.querySelectorAll('#list-accounts .icon-pencil.edit-action');
+      const pagination = document.querySelector('#list-accounts_wrapper > .datatables-info-and-pg');
+      const accountFilterInput = document.querySelector('#list-accounts_filter input');
 
       if (addNewUserAccount) {
         addNewUserAccount.href = `${CFL_UI_BASE}index.html#/user-account`;
       }
 
-      if (editUsersAccount.length) {
-        const pagination = document.querySelector('#list-accounts_wrapper > .datatables-info-and-pg');
-
-        overrideEditUserAccountLinks(editUsersAccount);
-
-        if (pagination) {
+      if (editUserAccount.length) {
+        overrideEditUserAccountLinks(editUserAccount);
+        pagination &&
           pagination.addEventListener('click', function () {
-            const editUserAccountIcons = document.querySelectorAll('#list-accounts .icon-pencil.edit-action');
-
-            overrideEditUserAccountLinks(editUserAccountIcons);
+            overrideEditUserAccountLinks(document.querySelectorAll('#list-accounts .icon-pencil.edit-action'));
           });
-        }
+        accountFilterInput &&
+          accountFilterInput.addEventListener('input', function () {
+            overrideEditUserAccountLinks(document.querySelectorAll('#list-accounts .icon-pencil.edit-action'));
+          });
       }
     }
   });
+
+function overrideEditUserAccountLinks(editUserAccoutLinks) {
+  editUserAccoutLinks.forEach(editUserAccoutLink => {
+    const currentLocationHref = editUserAccoutLink.getAttribute('onclick');
+    const personIdPosition = currentLocationHref.indexOf('personId=');
+    const personId = currentLocationHref.slice(personIdPosition, currentLocationHref.length - 2);
+
+    editUserAccoutLink.setAttribute('onclick', `location.href='${CFL_UI_BASE}index.html#/user-account?${personId}'`);
+  });
+}
 
 function redesignAllergyUI() {
   const allergies = document.querySelector('#allergies');
