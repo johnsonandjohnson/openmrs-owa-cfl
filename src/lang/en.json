@@ -231,13 +231,11 @@
     "phoneNumber": "Phone number",
     "uuid": "ID",
     "personLanguage": "Language",
-    "field1": "Field 1",
-    "field2": "Field 2",
-    "field3": "Field 3",
-    "field4": "Field 4",
-    "field5": "Field 5",
-    "field6": "Field 6",
-    "field7": "Field 7"
+    "field1": "Country",
+    "field2": "Hierarchy level 2",
+    "field3": "Hierarchy level 3",
+    "field4": "Hierarchy level 4",
+    "field5": "Hierarchy level 5"
   },
   "editPatient": {
     "title": "Patient Profile",
