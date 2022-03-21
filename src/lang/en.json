@@ -49,8 +49,6 @@
     "addressFieldsTooltip": "For each country, define which address fields should be shown in the app, as well as what they should be displayed as. E.g.: Address 1, display as 'Street'.",
     "allowManualParticipantIDEntry": "Manual Participant ID Entry",
     "allowManualParticipantIDEntryTooltip": "Indicate whether the operator is allowed to manually enter a participant ID.",
-    "enableBiometricOnlySearchWithoutPhone": "Enable Biometric Only Search Without Phone",
-    "enableBiometricOnlySearchWithoutPhoneTooltip": "If enabled and only biometric identification criteria are specified, local biometric search will only be done for participants without a phone number. If disabled, the local biometric search for only biometric identification criteria will done for all participants.",
     "participantIDRegex": "Participant ID Regex",
     "manufacturersName": "Name",
     "barcodeRegex": "Barcode Regex",
