@@ -33,7 +33,6 @@ import { AuthSteps } from './AuthSteps';
 import { IrisScore } from './IrisScore';
 import { AddressFields } from './AddressFields';
 import { AllowManualParticipantIDEntry, ParticipantIDRegex } from './ParticipantId';
-import { EnableBiometricOnlySearchWithoutPhone } from './SearchWithoutPhone';
 import { IVmpVaccinationSchedule } from '../../shared/models/vmp-vaccination-schedule';
 import { scrollToTop } from '../../shared/util/window-util';
 
@@ -334,9 +333,6 @@ export class VmpConfig extends React.Component<IVmpConfigProps, IVmpConfigState>
               </div>
               <div className="section" data-testid="allowManualParticipantIDEntrySection">
                 <AllowManualParticipantIDEntry intl={intl} config={vmpConfig} onValueChange={this.onValueChange} />
-              </div>
-              <div className="section" data-testid="enableBiometricOnlySearchWithoutPhoneSection">
-                <EnableBiometricOnlySearchWithoutPhone intl={intl} config={vmpConfig} onValueChange={this.onValueChange} />
               </div>
               <div className="section" data-testid="participantIDRegexSection">
                 <ParticipantIDRegex intl={intl} config={vmpConfig} onValueChange={this.onValueChange} />

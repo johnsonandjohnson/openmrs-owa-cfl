@@ -48,6 +48,5 @@ export const DEFAULT_VMP_CONFIG = {
   authSteps: [{}],
   irisScore: null,
   addressFields: [],
-  participantIDRegex: '',
-  isBiometricOnlySearchWithoutPhone: true
+  participantIDRegex: ''
 };
