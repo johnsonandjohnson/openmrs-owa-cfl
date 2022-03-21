@@ -1,6 +1,6 @@
 {
   "name": "cfl-ui",
-  "version": "1.5.3-snapshot",
+  "version": "1.5.2-snapshot",
   "private": true,
   "homepage": "./",
   "dependencies": {
