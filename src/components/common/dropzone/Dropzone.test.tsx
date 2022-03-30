@@ -9,14 +9,14 @@ jest.mock('react-intl', () => ({
 
 test('should render match snapshot', () => {
   const container = render(
-    <Dropzone acceptedFileExt=".csv" instructionMessageId="vmpTranslations.dropzone.instruction" onFileAccepted={() => null} />
+    <Dropzone acceptedFileExt=".csv" instructionMessageId="addressData.dropzone.instruction" onFileAccepted={() => null} />
   );
   expect(container).toMatchSnapshot();
 });
 
 test('should reject file', async () => {
   const { container } = render(
-    <Dropzone acceptedFileExt=".csv" instructionMessageId="vmpTranslations.dropzone.instruction" onFileAccepted={() => null} />
+    <Dropzone acceptedFileExt=".csv" instructionMessageId="addressData.dropzone.instruction" onFileAccepted={() => null} />
   );
   const input = container.querySelector('.dropzone input');
   const dropResult = container.querySelector('.drop-result');
@@ -27,7 +27,7 @@ test('should reject file', async () => {
 
 test('should accept file', async () => {
   const { container } = render(
-    <Dropzone acceptedFileExt=".csv" instructionMessageId="vmpTranslations.dropzone.instruction" onFileAccepted={() => null} />
+    <Dropzone acceptedFileExt=".csv" instructionMessageId="addressData.dropzone.instruction" onFileAccepted={() => null} />
   );
   const input = container.querySelector('.dropzone input');
   const dropResult = container.querySelector('.drop-result');

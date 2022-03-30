@@ -1,7 +1,10 @@
+import { getData } from 'country-list';
+import _ from 'lodash';
 import { ZERO, DEFAULT_TIME_FORMAT } from './input';
 import { parseJson } from '../util/json-util';
 import moment from 'moment';
 
+export const COUNTRY_OPTIONS = _.sortBy(getData(), 'name').map(({ name }) => ({ label: name, value: name }));
 export const COUNTRY_SETTINGS_MAP_SETTING_KEY = 'cfl.countrySettingsMap';
 export const MESSAGES_COUNTRY_PROPERTIES_PREFIX = 'message';
 export const DEFAULT_COUNTRY_CONFIGURATION_NAME = 'default';
