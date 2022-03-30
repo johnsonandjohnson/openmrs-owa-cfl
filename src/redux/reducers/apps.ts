@@ -21,11 +21,7 @@ const initialState = {
   findPatientTableColumns: null,
   findCaregiverTableColumns: null,
   patientRegistrationSteps: null,
-  caregiverRegistrationSteps: null,
-  vmpSyncScopes: null,
-  vmpAuthSteps: null,
-  vmpDosingVisitTypes: null,
-  vmpRegimenUpdatePermitted: null
+  caregiverRegistrationSteps: null
 };
 
 export const getAppsState = apps => ({
@@ -33,11 +29,7 @@ export const getAppsState = apps => ({
   findPatientTableColumns: getAppConfig(apps, FIND_PATIENT_APP)?.tableColumns,
   findCaregiverTableColumns: getAppConfig(apps, FIND_CAREGIVER_APP)?.tableColumns,
   patientRegistrationSteps: getAppConfig(apps, REGISTER_PATIENT_APP)?.steps,
-  caregiverRegistrationSteps: getAppConfig(apps, REGISTER_CAREGIVER_APP)?.steps,
-  vmpSyncScopes: getAppConfig(apps, CONFIGURE_METADATA_APPS)?.syncScopes,
-  vmpAuthSteps: getAppConfig(apps, CONFIGURE_METADATA_APPS)?.authSteps,
-  vmpDosingVisitTypes: getAppConfig(apps, CONFIGURE_METADATA_APPS)?.dosingVisitTypes,
-  vmpRegimenUpdatePermitted: getAppConfig(apps, CONFIGURE_METADATA_APPS)?.regimenUpdatePermitted
+  caregiverRegistrationSteps: getAppConfig(apps, REGISTER_CAREGIVER_APP)?.steps
 });
 
 const reducer = (state = initialState, action) => {
