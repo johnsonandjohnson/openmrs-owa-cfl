@@ -23,6 +23,14 @@
       margin-left: 0.5em;
     }
   }
+
+  .upload-failure {
+    clear: both;
+    margin-top: 1em;
+    color: #df2020;
+    font-weight: bold;
+  }
+
   .upload-error {
     display: flex;
     clear: both;

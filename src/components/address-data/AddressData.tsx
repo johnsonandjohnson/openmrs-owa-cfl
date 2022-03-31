@@ -147,19 +147,20 @@ class AddressData extends React.Component<IAddressDataProps, IAddressDataState> 
   );
 
   uploadButton = () => {
-    const { numberOfInvalidRecords, numberOfTotalRecords, intl } = this.props;
+    const { numberOfInvalidRecords, numberOfTotalRecords, intl, addressDataUploading } = this.props;
     return (
       <div className="upload-button-wrapper">
         <div className="upload-button">
-          {this.props.addressDataUploading && (
+          {addressDataUploading && (
             <div className="spinner">
               <Spinner />
             </div>
           )}
-          <Button onClick={this.onUpload} disabled={this.props.addressDataUploading || !this.state.acceptedFile} className="pull-right">
+          <Button onClick={this.onUpload} disabled={addressDataUploading || !this.state.acceptedFile} className="pull-right">
             <FormattedMessage id="addressData.upload.button" />
           </Button>
         </div>
+        <p className="upload-failure pull-right">{this.props.uploadError}</p>
         {!!numberOfInvalidRecords && (
           <div className="upload-error">
             <i className="bi bi-exclamation-circle"></i>
