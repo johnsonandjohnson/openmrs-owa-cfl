@@ -11,7 +11,12 @@ import { ConfirmationModal } from '../common/form/ConfirmationModal';
 import { successToast, errorToast } from '@bit/soldevelo-omrs.cfl-components.toast-handler';
 import InfiniteTable from '../common/InfiniteTable';
 import { getAddressDataPage, getAddressData, postAddressData } from '../../redux/reducers/address-data';
-import { ACCEPTED_FILE_EXTENSIONS, ADDRESS_DATA_TABLE_COLUMNS, DEFAULT_DOWNLOAD_FILENAME } from '../../shared/constants/address-data';
+import {
+  ACCEPTED_FILE_EXTENSIONS,
+  ADDRESS_DATA_TABLE_COLUMNS,
+  DEFAULT_DOWNLOAD_FILENAME,
+  DEFAULT_INVALID_ADDRESS_DATA_FILENAME
+} from '../../shared/constants/address-data';
 import { STRING_FALSE, STRING_TRUE } from '../../shared/constants/input';
 import downloadCsv from 'download-csv';
 import Dropzone from '../common/dropzone/Dropzone';
@@ -95,6 +100,8 @@ class AddressData extends React.Component<IAddressDataProps, IAddressDataState> 
 
   downloadAddressData = () => (this.state.isDownloadableAddressDataValid ? this.triggerAddressDataDownload() : this.props.getAddressData());
 
+  triggerInvalidAddressDataDownload = () => downloadCsv(this.props.invalidAddressData, null, DEFAULT_INVALID_ADDRESS_DATA_FILENAME);
+
   confirmationModal = () => (
     <ConfirmationModal
       header={this.state.modalHeader}
@@ -139,21 +146,42 @@ class AddressData extends React.Component<IAddressDataProps, IAddressDataState> 
     </div>
   );
 
-  uploadButton = () => (
-    <div className="upload-button-wrapper">
-      <div className="upload-button">
-        {this.props.addressDataUploading && (
-          <div className="spinner">
-            <Spinner />
+  uploadButton = () => {
+    const { numberOfInvalidRecords, numberOfTotalRecords, intl } = this.props;
+    return (
+      <div className="upload-button-wrapper">
+        <div className="upload-button">
+          {this.props.addressDataUploading && (
+            <div className="spinner">
+              <Spinner />
+            </div>
+          )}
+          <Button onClick={this.onUpload} disabled={this.props.addressDataUploading || !this.state.acceptedFile} className="pull-right">
+            <FormattedMessage id="addressData.upload.button" />
+          </Button>
+        </div>
+        {!!numberOfInvalidRecords && (
+          <div className="upload-error">
+            <i className="bi bi-exclamation-circle"></i>
+            <p className="upload-error-text">
+              {intl.formatMessage(
+                { id: 'addressData.upload.errorMessage1' },
+                {
+                  numberOfInvalidRecords: numberOfInvalidRecords,
+                  numberOfTotalRecords: numberOfTotalRecords
+                }
+              )}
+              <FormattedMessage id="addressData.upload.errorMessage2" tagName="span" />
+              <a className="csvDownloadLink" onClick={this.triggerInvalidAddressDataDownload}>
+                <FormattedMessage id="addressData.upload.csvDownloadLink" />
+              </a>
+              <FormattedMessage id="addressData.upload.Dot" tagName="span" />
+            </p>
           </div>
         )}
-        <Button onClick={this.onUpload} disabled={this.props.addressDataUploading || !this.state.acceptedFile} className="pull-right">
-          <FormattedMessage id="addressData.upload.button" />
-        </Button>
       </div>
-      <p className="upload-error pull-right">{this.props.uploadError}</p>
-    </div>
-  );
+    );
+  };
 
   downloadButton = disabled => (
     <Button onClick={this.downloadAddressData} disabled={disabled || !this.props.totalCount} className="cancel">
@@ -244,7 +272,10 @@ const mapStateToProps = ({ apps, addressData }) => ({
   hasNextPage: addressData.hasNextPage,
   totalCount: addressData.totalCount,
   uploadError: addressData.errorMessage,
-  downloadableAddressData: addressData.downloadableAddressData
+  downloadableAddressData: addressData.downloadableAddressData,
+  invalidAddressData: addressData.invalidAddressData,
+  numberOfInvalidRecords: addressData.numberOfInvalidRecords,
+  numberOfTotalRecords: addressData.numberOfTotalRecords
 });
 
 const mapDispatchToProps = { getAddressDataPage, getAddressData, postAddressData };

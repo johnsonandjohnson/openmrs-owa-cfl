@@ -6,7 +6,7 @@
   }
 
   .upload-button-wrapper {
-    padding-bottom: 5em;
+    padding-bottom: 2em;
   }
 
   .upload-button {
@@ -23,12 +23,34 @@
       margin-left: 0.5em;
     }
   }
-
   .upload-error {
+    display: flex;
     clear: both;
     margin-top: 1em;
-    color: #df2020;
-    font-weight: bold;
+    border: 1px solid #df2020;
+    background-color: #fcf0f0;
+
+    .bi-exclamation-circle {
+      color: #df2020;
+      font-size: 1.9rem;
+      padding: 0rem 1rem 0rem;
+    }
+
+    .upload-error-text {
+      color: #df2020;
+      font-weight: bold;
+      font-size: 0.8rem;
+      padding: 0.7rem 0 0 0.5rem;
+    }
+
+    .csvDownloadLink {
+      text-decoration: underline;
+      color: #df2020;
+    }
+
+    span {
+      font-weight: normal;
+    }
   }
 
   .table-section {
@@ -46,8 +68,16 @@
       text-align: center;
     }
 
-    th {
-      text-transform: none;
+    @media only screen and (min-width: 1280px) {
+      th {
+        padding: 0.5rem;
+        text-transform: none;
+        font-weight: 900;
+      }
+      tbody tr td {
+        font-size: 13px;
+        font-weight: 100;
+      }
     }
   }
 }
