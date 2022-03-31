@@ -11,41 +11,11 @@
       "icon": "icon-book"
     },
     {
-      "id": "cflUi.vmpConfigurationLink",
-      "extensionPointId": "org.openmrs.module.adminui.adminLinks",
-      "type": "link",
-      "label": "Manage Configuration",
-      "url": "owa/cfl-ui/index.html#/vmp-config",
-      "extensionParams": {
-        "group": "cflUi.adminGroup"
-      }
-    },
-    {
-      "id": "cflUi.vmpVaccinationScheduleLink",
-      "extensionPointId": "org.openmrs.module.adminui.adminLinks",
-      "type": "link",
-      "label": "Manage Vaccination Schedule",
-      "url": "owa/cfl-ui/index.html#/vmp-vaccination-schedule",
-      "extensionParams": {
-        "group": "cflUi.adminGroup"
-      }
-    },
-    {
       "id": "cflUi.addressDataLink",
       "extensionPointId": "org.openmrs.module.adminui.adminLinks",
       "type": "link",
       "label": "Manage Address Data",
       "url": "owa/cfl-ui/index.html#/address-data",
-      "extensionParams": {
-        "group": "cflUi.adminGroup"
-      }
-    },
-    {
-      "id": "cflUi.vmpTranslationsLink",
-      "extensionPointId": "org.openmrs.module.adminui.adminLinks",
-      "type": "link",
-      "label": "Manage Translations",
-      "url": "owa/cfl-ui/index.html#/vmp-translations",
       "extensionParams": {
         "group": "cflUi.adminGroup"
       }

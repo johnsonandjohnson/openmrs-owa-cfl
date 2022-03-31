@@ -8,7 +8,7 @@ export function PlusMinusButtons({ intl, onPlusClick, onMinusClick, isPlusButton
       <div className="action-icons-inner">
         <img
           src={Minus}
-          title={intl.formatMessage({ id: 'vmpConfig.delete' })}
+          title={intl.formatMessage({ id: 'plusMinusButtons.delete' })}
           alt="remove"
           className="remove-item"
           onClick={onMinusClick}
@@ -17,7 +17,7 @@ export function PlusMinusButtons({ intl, onPlusClick, onMinusClick, isPlusButton
         {isPlusButtonVisible && (
           <img
             src={Plus}
-            title={intl.formatMessage({ id: 'vmpConfig.addNew' })}
+            title={intl.formatMessage({ id: 'plusMinusButtons.addNew' })}
             alt="add"
             className="mx-2 add-item"
             onClick={onPlusClick}

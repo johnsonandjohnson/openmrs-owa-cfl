@@ -6,10 +6,7 @@ import RegisterPatient from '../../components/register/RegisterPatient';
 import RegisterCaregiver from '../../components/register/RegisterCaregiver';
 import Dashboard from '../../components/dashboard/Dashboard';
 import Conditions from '../../components/conditions/Conditions';
-import VmpConfig from '../../components/vmp-config/VmpConfig';
-import VmpVaccinationSchedule from '../../components/vmp-vaccination-schedule/VmpVaccinationSchedule';
 import AddressData from '../../components/address-data/AddressData';
-import VmpTranslations from '../../components/vmp-translations/VmpTranslations';
 import NotificationConfiguration from '../../components/notification-configuration/NotificationConfiguration';
 import NotificationTemplates from '../../components/notification-templates/NotificationTemplates';
 import Location from '../../components/locations/Location';
@@ -54,24 +51,9 @@ export const routeConfig = [
     breadcrumb: 'conditions.title'
   },
   {
-    path: '/vmp-config',
-    component: VmpConfig,
-    breadcrumb: 'vmpConfig.title'
-  },
-  {
-    path: '/vmp-vaccination-schedule',
-    component: VmpVaccinationSchedule,
-    breadcrumb: 'vmpVaccinationSchedule.title'
-  },
-  {
     path: '/address-data',
     component: AddressData,
     breadcrumb: 'addressData.title'
-  },
-  {
-    path: '/vmp-translations',
-    component: VmpTranslations,
-    breadcrumb: 'vmpTranslations.title'
   },
   {
     path: '/notification-configuration',

@@ -19,8 +19,8 @@ import { ConfirmationModal } from '../common/form/ConfirmationModal';
 import ValidationError from '../common/form/ValidationError';
 import './NotificationConfiguration.scss';
 import '../Inputs.scss';
-import { COUNTRY_OPTIONS } from '../../shared/constants/vmp-config';
 import {
+  COUNTRY_OPTIONS,
   BEST_CONTACT_TIME_PROPERTY_NAME,
   CALL_PROPERTY_NAME,
   CONFIGURATION_NAME_PROPERTY_NAME,
