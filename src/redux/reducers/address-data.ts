@@ -18,7 +18,10 @@ const initialState = {
   loadingAddressData: false,
   downloadableAddressData: [],
   errorMessage: null,
-  addressDataUploading: false
+  addressDataUploading: false,
+  invalidAddressData: [],
+  numberOfTotalRecords: 0,
+  numberOfInvalidRecords: 0
 };
 
 const reducer = (state = initialState, action) => {
@@ -68,13 +71,19 @@ const reducer = (state = initialState, action) => {
         errorMessage: action.payload.response.data
       };
     case SUCCESS(ACTION_TYPES.POST_ADDRESS_DATA):
+      const { invalidRecords, numberOfInvalidRecords, numberOfTotalRecords } = action.payload.data;
+      const invalidAddressData = invalidRecords.map(invalidRecord => invalidRecord.split(','));
       return {
         ...state,
         addressDataUploaded: true,
         loadingAddressData: false,
         errorMessage: null,
-        addressDataUploading: false
+        addressDataUploading: false,
+        invalidAddressData,
+        numberOfInvalidRecords,
+        numberOfTotalRecords
       };
+
     default:
       return state;
   }

@@ -49,7 +49,11 @@
       },
       "success": "Address data uploaded successfully",
       "addressDataEmpty": "There is no file to be displayed yet",
-      "button": "Upload file"
+      "button": "Upload file",
+      "errorMessage1": "{numberOfInvalidRecords} out of {numberOfTotalRecords} ",
+      "errorMessage2": "records failed to import. Download the .csv file with the failed records ",
+      "csvDownloadLink": "here",
+      "dot": "."
     },
     "dropzone": {
       "instruction": "Drag and drop Address Data file here. The file should be in .csv or .txt format."
