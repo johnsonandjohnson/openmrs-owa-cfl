@@ -147,7 +147,8 @@ class AddressData extends React.Component<IAddressDataProps, IAddressDataState> 
   );
 
   uploadButton = () => {
-    const { numberOfInvalidRecords, numberOfTotalRecords, intl, addressDataUploading } = this.props;
+    const { numberOfInvalidRecords, numberOfTotalRecords, intl, addressDataUploading, uploadFailure } = this.props;
+
     return (
       <div className="upload-button-wrapper">
         <div className="upload-button">
@@ -160,23 +161,17 @@ class AddressData extends React.Component<IAddressDataProps, IAddressDataState> 
             <FormattedMessage id="addressData.upload.button" />
           </Button>
         </div>
-        <p className="upload-failure pull-right">{this.props.uploadError}</p>
+        <p className="upload-failure pull-right">{uploadFailure}</p>
         {!!numberOfInvalidRecords && (
           <div className="upload-error">
             <i className="bi bi-exclamation-circle"></i>
             <p className="upload-error-text">
-              {intl.formatMessage(
-                { id: 'addressData.upload.errorMessage1' },
-                {
-                  numberOfInvalidRecords: numberOfInvalidRecords,
-                  numberOfTotalRecords: numberOfTotalRecords
-                }
-              )}
+              {intl.formatMessage({ id: 'addressData.upload.errorMessage1' }, { numberOfInvalidRecords, numberOfTotalRecords })}
               <FormattedMessage id="addressData.upload.errorMessage2" tagName="span" />
               <a className="csvDownloadLink" onClick={this.triggerInvalidAddressDataDownload}>
                 <FormattedMessage id="addressData.upload.csvDownloadLink" />
               </a>
-              <FormattedMessage id="addressData.upload.Dot" tagName="span" />
+              <FormattedMessage id="addressData.upload.dot" tagName="span" />
             </p>
           </div>
         )}
@@ -272,7 +267,7 @@ const mapStateToProps = ({ apps, addressData }) => ({
   addressData: addressData.addressData,
   hasNextPage: addressData.hasNextPage,
   totalCount: addressData.totalCount,
-  uploadError: addressData.errorMessage,
+  uploadFailure: addressData.errorMessage,
   downloadableAddressData: addressData.downloadableAddressData,
   invalidAddressData: addressData.invalidAddressData,
   numberOfInvalidRecords: addressData.numberOfInvalidRecords,

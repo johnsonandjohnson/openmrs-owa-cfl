@@ -53,7 +53,7 @@
       "errorMessage1": "{numberOfInvalidRecords} out of {numberOfTotalRecords} ",
       "errorMessage2": "records failed to import. Download the .csv file with the failed records ",
       "csvDownloadLink": "here",
-      "Dot": "."
+      "dot": "."
     },
     "dropzone": {
       "instruction": "Drag and drop Address Data file here. The file should be in .csv or .txt format."
