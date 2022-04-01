@@ -1,3 +1,5 @@
+import { WS_REST_V1_URL } from './openmrs';
+
 export const PERSON_ID_LOOKUP_STRING = 'personId=';
 export const EMAIL_REGEX = /^(([^<>()\\[\]\\.,;:\s@"]+(\.[^<>()\\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 export const PASSWORD_REGEX = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
@@ -17,6 +19,14 @@ export const LOCATION_FIELD = 'locations';
 export const USER_ROLE_FIELD = 'userRole';
 export const PASSWORD_FIELD = 'password';
 export const CONFIRM_PASSWORD_FIELD = 'confirmPassword';
+export const USER = 'user';
+export const USER_URL = `${WS_REST_V1_URL}${USER}`;
+export const PROVIDER_URL = `${WS_REST_V1_URL}provider`;
+export const PASSWORD_URL = `${WS_REST_V1_URL}password`;
+export const DEFAULT_PROVIDER_VALUES = {
+  uuid: '',
+  person: { uuid: '' }
+};
 export const DEFAULT_USER_VALUES = {
   familyName: { value: '', isValid: true, error: '' },
   givenName: { value: '', isValid: true, error: '' },
