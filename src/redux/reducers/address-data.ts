@@ -79,9 +79,9 @@ const reducer = (state = initialState, action) => {
         loadingAddressData: false,
         errorMessage: null,
         addressDataUploading: false,
-        invalidAddressData: invalidAddressData,
-        numberOfInvalidRecords: numberOfInvalidRecords,
-        numberOfTotalRecords: numberOfTotalRecords
+        invalidAddressData,
+        numberOfInvalidRecords,
+        numberOfTotalRecords
       };
 
     default:
