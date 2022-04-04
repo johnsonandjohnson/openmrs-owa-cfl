@@ -86,7 +86,7 @@ const reducer = (state = initialState, action) => {
 
       return {
         ...state,
-        updatedUser: updatedUser.data,
+        updatedUser: updatedUser?.data,
         success: {
           ...state.success,
           createUser: true
