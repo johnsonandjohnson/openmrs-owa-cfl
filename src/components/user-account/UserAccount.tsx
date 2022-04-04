@@ -8,7 +8,7 @@ import AuditInfo from './AuditInfo';
 import UserAccountDetails from './UserAccountDetails';
 import { searchLocations } from '../../redux/reducers/location';
 import { getRoles } from '../../redux/reducers/role';
-import { getUsers, getUserByPersonId, saveUser, deleteUser } from '../../redux/reducers/user';
+import { getUsers, getProviders, getUserByPersonId, saveUser, saveProvider, deleteUser, deleteProvider } from '../../redux/reducers/user';
 import { extractEventValue } from '../../shared/util/form-util';
 import { ROOT_URL } from '../../shared/constants/openmrs';
 import { uniq, isNil } from 'lodash';
@@ -38,7 +38,8 @@ import {
   PASSWORD_FIELD,
   PASSWORD_REGEX,
   CONFIRM_PASSWORD_FIELD,
-  USERNAME_REGEX
+  USERNAME_REGEX,
+  DEFAULT_PROVIDER_VALUES
 } from '../../shared/constants/user-account';
 import { EMPTY_STRING } from 'src/shared/constants/input';
 import { ConfirmationModal } from '../common/form/ConfirmationModal';
@@ -46,7 +47,30 @@ import { ConfirmationModal } from '../common/form/ConfirmationModal';
 interface IStore {
   role: { loading: boolean; roles: IDetailsOption[] };
   location: { locations: IDetailsOption[] };
-  user: { loading: boolean; users: IDetailsOption[]; currentUser: ICurrentUser; success: boolean };
+  user: {
+    loading: boolean;
+    users: IDetailsOption[];
+    currentUser: ICurrentUser;
+    providers: [
+      {
+        uuid: string;
+        person: {
+          uuid: string;
+        };
+      }
+    ];
+    updatedUser: {
+      person: {
+        uuid: string;
+      };
+    };
+    success: {
+      createUser: boolean;
+      createProvider: boolean;
+      deleteUser: boolean;
+      deleteProvider: boolean;
+    };
+  };
   settings: { settings: [{ property: string; value: string }]; loading: boolean };
   cflPerson: { person: { preferredName: { familyName: string; givenName: string }; attributes: IPersonAttribute[]; gender: string } };
 }
@@ -66,19 +90,27 @@ const UserAccount = (props: ILocationProps) => {
     locations,
     roles,
     users,
+    providers,
     currentUser,
     settings,
     loadingSettings,
     person,
-    success,
+    updatedUser,
+    successCreateUser,
+    successCreateProvider,
+    successDeleteUser,
+    successDeleteProvider,
     searchLocations,
     getRoles,
+    getProviders,
     getUsers,
     getUserByPersonId,
     getSettings,
     getPerson,
     saveUser,
-    deleteUser
+    saveProvider,
+    deleteUser,
+    deleteProvider
   } = props;
 
   const personUuid = currentUser?.person?.uuid;
@@ -89,15 +121,41 @@ const UserAccount = (props: ILocationProps) => {
   const [dirtyFields, setDirtyFields] = useState<string[]>([]);
   const [forcePassword, setForcePassword] = useState(true);
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
+  const [currentProvider, setCurrentProvider] = useState(DEFAULT_PROVIDER_VALUES);
 
   useEffect(() => {
-    success && onReturn();
-  }, [success]);
+    if (successCreateProvider || (successDeleteUser && successDeleteProvider)) {
+      onReturn();
+    }
+  }, [successCreateProvider, successDeleteProvider, successDeleteUser]);
+
+  useEffect(() => {
+    if (successCreateUser && !successCreateProvider) {
+      const {
+        familyName: { value: familyNameValue },
+        givenName: { value: givenNameValue },
+        username: { value: usernameValue }
+      } = userAccount;
+
+      const providerDataToSave = {
+        uuid: currentProvider?.uuid,
+        data: {
+          name: `${givenNameValue} ${familyNameValue}`,
+          person: updatedUser.person.uuid,
+          identifier: usernameValue
+        }
+      };
+
+      saveProvider(providerDataToSave);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [successCreateUser, successCreateProvider]);
 
   useEffect(() => {
     searchLocations();
     getRoles();
     getUsers();
+    getProviders();
     getSettings(SETTING_ATTRIBUTE_TYPE_PREFIX);
     personId && getUserByPersonId(personId);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -106,6 +164,14 @@ const UserAccount = (props: ILocationProps) => {
   useEffect(() => {
     personUuid && getPerson(personUuid);
   }, [personUuid, getPerson]);
+
+  useEffect(() => {
+    if (providers?.length) {
+      const currentProvider = providers.find(provider => provider.person.uuid === personUuid);
+
+      setCurrentProvider(currentProvider);
+    }
+  }, [personUuid, providers]);
 
   useEffect(() => {
     if (person) {
@@ -278,7 +344,8 @@ const UserAccount = (props: ILocationProps) => {
       header={{ id: 'userAccount.deleteAccount.confirmationModal.header' }}
       body={{ id: 'userAccount.deleteAccount.confirmationModal.body' }}
       onYes={() => {
-        deleteUser(currentUser?.uuid);
+        deleteProvider(currentProvider.uuid);
+        deleteUser(currentUser.uuid);
         setIsConfirmationModalOpen(false);
       }}
       onNo={() => setIsConfirmationModalOpen(false)}
@@ -344,27 +411,53 @@ const UserAccount = (props: ILocationProps) => {
   );
 };
 
-const mapStateToProps = ({ role, location, user, settings, cflPerson }: IStore) => ({
-  userLoading: !personId ? user.loading : isNil(cflPerson.person),
-  locations: location.locations,
-  roles: role.roles,
-  users: user.users,
-  currentUser: user.currentUser,
-  settings: settings.settings,
-  loadingSettings: settings.loading,
-  person: cflPerson.person,
-  success: user.success
+const mapStateToProps = ({
+  role: { roles },
+  location: { locations },
+  user: {
+    loading,
+    users,
+    providers,
+    currentUser,
+    updatedUser,
+    success: {
+      createUser: successCreateUser,
+      createProvider: successCreateProvider,
+      deleteUser: successDeleteUser,
+      deleteProvider: successDeleteProvider
+    }
+  },
+  settings: { settings, loading: loadingSettings },
+  cflPerson: { person }
+}: IStore) => ({
+  userLoading: !personId ? loading : isNil(person),
+  locations,
+  roles,
+  users,
+  providers,
+  currentUser,
+  settings,
+  loadingSettings,
+  person,
+  updatedUser,
+  successCreateUser,
+  successCreateProvider,
+  successDeleteUser,
+  successDeleteProvider
 });
 
 const mapDispatchToProps = {
   searchLocations,
   getRoles,
   getUsers,
+  getProviders,
   getUserByPersonId,
   getSettings,
   getPerson,
   saveUser,
-  deleteUser
+  saveProvider,
+  deleteUser,
+  deleteProvider
 };
 
 type StateProps = ReturnType<typeof mapStateToProps>;
