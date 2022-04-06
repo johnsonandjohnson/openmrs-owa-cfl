@@ -1,6 +1,12 @@
+interface IConceptSetMemberName {
+  display: string;
+}
+
 export interface IConceptSetMember {
   display: string;
   uuid: string;
+  names: Array<IConceptSetMemberName>;
+  setMembers: Array<IConceptSetMember>;
 }
 export interface IConcept {
   uuid: string;
@@ -12,6 +18,7 @@ export interface IConceptItemLink {
   rel: string;
   uri: string;
 }
+
 export interface IConceptItem {
   display: string;
   concept: {
@@ -25,6 +32,7 @@ export interface IConceptItem {
     links: IConceptItemLink[];
   };
 }
+
 export interface IConceptState {
   loading: {
     concepts: boolean;

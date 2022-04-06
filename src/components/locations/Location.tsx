@@ -11,12 +11,13 @@ import { extractEventValue, selectDefaultTheme } from '../../shared/util/form-ut
 import { getLocationAttributeTypes, searchLocations, saveLocation, getLocation } from '../../redux/reducers/location';
 import { chunk, cloneDeep, uniq } from 'lodash';
 import { ILocation, ILocationAttributeType, ILocationListItem } from '../../shared/models/location';
-import { STRING_FALSE, STRING_TRUE } from '../../shared/constants/input';
+import { EMPTY_STRING, STRING_FALSE, STRING_TRUE } from '../../shared/constants/input';
 import { TextareaWithPlaceholder } from '../common/textarea/Textarea';
 import ValidationError from '../common/form/ValidationError';
 import { scrollToTop } from '../../shared/util/window-util';
 import cx from 'classnames';
 import { getSettingByQuery } from '../../redux/reducers/setttings';
+import { getConcept } from '../../redux/reducers/concept';
 import {
   BOOLEAN_RADIOS_PREFERRED_HANDLER,
   COLUMNS,
@@ -25,8 +26,13 @@ import {
   DROPDOWN_PREFERRED_HANDLER,
   LOCATION_DEFAULT_TAG_LIST_SETTING_KEY,
   TEXTAREA_PREFERRED_HANDLER,
-  REQUIRED_OCCURRENCE
+  REQUIRED_OCCURRENCE,
+  COUNTRY_CODE_LOCATION_ATTRIBUTE_TYPE_UUID,
+  CLUSTER_LOCATION_ATTRIBUTE_TYPE_UUID,
+  MANDATORY_LOCATION_ATTRIBUTE_TYPE_UUID
 } from '../../shared/constants/location';
+import { COUNTRY_CONCEPT_UUID, COUNTRY_CONCEPT_REPRESENTATION } from '../../shared/constants/concept';
+import { IConcept } from '../../shared/models/concept';
 
 export interface ILocationProps extends StateProps, DispatchProps, RouteComponentProps {
   intl: IntlShape;
@@ -46,6 +52,12 @@ interface IStore {
   settings: {
     loading: boolean;
     setting: { value: string } | null;
+  };
+  concept: {
+    concept: IConcept;
+    loading: {
+      concept: boolean;
+    };
   };
 }
 
@@ -70,6 +82,7 @@ export const Location = (props: ILocationProps) => {
     props.getLocationAttributeTypes();
     props.searchLocations();
     props.getSettingByQuery(LOCATION_DEFAULT_TAG_LIST_SETTING_KEY);
+    props.getConcept(COUNTRY_CONCEPT_UUID, COUNTRY_CONCEPT_REPRESENTATION);
     if (locationId) {
       props.getLocation(locationId);
     }
@@ -118,6 +131,37 @@ export const Location = (props: ILocationProps) => {
 
   const onValueChange = (name: string) => (event: ChangeEvent) => setLocation({ ...location, [name]: extractEventValue(event) });
 
+  const onCountryValueChange = (event: ChangeEvent) => {
+    let attributes = location.attributes;
+    const countryFullySpecifiedName: IOption = extractEventValue(event);
+    const countryShortName = props.countryNames.find(({ fullySpecified }) => fullySpecified === countryFullySpecifiedName.value)?.short;
+
+    if (props.locationAttributeTypes.map(({ uuid }) => uuid).includes(COUNTRY_CODE_LOCATION_ATTRIBUTE_TYPE_UUID)) {
+      const countryCodeAttribute = attributes.find(({ attributeType }) => attributeType.uuid === COUNTRY_CODE_LOCATION_ATTRIBUTE_TYPE_UUID);
+
+      //fill in Country Code based on the selected Country
+      if (countryCodeAttribute) {
+        countryCodeAttribute.value = countryShortName;
+      } else {
+        attributes = [
+          ...location.attributes,
+          { attributeType: { uuid: COUNTRY_CODE_LOCATION_ATTRIBUTE_TYPE_UUID }, value: countryShortName }
+        ];
+      }
+    }
+
+    if (props.locationAttributeTypes.map(({ uuid }) => uuid).includes(CLUSTER_LOCATION_ATTRIBUTE_TYPE_UUID)) {
+      const clusterAttribute = attributes.find(({ attributeType }) => attributeType.uuid === CLUSTER_LOCATION_ATTRIBUTE_TYPE_UUID);
+
+      //clear Cluster value on Country change
+      if (clusterAttribute) {
+        clusterAttribute.value = null;
+      }
+    }
+
+    setLocation({ ...location, country: countryFullySpecifiedName.value, attributes });
+  };
+
   const onAttributeValueChange = (uuid: string) => (event: ChangeEvent | string) => {
     let attributes = location.attributes;
     const attribute = attributes.find(attribute => attribute.attributeType.uuid === uuid);
@@ -147,76 +191,109 @@ export const Location = (props: ILocationProps) => {
     const key = `locationAttribute${locationAttributeType.uuid}`;
     const placeholder = locationAttributeType.name;
     const value = location.attributes.find(attribute => locationAttributeType.uuid === attribute.attributeType.uuid)?.value;
-    const isRequired = locationAttributeType.minOccurs === REQUIRED_OCCURRENCE;
+    const isRequired =
+      locationAttributeType.minOccurs === REQUIRED_OCCURRENCE ||
+      MANDATORY_LOCATION_ATTRIBUTE_TYPE_UUID.includes(locationAttributeType.uuid);
     const isInvalid = isRequired && !value;
     const onChange = onAttributeValueChange(locationAttributeType.uuid);
 
-    switch (locationAttributeType.preferredHandlerClassname) {
-      case DROPDOWN_PREFERRED_HANDLER:
-        const options: Array<IOption> = locationAttributeType.handlerConfig
-          .split(DROPDOWN_HANDLER_CONFIG_SEPARATOR)
-          .map(value => ({ label: value, value }));
-        return (
-          <div className="input-container">
-            <SelectWithPlaceholder
-              key={key}
-              placeholder={placeholder}
-              showPlaceholder={!!value}
-              value={options.find(option => option.value === value)}
-              onChange={(option: IOption) => onChange(option.value)}
-              options={options}
-              wrapperClassName={cx('flex-1', { invalid: showValidationErrors && isInvalid })}
-              classNamePrefix="default-select"
-              theme={selectDefaultTheme}
-            />
-            {showValidationErrors && isInvalid && <ValidationError message="common.error.required" />}
-          </div>
-        );
-      case BOOLEAN_RADIOS_PREFERRED_HANDLER:
-        return (
-          <RadioButtonsWithPlaceholder
-            key={key}
-            name={key}
-            onChange={onChange}
-            options={[
-              { value: STRING_TRUE, label: formatMessage({ id: 'common.true' }) },
-              { value: STRING_FALSE, label: formatMessage({ id: 'common.false' }) }
-            ]}
-            value={value?.toString()}
+    if (locationAttributeType.uuid === CLUSTER_LOCATION_ATTRIBUTE_TYPE_UUID) {
+      const countryClusters = props.countryClusters.find(({ countryName }) => countryName === location.country)?.clusters;
+      const options = countryClusters?.map(clusterName => ({ label: clusterName, value: clusterName })) ?? [];
+      return (
+        <div className="input-container" key={key}>
+          <SelectWithPlaceholder
             placeholder={placeholder}
-            showPlaceholder
+            showPlaceholder={!!value}
+            value={value && options.find(option => option.value === value)}
+            onChange={(option: IOption) => onChange(option.value)}
+            options={options}
+            wrapperClassName={cx('flex-1', { invalid: showValidationErrors && isInvalid })}
+            classNamePrefix="default-select"
+            theme={selectDefaultTheme}
+            isDisabled={!location.country}
           />
-        );
-      case TEXTAREA_PREFERRED_HANDLER:
-        return (
-          <div className="input-container">
-            <TextareaWithPlaceholder
+          {showValidationErrors && isInvalid && <ValidationError message="common.error.required" />}
+        </div>
+      );
+    } else if (locationAttributeType.uuid === COUNTRY_CODE_LOCATION_ATTRIBUTE_TYPE_UUID) {
+      return (
+        <div className="input-container" key={key}>
+          <InputWithPlaceholder
+            className={cx({ invalid: showValidationErrors && isInvalid })}
+            placeholder={placeholder}
+            showPlaceholder={!!value}
+            value={value || EMPTY_STRING}
+            onChange={onChange}
+            readOnly
+          />
+          {showValidationErrors && isInvalid && <ValidationError message="common.error.required" />}
+        </div>
+      );
+    } else
+      switch (locationAttributeType.preferredHandlerClassname) {
+        case DROPDOWN_PREFERRED_HANDLER:
+          const options: Array<IOption> = locationAttributeType.handlerConfig
+            .split(DROPDOWN_HANDLER_CONFIG_SEPARATOR)
+            .map(value => ({ label: value, value }));
+          return (
+            <div className="input-container" key={key}>
+              <SelectWithPlaceholder
+                placeholder={placeholder}
+                showPlaceholder={!!value}
+                value={options.find(option => option.value === value)}
+                onChange={(option: IOption) => onChange(option.value)}
+                options={options}
+                wrapperClassName={cx('flex-1', { invalid: showValidationErrors && isInvalid })}
+                classNamePrefix="default-select"
+                theme={selectDefaultTheme}
+              />
+              {showValidationErrors && isInvalid && <ValidationError message="common.error.required" />}
+            </div>
+          );
+        case BOOLEAN_RADIOS_PREFERRED_HANDLER:
+          return (
+            <RadioButtonsWithPlaceholder
               key={key}
-              className={cx(showValidationErrors && isInvalid)}
-              placeholder={placeholder}
-              showPlaceholder={!!value}
-              value={value}
+              name={key}
               onChange={onChange}
-              isResizable
-            />
-            {showValidationErrors && isInvalid && <ValidationError message="common.error.required" />}
-          </div>
-        );
-      default:
-        return (
-          <div className="input-container">
-            <InputWithPlaceholder
-              key={key}
-              className={cx({ invalid: showValidationErrors && isInvalid })}
+              options={[
+                { value: STRING_TRUE, label: formatMessage({ id: 'common.true' }) },
+                { value: STRING_FALSE, label: formatMessage({ id: 'common.false' }) }
+              ]}
+              value={value?.toString()}
               placeholder={placeholder}
-              showPlaceholder={!!value}
-              value={value}
-              onChange={onChange}
+              showPlaceholder
             />
-            {showValidationErrors && isInvalid && <ValidationError message="common.error.required" />}
-          </div>
-        );
-    }
+          );
+        case TEXTAREA_PREFERRED_HANDLER:
+          return (
+            <div className="input-container" key={key}>
+              <TextareaWithPlaceholder
+                className={cx(showValidationErrors && isInvalid)}
+                placeholder={placeholder}
+                showPlaceholder={!!value}
+                value={value || EMPTY_STRING}
+                onChange={onChange}
+                isResizable
+              />
+              {showValidationErrors && isInvalid && <ValidationError message="common.error.required" />}
+            </div>
+          );
+        default:
+          return (
+            <div className="input-container" key={key}>
+              <InputWithPlaceholder
+                className={cx({ invalid: showValidationErrors && isInvalid })}
+                placeholder={placeholder}
+                showPlaceholder={!!value}
+                value={value || EMPTY_STRING}
+                onChange={onChange}
+              />
+              {showValidationErrors && isInvalid && <ValidationError message="common.error.required" />}
+            </div>
+          );
+      }
   };
 
   return (
@@ -238,7 +315,7 @@ export const Location = (props: ILocationProps) => {
                     key="locationNameInput"
                     placeholder={formatMessage({ id: 'locations.location.name' })}
                     showPlaceholder={!!location.name}
-                    value={location.name}
+                    value={location.name || EMPTY_STRING}
                     onChange={onValueChange('name')}
                     className={cx({ invalid: showValidationErrors && (isLocationNameEmpty || isLocationNameDuplicated) })}
                     data-testid="locationNameInput"
@@ -254,7 +331,7 @@ export const Location = (props: ILocationProps) => {
                   key="locationDescriptionInput"
                   placeholder={formatMessage({ id: 'locations.location.description' })}
                   showPlaceholder={!!location.description}
-                  value={location.description}
+                  value={location.description || EMPTY_STRING}
                   onChange={onValueChange('description')}
                   data-testid="locationDescriptionInput"
                 />
@@ -264,7 +341,7 @@ export const Location = (props: ILocationProps) => {
                   key="locationAddress1Input"
                   placeholder={formatMessage({ id: 'locations.location.address1' })}
                   showPlaceholder={!!location.address1}
-                  value={location.address1}
+                  value={location.address1 || EMPTY_STRING}
                   onChange={onValueChange('address1')}
                   data-testid="locationAddress1Input"
                 />
@@ -272,7 +349,7 @@ export const Location = (props: ILocationProps) => {
                   key="locationAddress2Input"
                   placeholder={formatMessage({ id: 'locations.location.address2' })}
                   showPlaceholder={!!location.address2}
-                  value={location.address2}
+                  value={location.address2 || EMPTY_STRING}
                   onChange={onValueChange('address2')}
                   data-testid="locationAddress2Input"
                 />
@@ -282,7 +359,7 @@ export const Location = (props: ILocationProps) => {
                   key="locationCityVillageInput"
                   placeholder={formatMessage({ id: 'locations.location.cityVillage' })}
                   showPlaceholder={!!location.cityVillage}
-                  value={location.cityVillage}
+                  value={location.cityVillage || EMPTY_STRING}
                   onChange={onValueChange('cityVillage')}
                   data-testid="locationCityVillageInput"
                 />
@@ -290,7 +367,7 @@ export const Location = (props: ILocationProps) => {
                   key="locationStateProvinceInput"
                   placeholder={formatMessage({ id: 'locations.location.stateProvince' })}
                   showPlaceholder={!!location.stateProvince}
-                  value={location.stateProvince}
+                  value={location.stateProvince || EMPTY_STRING}
                   onChange={onValueChange('stateProvince')}
                   data-testid="locationStateProvinceInput"
                 />
@@ -300,19 +377,21 @@ export const Location = (props: ILocationProps) => {
                   key="locationPostalCodeInput"
                   placeholder={formatMessage({ id: 'locations.location.postalCode' })}
                   showPlaceholder={!!location.postalCode}
-                  value={location.postalCode}
+                  value={location.postalCode || EMPTY_STRING}
                   onChange={onValueChange('postalCode')}
                   data-testid="locationPostalCodeInput"
                 />
                 <div className="input-container">
-                  <InputWithPlaceholder
+                  <SelectWithPlaceholder
                     key="locationCountryInput"
                     placeholder={formatMessage({ id: 'locations.location.country' })}
                     showPlaceholder={!!location.country}
-                    value={location.country}
-                    onChange={onValueChange('country')}
-                    className={cx({ invalid: showValidationErrors && isCountryEmpty })}
-                    data-testid="locationCountryInput"
+                    value={props.countryOptions.find(({ value }) => value === location.country)}
+                    onChange={onCountryValueChange}
+                    options={props.countryOptions}
+                    wrapperClassName={cx('flex-1', { invalid: showValidationErrors && isCountryEmpty })}
+                    classNamePrefix="default-select"
+                    theme={selectDefaultTheme}
                   />
                   {showValidationErrors && isCountryEmpty && <ValidationError message="common.error.required" />}
                 </div>
@@ -344,17 +423,32 @@ export const Location = (props: ILocationProps) => {
 
 const mapStateToProps = ({
   location: { loadingLocationAttributeTypes, locationAttributeTypes, locations, success, loadingLocation, location: editedLocation },
-  settings: { loading: settingLoading, setting }
+  settings: { loading: loadingSetting, setting },
+  concept: {
+    concept,
+    loading: { concept: loadingConcept }
+  }
 }: IStore) => ({
-  isLocationLoading: loadingLocationAttributeTypes || loadingLocation || settingLoading,
+  isLocationLoading: loadingLocationAttributeTypes || loadingLocation || loadingSetting || loadingConcept,
   locationAttributeTypes: locationAttributeTypes.filter(locationAttributeType => !locationAttributeType.retired),
   locations,
   success,
   editedLocation,
-  settingValue: setting?.value
+  settingValue: setting?.value,
+  countryOptions: concept.setMembers
+    .sort((countryA, countryB) => countryA.display.localeCompare(countryB.display))
+    .map(({ display }) => ({ label: display, value: display })),
+  countryNames: concept.setMembers.map(({ display: fullySpecified, names }) => ({
+    fullySpecified,
+    short: names.find(({ display }) => display !== fullySpecified)?.display
+  })),
+  countryClusters: concept.setMembers.map(({ display: countryName, setMembers }) => ({
+    countryName,
+    clusters: setMembers.map(({ display: clusterName }) => clusterName)
+  }))
 });
 
-const mapDispatchToProps = { getLocationAttributeTypes, searchLocations, saveLocation, getLocation, getSettingByQuery };
+const mapDispatchToProps = { getLocationAttributeTypes, searchLocations, saveLocation, getLocation, getSettingByQuery, getConcept };
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
