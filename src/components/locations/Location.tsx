@@ -211,7 +211,7 @@ export const Location = (props: ILocationProps) => {
             wrapperClassName={cx('flex-1', { invalid: showValidationErrors && isInvalid })}
             classNamePrefix="default-select"
             theme={selectDefaultTheme}
-            isDisabled={!location.country}
+            isDisabled={isCountryEmpty}
           />
           {showValidationErrors && isInvalid && <ValidationError message="common.error.required" />}
         </div>
@@ -385,7 +385,7 @@ export const Location = (props: ILocationProps) => {
                   <SelectWithPlaceholder
                     key="locationCountryInput"
                     placeholder={formatMessage({ id: 'locations.location.country' })}
-                    showPlaceholder={!!location.country}
+                    showPlaceholder={!isCountryEmpty}
                     value={props.countryOptions.find(({ value }) => value === location.country)}
                     onChange={onCountryValueChange}
                     options={props.countryOptions}
