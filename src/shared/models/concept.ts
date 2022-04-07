@@ -5,8 +5,8 @@ interface IConceptSetMemberName {
 export interface IConceptSetMember {
   display: string;
   uuid: string;
-  names: Array<IConceptSetMemberName>;
-  setMembers: Array<IConceptSetMember>;
+  names: IConceptSetMemberName[];
+  setMembers: IConceptSetMember[];
 }
 export interface IConcept {
   uuid: string;

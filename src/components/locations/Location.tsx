@@ -32,7 +32,7 @@ import {
   MANDATORY_LOCATION_ATTRIBUTE_TYPE_UUID
 } from '../../shared/constants/location';
 import { COUNTRY_CONCEPT_UUID, COUNTRY_CONCEPT_REPRESENTATION } from '../../shared/constants/concept';
-import { IConcept } from '../../shared/models/concept';
+import { IConceptSetMember } from '../../shared/models/concept';
 
 export interface ILocationProps extends StateProps, DispatchProps, RouteComponentProps {
   intl: IntlShape;
@@ -54,7 +54,9 @@ interface IStore {
     setting: { value: string } | null;
   };
   concept: {
-    concept: IConcept;
+    concept: {
+      setMembers: Array<IConceptSetMember>;
+    };
     loading: {
       concept: boolean;
     };
@@ -70,37 +72,52 @@ interface IOption {
   value: string;
 }
 
-export const Location = (props: ILocationProps) => {
+export const Location = ({
+  editedLocation,
+  countryClusters,
+  countryNames,
+  countryOptions,
+  intl: { formatMessage },
+  isLocationLoading,
+  locations,
+  locationAttributeTypes,
+  match,
+  settingValue,
+  success,
+  getConcept,
+  getLocation,
+  getLocationAttributeTypes,
+  getSettingByQuery,
+  saveLocation,
+  searchLocations
+}: ILocationProps) => {
   const [location, setLocation] = useState(DEFAULT_LOCATION);
   const [showValidationErrors, setShowValidationErrors] = useState(false);
-  const {
-    intl: { formatMessage }
-  } = props;
-  const { locationId } = props.match.params as IUrlParams;
+  const { locationId } = match.params as IUrlParams;
 
   useEffect(() => {
-    props.getLocationAttributeTypes();
-    props.searchLocations();
-    props.getSettingByQuery(LOCATION_DEFAULT_TAG_LIST_SETTING_KEY);
-    props.getConcept(COUNTRY_CONCEPT_UUID, COUNTRY_CONCEPT_REPRESENTATION);
+    getLocationAttributeTypes();
+    searchLocations();
+    getSettingByQuery(LOCATION_DEFAULT_TAG_LIST_SETTING_KEY);
+    getConcept(COUNTRY_CONCEPT_UUID, COUNTRY_CONCEPT_REPRESENTATION);
     if (locationId) {
-      props.getLocation(locationId);
+      getLocation(locationId);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    if (props.editedLocation) {
-      setLocation(props.editedLocation);
+    if (editedLocation) {
+      setLocation(editedLocation);
     }
-  }, [props.editedLocation]);
+  }, [editedLocation]);
 
   const onReturn = () => {
     window.location.href = `${ROOT_URL}adminui/metadata/locations/manageLocations.page`;
   };
 
   const onSave = () => {
-    const requiredLocationAttributeTypes = props.locationAttributeTypes.filter(
+    const requiredLocationAttributeTypes = locationAttributeTypes.filter(
       locationAttributeType => locationAttributeType.minOccurs === REQUIRED_OCCURRENCE
     );
     const isAllRequiredLocationAttributeTypesFilled = requiredLocationAttributeTypes.every(({ uuid: requiredLocationAttributeTypeUuid }) =>
@@ -112,31 +129,31 @@ export const Location = (props: ILocationProps) => {
       scrollToTop();
     } else {
       const preparedLocation = cloneDeep(location) as ILocation;
-      const locationDefaultTags = props.settingValue ? JSON.parse(props.settingValue) : [];
+      const locationDefaultTags = settingValue ? JSON.parse(settingValue) : [];
 
       preparedLocation.attributes = preparedLocation.attributes
         .filter(attribute => attribute.value !== '')
         .map(({ attributeType, value }) => ({ attributeType, value }));
       preparedLocation.tags = uniq([...preparedLocation.tags, ...locationDefaultTags]);
 
-      props.saveLocation(preparedLocation);
+      saveLocation(preparedLocation);
     }
   };
 
   useEffect(() => {
-    if (props.success) {
+    if (success) {
       onReturn();
     }
-  }, [props.success]);
+  }, [success]);
 
   const onValueChange = (name: string) => (event: ChangeEvent) => setLocation({ ...location, [name]: extractEventValue(event) });
 
   const onCountryValueChange = (event: ChangeEvent) => {
     let attributes = location.attributes;
     const countryFullySpecifiedName: IOption = extractEventValue(event);
-    const countryShortName = props.countryNames.find(({ fullySpecified }) => fullySpecified === countryFullySpecifiedName.value)?.short;
+    const countryShortName = countryNames.find(({ fullySpecified }) => fullySpecified === countryFullySpecifiedName.value)?.short;
 
-    if (props.locationAttributeTypes.map(({ uuid }) => uuid).includes(COUNTRY_CODE_LOCATION_ATTRIBUTE_TYPE_UUID)) {
+    if (locationAttributeTypes.some(({ uuid }) => uuid === COUNTRY_CODE_LOCATION_ATTRIBUTE_TYPE_UUID)) {
       const countryCodeAttribute = attributes.find(({ attributeType }) => attributeType.uuid === COUNTRY_CODE_LOCATION_ATTRIBUTE_TYPE_UUID);
 
       //fill in Country Code based on the selected Country
@@ -150,7 +167,7 @@ export const Location = (props: ILocationProps) => {
       }
     }
 
-    if (props.locationAttributeTypes.map(({ uuid }) => uuid).includes(CLUSTER_LOCATION_ATTRIBUTE_TYPE_UUID)) {
+    if (locationAttributeTypes.some(({ uuid }) => uuid === CLUSTER_LOCATION_ATTRIBUTE_TYPE_UUID)) {
       const clusterAttribute = attributes.find(({ attributeType }) => attributeType.uuid === CLUSTER_LOCATION_ATTRIBUTE_TYPE_UUID);
 
       //clear Cluster value on Country change
@@ -178,28 +195,34 @@ export const Location = (props: ILocationProps) => {
 
   const isLocationNameEmpty = !location.name;
 
-  const isLocationNameDuplicated = props.locations
+  const isLocationNameDuplicated = locations
     .filter(loc => loc.uuid !== location.uuid)
     .map(loc => loc.display.toLowerCase())
     .includes(location.name.toLowerCase());
 
   const isCountryEmpty = !location.country;
 
-  const locationAttributeTypesGrouped: Array<Array<ILocationAttributeType>> = chunk(props.locationAttributeTypes, COLUMNS);
+  const locationAttributeTypesGrouped: Array<Array<ILocationAttributeType>> = chunk(locationAttributeTypes, COLUMNS);
 
   const input = (locationAttributeType: ILocationAttributeType) => {
-    const key = `locationAttribute${locationAttributeType.uuid}`;
-    const placeholder = locationAttributeType.name;
-    const value = location.attributes.find(attribute => locationAttributeType.uuid === attribute.attributeType.uuid)?.value;
-    const isRequired =
-      locationAttributeType.minOccurs === REQUIRED_OCCURRENCE ||
-      MANDATORY_LOCATION_ATTRIBUTE_TYPE_UUID.includes(locationAttributeType.uuid);
+    const {
+      uuid: locationAttributeTypeUuid,
+      name: placeholder,
+      minOccurs,
+      preferredHandlerClassname,
+      handlerConfig
+    } = locationAttributeType;
+    const key = `locationAttribute${locationAttributeTypeUuid}`;
+    const value = location.attributes.find(attribute => locationAttributeTypeUuid === attribute.attributeType.uuid)?.value;
+    const isRequired = minOccurs === REQUIRED_OCCURRENCE || MANDATORY_LOCATION_ATTRIBUTE_TYPE_UUID.includes(locationAttributeTypeUuid);
     const isInvalid = isRequired && !value;
-    const onChange = onAttributeValueChange(locationAttributeType.uuid);
+    const onChange = onAttributeValueChange(locationAttributeTypeUuid);
 
-    if (locationAttributeType.uuid === CLUSTER_LOCATION_ATTRIBUTE_TYPE_UUID) {
-      const countryClusters = props.countryClusters.find(({ countryName }) => countryName === location.country)?.clusters;
-      const options = countryClusters?.map(clusterName => ({ label: clusterName, value: clusterName })) ?? [];
+    if (locationAttributeTypeUuid === CLUSTER_LOCATION_ATTRIBUTE_TYPE_UUID) {
+      const options: Array<IOption> =
+        countryClusters
+          .find(({ countryName }) => countryName === location.country)
+          ?.clusters?.map(clusterName => ({ label: clusterName, value: clusterName })) ?? [];
       return (
         <div className="input-container" key={key}>
           <SelectWithPlaceholder
@@ -216,7 +239,7 @@ export const Location = (props: ILocationProps) => {
           {showValidationErrors && isInvalid && <ValidationError message="common.error.required" />}
         </div>
       );
-    } else if (locationAttributeType.uuid === COUNTRY_CODE_LOCATION_ATTRIBUTE_TYPE_UUID) {
+    } else if (locationAttributeTypeUuid === COUNTRY_CODE_LOCATION_ATTRIBUTE_TYPE_UUID) {
       return (
         <div className="input-container" key={key}>
           <InputWithPlaceholder
@@ -231,11 +254,9 @@ export const Location = (props: ILocationProps) => {
         </div>
       );
     } else
-      switch (locationAttributeType.preferredHandlerClassname) {
+      switch (preferredHandlerClassname) {
         case DROPDOWN_PREFERRED_HANDLER:
-          const options: Array<IOption> = locationAttributeType.handlerConfig
-            .split(DROPDOWN_HANDLER_CONFIG_SEPARATOR)
-            .map(value => ({ label: value, value }));
+          const options: Array<IOption> = handlerConfig.split(DROPDOWN_HANDLER_CONFIG_SEPARATOR).map(value => ({ label: value, value }));
           return (
             <div className="input-container" key={key}>
               <SelectWithPlaceholder
@@ -302,7 +323,7 @@ export const Location = (props: ILocationProps) => {
         <FormattedMessage id={`locations.location.${locationId ? 'edit' : 'create'}.title`} />
       </h2>
       <div className="inner-content">
-        {props.isLocationLoading ? (
+        {isLocationLoading ? (
           <div className="spinner">
             <Spinner />
           </div>
@@ -386,9 +407,9 @@ export const Location = (props: ILocationProps) => {
                     key="locationCountryInput"
                     placeholder={formatMessage({ id: 'locations.location.country' })}
                     showPlaceholder={!isCountryEmpty}
-                    value={props.countryOptions.find(({ value }) => value === location.country)}
+                    value={countryOptions.find(({ value }) => value === location.country)}
                     onChange={onCountryValueChange}
-                    options={props.countryOptions}
+                    options={countryOptions}
                     wrapperClassName={cx('flex-1', { invalid: showValidationErrors && isCountryEmpty })}
                     classNamePrefix="default-select"
                     theme={selectDefaultTheme}
@@ -425,7 +446,7 @@ const mapStateToProps = ({
   location: { loadingLocationAttributeTypes, locationAttributeTypes, locations, success, loadingLocation, location: editedLocation },
   settings: { loading: loadingSetting, setting },
   concept: {
-    concept,
+    concept: { setMembers: countries },
     loading: { concept: loadingConcept }
   }
 }: IStore) => ({
@@ -435,14 +456,14 @@ const mapStateToProps = ({
   success,
   editedLocation,
   settingValue: setting?.value,
-  countryOptions: concept.setMembers
+  countryOptions: countries
     .sort((countryA, countryB) => countryA.display.localeCompare(countryB.display))
     .map(({ display }) => ({ label: display, value: display })),
-  countryNames: concept.setMembers.map(({ display: fullySpecified, names }) => ({
+  countryNames: countries.map(({ display: fullySpecified, names }) => ({
     fullySpecified,
     short: names.find(({ display }) => display !== fullySpecified)?.display
   })),
-  countryClusters: concept.setMembers.map(({ display: countryName, setMembers }) => ({
+  countryClusters: countries.map(({ display: countryName, setMembers }) => ({
     countryName,
     clusters: setMembers.map(({ display: clusterName }) => clusterName)
   }))
