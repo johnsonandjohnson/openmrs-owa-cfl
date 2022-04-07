@@ -2,13 +2,7 @@ import axios from 'axios';
 
 import { FAILURE, REQUEST, SUCCESS } from '../action-type.util';
 import { getAppConfig } from '../../shared/util/app-util';
-import {
-  FIND_CAREGIVER_APP,
-  FIND_PATIENT_APP,
-  REGISTER_CAREGIVER_APP,
-  REGISTER_PATIENT_APP,
-  CONFIGURE_METADATA_APPS
-} from '../../shared/constants/app';
+import { FIND_CAREGIVER_APP, FIND_PATIENT_APP, REGISTER_CAREGIVER_APP, REGISTER_PATIENT_APP } from '../../shared/constants/app';
 
 export const ACTION_TYPES = {
   GET_APPS: 'settings/GET_APPS'
