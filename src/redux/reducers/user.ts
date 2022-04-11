@@ -110,9 +110,9 @@ export const getUsers = () => ({
   payload: axios.get(USER_URL)
 });
 
-export const getProviders = () => ({
+export const getProviders = (userUuid?: string) => ({
   type: ACTION_TYPES.GET_PROVIDERS,
-  payload: axios.get(`${PROVIDER_URL}?v=default`)
+  payload: axios.get(`${PROVIDER_URL}?v=default${userUuid ? '&user=' + userUuid : ''}`)
 });
 
 export const getUserByPersonId = (personId: string) => ({
