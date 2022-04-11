@@ -23,10 +23,6 @@ export const USER = 'user';
 export const USER_URL = `${WS_REST_V1_URL}${USER}`;
 export const PROVIDER_URL = `${WS_REST_V1_URL}provider`;
 export const PASSWORD_URL = `${WS_REST_V1_URL}password`;
-export const DEFAULT_PROVIDER_VALUES = {
-  uuid: '',
-  person: { uuid: '' }
-};
 export const DEFAULT_USER_VALUES = {
   familyName: { value: '', isValid: true, error: '' },
   givenName: { value: '', isValid: true, error: '' },

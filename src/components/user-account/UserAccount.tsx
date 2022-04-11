@@ -38,8 +38,7 @@ import {
   PASSWORD_FIELD,
   PASSWORD_REGEX,
   CONFIRM_PASSWORD_FIELD,
-  USERNAME_REGEX,
-  DEFAULT_PROVIDER_VALUES
+  USERNAME_REGEX
 } from '../../shared/constants/user-account';
 import { EMPTY_STRING } from 'src/shared/constants/input';
 import { ConfirmationModal } from '../common/form/ConfirmationModal';
@@ -90,7 +89,7 @@ const UserAccount = (props: ILocationProps) => {
     locations,
     roles,
     users,
-    providers,
+    provider,
     currentUser,
     settings,
     loadingSettings,
@@ -114,6 +113,7 @@ const UserAccount = (props: ILocationProps) => {
   } = props;
 
   const personUuid = currentUser?.person?.uuid;
+  const userUuid = currentUser?.uuid;
   const emailAddressAtributeTypeUuid = settings?.find(setting => setting.property === SETTING_EMAIL_ADDRESS_ATRRIBUTE_TYPE)?.value;
   const telephoneNumberAtributeTypeUuid = settings?.find(setting => setting.property === SETTING_TELEPHONE_NUMBER_ATRRIBUTE_TYPE)?.value;
 
@@ -121,13 +121,12 @@ const UserAccount = (props: ILocationProps) => {
   const [dirtyFields, setDirtyFields] = useState<string[]>([]);
   const [forcePassword, setForcePassword] = useState(true);
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
-  const [currentProvider, setCurrentProvider] = useState(DEFAULT_PROVIDER_VALUES);
 
   useEffect(() => {
-    if (successCreateProvider || (successDeleteUser && successDeleteProvider)) {
+    if ((successCreateUser && successCreateProvider) || (successDeleteUser && successDeleteProvider)) {
       onReturn();
     }
-  }, [successCreateProvider, successDeleteProvider, successDeleteUser]);
+  }, [successCreateUser, successCreateProvider, successDeleteProvider, successDeleteUser]);
 
   useEffect(() => {
     if (successCreateUser && !successCreateProvider) {
@@ -138,7 +137,7 @@ const UserAccount = (props: ILocationProps) => {
       } = userAccount;
 
       const providerDataToSave = {
-        uuid: currentProvider?.uuid,
+        uuid: provider?.uuid,
         data: {
           name: `${givenNameValue} ${familyNameValue}`,
           person: updatedUser.person.uuid,
@@ -155,7 +154,6 @@ const UserAccount = (props: ILocationProps) => {
     searchLocations();
     getRoles();
     getUsers();
-    getProviders();
     getSettings(SETTING_ATTRIBUTE_TYPE_PREFIX);
     personId && getUserByPersonId(personId);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -164,14 +162,6 @@ const UserAccount = (props: ILocationProps) => {
   useEffect(() => {
     personUuid && getPerson(personUuid);
   }, [personUuid, getPerson]);
-
-  useEffect(() => {
-    if (providers?.length) {
-      const currentProvider = providers.find(provider => provider.person.uuid === personUuid);
-
-      setCurrentProvider(currentProvider);
-    }
-  }, [personUuid, providers]);
 
   useEffect(() => {
     if (person) {
@@ -213,6 +203,7 @@ const UserAccount = (props: ILocationProps) => {
         confirmPassword: { ...userAccount.confirmPassword, value: DEFAULT_EDIT_USER_PASSWORD }
       });
       setForcePassword(false);
+      getProviders(userUuid);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [person, currentUser]);
@@ -329,7 +320,7 @@ const UserAccount = (props: ILocationProps) => {
             ]
           }
         },
-        currentUser?.uuid,
+        userUuid,
         person && isPasswordFieldDirty && userAccount.password.value
       );
     } else {
@@ -344,7 +335,7 @@ const UserAccount = (props: ILocationProps) => {
       header={{ id: 'userAccount.deleteAccount.confirmationModal.header' }}
       body={{ id: 'userAccount.deleteAccount.confirmationModal.body' }}
       onYes={() => {
-        deleteProvider(currentProvider.uuid);
+        deleteProvider(provider.uuid);
         deleteUser(currentUser.uuid);
         setIsConfirmationModalOpen(false);
       }}
@@ -434,7 +425,7 @@ const mapStateToProps = ({
   locations,
   roles,
   users,
-  providers,
+  provider: providers.find(({ person: { uuid } }) => uuid === currentUser?.person?.uuid),
   currentUser,
   settings,
   loadingSettings,
