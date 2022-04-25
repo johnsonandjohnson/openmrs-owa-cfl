@@ -20,7 +20,6 @@ import ValidationError from '../common/form/ValidationError';
 import './NotificationConfiguration.scss';
 import '../Inputs.scss';
 import {
-  COUNTRY_OPTIONS,
   BEST_CONTACT_TIME_PROPERTY_NAME,
   CALL_PROPERTY_NAME,
   CONFIGURATION_NAME_PROPERTY_NAME,
@@ -44,6 +43,9 @@ import {
 } from '../../shared/constants/notification-configuration';
 import { ONE, TEN, ZERO } from '../../shared/constants/input';
 import { ROOT_URL } from '../../shared/constants/openmrs';
+import { COUNTRY_CONCEPT_UUID, COUNTRY_CONCEPT_REPRESENTATION } from '../../shared/constants/concept';
+import { IConceptSetMember } from '../../shared/models/concept';
+import { getConcept } from '../../redux/reducers/concept';
 
 interface IStore {
   appError: string;
@@ -55,6 +57,8 @@ interface IStore {
   callflowsProviders: { name: string }[];
   messageCountryProperties: ICountryProperty[];
   isSetValuesSuccessful: boolean;
+  conceptCountryOptions: { label: string; value: string }[];
+  loadingConcept: boolean;
 }
 
 interface INotificationConfigurationProps extends StateProps, DispatchProps, RouteComponentProps {
@@ -78,6 +82,7 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
     this.props.getCountryProperties(MESSAGES_COUNTRY_PROPERTIES_PREFIX);
     this.props.getCallflowsProviders();
     this.props.getSmsProviders();
+    this.props.getConcept(COUNTRY_CONCEPT_UUID, COUNTRY_CONCEPT_REPRESENTATION);
   }
 
   componentDidUpdate(prevProps: Readonly<INotificationConfigurationProps>) {
@@ -487,11 +492,11 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
   };
 
   countryConfiguration = (configuration, configurationIdx) => {
-    const { intl } = this.props;
+    const { intl, conceptCountryOptions } = this.props;
     const { isAllSectionsExpanded, notificationConfiguration } = this.state;
     const configurationName = configuration[CONFIGURATION_NAME_PROPERTY_NAME];
     const isDefaultCountryConfiguration = configurationName === DEFAULT_COUNTRY_CONFIGURATION_NAME;
-    const countryOptions = COUNTRY_OPTIONS.filter(
+    const countryOptions = conceptCountryOptions.filter(
       country => !notificationConfiguration.map(configuration => configuration.name).includes(country.value)
     );
     const headerComponent = isDefaultCountryConfiguration ? (
@@ -503,7 +508,7 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
         <SelectWithPlaceholder
           placeholder={intl.formatMessage({ id: 'notificationConfiguration.country' })}
           showPlaceholder={!!configurationName}
-          value={!!configurationName && COUNTRY_OPTIONS.find(countryName => countryName.value === configurationName)}
+          value={!!configurationName && conceptCountryOptions.find(countryName => countryName.value === configurationName)}
           onChange={this.onCountryChange(configurationIdx)}
           options={countryOptions}
           wrapperClassName={!configurationName ? 'invalid' : ''}
@@ -553,8 +558,9 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
   };
 
   render() {
-    const { appError, appLoading, loading } = this.props;
+    const { appError, appLoading, loading, loadingConcept } = this.props;
     const { notificationConfiguration } = this.state;
+    const isLoading = appLoading || loading || loadingConcept;
     return (
       <div className="notification-configuration">
         {this.confirmationModal()}
@@ -563,7 +569,7 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
         </h2>
         <div className="error">{appError}</div>
         <div className="inner-content">
-          {appLoading || loading ? (
+          {isLoading ? (
             <Spinner />
           ) : (
             <>
@@ -601,7 +607,15 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
   }
 }
 
-const mapStateToProps = ({ apps, provider, countryProperty }) =>
+const mapStateToProps = ({
+  apps,
+  provider,
+  countryProperty,
+  concept: {
+    concept: { setMembers: countries },
+    loading: { concept: loadingConcept }
+  }
+}) =>
   ({
     appError: apps.errorMessage,
     appLoading: apps.loading,
@@ -611,10 +625,18 @@ const mapStateToProps = ({ apps, provider, countryProperty }) =>
     smsProviders: provider.smsProviders,
     callflowsProviders: provider.callflowsProviders,
     messageCountryProperties: countryProperty.countryProperties,
-    isSetValuesSuccessful: countryProperty.isSetValuesSuccessful
+    isSetValuesSuccessful: countryProperty.isSetValuesSuccessful,
+    conceptCountryOptions: countries
+      .sort((countryA, countryB) => countryA.display.localeCompare(countryB.display))
+      .map(({ display }) => ({ label: display, value: display })),
+    countryNames: countries.map(({ display: fullySpecified, names }) => ({
+      fullySpecified,
+      short: names.find(({ display }) => display !== fullySpecified)?.display
+    })),
+    loadingConcept
   } as IStore);
 
-const mapDispatchToProps = { getCountryProperties, setCountryPropertyValues, getCallflowsProviders, getSmsProviders };
+const mapDispatchToProps = { getCountryProperties, setCountryPropertyValues, getCallflowsProviders, getSmsProviders, getConcept };
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
