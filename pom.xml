@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.openmrs.owa</groupId>
+    <artifactId>openmrs-owa-cflui</artifactId>
+    <version>1.5.2-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>openmrs-owa-cflui</name>
+    <description>OpenMRS CFL UI OWA</description>
+
+    <scm>
+        <connection>scm:git:https://sourcecode.jnj.com/scm/itx-bpv/cfl-ui.git</connection>
+        <developerConnection>scm:git:https://sourcecode.jnj.com/scm/itx-bpv/cfl-ui.git</developerConnection>
+        <url>https://sourcecode.jnj.com/scm/itx-bpv/cfl-ui.git</url>
+        <tag>HEAD</tag>
+    </scm>
+
+    <build>
+        <finalName>cfl-ui-${project.version}</finalName>
+        <plugins>
+            <plugin>
+                <groupId>com.github.eirslett</groupId>
+                <artifactId>frontend-maven-plugin</artifactId>
+                <version>1.0</version>
+                <executions>
+                    <execution>
+                        <id>install node and npm</id>
+                        <goals>
+                            <goal>install-node-and-npm</goal>
+                        </goals>
+                        <phase>validate</phase>
+                        <configuration>
+                            <nodeVersion>v14.17.5</nodeVersion>
+                            <npmVersion>6.14.14</npmVersion>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>npm install</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <phase>generate-resources</phase>
+                        <configuration>
+                            <arguments>--userconfig=${project.basedir}/.npmrc install</arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>npm build</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <phase>generate-resources</phase>
+                        <configuration>
+                            <arguments>run build</arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <phase>package</phase>
+                        <configuration>
+                            <descriptors>
+                                <descriptor>assembly.xml</descriptor>
+                            </descriptors>
+                            <appendAssemblyId>false</appendAssemblyId>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <repositories>
+        <repository>
+            <id>openmrs-repo</id>
+            <name>OpenMRS Nexus Repository</name>
+            <url>https://mavenrepo.openmrs.org/nexus/content/repositories/public</url>
+        </repository>
+        <repository>
+            <id>central</id>
+            <name>Maven Repository Switchboard</name>
+            <layout>default</layout>
+            <url>https://repo1.maven.org/maven2</url>
+        </repository>
+        <repository>
+            <id>taur-maven-release</id>
+            <name>taur-maven-release</name>
+            <url>https://artifactrepo.jnj.com/artifactory/taur-maven-release</url>
+        </repository>
+        <repository>
+            <id>taur-maven-snapshot</id>
+            <name>taur-maven-snapshot</name>
+            <url>https://artifactrepo.jnj.com/artifactory/taur-maven-snapshot</url>
+        </repository>
+    </repositories>
+    <distributionManagement>
+        <repository>
+            <id>taur-maven-release</id>
+            <name>taur-maven-release</name>
+            <url>https://artifactrepo.jnj.com/artifactory/taur-maven-release</url>
+        </repository>
+        <snapshotRepository>
+            <id>taur-maven-snapshot</id>
+            <name>taur-maven-snapshot</name>
+            <url>https://artifactrepo.jnj.com/artifactory/taur-maven-snapshot</url>
+        </snapshotRepository>
+    </distributionManagement>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>openmrs-repo</id>
+            <name>OpenMRS Nexus Repository</name>
+            <url>https://mavenrepo.openmrs.org/nexus/content/repositories/public</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
+</project>

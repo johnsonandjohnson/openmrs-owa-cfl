@@ -62,7 +62,6 @@ common:
     enabled: true
     type: maven
     dockerImage: jnj.artifactrepo.jnj.com/jpm/maven:3.6.3-jdk-8
-    mvnCommand: mvn clean install -Pcode-coverage
     executeOnError: false
     ignoreError: false
   versionCalculation:
@@ -110,16 +109,16 @@ environments:
     lint:
       enabled: false
     staticAnalysis:
-      enabled: true
+      enabled: false
       shortLivedAnalysis: true
       longLivedAnalysis: false
     unitTest:
-      enabled: true
+      enabled: false
   DEV:
     unitTest:
-      enabled: true
+      enabled: false
     staticAnalysis:
-      enabled: true
+      enabled: false
       shortLivedAnalysis: false
       longLivedAnalysis: true
     package:
