@@ -140,7 +140,6 @@
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
-    "postbuild": "./postbuild.sh",
     "build:dev": "node scripts/build.js && ./deploy-dev.sh",
     "watch": "node scripts/watch.js",
     "test": "node scripts/test.js",
