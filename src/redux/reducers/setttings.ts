@@ -42,7 +42,7 @@ const reducer = (state = initialState, action) => {
       };
     case SUCCESS(ACTION_TYPES.GET_SETTINGS):
       return {
-        ...initialState,
+        ...state,
         settings: action.payload.data.results
       };
     case SUCCESS(ACTION_TYPES.GET_SETTING):

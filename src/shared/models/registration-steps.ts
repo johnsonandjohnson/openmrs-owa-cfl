@@ -1,14 +1,12 @@
-export interface IRegistrationStepFieldOption {
-  label: string;
-  value: string;
-}
+import { IOption } from './option';
+
 export interface IRegistrationStepField {
   name?: string;
   required?: boolean;
   type?: string;
   label?: string;
   class?: string;
-  options?: IRegistrationStepFieldOption[] | string[];
+  options?: IOption[] | string[];
 }
 export interface IRegistrationStep {
   label: string;
