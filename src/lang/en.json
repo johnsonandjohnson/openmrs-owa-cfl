@@ -363,7 +363,8 @@
     "save": "Save",
     "true": "True",
     "false": "False",
-    "grandTotal": "Grand Total"
+    "grandTotal": "Grand Total",
+    "downloadCsv": "Download csv"
   },
   "userAccount": {
     "title": "User Account",
