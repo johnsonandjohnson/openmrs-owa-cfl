@@ -1,11 +1,6 @@
 import { Dispatch, FormEvent, SetStateAction } from 'react';
 import { IntlShape } from 'react-intl';
-
-export interface ISelectOption {
-  label: string;
-  value: string;
-}
-
+import { IOption } from './option';
 export interface IDetailsOption {
   display?: string;
   uuid?: string;
@@ -21,10 +16,10 @@ interface IUserAccountInput extends IValidationField {
 }
 
 interface IUserAccountSelectLocations extends IValidationField {
-  value: ISelectOption[];
+  value: IOption[];
 }
 interface IUserAccountSelectRole extends IValidationField {
-  value: ISelectOption;
+  value: IOption;
 }
 
 export interface IUserAccount {

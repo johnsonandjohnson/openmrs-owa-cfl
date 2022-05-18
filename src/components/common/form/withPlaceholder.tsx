@@ -12,6 +12,7 @@ interface IWithPlaceholderProps {
   // input props
   value?: any;
   onChange?: any;
+  onBlur?: any;
   options?: any[];
   isMulti?: boolean;
   isOptionSelected?: any;

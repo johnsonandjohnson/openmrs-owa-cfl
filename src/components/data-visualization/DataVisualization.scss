@@ -1,0 +1,51 @@
+.data-visualization {
+  .nav {
+    margin-bottom: 2em;
+  }
+
+  .chart {
+    width: 85vw;
+    height: 60vh;
+
+    svg:not(:root) {
+      overflow: visible;
+    }
+
+    .input-container {
+      margin: -2em 0 2em 0;
+    }
+
+    .legend {
+      opacity: 0.3;
+
+      &.active {
+        opacity: 1;
+      }
+    }
+
+    .chart-description {
+      margin: 1em 0;
+    }
+
+    .table-responsive {
+      position: relative;
+      max-height: 500px;
+      margin: 1em 0;
+
+      .sticky {
+        position: sticky;
+      }
+
+      .sticky-top {
+        top: 0;
+      }
+      .sticky-bottom {
+        bottom: 0;
+      }
+
+      .sticky-left {
+        left: 0;
+      }
+    }
+  }
+}

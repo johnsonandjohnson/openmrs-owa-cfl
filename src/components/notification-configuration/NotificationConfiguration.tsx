@@ -44,7 +44,6 @@ import {
 import { ONE, TEN, ZERO } from '../../shared/constants/input';
 import { ROOT_URL } from '../../shared/constants/openmrs';
 import { COUNTRY_CONCEPT_UUID, COUNTRY_CONCEPT_REPRESENTATION } from '../../shared/constants/concept';
-import { IConceptSetMember } from '../../shared/models/concept';
 import { getConcept } from '../../redux/reducers/concept';
 
 interface IStore {

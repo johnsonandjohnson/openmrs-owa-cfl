@@ -30,6 +30,7 @@ import drugs from './drugs';
 import orderFrequency from './order-frequency';
 import orderType from './order-type';
 import findPatientColumnsConfiguration from './columns-configuration';
+import reports from './data-visualization-configuration';
 
 export default combineReducers({
   cflPatient,
@@ -61,6 +62,7 @@ export default combineReducers({
   orderFrequency,
   orderType,
   findPatientColumnsConfiguration,
+  reports,
   openmrs: openmrsReducers,
   form: reduxFormReducer
 });
