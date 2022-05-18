@@ -45,7 +45,7 @@ const ChartLegend = ({
         .attr('y', 9)
         .attr('dy', '.35em')
         .style('text-anchor', 'end')
-        .text(legendType => `${legendType}`);
+        .text(legendType => legendType);
     }
   }, [chartRef, chartWidth, colors, legendTypes, marginLeft, marginRight]);
 

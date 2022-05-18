@@ -2,16 +2,16 @@ import React from 'react';
 import moment from 'moment';
 import { Table } from 'reactstrap';
 import { FormattedMessage } from 'react-intl';
-import { IGroupedDataByXAxis, IGroupedDataByLegend } from '../../shared/models/data-visualization';
+import { IGroupedAndSummedDataByXAxis, IGroupedAndSummedDataByLegend } from '../../shared/models/data-visualization';
 
 interface ISummaryChartTable {
   xAxis: string;
   legendTypes: string[];
-  groupedDataByXAxis: IGroupedDataByXAxis[];
-  groupedDataByLegend: IGroupedDataByLegend[];
+  groupedAndSummedDataByXAxis: IGroupedAndSummedDataByXAxis[];
+  groupedAndSummedDataByLegend: IGroupedAndSummedDataByLegend[];
 }
 
-const SummaryChartTable = ({ xAxis, legendTypes, groupedDataByXAxis, groupedDataByLegend }: ISummaryChartTable) => (
+const SummaryChartTable = ({ xAxis, legendTypes, groupedAndSummedDataByXAxis, groupedAndSummedDataByLegend }: ISummaryChartTable) => (
   <Table hover striped responsive size="sm">
     <thead>
       <tr className="sticky sticky-top">
@@ -22,7 +22,7 @@ const SummaryChartTable = ({ xAxis, legendTypes, groupedDataByXAxis, groupedData
       </tr>
     </thead>
     <tbody>
-      {groupedDataByXAxis.map(({ xAxisKey, legendData }) => (
+      {groupedAndSummedDataByXAxis.map(({ xAxisKey, legendData }) => (
         <tr key={xAxisKey}>
           <td className="sticky sticky-left">{moment(xAxisKey).format('DD-MM-YYYY')}</td>
           {legendTypes.map(legend => {
@@ -36,7 +36,7 @@ const SummaryChartTable = ({ xAxis, legendTypes, groupedDataByXAxis, groupedData
         <td className="sticky sticky-left">
           <FormattedMessage id="common.grandTotal" tagName="span" />
         </td>
-        {groupedDataByLegend.map(({ legendKey, legendSum }) => (
+        {groupedAndSummedDataByLegend.map(({ legendKey, legendSum }) => (
           <td key={`${legendKey}`}>{legendSum}</td>
         ))}
       </tr>

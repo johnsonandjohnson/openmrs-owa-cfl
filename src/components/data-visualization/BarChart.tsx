@@ -1,17 +1,16 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
 import useController from './DataVisualizationController';
 import ChartLegend from './ChartLegend';
 import XScale from './XScale';
 import YScale from './YScale';
 import Bars from './Bars';
-import { sumBy, chain } from 'lodash';
 import { Button, Spinner } from 'reactstrap';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { RETURN_LOCATION } from '../../shared/constants/data-visualization-configuration';
 import { SelectWithPlaceholder } from '../common/form/withPlaceholder';
 import { selectDefaultTheme } from '../../shared/util/form-util';
-import { IGroupedDataByXAxis, IReportConfiguration, IReportData } from '../../shared/models/data-visualization';
+import { IReportConfiguration, IReportData } from '../../shared/models/data-visualization';
 import { IOption } from '../../shared/models/option';
 import ChartDescription from './ChartDescription';
 import ChartTitle from './ChartTitle';
@@ -31,7 +30,7 @@ const BarChart = ({
   const chartRefCurrent = chartRef.current as SVGAElement;
   const { formatMessage } = useIntl();
 
-  const [dataToDisplay, setDataToDisplay] = useState<IGroupedDataByXAxis[]>([]);
+  const [dataToDisplay, setDataToDisplay] = useState<IReportData[]>([]);
   const [legendTypes, setLegendTypes] = useState<string[]>([]);
   const [xAsisTypes, setXAsisTypes] = useState<string[]>([]);
   const [filterByLegend, setFilterByLegend] = useState<string[]>([]);
@@ -39,50 +38,27 @@ const BarChart = ({
   const [chartWidth, setChartWidth] = useState<number>(null);
   const [chartHeight, setChartHeight] = useState<number>(null);
 
-  const groupData = useCallback(
-    (data: IReportData[]) =>
-      chain(data)
-        .groupBy(xAxis)
-        .map((xAxisValue: IReportData[], xAxisKey: string) => {
-          const legendData = chain(xAxisValue)
-            .groupBy(legend)
-            .map((legendValue: IReportData[], legendKey: string) => {
-              const legendSum = sumBy(legendValue, (data: IReportData) => data[yAxis]);
-
-              return { legendSum, legendKey };
-            })
-            .value();
-
-          return { xAxisKey, legendData };
-        })
-        .value() as IGroupedDataByXAxis[],
-    [legend, xAxis, yAxis]
-  );
-
   useEffect(() => {
     if (report?.length) {
       if (!legendTypes?.length) {
-        const types = [...new Set(report.map(data => data[legend]))] as string[];
+        const types = [...new Set(report.map(data => `${data[legend]}`))] as string[];
 
         setLegendTypes(types);
         setFilterByLegend(types);
       }
 
       if (!xAsisTypes?.length) {
-        const types = [...new Set(report.map(data => data[xAxis]))] as string[];
+        const types = [...new Set(report.map(data => `${data[xAxis]}`))] as string[];
 
         setXAsisTypes(types);
         setFilterByXAxsis(types);
       }
-    }
-  }, [legendTypes, xAsisTypes, report, legend, xAxis]);
 
-  useEffect(() => {
-    if (legendTypes?.length && xAsisTypes.length && !dataToDisplay?.length) {
-      const groupedData = groupData(report);
-      setDataToDisplay(groupedData);
+      if (legendTypes?.length && xAsisTypes.length && !dataToDisplay?.length) {
+        setDataToDisplay(report);
+      }
     }
-  }, [dataToDisplay, groupData, legendTypes, report, xAsisTypes]);
+  }, [legendTypes, xAsisTypes, report, legend, xAxis, dataToDisplay?.length]);
 
   useEffect(() => {
     if (dataToDisplay?.length && isActive) {
@@ -108,20 +84,13 @@ const BarChart = ({
     marginTop
   });
 
-  const { yScale, xScale, xSubgroup, colorsScaleOrdinal } = controller;
+  const { yScale, xScale, xSubgroup, colorsScaleOrdinal, groupedAndSummedDataByXAxis } = controller;
 
   const options = xAsisTypes.map(xAxisKey => ({ label: `${xAxisKey}`, value: `${xAxisKey}` }));
 
-  const filterData = (xAxis: string[], legend = filterByLegend) => {
-    const groupedData = groupData(report);
-    const clonedDataToDisplay = !xAxis.length ? groupedData : groupedData.filter(({ xAxisKey }) => xAxis.includes(xAxisKey));
-
-    const filteredDataToDisplay = clonedDataToDisplay
-      .map(({ xAxisKey, legendData }) => ({
-        xAxisKey,
-        legendData: legendData.filter(({ legendKey }) => legend.includes(legendKey))
-      }))
-      .filter(({ legendData }) => legendData.length);
+  const filterData = (filteredXAxis: string[], legends = filterByLegend) => {
+    const clonedDataToDisplay = !filteredXAxis.length ? report : report.filter(data => filteredXAxis.includes(`${data[xAxis]}`));
+    const filteredDataToDisplay = clonedDataToDisplay.filter(data => legends.includes(`${data[legend]}`));
 
     setDataToDisplay(filteredDataToDisplay);
   };
@@ -171,7 +140,13 @@ const BarChart = ({
           <svg width={chartWidth + marginLeft + marginRight} height={chartHeight + marginTop + marginBottom} ref={chartRef}>
             <ChartTitle chartRef={chartRefCurrent} chartWidth={chartWidth} marginTop={marginTop} title={title} />
             <YScale chartRef={chartRefCurrent} yScale={yScale} chartWidth={chartWidth} marginLeft={marginLeft} />
-            <XScale chartRef={chartRefCurrent} xScale={xScale} chartHeight={chartHeight} chartType={chartType} data={dataToDisplay} />
+            <XScale
+              chartRef={chartRefCurrent}
+              xScale={xScale}
+              chartHeight={chartHeight}
+              chartType={chartType}
+              data={groupedAndSummedDataByXAxis}
+            />
             <ChartLegend
               legendTypes={legendTypes}
               filterByLegend={filterByLegend}
@@ -184,7 +159,7 @@ const BarChart = ({
             />
             <Bars
               chartRef={chartRefCurrent}
-              dataToDisplay={dataToDisplay}
+              dataToDisplay={groupedAndSummedDataByXAxis}
               xScale={xScale}
               yScale={yScale}
               xSubgroup={xSubgroup}

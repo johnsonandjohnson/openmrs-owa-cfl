@@ -14,9 +14,11 @@ export const CHART_MARGIN_BOTTOM_KEY = 'marginBottom';
 export const CHART_MARGIN_RIGHT_KEY = 'marginRight';
 export const CHART_MARGIN_LEFT_KEY = 'marginLeft';
 export const CHART_COLORS_KEY = 'colors';
+export const LINE_CHART = 'Line Chart';
+export const BAR_CHART = 'Bar Chart';
 export const CHART_TYPE_OPTIONS = [
-  { label: 'Bar Chart', value: 'Bar Chart' },
-  { label: 'Line Chart', value: 'Line Chart' }
+  { label: BAR_CHART, value: BAR_CHART },
+  { label: LINE_CHART, value: LINE_CHART }
 ];
 
 export const DEFAULT_REPORT_CONFIGURATION = {

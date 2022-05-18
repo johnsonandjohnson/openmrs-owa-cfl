@@ -44,7 +44,7 @@ const Lines = ({ chartRef, filterByLegend, groupedByLegend, chartWidth, colors, 
             })(d[1])
         );
     }
-  }, [chartRef, chartWidth, colors, groupedByLegend, xAxis, xScale, yAxis, yScale]);
+  }, [chartRef, chartWidth, colors, filterByLegend, groupedByLegend, xAxis, xScale, yAxis, yScale]);
 
   return (
     <g className="lines">

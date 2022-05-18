@@ -77,12 +77,12 @@ export interface IDataVisualizationConfigurationState {
   showValidationErrors: boolean;
 }
 
-export interface IGroupedDataByXAxis {
+export interface IGroupedAndSummedDataByXAxis {
   xAxisKey: string;
-  legendData: IGroupedDataByLegend[];
+  legendData: IGroupedAndSummedDataByLegend[];
 }
 
-export interface IGroupedDataByLegend {
+export interface IGroupedAndSummedDataByLegend {
   legendKey: string;
   legendSum: number;
 }

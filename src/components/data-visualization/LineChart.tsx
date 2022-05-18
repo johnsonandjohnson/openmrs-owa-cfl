@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import * as d3 from 'd3';
 import SummaryChartTable from './SummaryChartTable';
 import ChartLegend from './ChartLegend';
@@ -9,8 +9,7 @@ import Lines from './Lines';
 import { Button, Spinner } from 'reactstrap';
 import { FormattedMessage } from 'react-intl';
 import { RETURN_LOCATION } from '../../shared/constants/data-visualization-configuration';
-import { sumBy, chain } from 'lodash';
-import { IReportConfiguration, IReportData, IGroupedDataByXAxis, IGroupedDataByLegend } from '../../shared/models/data-visualization';
+import { IReportConfiguration, IReportData } from '../../shared/models/data-visualization';
 import ChartDescription from './ChartDescription';
 import ChartTitle from './ChartTitle';
 
@@ -35,45 +34,10 @@ const LineChart = ({
   const [chartWidth, setChartWidth] = useState<number>(null);
   const [chartHeight, setChartHeight] = useState<number>(null);
 
-  const groupedDataByXAxis = useMemo(
-    () =>
-      report?.length &&
-      chain(report)
-        .groupBy(xAxis)
-        .map((xAxisValue: IReportData[], xAxisKey: string) => {
-          const legendData = chain(xAxisValue)
-            .groupBy(legend)
-            .map((legendValue: IReportData[], legendKey: string) => {
-              const legendSum = sumBy(legendValue, (data: IReportData) => data[yAxis]);
-
-              return { legendSum, legendKey: `${legendKey}` };
-            })
-            .value();
-
-          return { xAxisKey, legendData };
-        })
-        .value(),
-    [report, xAxis, legend, yAxis]
-  ) as IGroupedDataByXAxis[];
-
-  const groupedDataByLegend = useMemo(
-    () =>
-      report?.length &&
-      chain(report)
-        .groupBy(legend)
-        .map((legendValue: IReportData[], legendKey: string) => {
-          const legendSum = sumBy(legendValue, (data: IReportData) => data[yAxis]);
-
-          return { legendKey, legendSum };
-        })
-        .value(),
-    [report, legend, yAxis]
-  ) as IGroupedDataByLegend[];
-
   useEffect(() => {
     if (report?.length) {
       setDataToDisplay(report);
-      const legendTypes = [...new Set(report.map(data => data[legend]))].sort() as string[];
+      const legendTypes = [...new Set(report.map(data => `${data[legend]}`))].sort() as string[];
 
       setLegendTypes(legendTypes);
       setFilterByLegend(legendTypes);
@@ -103,16 +67,16 @@ const LineChart = ({
     marginLeft
   });
 
-  const { groupedByLegend, yScale, xScale, colorsScaleOrdinal } = controller;
+  const { groupedByLegend, yScale, xScale, colorsScaleOrdinal, groupedAndSummedDataByXAxis, groupedAndSummedDataByLegend } = controller;
 
   const handleLegendClick = (value: string) => {
     let filteredLegend = [...filterByLegend];
-    let filteredClonedDataToDisplay = dataToDisplay.filter(data => data[legend] !== value);
+    let filteredClonedDataToDisplay = dataToDisplay.filter(data => `${data[legend]}` !== value);
 
     if (filteredLegend.includes(value)) {
       filteredLegend = filteredLegend.filter(data => data !== value);
     } else {
-      filteredClonedDataToDisplay = [...dataToDisplay, ...report.filter(data => data[legend] === value)];
+      filteredClonedDataToDisplay = [...dataToDisplay, ...report.filter(data => `${data[legend]}` === value)];
       filteredLegend.push(value);
     }
 
@@ -122,7 +86,7 @@ const LineChart = ({
     }
 
     setDataToDisplay(filteredClonedDataToDisplay);
-    setFilterByLegend(filteredLegend);
+    setFilterByLegend(filteredLegend.sort());
   };
 
   return (
@@ -162,9 +126,9 @@ const LineChart = ({
           {description && <ChartDescription description={description} />}
           <SummaryChartTable
             xAxis={xAxis}
-            legendTypes={legendTypes}
-            groupedDataByXAxis={groupedDataByXAxis}
-            groupedDataByLegend={groupedDataByLegend}
+            legendTypes={filterByLegend}
+            groupedAndSummedDataByXAxis={groupedAndSummedDataByXAxis}
+            groupedAndSummedDataByLegend={groupedAndSummedDataByLegend}
           />
           <div className="mt-5 pb-5">
             <div className="d-inline">

@@ -7,7 +7,7 @@ import { FormattedMessage } from 'react-intl';
 import { Spinner, Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap';
 import { getSettingByQuery } from '../../redux/reducers/setttings';
 import { ISettingsState } from '../../shared/models/settings';
-import { REPORTS_CONFIGURATION } from '../../shared/constants/data-visualization-configuration';
+import { LINE_CHART, REPORTS_CONFIGURATION } from '../../shared/constants/data-visualization-configuration';
 import { IDataVisualizationConfigurationState, IReportConfiguration } from '../../shared/models/data-visualization';
 import { initialUpdateReportsConfiguration, getReports } from '../../redux/reducers/data-visualization-configuration';
 import '../Inputs.scss';
@@ -42,6 +42,7 @@ const DataVisualization = ({
   useEffect(() => {
     if (initialUpdate && !reportsList.length) {
       const configuredReportsUuidList = reportsConfiguration.map(({ uuid }) => uuid);
+
       getReports(configuredReportsUuidList);
     }
   }, [initialUpdate, reportsList, reportsConfiguration, getReports]);
@@ -62,7 +63,7 @@ const DataVisualization = ({
     let chartComponent;
 
     switch (chartType) {
-      case 'Line Chart':
+      case LINE_CHART:
         chartComponent = <LineChart report={reportData} config={config} chartIdx={idx} isActive={activeTab === `${idx}`} />;
         break;
       default:

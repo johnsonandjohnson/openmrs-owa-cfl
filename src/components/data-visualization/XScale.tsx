@@ -1,13 +1,14 @@
 import React, { useEffect } from 'react';
 import * as d3 from 'd3';
-import { IGroupedDataByXAxis } from '../../shared/models/data-visualization';
+import { IGroupedAndSummedDataByXAxis } from '../../shared/models/data-visualization';
+import { BAR_CHART } from '../../shared/constants/data-visualization-configuration';
 
 interface IXScale {
   chartRef: SVGAElement;
   xScale: (Date[] & d3.ScaleTime<number, number, never>) | (string[] & d3.ScaleBand<string>);
   chartHeight: number;
   chartType: string;
-  data?: IGroupedDataByXAxis[];
+  data?: IGroupedAndSummedDataByXAxis[];
 }
 
 const XScale = ({ chartRef, xScale, chartHeight, chartType, data = [] }: IXScale) => {
@@ -15,7 +16,7 @@ const XScale = ({ chartRef, xScale, chartHeight, chartType, data = [] }: IXScale
     if (chartHeight) {
       const xScaleSelection = d3.select(chartRef).select('.xScale').attr('transform', `translate(0, ${chartHeight})`);
 
-      if (chartType === 'Bar Chart') {
+      if (chartType === BAR_CHART) {
         xScaleSelection.call(
           d3
             .axisBottom(xScale)

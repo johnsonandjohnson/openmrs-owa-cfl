@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import * as d3 from 'd3';
-import { IGroupedDataByLegend, IGroupedDataByXAxis } from '../../shared/models/data-visualization';
+import { IGroupedAndSummedDataByLegend, IGroupedAndSummedDataByXAxis } from '../../shared/models/data-visualization';
 
 interface IBars {
   chartRef: SVGAElement;
-  dataToDisplay: IGroupedDataByXAxis[];
+  dataToDisplay: IGroupedAndSummedDataByXAxis[];
   xScale: d3.ScaleTime<number, number, never> | (string[] & d3.ScaleBand<string>);
   yScale: d3.ScaleLinear<number, number, never>;
   xSubgroup: d3.ScaleBand<string>;
@@ -42,9 +42,9 @@ const Bars = ({ chartRef, dataToDisplay, xScale, xSubgroup, yScale, colors, char
         .transition()
         .delay((_, i) => i * 100)
         .duration(500)
-        .attr('y', (d: IGroupedDataByLegend) => yScale(d.legendSum))
-        .attr('height', (d: IGroupedDataByLegend) => yScale(0) - yScale(d.legendSum))
-        .style('fill', (d: IGroupedDataByLegend) => colors(d.legendKey));
+        .attr('y', (d: IGroupedAndSummedDataByLegend) => yScale(d.legendSum))
+        .attr('height', (d: IGroupedAndSummedDataByLegend) => yScale(0) - yScale(d.legendSum))
+        .style('fill', (d: IGroupedAndSummedDataByLegend) => colors(d.legendKey));
     }
   }, [chartHeight, chartRef, colors, dataToDisplay, xScale, xSubgroup, yScale]);
 
