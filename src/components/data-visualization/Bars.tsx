@@ -5,7 +5,7 @@ import { IGroupedAndSummedDataByLegend, IGroupedAndSummedDataByXAxis } from '../
 interface IBars {
   chartRef: SVGAElement;
   dataToDisplay: IGroupedAndSummedDataByXAxis[];
-  xScale: d3.ScaleTime<number, number, never> | (string[] & d3.ScaleBand<string>);
+  xScale: d3.ScaleTime<number, number, never> | (string[] & d3.ScaleBand<number | string>);
   yScale: d3.ScaleLinear<number, number, never>;
   xSubgroup: d3.ScaleBand<string>;
   colors: d3.ScaleOrdinal<string, string, never>;

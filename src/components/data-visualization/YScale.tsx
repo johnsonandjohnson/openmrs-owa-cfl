@@ -14,6 +14,7 @@ const YScale = ({ chartRef, yScale, chartWidth, marginLeft }: IYScale) => {
       d3.select(chartRef)
         .select('.yScale')
         .attr('transform', `translate(${marginLeft},0)`)
+        //@ts-ignore
         .call(d3.axisLeft(yScale))
         .call(g => g.selectAll('.tick .grid-line').remove())
         .call(g =>

@@ -1,14 +1,13 @@
 import React, { useEffect } from 'react';
 import * as d3 from 'd3';
-import { IReportData } from '../../shared/models/data-visualization';
 
 interface ILines {
   chartRef: SVGAElement;
   filterByLegend: string[];
-  groupedByLegend: d3.InternMap<unknown, IReportData[]>;
+  groupedByLegend: any;
   chartWidth: number;
   colors: d3.ScaleOrdinal<string, string, never>;
-  xScale: (Date[] & d3.ScaleTime<number, number, never>) | (string[] & d3.ScaleBand<string>);
+  xScale: d3.ScaleTime<number, number, never> | d3.ScaleBand<string>;
   yScale: d3.ScaleLinear<number, number, never>;
   xAxis: string;
   yAxis: string;
@@ -35,6 +34,7 @@ const Lines = ({ chartRef, filterByLegend, groupedByLegend, chartWidth, colors, 
         .attr('d', d =>
           d3
             .line()
+            //@ts-ignore
             .x(d => xScale(new Date(d[xAxis])))
             .y((_, idx, b) => {
               const agg = b.slice(0, idx + 1);
