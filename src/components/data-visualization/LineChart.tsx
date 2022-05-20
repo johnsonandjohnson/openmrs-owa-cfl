@@ -12,6 +12,7 @@ import { RETURN_LOCATION } from '../../shared/constants/data-visualization-confi
 import { IReportConfiguration, IReportData } from '../../shared/models/data-visualization';
 import ChartDescription from './ChartDescription';
 import ChartTitle from './ChartTitle';
+import ExportChartDataButton from './ExportChartDataButton';
 
 interface ILineChart {
   chartIdx: number;
@@ -136,6 +137,13 @@ const LineChart = ({
                 <FormattedMessage id="common.return" />
               </Button>
             </div>
+            <ExportChartDataButton
+              data={dataToDisplay}
+              chartType={chartType}
+              filterByLegend={filterByLegend}
+              legend={legend}
+              xAxis={xAxis}
+            />
           </div>
         </div>
       )}

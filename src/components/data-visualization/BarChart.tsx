@@ -14,6 +14,7 @@ import { IReportConfiguration, IReportData } from '../../shared/models/data-visu
 import { IOption } from '../../shared/models/option';
 import ChartDescription from './ChartDescription';
 import ChartTitle from './ChartTitle';
+import ExportChartDataButton from './ExportChartDataButton';
 
 interface IBarChart {
   isActive: boolean;
@@ -174,6 +175,14 @@ const BarChart = ({
                 <FormattedMessage id="common.return" />
               </Button>
             </div>
+            <ExportChartDataButton
+              data={dataToDisplay}
+              chartType={chartType}
+              filterByLegend={filterByLegend}
+              filterByXAxsis={filterByXAxsis}
+              legend={legend}
+              xAxis={xAxis}
+            />
           </div>
         </>
       )}
