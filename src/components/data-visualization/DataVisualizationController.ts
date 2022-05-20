@@ -81,7 +81,7 @@ const useController = ({
 
   const lineChartMax = useMemo(() => {
     return d3.max(groupedByLegend, d =>
-      d3.max(d[1], (_, idx, legends) => {
+      d3.max(d[1], (_, idx, legends: IReportData[]) => {
         const agg = legends.slice(0, idx + 1);
 
         return d3.sum(agg, d => d[yAxis]);
@@ -96,6 +96,7 @@ const useController = ({
   }, [chartHeight, marginTop, max]);
 
   const xScaleBarChart = useMemo(() => {
+    //@ts-ignore
     return d3.scaleBand().domain(d3.range(groupedAndSummedDataByXAxis.length)).range([marginLeft, chartWidth]).padding(0.1);
   }, [chartWidth, groupedAndSummedDataByXAxis.length, marginLeft]);
 

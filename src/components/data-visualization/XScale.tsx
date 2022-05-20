@@ -5,7 +5,7 @@ import { BAR_CHART } from '../../shared/constants/data-visualization-configurati
 
 interface IXScale {
   chartRef: SVGAElement;
-  xScale: (Date[] & d3.ScaleTime<number, number, never>) | (string[] & d3.ScaleBand<string>);
+  xScale: any;
   chartHeight: number;
   chartType: string;
   data?: IGroupedAndSummedDataByXAxis[];
@@ -18,12 +18,14 @@ const XScale = ({ chartRef, xScale, chartHeight, chartType, data = [] }: IXScale
 
       if (chartType === BAR_CHART) {
         xScaleSelection.call(
+          //@ts-ignore
           d3
             .axisBottom(xScale)
-            .tickFormat(i => data[i].xAxisKey)
+            .tickFormat((i: number) => data[i].xAxisKey)
             .tickSizeOuter(0)
         );
       } else {
+        //@ts-ignore
         xScaleSelection.call(d3.axisBottom(xScale).tickFormat(d3.timeFormat('%d-%m-%Y')));
       }
 
