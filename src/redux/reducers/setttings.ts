@@ -53,6 +53,7 @@ const reducer = (state = initialState, action) => {
     case SUCCESS(ACTION_TYPES.GET_SETTINGS):
       return {
         ...state,
+        loading: false,
         settings: action.payload.data.results
       };
     case SUCCESS(ACTION_TYPES.GET_SETTING):
