@@ -357,7 +357,6 @@ module.exports = function (webpackEnv) {
               loader: require.resolve('url-loader'),
               options: {
                 limit: imageInlineSizeLimit,
-                mimetype: 'image/avif',
                 name: '[name].[hash:8].[ext]'
               }
             },
