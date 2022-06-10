@@ -109,7 +109,7 @@ environments:
     lint:
       enabled: false
     staticAnalysis:
-      enabled: false
+      enabled: true
       shortLivedAnalysis: true
       longLivedAnalysis: false
     unitTest:
@@ -118,7 +118,7 @@ environments:
     unitTest:
       enabled: false
     staticAnalysis:
-      enabled: false
+      enabled: true
       shortLivedAnalysis: false
       longLivedAnalysis: true
     package:
