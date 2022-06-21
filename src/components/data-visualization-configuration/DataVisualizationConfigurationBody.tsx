@@ -52,8 +52,7 @@ const DataVisualizationConfigurationBody = ({
   reportData,
   reportConfig,
   reportsConfiguration,
-  showValidationErrors,
-  updateReportsConfiguration
+  showValidationErrors
 }: IDataVisualizationConfigurationBody) => {
   const { formatMessage } = useIntl();
   const { title, description, marginTop, marginBottom, marginRight, marginLeft, colors, xAxis, yAxis, legend } = reportConfig;

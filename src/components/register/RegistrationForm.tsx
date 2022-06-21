@@ -97,6 +97,8 @@ class RegistrationForm extends React.Component<IRegistrationProps, IRegistration
         this.setState({
           patient
         });
+      } else {
+        // Do nothing
       }
     }
     if (!prevProps.success && this.props.success) {
@@ -118,7 +120,7 @@ class RegistrationForm extends React.Component<IRegistrationProps, IRegistration
     this.setState({
       step,
       // tslint:disable-next-line:no-shadowed-variable
-      visitedSteps: [...Array(highestVisitedStep + 1)].map((_, stepNumber) => stepNumber)
+      visitedSteps: [...Array(highestVisitedStep + 1)].map((ignore, stepNumber) => stepNumber)
     });
   };
 
@@ -129,7 +131,7 @@ class RegistrationForm extends React.Component<IRegistrationProps, IRegistration
       return true;
     }
     // tslint:disable-next-line:no-shadowed-variable
-    if ([...Array(step)].every((_, stepNumber) => this.state.stepValidity[stepNumber]?.isValid)) {
+    if ([...Array(step)].every((ignore, stepNumber) => this.state.stepValidity[stepNumber]?.isValid)) {
       // if every preceding step is valid (or non-required), return true
       return true;
     }

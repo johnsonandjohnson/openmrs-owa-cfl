@@ -50,8 +50,9 @@ export const ordinalIndicator = number => {
     return 'common.ordinalSuffix.nd';
   } else if (i === 3 && j !== 13) {
     return 'common.ordinalSuffix.rd';
+  } else {
+    return 'common.ordinalSuffix.th';
   }
-  return 'common.ordinalSuffix.th';
 };
 
 export const selectDefaultTheme = theme => ({

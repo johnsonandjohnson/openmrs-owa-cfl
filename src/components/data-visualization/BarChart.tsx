@@ -9,7 +9,7 @@
  */
 
 import React, { useEffect, useRef, useState } from 'react';
-import * as d3 from 'd3';
+import d3 from 'd3';
 import useController from './DataVisualizationController';
 import ChartLegend from './ChartLegend';
 import XScale from './XScale';
@@ -106,8 +106,8 @@ const BarChart = ({
     setDataToDisplay(filteredDataToDisplay);
   };
 
-  const handleOnChange = (options: IOption[]) => {
-    const xAxisTypesFromOptions = options.map(({ value }) => value);
+  const handleOnChange = (onChangeOptions: IOption[]) => {
+    const xAxisTypesFromOptions = onChangeOptions.map(({ value }) => value);
 
     filterData(xAxisTypesFromOptions, filterByLegend);
     setFilterByXAxsis(xAxisTypesFromOptions);
@@ -117,7 +117,7 @@ const BarChart = ({
     let clonedFilterByLegend = [...filterByLegend];
 
     if (clonedFilterByLegend.includes(value)) {
-      clonedFilterByLegend = clonedFilterByLegend.filter(legend => legend !== value);
+      clonedFilterByLegend = clonedFilterByLegend.filter(filterLegend => filterLegend !== value);
     } else {
       clonedFilterByLegend.push(value);
     }

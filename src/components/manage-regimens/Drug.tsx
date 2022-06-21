@@ -54,11 +54,7 @@ export const Drug = ({
   regimenUuid,
   regimenIdx,
   drug: { drugDetails, doseUnits, dose, frequency: drugFrequency, uuid: drugUuid },
-  drugIdx,
-  setRegimens,
-  setEditedRegimens,
-  setConfirmationModal,
-  setDrugToDelete
+  drugIdx
 }: IDrugProps) => {
   const { formatMessage } = intl;
   const getOptions = useMemo(
@@ -67,23 +63,23 @@ export const Drug = ({
   );
   const getValue = (value: { label: string }) => (value.label ? value : null);
   const onChangeHandler: OnChangeHandler = useCallback(
-    (regimenIdx, regimenUuid, name, drugIdx) => event => {
+    (eventRegimenIdx, eventRegimenUuid, eventName, eventDrugIdx) => event => {
       const clonedRegimens = cloneDeep(regimens);
       const extractedValue = extractEventValue(event);
 
-      clonedRegimens[regimenIdx][DRUGS][drugIdx][name] = extractedValue;
+      clonedRegimens[eventRegimenIdx][DRUGS][eventDrugIdx][eventName] = extractedValue;
 
-      if (name === DRUG_DETAILS) {
+      if (eventName === DRUG_DETAILS) {
         const { abbreviation } = drugsList.find(({ uuid }) => uuid === extractedValue.value);
-        clonedRegimens[regimenIdx][DRUGS][drugIdx][name].abbreviation = abbreviation ?? EMPTY_STRING;
+        clonedRegimens[eventRegimenIdx][DRUGS][eventDrugIdx][eventName].abbreviation = abbreviation ?? EMPTY_STRING;
       }
 
-      if (name !== DOSE) {
-        clonedRegimens[regimenIdx][DRUGS][drugIdx][name].isValid = !!extractedValue;
+      if (eventName !== DOSE) {
+        clonedRegimens[eventRegimenIdx][DRUGS][eventDrugIdx][eventName].isValid = !!extractedValue;
       }
 
       setRegimens(clonedRegimens);
-      regimenUuid && setEditedRegimens(uniq([...editedRegimens, regimenUuid]));
+      eventRegimenUuid && setEditedRegimens(uniq([...editedRegimens, eventRegimenUuid]));
     },
     [regimens, setRegimens, setEditedRegimens, editedRegimens, drugsList]
   );

@@ -95,21 +95,7 @@ export const ManageRegimens = ({
   editedRegimens,
   regimenToDelete,
   drugToDelete,
-  confirmationModal,
-  getOrderSet,
-  deleteOrderSet,
-  saveOrderSet,
-  deleteOrderSetMember,
-  getSettings,
-  getDrugsList,
-  getFrequencies,
-  getConcept,
-  getOrderType,
-  setRegimens,
-  setEditedRegimens,
-  setRegimenToDelete,
-  setDrugToDelete,
-  setConfirmationModal
+  confirmationModal
 }: IMangeRegimensProps) => {
   const [isAllSectionsExpanded, setIsAllSectionsExpanded] = useState(false);
   const onReturn = useCallback(() => (window.location.href = RETURN_LOCATION), []);
@@ -343,6 +329,8 @@ export const ManageRegimens = ({
       case DELETE_DRUG_MODAL:
         onRemoveDrugHandler(drugToDelete);
         setDrugToDelete(INITIAL_DRUG_VALUE);
+        break;
+      default:
         break;
     }
     setConfirmationModal(CLOSED_MODAL_CONFIGURATION);

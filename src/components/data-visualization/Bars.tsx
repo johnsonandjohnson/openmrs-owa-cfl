@@ -9,7 +9,7 @@
  */
 
 import React, { useEffect } from 'react';
-import * as d3 from 'd3';
+import d3 from 'd3';
 import { IGroupedAndSummedDataByLegend, IGroupedAndSummedDataByXAxis } from '../../shared/models/data-visualization';
 
 interface IBars {

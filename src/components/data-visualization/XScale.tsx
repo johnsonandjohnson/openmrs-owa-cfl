@@ -9,7 +9,7 @@
  */
 
 import React, { useEffect } from 'react';
-import * as d3 from 'd3';
+import d3 from 'd3';
 import { IGroupedAndSummedDataByXAxis } from '../../shared/models/data-visualization';
 import { BAR_CHART } from '../../shared/constants/data-visualization-configuration';
 

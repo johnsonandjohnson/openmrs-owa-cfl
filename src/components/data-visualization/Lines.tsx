@@ -9,7 +9,7 @@
  */
 
 import React, { useEffect } from 'react';
-import * as d3 from 'd3';
+import d3 from 'd3';
 
 interface ILines {
   chartRef: SVGAElement;
@@ -45,10 +45,10 @@ const Lines = ({ chartRef, filterByLegend, groupedByLegend, chartWidth, colors, 
           d3
             .line()
             //@ts-ignore
-            .x(d => xScale(new Date(d[xAxis])))
+            .x(datum => xScale(new Date(datum[xAxis])))
             .y((_, idx, b) => {
               const agg = b.slice(0, idx + 1);
-              const sum = d3.sum(agg, d => d[yAxis]);
+              const sum = d3.sum(agg, datum => datum[yAxis]);
 
               return yScale(sum);
             })(d[1])

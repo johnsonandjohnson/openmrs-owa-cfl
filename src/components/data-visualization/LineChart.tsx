@@ -9,7 +9,7 @@
  */
 
 import React, { useState, useEffect, useRef } from 'react';
-import * as d3 from 'd3';
+import d3 from 'd3';
 import SummaryChartTable from './SummaryChartTable';
 import ChartLegend from './ChartLegend';
 import useController from './DataVisualizationController';
@@ -48,10 +48,10 @@ const LineChart = ({
   useEffect(() => {
     if (report?.length) {
       setDataToDisplay(report);
-      const legendTypes = [...new Set(report.map(data => `${data[legend]}`))].sort() as string[];
+      const newLegendTypes = [...new Set(report.map(data => `${data[legend]}`))].sort() as string[];
 
-      setLegendTypes(legendTypes);
-      setFilterByLegend(legendTypes);
+      setLegendTypes(newLegendTypes);
+      setFilterByLegend(newLegendTypes);
     }
   }, [legend, report]);
 

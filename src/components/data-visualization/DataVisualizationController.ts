@@ -9,7 +9,7 @@
  */
 
 import { useMemo } from 'react';
-import * as d3 from 'd3';
+import d3 from 'd3';
 import { IGroupedAndSummedDataByXAxis, IGroupedAndSummedDataByLegend, IReportData } from '../../shared/models/data-visualization';
 import { chain, sumBy, sortBy } from 'lodash';
 import { LINE_CHART } from '../../shared/constants/data-visualization-configuration';
@@ -49,7 +49,7 @@ const useController = ({
           const legendData = chain(xAxisValue)
             .groupBy(legend)
             .map((legendValue: IReportData[], legendKey: string) => {
-              const legendSum = sumBy(legendValue, (data: IReportData) => data[yAxis]);
+              const legendSum = sumBy(legendValue, (reportData: IReportData) => reportData[yAxis]);
 
               return { legendSum, legendKey: `${legendKey}` };
             })
@@ -67,7 +67,7 @@ const useController = ({
         chain(data)
           .groupBy(legend)
           .map((legendValue: IReportData[], legendKey: string) => {
-            const legendSum = sumBy(legendValue, (data: IReportData) => data[yAxis]);
+            const legendSum = sumBy(legendValue, (reportData: IReportData) => reportData[yAxis]);
 
             return { legendKey, legendSum };
           })
@@ -94,7 +94,7 @@ const useController = ({
       d3.max(d[1], (_, idx, legends: IReportData[]) => {
         const agg = legends.slice(0, idx + 1);
 
-        return d3.sum(agg, d => d[yAxis]);
+        return d3.sum(agg, datum => datum[yAxis]);
       })
     );
   }, [groupedByLegend, yAxis]);

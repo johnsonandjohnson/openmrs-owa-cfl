@@ -48,15 +48,7 @@ const DataVisualizationConfiguration = ({
   settingUuid,
   configurationSetting,
   initialUpdate,
-  success,
-  getSettingByQuery,
-  getSettings,
-  getReports,
-  addReportConfigurationBlock,
-  initialUpdateReportsConfiguration,
-  setShowValidationErrors,
-  updateSetting,
-  createSetting
+  success
 }: StateProps & DispatchProps) => {
   const { formatMessage } = useIntl();
 

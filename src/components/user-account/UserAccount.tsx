@@ -108,18 +108,7 @@ const UserAccount = (props: ILocationProps) => {
     successCreateUser,
     successCreateProvider,
     successDeleteUser,
-    successDeleteProvider,
-    searchLocations,
-    getRoles,
-    getProviders,
-    getUsers,
-    getUserByPersonId,
-    getSettings,
-    getPerson,
-    saveUser,
-    saveProvider,
-    deleteUser,
-    deleteProvider
+    successDeleteProvider
   } = props;
 
   const personUuid = currentUser?.person?.uuid;
@@ -264,6 +253,8 @@ const UserAccount = (props: ILocationProps) => {
         } else if (!isUsernameUnique) {
           isFieldValid = false;
           errorMessage = 'common.error.nameUnique';
+        } else {
+          // Do nothing
         }
         break;
       case PASSWORD_FIELD:
@@ -279,6 +270,9 @@ const UserAccount = (props: ILocationProps) => {
           isFieldValid = false;
           errorMessage = 'common.error.confirmPassword';
         }
+        break;
+      default:
+        break;
     }
 
     setUserAccount({ ...userAccount, [name]: { ...userAccount[name], value: fieldValue, isValid: isFieldValid, error: errorMessage } });

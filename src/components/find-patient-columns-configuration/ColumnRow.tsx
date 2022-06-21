@@ -40,8 +40,7 @@ export const ColumnRow = ({
   allPossibleColumns,
   columnsConfiguration,
   column,
-  columnIdx,
-  setColumnsConfiguration
+  columnIdx
 }: IColumnRowProps) => {
   const { formatMessage } = intl;
   const columnValue = column.value ? column : null;

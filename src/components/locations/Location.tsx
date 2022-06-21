@@ -93,13 +93,7 @@ export const Location = ({
   locationAttributeTypes,
   match,
   settingValue,
-  success,
-  getConcept,
-  getLocation,
-  getLocationAttributeTypes,
-  getSettingByQuery,
-  saveLocation,
-  searchLocations
+  success
 }: ILocationProps) => {
   const [location, setLocation] = useState(DEFAULT_LOCATION);
   const [showValidationErrors, setShowValidationErrors] = useState(false);
@@ -166,7 +160,7 @@ export const Location = ({
     if (locationAttributeTypes.some(({ uuid }) => uuid === COUNTRY_CODE_LOCATION_ATTRIBUTE_TYPE_UUID)) {
       const countryCodeAttribute = attributes.find(({ attributeType }) => attributeType.uuid === COUNTRY_CODE_LOCATION_ATTRIBUTE_TYPE_UUID);
 
-      //fill in Country Code based on the selected Country
+      // fill in Country Code based on the selected Country
       if (countryCodeAttribute) {
         countryCodeAttribute.value = countryShortName;
       } else {
@@ -180,7 +174,7 @@ export const Location = ({
     if (locationAttributeTypes.some(({ uuid }) => uuid === CLUSTER_LOCATION_ATTRIBUTE_TYPE_UUID)) {
       const clusterAttribute = attributes.find(({ attributeType }) => attributeType.uuid === CLUSTER_LOCATION_ATTRIBUTE_TYPE_UUID);
 
-      //clear Cluster value on Country change
+      // clear Cluster value on Country change
       if (clusterAttribute) {
         clusterAttribute.value = null;
       }
@@ -191,7 +185,7 @@ export const Location = ({
 
   const onAttributeValueChange = (uuid: string) => (event: ChangeEvent | string) => {
     let attributes = location.attributes;
-    const attribute = attributes.find(attribute => attribute.attributeType.uuid === uuid);
+    const attribute = attributes.find(attributeToCheck => attributeToCheck.attributeType.uuid === uuid);
     const value = extractEventValue(event);
 
     if (attribute) {
@@ -266,7 +260,7 @@ export const Location = ({
     } else
       switch (preferredHandlerClassname) {
         case DROPDOWN_PREFERRED_HANDLER:
-          const options: Array<IOption> = handlerConfig.split(DROPDOWN_HANDLER_CONFIG_SEPARATOR).map(value => ({ label: value, value }));
+          const options: Array<IOption> = handlerConfig.split(DROPDOWN_HANDLER_CONFIG_SEPARATOR).map(dropdownValue => ({ label: dropdownValue, value: dropdownValue }));
           return (
             <div className="input-container" key={key}>
               <SelectWithPlaceholder

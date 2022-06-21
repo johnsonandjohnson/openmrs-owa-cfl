@@ -44,9 +44,7 @@ export const Select = (props: ISelectProps) => {
     selectOptions,
     concept,
     onPatientChange,
-    settings,
-    getConcept,
-    getSettingByQuery
+    settings
   } = props;
   const { name, required, label, options, defaultOption = '', optionSource = '', optionUuid = '', optionKey = '' } = field;
   const hasValue = value || patient[name] || defaultOption;
@@ -61,6 +59,8 @@ export const Select = (props: ISelectProps) => {
       getConcept(optionUuid, CONCEPT_CUSTOM_REPRESENTATION);
     } else if (isGlobalPropertyOptionSource) {
       getSettingByQuery(optionUuid);
+    } else {
+      // Do nothing
     }
   }, [getConcept, getSettingByQuery, isConceptOptionSource, isGlobalPropertyOptionSource, optionSource, optionUuid]);
 
@@ -75,9 +75,11 @@ export const Select = (props: ISelectProps) => {
 
     if (isGlobalPropertyOptionSource && settings?.setting?.value) {
       const configParsed = JSON.parse(settings.setting.value);
-      opts = configParsed[optionKey].map(({ name }) => name);
+      opts = configParsed[optionKey].map(mappedConfig => mappedConfig.name);
     } else if (isConceptOptionSource && concept?.concept?.setMembers.length) {
       opts = concept.concept.setMembers.map(({ display }) => display).sort();
+    } else {
+      // Do nothing
     }
 
     if (opts) {

@@ -44,11 +44,7 @@ const Regimen = ({
   regimens,
   editedRegimens,
   regimenIdx,
-  isAllSectionsExpanded,
-  setConfirmationModal,
-  setRegimens,
-  setEditedRegimens,
-  setRegimenToDelete
+  isAllSectionsExpanded
 }: IRegimenProps) => {
   if (!drugs.length) {
     const clonedRegimens = cloneDeep(regimens);
@@ -57,24 +53,26 @@ const Regimen = ({
   }
 
   const onChangeHandler: OnChangeHandler = useCallback(
-    (regimenIdx, regimenUuid) => event => {
+    (eventRegimenIdx, eventRegimenUuid) => event => {
       const clonedRegimens = cloneDeep(regimens);
       const extractedValue = extractEventValue(event);
-      const isRegimenNameUnique = clonedRegimens.every(({ regimenName }) => regimenName.toLowerCase() !== extractedValue.toLowerCase());
+      const isRegimenNameUnique = clonedRegimens.every(clonedRegimen => clonedRegimen.regimenName.toLowerCase() !== extractedValue.toLowerCase());
 
-      clonedRegimens[regimenIdx][REGIMEN_NAME] = extractedValue;
-      clonedRegimens[regimenIdx].isValid = !!extractedValue;
-      clonedRegimens[regimenIdx].errorMessage = EMPTY_STRING;
+      clonedRegimens[eventRegimenIdx][REGIMEN_NAME] = extractedValue;
+      clonedRegimens[eventRegimenIdx].isValid = !!extractedValue;
+      clonedRegimens[eventRegimenIdx].errorMessage = EMPTY_STRING;
 
       if (!extractedValue) {
-        clonedRegimens[regimenIdx].errorMessage = FIELD_REQUIRED_ERROR_MESSAGE;
+        clonedRegimens[eventRegimenIdx].errorMessage = FIELD_REQUIRED_ERROR_MESSAGE;
       } else if (!isRegimenNameUnique) {
-        clonedRegimens[regimenIdx].isValid = false;
-        clonedRegimens[regimenIdx].errorMessage = UNIQUE_REGIMEN_NAME_ERROR_MESSAGE;
+        clonedRegimens[eventRegimenIdx].isValid = false;
+        clonedRegimens[eventRegimenIdx].errorMessage = UNIQUE_REGIMEN_NAME_ERROR_MESSAGE;
+      } else {
+        // Do nothing
       }
 
       setRegimens(clonedRegimens);
-      regimenUuid && setEditedRegimens(uniq([...editedRegimens, regimenUuid]));
+      eventRegimenUuid && setEditedRegimens(uniq([...editedRegimens, eventRegimenUuid]));
     },
     [regimens, setRegimens, setEditedRegimens, editedRegimens]
   );

@@ -10,7 +10,7 @@
 
 import React, { useEffect } from 'react';
 import cx from 'classnames';
-import * as d3 from 'd3';
+import d3 from 'd3';
 
 interface IChartLegend {
   chartRef: SVGAElement;
