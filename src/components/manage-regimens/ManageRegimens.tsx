@@ -95,7 +95,21 @@ export const ManageRegimens = ({
   editedRegimens,
   regimenToDelete,
   drugToDelete,
-  confirmationModal
+  confirmationModal,
+  getOrderSet,
+  deleteOrderSet,
+  saveOrderSet,
+  deleteOrderSetMember,
+  getSettings,
+  getDrugsList,
+  getFrequencies,
+  getConcept,
+  getOrderType,
+  setRegimens,
+  setEditedRegimens,
+  setRegimenToDelete,
+  setDrugToDelete,
+  setConfirmationModal
 }: IMangeRegimensProps) => {
   const [isAllSectionsExpanded, setIsAllSectionsExpanded] = useState(false);
   const onReturn = useCallback(() => (window.location.href = RETURN_LOCATION), []);

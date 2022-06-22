@@ -9,7 +9,7 @@
  */
 
 import React, { useEffect } from 'react';
-import d3 from 'd3';
+import { select } from 'd3';
 import { IGroupedAndSummedDataByLegend, IGroupedAndSummedDataByXAxis } from '../../shared/models/data-visualization';
 
 interface IBars {
@@ -25,8 +25,7 @@ interface IBars {
 const Bars = ({ chartRef, dataToDisplay, xScale, xSubgroup, yScale, colors, chartHeight }: IBars) => {
   useEffect(() => {
     if (chartHeight) {
-      const selection = d3
-        .select(chartRef)
+      const selection = select(chartRef)
         .selectAll('g.xAxisKey')
         .data(dataToDisplay)
         .attr('transform', (_, idx) => `translate(${xScale(idx)},0)`);

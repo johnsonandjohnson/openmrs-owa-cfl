@@ -36,7 +36,8 @@ const DataVisualizationConfigurationHeader = ({
   reportConfig,
   reportsList,
   reportsConfiguration,
-  showValidationErrors
+  showValidationErrors,
+  updateReportsConfiguration
 }: IDataVisualizationConfigurationHeader) => {
   const { formatMessage } = useIntl();
   const unusedReportsUuid = differenceBy(reportsList, reportsConfiguration, 'uuid') as IReportList[];

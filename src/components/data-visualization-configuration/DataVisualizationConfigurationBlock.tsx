@@ -22,7 +22,7 @@ interface IReportConfigurationBlockProps extends DispatchProps {
   reportIdx: number;
 }
 
-const DataVisualizationConfigurationBlock = ({ reportConfig, reportData, reportIdx }: IReportConfigurationBlockProps) => {
+const DataVisualizationConfigurationBlock = ({ reportConfig, reportData, reportIdx, removeReport }: IReportConfigurationBlockProps) => {
   return (
     <div className="section">
       <ExpandableSection

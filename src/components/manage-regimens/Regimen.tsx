@@ -44,7 +44,11 @@ const Regimen = ({
   regimens,
   editedRegimens,
   regimenIdx,
-  isAllSectionsExpanded
+  isAllSectionsExpanded,
+  setConfirmationModal,
+  setRegimens,
+  setEditedRegimens,
+  setRegimenToDelete
 }: IRegimenProps) => {
   if (!drugs.length) {
     const clonedRegimens = cloneDeep(regimens);
@@ -56,7 +60,9 @@ const Regimen = ({
     (eventRegimenIdx, eventRegimenUuid) => event => {
       const clonedRegimens = cloneDeep(regimens);
       const extractedValue = extractEventValue(event);
-      const isRegimenNameUnique = clonedRegimens.every(clonedRegimen => clonedRegimen.regimenName.toLowerCase() !== extractedValue.toLowerCase());
+      const isRegimenNameUnique = clonedRegimens.every(
+        clonedRegimen => clonedRegimen.regimenName.toLowerCase() !== extractedValue.toLowerCase()
+      );
 
       clonedRegimens[eventRegimenIdx][REGIMEN_NAME] = extractedValue;
       clonedRegimens[eventRegimenIdx].isValid = !!extractedValue;

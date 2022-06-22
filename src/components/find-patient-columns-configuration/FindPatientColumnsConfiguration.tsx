@@ -61,7 +61,12 @@ const FindPatientColumnsConfiguration = ({
   isSettingExist,
   settingUuid,
   settingValue,
-  settingsSaved
+  settingsSaved,
+  setAllPossibleColumns,
+  setColumnsConfiguration,
+  getSettingByQuery,
+  createSetting,
+  updateSetting
 }: IFindPatientColumnsConfigurationProps) => {
   useEffect(() => {
     getSettingByQuery(COLUMNS_CONFIGURATION_SETTING_KEY);

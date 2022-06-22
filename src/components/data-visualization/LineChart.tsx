@@ -9,7 +9,7 @@
  */
 
 import React, { useState, useEffect, useRef } from 'react';
-import d3 from 'd3';
+import { select } from 'd3';
 import SummaryChartTable from './SummaryChartTable';
 import ChartLegend from './ChartLegend';
 import useController from './DataVisualizationController';
@@ -57,8 +57,8 @@ const LineChart = ({
 
   useEffect(() => {
     if (dataToDisplay?.length && isActive) {
-      const width = parseInt(d3.select('.chart').style('width')) - marginLeft - marginRight;
-      const height = parseInt(d3.select('.chart').style('height')) - marginTop - marginBottom;
+      const width = parseInt(select('.chart').style('width')) - marginLeft - marginRight;
+      const height = parseInt(select('.chart').style('height')) - marginTop - marginBottom;
       setChartWidth(width);
       setChartHeight(height);
     }

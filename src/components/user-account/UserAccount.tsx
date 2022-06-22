@@ -108,7 +108,18 @@ const UserAccount = (props: ILocationProps) => {
     successCreateUser,
     successCreateProvider,
     successDeleteUser,
-    successDeleteProvider
+    successDeleteProvider,
+    searchLocations,
+    getRoles,
+    getProviders,
+    getUsers,
+    getUserByPersonId,
+    getSettings,
+    getPerson,
+    saveUser,
+    saveProvider,
+    deleteUser,
+    deleteProvider
   } = props;
 
   const personUuid = currentUser?.person?.uuid;
@@ -170,10 +181,10 @@ const UserAccount = (props: ILocationProps) => {
       } = person;
       const {
         username,
-        roles = [],
+        roles: currentUserRoles = [],
         userProperties: { locationUuid: locationUuidString }
       } = currentUser;
-      const [userRole = {}] = roles;
+      const [userRole = {}] = currentUserRoles;
       const { display: label, uuid: value } = userRole;
       // editing an account through Legacy UI results in 'null' string being added to 'locationUuid' user property
       const fixedLocationUuidString = locationUuidString?.replace(/null/g, '');

@@ -34,7 +34,10 @@ const DataVisualization = ({
   initialUpdate,
   reportsConfiguration,
   reportsList,
-  errorMessage
+  errorMessage,
+  getReports,
+  getSettingByQuery,
+  initialUpdateReportsConfiguration
 }: StateProps & DispatchProps) => {
   const [activeTab, setActiveTab] = useState('0');
 

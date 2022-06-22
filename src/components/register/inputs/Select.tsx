@@ -44,7 +44,9 @@ export const Select = (props: ISelectProps) => {
     selectOptions,
     concept,
     onPatientChange,
-    settings
+    settings,
+    getConcept,
+    getSettingByQuery
   } = props;
   const { name, required, label, options, defaultOption = '', optionSource = '', optionUuid = '', optionKey = '' } = field;
   const hasValue = value || patient[name] || defaultOption;

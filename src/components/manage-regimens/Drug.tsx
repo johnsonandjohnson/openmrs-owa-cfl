@@ -54,7 +54,11 @@ export const Drug = ({
   regimenUuid,
   regimenIdx,
   drug: { drugDetails, doseUnits, dose, frequency: drugFrequency, uuid: drugUuid },
-  drugIdx
+  drugIdx,
+  setRegimens,
+  setEditedRegimens,
+  setConfirmationModal,
+  setDrugToDelete
 }: IDrugProps) => {
   const { formatMessage } = intl;
   const getOptions = useMemo(

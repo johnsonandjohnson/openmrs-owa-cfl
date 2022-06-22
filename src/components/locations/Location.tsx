@@ -93,7 +93,13 @@ export const Location = ({
   locationAttributeTypes,
   match,
   settingValue,
-  success
+  success,
+  getConcept,
+  getLocation,
+  getLocationAttributeTypes,
+  getSettingByQuery,
+  saveLocation,
+  searchLocations
 }: ILocationProps) => {
   const [location, setLocation] = useState(DEFAULT_LOCATION);
   const [showValidationErrors, setShowValidationErrors] = useState(false);
@@ -260,7 +266,9 @@ export const Location = ({
     } else
       switch (preferredHandlerClassname) {
         case DROPDOWN_PREFERRED_HANDLER:
-          const options: Array<IOption> = handlerConfig.split(DROPDOWN_HANDLER_CONFIG_SEPARATOR).map(dropdownValue => ({ label: dropdownValue, value: dropdownValue }));
+          const options: Array<IOption> = handlerConfig
+            .split(DROPDOWN_HANDLER_CONFIG_SEPARATOR)
+            .map(dropdownValue => ({ label: dropdownValue, value: dropdownValue }));
           return (
             <div className="input-container" key={key}>
               <SelectWithPlaceholder

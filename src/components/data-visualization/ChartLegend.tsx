@@ -10,7 +10,7 @@
 
 import React, { useEffect } from 'react';
 import cx from 'classnames';
-import d3 from 'd3';
+import { select } from 'd3';
 
 interface IChartLegend {
   chartRef: SVGAElement;
@@ -35,8 +35,7 @@ const ChartLegend = ({
 }: IChartLegend) => {
   useEffect(() => {
     if (chartWidth) {
-      const legend = d3
-        .select(chartRef)
+      const legend = select(chartRef)
         .selectAll('.legend')
         .data(legendTypes)
         .attr('transform', (_, i) => `translate(${marginLeft + marginRight}, ${i * 20 + 5})`)
