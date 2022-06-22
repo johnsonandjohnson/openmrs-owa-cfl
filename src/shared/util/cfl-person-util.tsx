@@ -29,6 +29,9 @@ import { formatDate } from './date-util';
 import { formatPhoneNumberIntl } from 'react-phone-number-input';
 import { getPhoneNumberWithPlusSign } from '../../shared/util/person-util';
 
+const formattedDate = (date, intl) => date && formatDate(intl, new Date(date));
+const getIdentifier = person => person?.patientIdentifier || person?.personIdentifier;
+
 export const extractAttribute = (entity, type) => {
   if (!entity) {
     return DEFAULT_COLUMN_VALUE;
@@ -42,9 +45,9 @@ export const columnContent = (person, column, intl) => {
 
   switch (column) {
     case BIRTHDATE:
-      return person?.birthdate && formatDate(intl, new Date(person.birthdate));
+      return formattedDate(person?.birthdate, intl);
     case DEATH_DATE:
-      return person?.deathDate && formatDate(intl, new Date(person.deathDate));
+      return formattedDate(person?.deathDate, intl);
     case GIVEN_NAME:
       return names?.[0];
     case FAMILY_NAME:
@@ -53,7 +56,7 @@ export const columnContent = (person, column, intl) => {
       return person.personName;
     case PERSON_IDENTIFIER:
     case PATIENT_IDENTIFIER:
-      return person?.patientIdentifier || person?.personIdentifier;
+      return getIdentifier(person);
     case PHONE_NUMBER: {
       const phoneNumber = extractAttribute(person, TELEPHONE_NUMBER_ATTRIBUTE_TYPE);
       return formatPhoneNumberIntl(getPhoneNumberWithPlusSign(phoneNumber)) || phoneNumber;
