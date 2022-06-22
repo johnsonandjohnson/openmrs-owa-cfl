@@ -25,14 +25,16 @@ export interface IRoutesProps extends StateProps, DispatchProps {}
 class Routes extends React.Component<IRoutesProps> {
   renderComponent = route => {
     const { authenticated, privileges, loading } = this.props;
+    const Component = route.component;
     if (route.requiredPrivilege) {
       if (loading) {
         return <Spinner />;
       } else if (!authenticated || !privileges.includes(route.requiredPrivilege)) {
         return <Unauthorized />;
+      } else {
+        return <Component {...this.props} />;
       }
     }
-    const Component = route.component;
     return <Component {...this.props} />;
   };
 

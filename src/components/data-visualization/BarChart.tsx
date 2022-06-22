@@ -9,7 +9,7 @@
  */
 
 import React, { useEffect, useRef, useState } from 'react';
-import * as d3 from 'd3';
+import { select } from 'd3';
 import useController from './DataVisualizationController';
 import ChartLegend from './ChartLegend';
 import XScale from './XScale';
@@ -73,8 +73,8 @@ const BarChart = ({
 
   useEffect(() => {
     if (dataToDisplay?.length && isActive) {
-      const width = parseInt(d3.select('.chart').style('width')) - marginLeft - marginRight;
-      const height = parseInt(d3.select('.chart').style('height')) - marginTop - marginBottom;
+      const width = parseInt(select('.chart').style('width')) - marginLeft - marginRight;
+      const height = parseInt(select('.chart').style('height')) - marginTop - marginBottom;
 
       setChartWidth(width);
       setChartHeight(height);
@@ -106,8 +106,8 @@ const BarChart = ({
     setDataToDisplay(filteredDataToDisplay);
   };
 
-  const handleOnChange = (options: IOption[]) => {
-    const xAxisTypesFromOptions = options.map(({ value }) => value);
+  const handleOnChange = (onChangeOptions: IOption[]) => {
+    const xAxisTypesFromOptions = onChangeOptions.map(({ value }) => value);
 
     filterData(xAxisTypesFromOptions, filterByLegend);
     setFilterByXAxsis(xAxisTypesFromOptions);
@@ -117,7 +117,7 @@ const BarChart = ({
     let clonedFilterByLegend = [...filterByLegend];
 
     if (clonedFilterByLegend.includes(value)) {
-      clonedFilterByLegend = clonedFilterByLegend.filter(legend => legend !== value);
+      clonedFilterByLegend = clonedFilterByLegend.filter(filterLegend => filterLegend !== value);
     } else {
       clonedFilterByLegend.push(value);
     }

@@ -26,7 +26,7 @@ export const VelocityCodeEditor = ({ value, lineNumbers = false, placeholder, on
       placeholder
     }}
     autoCursor={false}
-    onChange={(editor, data, value) => onChange(value)}
+    onChange={(editor, data, newValue) => onChange(newValue)}
   />
 );
 

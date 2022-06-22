@@ -77,6 +77,8 @@ class AddressData extends React.Component<IAddressDataProps, IAddressDataState> 
       this.setState({ isDownloadableAddressDataValid: true }, this.triggerAddressDataDownload);
     } else if (prevProps.error !== error) {
       errorToast(error);
+    } else {
+      // Do nothing
     }
   }
 

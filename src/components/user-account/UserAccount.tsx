@@ -181,10 +181,10 @@ const UserAccount = (props: ILocationProps) => {
       } = person;
       const {
         username,
-        roles = [],
+        roles: currentUserRoles = [],
         userProperties: { locationUuid: locationUuidString }
       } = currentUser;
-      const [userRole = {}] = roles;
+      const [userRole = {}] = currentUserRoles;
       const { display: label, uuid: value } = userRole;
       // editing an account through Legacy UI results in 'null' string being added to 'locationUuid' user property
       const fixedLocationUuidString = locationUuidString?.replace(/null/g, '');
@@ -264,6 +264,8 @@ const UserAccount = (props: ILocationProps) => {
         } else if (!isUsernameUnique) {
           isFieldValid = false;
           errorMessage = 'common.error.nameUnique';
+        } else {
+          // Do nothing
         }
         break;
       case PASSWORD_FIELD:
@@ -279,6 +281,9 @@ const UserAccount = (props: ILocationProps) => {
           isFieldValid = false;
           errorMessage = 'common.error.confirmPassword';
         }
+        break;
+      default:
+        break;
     }
 
     setUserAccount({ ...userAccount, [name]: { ...userAccount[name], value: fieldValue, isValid: isFieldValid, error: errorMessage } });

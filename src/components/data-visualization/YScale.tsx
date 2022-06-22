@@ -9,7 +9,7 @@
  */
 
 import React, { useEffect } from 'react';
-import * as d3 from 'd3';
+import { select, axisLeft } from 'd3';
 
 interface IYScale {
   chartRef: SVGAElement;
@@ -21,11 +21,11 @@ interface IYScale {
 const YScale = ({ chartRef, yScale, chartWidth, marginLeft }: IYScale) => {
   useEffect(() => {
     if (chartWidth) {
-      d3.select(chartRef)
+      select(chartRef)
         .select('.yScale')
         .attr('transform', `translate(${marginLeft},0)`)
         //@ts-ignore
-        .call(d3.axisLeft(yScale))
+        .call(axisLeft(yScale))
         .call(g => g.selectAll('.tick .grid-line').remove())
         .call(g =>
           g

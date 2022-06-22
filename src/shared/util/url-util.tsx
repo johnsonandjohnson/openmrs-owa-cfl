@@ -14,9 +14,9 @@ import { ROOT_URL } from '../constants/openmrs';
 export const redirectUrl = search => {
   const params = queryString.parse(search);
   const { redirect, dashboard = '' } = params;
-  const redirectUrl = dashboard ? `${redirect}&dashboard=${dashboard}` : `${redirect}`;
+  const redirectUrlRaw = dashboard ? `${redirect}&dashboard=${dashboard}` : `${redirect}`;
 
-  return (redirectUrl || ROOT_URL).toString();
+  return (redirectUrlRaw || ROOT_URL).toString();
 };
 
 export const nameParamVal = search => {

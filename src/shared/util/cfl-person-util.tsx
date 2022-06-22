@@ -29,6 +29,9 @@ import { formatDate } from './date-util';
 import { formatPhoneNumberIntl } from 'react-phone-number-input';
 import { getPhoneNumberWithPlusSign } from '../../shared/util/person-util';
 
+const formattedDate = (date, intl) => date && formatDate(intl, new Date(date));
+const getIdentifier = person => person?.patientIdentifier || person?.personIdentifier;
+
 export const extractAttribute = (entity, type) => {
   if (!entity) {
     return DEFAULT_COLUMN_VALUE;
@@ -38,21 +41,22 @@ export const extractAttribute = (entity, type) => {
 };
 
 export const columnContent = (person, column, intl) => {
-  const names = person.personName && person.personName.split(' ');
+  const names = person?.personName?.split(' ');
+
   switch (column) {
     case BIRTHDATE:
-      return person && person.birthdate && formatDate(intl, new Date(person.birthdate));
+      return formattedDate(person?.birthdate, intl);
     case DEATH_DATE:
-      return person && person.deathDate && formatDate(intl, new Date(person.deathDate));
+      return formattedDate(person?.deathDate, intl);
     case GIVEN_NAME:
-      return names && names[0];
+      return names?.[0];
     case FAMILY_NAME:
-      return names && (names.length > 1 ? names[1] : DEFAULT_COLUMN_VALUE);
+      return names?.length ? names[1] : DEFAULT_COLUMN_VALUE;
     case DISPLAY:
       return person.personName;
     case PERSON_IDENTIFIER:
     case PATIENT_IDENTIFIER:
-      return person && (person.patientIdentifier || person.personIdentifier);
+      return getIdentifier(person);
     case PHONE_NUMBER: {
       const phoneNumber = extractAttribute(person, TELEPHONE_NUMBER_ATTRIBUTE_TYPE);
       return formatPhoneNumberIntl(getPhoneNumberWithPlusSign(phoneNumber)) || phoneNumber;
@@ -60,8 +64,8 @@ export const columnContent = (person, column, intl) => {
     case PERSON_LANGUAGE:
       return extractAttribute(person, PERSON_LANGUAGE_ATTRIBUTE_TYPE);
     case GENDER:
-      return person && (GENDER_DICT[person.gender] || person.gender);
+      return GENDER_DICT[person?.gender] || person?.gender;
     default:
-      return extractValue(person && person[column]);
+      return extractValue(person?.[column]);
   }
 };

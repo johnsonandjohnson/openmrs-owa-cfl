@@ -22,5 +22,7 @@ export const helperText = (query, loading, totalCount) => {
     return <FormattedMessage id="table.enterSearch" />;
   } else if (!loading && totalCount === 0) {
     return <FormattedMessage id="table.noRecords" />;
+  } else {
+    return undefined;
   }
 };

@@ -9,7 +9,7 @@
  */
 
 import { useMemo } from 'react';
-import * as d3 from 'd3';
+import { scaleOrdinal, group, max, sum, scaleLinear, scaleBand, scaleTime, extent, range } from 'd3';
 import { IGroupedAndSummedDataByXAxis, IGroupedAndSummedDataByLegend, IReportData } from '../../shared/models/data-visualization';
 import { chain, sumBy, sortBy } from 'lodash';
 import { LINE_CHART } from '../../shared/constants/data-visualization-configuration';
@@ -49,7 +49,7 @@ const useController = ({
           const legendData = chain(xAxisValue)
             .groupBy(legend)
             .map((legendValue: IReportData[], legendKey: string) => {
-              const legendSum = sumBy(legendValue, (data: IReportData) => data[yAxis]);
+              const legendSum = sumBy(legendValue, (reportData: IReportData) => reportData[yAxis]);
 
               return { legendSum, legendKey: `${legendKey}` };
             })
@@ -67,7 +67,7 @@ const useController = ({
         chain(data)
           .groupBy(legend)
           .map((legendValue: IReportData[], legendKey: string) => {
-            const legendSum = sumBy(legendValue, (data: IReportData) => data[yAxis]);
+            const legendSum = sumBy(legendValue, (reportData: IReportData) => reportData[yAxis]);
 
             return { legendKey, legendSum };
           })
@@ -78,42 +78,41 @@ const useController = ({
   ) as IGroupedAndSummedDataByLegend[];
 
   const colorsScaleOrdinal = useMemo(() => {
-    return d3.scaleOrdinal(colors.split(','));
+    return scaleOrdinal(colors.split(','));
   }, [colors]);
 
   const groupedByLegend = useMemo(() => {
-    return d3.group(data, d => `${d[legend]}`);
+    return group(data, d => `${d[legend]}`);
   }, [data, legend]);
 
   const barChartMax = useMemo(() => {
-    return (d3.max(groupedAndSummedDataByXAxis, ({ legendData = [] }) => d3.max(legendData, d => d.legendSum)) as unknown) as number;
+    return (max(groupedAndSummedDataByXAxis, ({ legendData = [] }) => max(legendData, d => d.legendSum)) as unknown) as number;
   }, [groupedAndSummedDataByXAxis]);
 
   const lineChartMax = useMemo(() => {
-    return d3.max(groupedByLegend, d =>
-      d3.max(d[1], (_, idx, legends: IReportData[]) => {
+    return max(groupedByLegend, d =>
+      max(d[1], (_, idx, legends: IReportData[]) => {
         const agg = legends.slice(0, idx + 1);
 
-        return d3.sum(agg, d => d[yAxis]);
+        return sum(agg, datum => datum[yAxis]);
       })
     );
   }, [groupedByLegend, yAxis]);
 
-  const max = chartType === LINE_CHART ? lineChartMax : barChartMax;
+  const maximum = chartType === LINE_CHART ? lineChartMax : barChartMax;
 
   const yScale = useMemo(() => {
-    return d3.scaleLinear().domain([0, max]).range([chartHeight, marginTop]);
-  }, [chartHeight, marginTop, max]);
+    return scaleLinear().domain([0, maximum]).range([chartHeight, marginTop]);
+  }, [chartHeight, marginTop, maximum]);
 
   const xScaleBarChart = useMemo(() => {
     //@ts-ignore
-    return d3.scaleBand().domain(d3.range(groupedAndSummedDataByXAxis.length)).range([marginLeft, chartWidth]).padding(0.1);
+    return scaleBand().domain(range(groupedAndSummedDataByXAxis.length)).range([marginLeft, chartWidth]).padding(0.1);
   }, [chartWidth, groupedAndSummedDataByXAxis.length, marginLeft]);
 
   const xScaleLineChart = useMemo(() => {
-    return d3
-      .scaleTime()
-      .domain(d3.extent(data, d => new Date(d[xAxis])))
+    return scaleTime()
+      .domain(extent(data, d => new Date(d[xAxis])))
       .range([marginLeft, chartWidth])
       .nice();
   }, [chartWidth, data, marginLeft, xAxis]);
@@ -121,7 +120,7 @@ const useController = ({
   const xScale = chartType === LINE_CHART ? xScaleLineChart : xScaleBarChart;
 
   const xSubgroup = useMemo(() => {
-    return d3.scaleBand().domain(legendTypes).range([0, xScaleBarChart.bandwidth()]).padding(0.3);
+    return scaleBand().domain(legendTypes).range([0, xScaleBarChart.bandwidth()]).padding(0.3);
   }, [legendTypes, xScaleBarChart]);
 
   return {

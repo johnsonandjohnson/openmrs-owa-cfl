@@ -32,7 +32,9 @@ export interface IConfirmProps extends StateProps, DispatchProps {
 class Confirm extends React.Component<IConfirmProps> {
   state = {};
 
-  componentDidMount() {}
+  componentDidMount() {
+    // Do nothing
+  }
 
   validate = () => true;
 
@@ -46,6 +48,8 @@ class Confirm extends React.Component<IConfirmProps> {
       const monthPart =
         !!patient.birthdateMonths && patient.birthdateMonths + ' ' + intl.formatMessage({ id: 'registerPatient.steps.confirm.months' });
       return [intl.formatMessage({ id: 'registerPatient.steps.confirm.estimated' }), yearPart, monthPart].filter(Boolean).join(' ');
+    } else {
+      // Do nothing
     }
   };
 

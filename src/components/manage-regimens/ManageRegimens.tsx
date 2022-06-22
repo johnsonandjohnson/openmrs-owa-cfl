@@ -344,6 +344,8 @@ export const ManageRegimens = ({
         onRemoveDrugHandler(drugToDelete);
         setDrugToDelete(INITIAL_DRUG_VALUE);
         break;
+      default:
+        break;
     }
     setConfirmationModal(CLOSED_MODAL_CONFIGURATION);
   }, [

@@ -9,7 +9,7 @@
  */
 
 import React, { useEffect } from 'react';
-import * as d3 from 'd3';
+import { select } from 'd3';
 
 interface IChartTitle {
   chartRef: SVGAElement;
@@ -20,7 +20,7 @@ interface IChartTitle {
 
 const ChartTitle = ({ chartRef, title, chartWidth, marginTop }: IChartTitle) => {
   useEffect(() => {
-    d3.select(chartRef)
+    select(chartRef)
       .select('.chart-title')
       .attr('x', chartWidth / 2)
       .attr('y', marginTop / 5 - 10)

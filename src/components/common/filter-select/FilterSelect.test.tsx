@@ -14,7 +14,7 @@ import { FilterSelect } from './FilterSelect';
 
 test('should render match snapshot', () => {
   const select = render(
-    <FilterSelect intl={{ formatMessage: () => {} }} placeholderId="" value={null} onChange={() => null} options={[]} />
+    <FilterSelect intl={{ formatMessage: () => void 0 }} placeholderId="" value={null} onChange={() => null} options={[]} />
   );
   expect(select).toMatchSnapshot();
 });

@@ -171,28 +171,43 @@ class Condition extends React.Component<IConditionsProps, IConditionsState> {
 
   save = () => {
     if (this.state.concept) {
-      const conditionId = this.conditionId();
-      const condition = !!conditionId ? { ...this.props.condition } : {};
-      condition.status = this.state.active ? STATUS_ACTIVE : STATUS_INACTIVE;
-      condition.patientUuid = this.props.match.params.patientUuid;
-      if (this.state.concept?.__isNew__) {
-        condition.concept = { uuid: '', name: '', shortName: '' };
-        condition.conditionNonCoded = this.state.concept.label;
-      } else {
-        condition.concept = { ...(condition.concept || {}), uuid: this.state.concept.value };
-      }
-      condition.onSetDate = isoDateString(this.state.onsetDate || new Date());
-      condition.endDate = !this.state.active ? isoDateString(this.state.endDate) : '';
-      condition.voided = false;
-      if (!condition.additionalDetail) {
-        condition.additionalDetail = '';
-      }
-      if (!condition.endReason) {
-        condition.endReason = { shortName: '' };
-      }
-      this.props.saveCondition(condition);
+      this.saveConditionConcept();
     }
   };
+
+  saveConditionConcept = () => {
+    const conditionId = this.conditionId();
+    const condition = !!conditionId ? { ...this.props.condition } : {};
+
+    condition.status = this.getConditionStatus();
+    condition.patientUuid = this.props.match.params.patientUuid;
+
+    if (this.state.concept?.__isNew__) {
+      condition.concept = { uuid: '', name: '', shortName: '' };
+      condition.conditionNonCoded = this.state.concept.label;
+    } else {
+      condition.concept = { ...(condition.concept || {}), uuid: this.state.concept.value };
+    }
+
+    condition.onSetDate = this.getSetDate();
+    condition.endDate = this.getEndDate();
+    condition.voided = false;
+
+    if (!condition.additionalDetail) {
+      condition.additionalDetail = '';
+    }
+    if (!condition.endReason) {
+      condition.endReason = { shortName: '' };
+    }
+
+    this.props.saveCondition(condition);
+  };
+
+  getConditionStatus = () => this.state.active ? STATUS_ACTIVE : STATUS_INACTIVE;
+
+  getSetDate = () => isoDateString(this.state.onsetDate || new Date());
+
+  getEndDate = () => !this.state.active ? isoDateString(this.state.endDate) : '';
 
   render() {
     const { intl } = this.props;

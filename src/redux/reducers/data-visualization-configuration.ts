@@ -83,7 +83,7 @@ const reducer = (state = initialState, action: AnyAction) => {
             uuid,
             name,
             description,
-            columns: columns.map(({ name }) => name),
+            columns: columns.map(({ name: columnName }) => columnName),
             reportData: rows
           };
         }

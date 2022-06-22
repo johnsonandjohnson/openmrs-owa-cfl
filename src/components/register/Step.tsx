@@ -105,11 +105,13 @@ export class Step extends React.Component<IStepProps, IStepState> {
       return 'col-sm-4';
     } else if (columns === '4') {
       return 'col-sm-3';
+    } else {
+      if (field.type === 'buttons') {
+        return 'col-sm-12';
+      }
+
+      return 'col-sm-4';
     }
-    if (field.type === 'buttons') {
-      return 'col-sm-12';
-    }
-    return 'col-sm-4';
   };
 
   // return true if invalid

@@ -32,15 +32,15 @@ const PLUS_SIGN = '+';
 export const columnContent = (person, column, intl) => {
   switch (column) {
     case BIRTHDATE:
-      return person && person.birthdate && formatDate(intl, new Date(person.birthdate));
+      return person?.birthdate && formatDate(intl, new Date(person.birthdate));
     case DEATH_DATE:
-      return person && person.deathDate && formatDate(intl, new Date(person.deathDate));
+      return person?.deathDate && formatDate(intl, new Date(person.deathDate));
     case GIVEN_NAME:
-      return person.preferredName && person.preferredName.givenName;
+      return person?.preferredName?.givenName;
     case MIDDLE_NAME:
-      return person.preferredName && person.preferredName.middleName;
+      return person?.preferredName?.middleName;
     case FAMILY_NAME:
-      return person.preferredName && person.preferredName.familyName;
+      return person?.preferredName?.familyName;
     case PERSON_IDENTIFIER:
       return extractAttribute(person, PERSON_IDENTIFIER_ATTRIBUTE_TYPE);
     case PHONE_NUMBER: {
@@ -50,9 +50,9 @@ export const columnContent = (person, column, intl) => {
     case PERSON_LANGUAGE:
       return extractAttribute(person, PERSON_LANGUAGE_ATTRIBUTE_TYPE);
     case GENDER:
-      return person && (GENDER_DICT[person.gender] || person.gender);
+      return GENDER_DICT?.[person.gender] || person?.gender;
     default:
-      return extractValue(person && person[column]);
+      return extractValue(person?.[column]);
   }
 };
 

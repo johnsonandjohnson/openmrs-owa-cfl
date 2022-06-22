@@ -106,6 +106,8 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
       this.setState({ isAllSectionsExpanded: false });
     } else if (prevProps.error !== this.props.error && !loading) {
       errorToast(error);
+    } else {
+      // Do nothing
     }
   }
 
@@ -506,7 +508,7 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
     const configurationName = configuration[CONFIGURATION_NAME_PROPERTY_NAME];
     const isDefaultCountryConfiguration = configurationName === DEFAULT_COUNTRY_CONFIGURATION_NAME;
     const countryOptions = conceptCountryOptions.filter(
-      country => !notificationConfiguration.map(configuration => configuration.name).includes(country.value)
+      country => !notificationConfiguration.map(configurationToMap => configurationToMap.name).includes(country.value)
     );
     const headerComponent = isDefaultCountryConfiguration ? (
       <Label>

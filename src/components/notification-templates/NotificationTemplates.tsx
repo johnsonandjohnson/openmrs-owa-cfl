@@ -114,6 +114,8 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
         savedNotificationTemplates: _.clone(sortedSettings),
         unifiedSuccessToastDisplayed: false
       });
+    } else {
+      // Do nothing
     }
     if (!prevProps.success && success && this.state.isAllRequestsSent && !this.state.unifiedSuccessToastDisplayed) {
       successToast(intl.formatMessage({ id: 'notificationTemplates.success' }));
@@ -128,6 +130,8 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
       );
     } else if (prevProps.appError !== this.props.appError && !loading) {
       errorToast(appError);
+    } else {
+      // Do nothing
     }
   }
 
@@ -188,6 +192,8 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
           template[TEMPLATE_VALUE_PROPERTY_NAME],
           template[TEMPLATE_DESCRIPTION_PROPERTY_NAME]
         );
+      } else {
+        // Do nothing
       }
     });
     this.setState({ isAllRequestsSent: true });
