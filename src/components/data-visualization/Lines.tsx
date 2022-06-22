@@ -56,8 +56,8 @@ const Lines = ({ chartRef, filterByLegend, groupedByLegend, chartWidth, colors, 
 
   return (
     <g className="lines">
-      {filterByLegend.map(line => (
-        <path key={line} className="line" />
+      {filterByLegend.map(filterByLegendLine => (
+        <path key={filterByLegendLine} className="line" />
       ))}
     </g>
   );
