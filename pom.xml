@@ -4,7 +4,7 @@
 
     <groupId>org.openmrs.owa</groupId>
     <artifactId>openmrs-owa-cflui</artifactId>
-    <version>1.5.2</version>
+    <version>1.5.3-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>openmrs-owa-cflui</name>
     <description>OpenMRS CFL UI OWA</description>
@@ -13,7 +13,7 @@
         <connection>scm:git:https://sourcecode.jnj.com/scm/itx-bpv/cfl-ui.git</connection>
         <developerConnection>scm:git:https://sourcecode.jnj.com/scm/itx-bpv/cfl-ui.git</developerConnection>
         <url>https://sourcecode.jnj.com/scm/itx-bpv/cfl-ui.git</url>
-        <tag>openmrs-owa-cflui-1.5.2</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <build>
