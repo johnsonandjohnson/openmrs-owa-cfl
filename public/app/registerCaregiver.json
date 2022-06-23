@@ -8,7 +8,7 @@
       "extensionPointId": "org.openmrs.referenceapplication.homepageLink",
       "type": "link",
       "label": "CFL Register Caregiver",
-      "url": "owa/cfl-ui/index.html#/register-caregiver",
+      "url": "owa/cfl/index.html#/register-caregiver",
       "icon": "cfl-register-caregiver",
       "requiredPrivilege": "Add People"
     }

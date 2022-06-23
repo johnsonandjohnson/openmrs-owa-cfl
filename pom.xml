@@ -3,21 +3,21 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.openmrs.owa</groupId>
-    <artifactId>openmrs-owa-cflui</artifactId>
+    <artifactId>openmrs-owa-cfl</artifactId>
     <version>1.7.1-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>openmrs-owa-cflui</name>
+    <name>openmrs-owa-cfl</name>
     <description>OpenMRS CFL UI OWA</description>
 
     <scm>
-        <connection>scm:git:https://sourcecode.jnj.com/scm/itx-bpv/cfl-ui.git</connection>
-        <developerConnection>scm:git:https://sourcecode.jnj.com/scm/itx-bpv/cfl-ui.git</developerConnection>
-        <url>https://sourcecode.jnj.com/scm/itx-bpv/cfl-ui.git</url>
+        <connection>scm:git:https://sourcecode.jnj.com/scm/itx-bpv/openmrs-owa-cfl.git</connection>
+        <developerConnection>scm:git:https://sourcecode.jnj.com/scm/itx-bpv/openmrs-owa-cfl.git</developerConnection>
+        <url>https://sourcecode.jnj.com/scm/itx-bpv/openmrs-owa-cfl.git</url>
         <tag>HEAD</tag>
     </scm>
 
     <build>
-        <finalName>cfl-ui-${project.version}</finalName>
+        <finalName>cfl-${project.version}</finalName>
         <plugins>
             <plugin>
                 <groupId>com.github.eirslett</groupId>

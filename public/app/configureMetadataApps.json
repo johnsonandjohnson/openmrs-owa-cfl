@@ -15,7 +15,7 @@
       "extensionPointId": "org.openmrs.module.adminui.adminLinks",
       "type": "link",
       "label": "Manage Address Data",
-      "url": "owa/cfl-ui/index.html#/address-data",
+      "url": "owa/cfl/index.html#/address-data",
       "extensionParams": {
         "group": "cflUi.adminGroup"
       }
@@ -25,7 +25,7 @@
       "extensionPointId": "org.openmrs.module.adminui.adminLinks",
       "type": "link",
       "label": "Manage Notification Configuration",
-      "url": "owa/cfl-ui/index.html#/notification-configuration",
+      "url": "owa/cfl/index.html#/notification-configuration",
       "extensionParams": {
         "group": "cflUi.adminGroup"
       }
@@ -35,7 +35,7 @@
       "extensionPointId": "org.openmrs.module.adminui.adminLinks",
       "type": "link",
       "label": "Manage Notification Templates",
-      "url": "owa/cfl-ui/index.html#/notification-templates",
+      "url": "owa/cfl/index.html#/notification-templates",
       "extensionParams": {
         "group": "cflUi.adminGroup"
       }

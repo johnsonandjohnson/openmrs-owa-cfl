@@ -55,7 +55,7 @@ conf.plugins.push(new WatchExternalFilesPlugin.default({
     ]
 }));
 
-const OUTPUT_PATH = path.join(require('os').homedir(), '.cfl-dev/owa/cfl-ui');
+const OUTPUT_PATH = path.join(require('os').homedir(), '.cfl-dev/owa/cfl');
 conf.output.path = OUTPUT_PATH;
 
 conf.output.publicPath = process.env.PUBLIC_URL;

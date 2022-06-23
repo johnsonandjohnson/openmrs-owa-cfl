@@ -1,6 +1,6 @@
 {
   "version": "1.6.2-snapshot",
-  "name": "cfl-ui",
+  "name": "cfl",
   "description": "CFL UI for OpenMRS",
   "launch_path": "index.html",
   "icons": {

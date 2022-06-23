@@ -132,10 +132,10 @@ class AddressData extends React.Component<IAddressDataProps, IAddressDataState> 
       <p className="d-inline">
         <FormattedMessage id="addressData.upload.instruction2" />
       </p>
-      <a href={`${ROOT_URL}owa/cfl-ui/address-data/address-data-sample-file.csv`} download className="ml-2">
+      <a href={`${ROOT_URL}owa/cfl/address-data/address-data-sample-file.csv`} download className="ml-2">
         <FormattedMessage id="addressData.download.csvFileSample" />
       </a>
-      <a href={`${ROOT_URL}owa/cfl-ui/address-data/address-data-sample-file.txt`} download className="ml-2">
+      <a href={`${ROOT_URL}owa/cfl/address-data/address-data-sample-file.txt`} download className="ml-2">
         <FormattedMessage id="addressData.download.txtFileSample" />
       </a>
     </>

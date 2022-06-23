@@ -8,7 +8,7 @@
       "extensionPointId": "org.openmrs.referenceapplication.homepageLink",
       "type": "link",
       "label": "CFL Register Patient",
-      "url": "owa/cfl-ui/index.html#/register-patient",
+      "url": "owa/cfl/index.html#/register-patient",
       "icon": "cfl-register-patient",
       "requiredPrivilege": "Add Patients"
     }

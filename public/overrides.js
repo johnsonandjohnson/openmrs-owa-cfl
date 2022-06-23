@@ -8,7 +8,7 @@
  * graphic logo is a trademark of OpenMRS Inc.
  */
 
-const CFL_UI_BASE = '/openmrs/owa/cfl-ui/';
+const CFL_UI_BASE = '/openmrs/owa/cfl/';
 const NODE_TYPE_ELEMENT = 1;
 const NODE_TYPE_TEXT = 3;
 const DATE_PICKER_PLACEHOLDER_REGEX = /\([dmy]{2,4}\/[dmy]{2,4}\/[dmy]{2,4}\)/g;
