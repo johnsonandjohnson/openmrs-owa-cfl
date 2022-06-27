@@ -5,7 +5,7 @@
   "homepage": "./",
   "dependencies": {
     "@babel/core": "7.12.3",
-    "@bit/soldevelo-cfl.omrs-components.customize": "^1.0.8",
+    "@bit/soldevelo-cfl.omrs-components.customize": "^1.0.10",
     "@bit/soldevelo-cfl.omrs-components.person-status": "^1.0.8",
     "@bit/soldevelo-omrs.cfl-components.error-description": "^1.0.0",
     "@bit/soldevelo-omrs.cfl-components.form-label": "^1.0.1",
