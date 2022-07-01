@@ -436,29 +436,5 @@
       "header": "Submit Columns Configuration",
       "body": "Are you sure you want to submit Columns Configuration for the Patient's Record?"
     }
-  },
-  "dataVisualization": {
-    "title": "Data Visualization"
-  },
-  "dataVisualizationConfiguration": {
-    "title": "Data Visualization Configuration",
-    "addNewReport": "Add New report",
-    "report": "Report",
-    "configurationNotSaved": "Not all required fields have been filled. Please try again.",
-    "chart": {
-      "title": "Chart Title",
-      "type": "Chart Type",
-      "xAxis": "Chart X-Axis",
-      "yAxis": "Chart Y-Axis",
-      "legend": "Chart Legend",
-      "description": "Chart Description",
-      "width": "Chart width in pixels",
-      "height": "Chart height in pixels",
-      "marginTop": "Chart margin top in pixels",
-      "marginBottom": "Chart margin bottom in pixels",
-      "marginRight": "Chart margin right in pixels",
-      "marginLeft": "Chart margin left in pixels",
-      "colors": "Chart colors"
-    }
   }
 }
