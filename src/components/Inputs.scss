@@ -1,0 +1,195 @@
+/*!
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at http://mozilla.org/MPL/2.0/. OpenMRS is also distributed under
+ * the terms of the Healthcare Disclaimer located at http://openmrs.org/license.
+ * <p>
+ * Copyright (C) OpenMRS Inc. OpenMRS is a registered trademark and the OpenMRS
+ * graphic logo is a trademark of OpenMRS Inc.
+ */
+
+:root {
+  --error-border: 1px red solid;
+  --input-border: 1px solid #ced4da;
+  --input-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  --input-focused-box-shadow: 0 0 8px rgba(102, 175, 233, 0.6);
+  --input-min-height: 4rem;
+  --button-main-background-color: #00455c;
+  --button-border-color: #6c757d;
+  --dropdown-option-hover-background-color: #e4e7e7;
+  --dropdown-option-selected-background-color: #00455c;
+  --main-color: #333333;
+  --placeholder-color: rgba(0, 0, 0, 0.45);
+  --default-placeholder-font-size: 14px;
+  --select-with-placeholder-padding-top: calc(2rem - 4px);
+}
+
+#app #address-data,
+#app .register-patient,
+#app #find-patient-columns-configuration,
+#app .conditions,
+#app .condition,
+#app #location,
+#app #manage-regimens,
+#app .notification-configuration,
+#app .notification-templates,
+#app #user-account,
+#app .data-visualization,
+#app .data-visualization-configuration,
+.modal {
+  input:not([type='checkbox']):not([class*='filter-input']),
+  select:not([class*='react-datepicker__']),
+  textarea,
+  div[class*='__value-container']:not([class*='filter-select']),
+  div[class*='-ValueContainer']:not([class*='filter-select']) {
+    min-height: calc(var(--input-min-height) + 2px);
+    margin-right: 15px;
+    &.invalid {
+      border: var(--error-border) !important;
+    }
+    text-align: center;
+    text-align-last: center;
+    &::placeholder {
+      text-align: start;
+    }
+    &.placeholder {
+      padding-top: 1em;
+      padding-bottom: 1em;
+      color: var(--placeholder-color);
+      font-size: var(--default-placeholder-font-size);
+      font-family: CircularStd-Book;
+      option {
+        font-size: 16px;
+        color: black;
+      }
+    }
+  }
+  input:not([type='checkbox']):not(:placeholder-shown),
+  select:not(.placeholder):not([class*='react-datepicker__']):not(.filter-select),
+  textarea:not(:placeholder-shown) {
+    padding-top: 2rem;
+  }
+  input::placeholder,
+  textarea::placeholder {
+    font-family: CircularStd-Book;
+    font-size: var(--default-placeholder-font-size);
+    color: var(--main-color);
+    opacity: 0.5;
+  }
+  input:focus,
+  textarea:focus,
+  select:focus {
+    outline: none !important;
+  }
+  input[type='checkbox'] {
+    cursor: pointer;
+    &:focus {
+      border: var(--input-border) !important;
+    }
+  }
+  .input-container {
+    position: relative;
+    span.placeholder {
+      font-family: CircularStd;
+      position: absolute;
+      top: 1em;
+      left: 1em;
+      font-size: 10px;
+      text-transform: uppercase;
+      opacity: 0.65;
+    }
+    & div[class*='__control--is-disabled'] {
+      background-color: rgb(238, 238, 238);
+    }
+  }
+  /* style react-select to resemble a regular input */
+  div[class*='-container']:not([class*='filter-select']) {
+    & > div[class*='-control'] {
+      border-radius: 0;
+      box-shadow: var(--input-box-shadow) !important;
+      border: var(--input-border);
+
+      &[class*='--is-focused'],
+      &[class*='--menu-is-open'] {
+        box-shadow: var(--input-box-shadow), var(--input-focused-box-shadow) !important;
+      }
+    }
+    &.invalid div[class*='-control'] {
+      border: var(--error-border);
+    }
+  }
+  div[class*='__value-container']:not([class*='filter-select']) {
+    min-height: var(--input-min-height);
+    overflow: visible;
+    padding: 0 8px;
+    font-family: CircularStd-Book;
+    font-size: 14px;
+    div[class*='-Placeholder'] {
+      color: rgba(0, 0, 0, 0.45);
+    }
+    div[class*='__single-value'] {
+      padding-top: var(--select-with-placeholder-padding-top);
+      position: initial;
+      margin-left: auto;
+      margin-right: auto;
+      color: black;
+    }
+    div[class*='__multi-value'] {
+      z-index: 1;
+    }
+    div[class*='__remove'] {
+      z-index: 1;
+    }
+    > div[class*='css-']:not([class*='-multiValue']) {
+      position: absolute;
+      width: 100%;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    &[class*='__value-container--is-multi'] {
+      padding-top: var(--select-with-placeholder-padding-top);
+    }
+  }
+  div[class*='__menu'] {
+    color: var(--main-color);
+  }
+  .react-datepicker-wrapper {
+    width: 100%;
+  }
+  .select-button {
+    padding: 0.75rem 1.5rem;
+    font-size: 12px;
+    text-transform: uppercase;
+    background-color: rgba(0, 0, 0, 0);
+    color: black;
+
+    &.active {
+      background-color: var(--button-main-background-color) !important;
+      color: white;
+    }
+  }
+  button:not(.disabled):active {
+    background-color: var(--button-main-background-color) !important;
+  }
+  button.cancel,
+  .btn.cancel {
+    background: transparent;
+    color: black;
+
+    &:active {
+      background-color: transparent !important;
+    }
+  }
+  .PhoneInputCountry {
+    position: absolute;
+    left: 1em;
+    top: 2em;
+
+    .PhoneInputCountrySelect {
+      min-height: 100%;
+      bottom: 0;
+      background-color: white;
+      color: black;
+    }
+  }
+}

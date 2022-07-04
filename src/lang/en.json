@@ -1,0 +1,464 @@
+{
+  "home": {
+    "title": "Home"
+  },
+  "plusMinusButtons": {
+    "delete": "Delete",
+    "addNew": "Add new"
+  },
+  "table": {
+    "enterSearch": "For the search results to appear, enter at least 3 characters.",
+    "noRecords": "No records.",
+    "recordsFound": "records found."
+  },
+  "dashboard": {
+    "findPatient": "Find Patient Record",
+    "registerPatient": "CFL Register Patient",
+    "findCaregiver": "Find Caregiver Record"
+  },
+  "findPatient": {
+    "title": "Find Patient Record",
+    "searchInputPlaceholder": "Search by Id, name or phone number"
+  },
+  "findCaregiver": {
+    "title": "Find Caregiver Record",
+    "searchInputPlaceholder": "Search by Id, name or phone number"
+  },
+  "dropzone": {
+    "openFileDialog": "Open File Dialog",
+    "acceptedFile": "Accepted File:",
+    "rejectedFile": "Rejected File:"
+  },
+  "addressData": {
+    "title": "Manage Address Data",
+    "upload": {
+      "title": "Upload Address Data",
+      "instruction1": "Please upload file in <b>.csv</b> or <b>.txt</b> format. The file should contain <b>comma delimiter</b>.",
+      "instruction2": "Download file samples here:",
+      "overwriteAddressData": {
+        "true": {
+          "radioLabel": "Overwrite existing address data",
+          "modalHeader": "Overwriting existing data",
+          "modalBody": "Are you sure you want to overwrite existing data?"
+        },
+        "false": {
+          "radioLabel": "Add to existing address data",
+          "modalHeader": "Adding new data to existing file",
+          "modalBody": "Are you sure you want to add new data to existing file?"
+        }
+      },
+      "success": "Address data uploaded successfully",
+      "addressDataEmpty": "There is no file to be displayed yet",
+      "button": "Upload file",
+      "errorMessage1": "{numberOfInvalidRecords} out of {numberOfTotalRecords} ",
+      "errorMessage2": "records failed to import. Download the .csv file with the failed records ",
+      "csvDownloadLink": "here",
+      "dot": "."
+    },
+    "dropzone": {
+      "instruction": "Drag and drop Address Data file here. The file should be in .csv or .txt format."
+    },
+    "table": {
+      "title": "Uploaded File"
+    },
+    "download": {
+      "csvFileSample": "csv file sample",
+      "txtFileSample": "txt file sample",
+      "button": "Download file"
+    }
+  },
+  "conditions": {
+    "title": "Manage Conditions",
+    "success": "Condition saved successfully",
+    "set": "SET",
+    "active": "Active",
+    "inactive": "Inactive",
+    "addNew": "Add new Condition",
+    "remove": "Remove Condition",
+    "removeConfirmation": "Are you sure you want to remove condition for this patient?",
+    "yes": "Yes",
+    "no": "No",
+    "condition": "Condition",
+    "onsetDate": "Onset Date",
+    "actions": "Actions"
+  },
+  "manageCondition": {
+    "title": "Condition",
+    "editCondition": "Edit Condition",
+    "addNewCondition": "Add New Condition",
+    "conditions": "Conditions",
+    "condition": "Condition",
+    "onsetDate": "Onset Date",
+    "endDate": "End date",
+    "cancel": "Cancel"
+  },
+  "columnNames": {
+    "patientIdentifier": "Identifier",
+    "personIdentifier": "Identifier",
+    "givenName": "First Name",
+    "middleName": "Middle Name",
+    "familyName": "Last Name",
+    "display": "Name",
+    "gender": "Gender",
+    "age": "Age",
+    "birthdate": "Birthdate",
+    "birthdateEstimated": "Is birthdate estimated",
+    "birthtime": "Birth time",
+    "causeOfDeath": "Cause of death",
+    "dead": "Is dead",
+    "deathDate": "Death date",
+    "deathDateEstimated": "Is death date estimated",
+    "preferredAddress": "Preferred address",
+    "phoneNumber": "Phone number",
+    "uuid": "ID",
+    "personLanguage": "Language",
+    "field1": "Country",
+    "field2": "Hierarchy level 2",
+    "field3": "Hierarchy level 3",
+    "field4": "Hierarchy level 4",
+    "field5": "Hierarchy level 5"
+  },
+  "editPatient": {
+    "title": "Patient Profile",
+    "subtitle": "Please edit Patient profile below",
+    "success": {
+      "subtitle": "The Patient has been saved successfully."
+    }
+  },
+  "editCaregiver": {
+    "title": "Caregiver Profile",
+    "subtitle": "Please edit Caregiver profile below"
+  },
+  "registerCaregiver": {
+    "title": "Register a Caregiver",
+    "subtitle": "Please register a caregiver below",
+    "steps": {
+      "confirm": {
+        "title": "Person Demographics",
+        "subtitle": "Confirm the person details are correct."
+      }
+    }
+  },
+  "registerPatient": {
+    "title": "Register a Patient",
+    "subtitle": "Please register a patient below",
+    "steps": {
+      "name": {
+        "label": "Name",
+        "title": "Patient Demographics",
+        "subtitle": "What's the patient's name?"
+      },
+      "gender": {
+        "label": "Gender",
+        "title": "Patient Demographics",
+        "subtitle": "What's the patient's gender?",
+        "male": "Male",
+        "female": "Female"
+      },
+      "birthdate": {
+        "label": "Birthdate",
+        "title": "Patient Demographics",
+        "subtitle": "What's the patient's birth date?",
+        "or": "Or"
+      },
+      "address": {
+        "label": "Address",
+        "title": "Patient Demographics",
+        "subtitle": "What's the patient's address?"
+      },
+      "language": {
+        "label": "Language",
+        "title": "Patient Demographics",
+        "subtitle": "What language does the patient prefer?"
+      },
+      "phoneNumber": {
+        "label": "Phone Number",
+        "title": "Patient Demographics",
+        "subtitle": "What's the patient's phone number?"
+      },
+      "patientLocation": {
+        "label": "Patient Location",
+        "title": "Patient Demographics",
+        "subtitle": "What's the patient's location?"
+      },
+      "aadharNumber": {
+        "label": "Aadhar Number",
+        "title": "Patient Demographics",
+        "subtitle": "What's the patient's Aadhar Number?"
+      },
+      "artNumber": {
+        "label": "ART Number",
+        "title": "Patient Demographics",
+        "subtitle": "What's the patient's ART Number?"
+      },
+      "relatives": {
+        "label": "Relatives",
+        "title": "Patient Demographics",
+        "subtitle": "Who is the patient related to?"
+      },
+      "confirm": {
+        "label": "Confirm",
+        "title": "Patient Demographics",
+        "subtitle": "Confirm the patient details are correct.",
+        "estimated": "Estimated",
+        "years": "Year(s)",
+        "months": "Month(s)"
+      }
+    },
+    "fields": {
+      "givenName": "Given Name",
+      "middleName": "Middle Name",
+      "familyName": "Family Name",
+      "gender": "Gender",
+      "birthdateDay": "Day",
+      "birthdateMonth": "Month",
+      "birthdateYear": "Year",
+      "birthdateYears": "Estimated Years",
+      "birthdateMonths": "Estimated Months",
+      "address1": "Address 1",
+      "address2": "Address 2",
+      "cityVillage": "City/Village",
+      "stateProvince": "State/Province",
+      "country": "Country",
+      "postalCode": "Postal Code",
+      "personLanguage": "Language",
+      "Telephone Number": "Phone Number",
+      "patientLocation": "Location",
+      "Aadhar Number": "AADHAR Number",
+      "ART Number": "ART Number",
+      "relationshipType": "Relationship Type",
+      "otherPerson": "Person's Name",
+      "LocationAttribute": "Location",
+      "relatives": "Relatives",
+      "language": "Language",
+      "name": "Name",
+      "birthdate": "Birthdate",
+      "address": "Address",
+      "location": "Location",
+      "required": "(Required)"
+    },
+    "success": {
+      "title": "Success",
+      "subtitle": "The Patient has been successfully registered.",
+      "editSubtitle": "The Patient has been saved successfully.",
+      "goBack": "Go back"
+    },
+    "unknown": "Unknown",
+    "required": "Required",
+    "invalid": "Invalid",
+    "previous": "Previous",
+    "next": "Next",
+    "confirm": "Confirm",
+    "invalidPhoneNumber": "Please provide a valid phone number including the country code. Example: +1 555 555 1234"
+  },
+  "notificationConfiguration": {
+    "title": "Manage Notification Configuration",
+    "configureSettings": "Configure Settings",
+    "defaultCountry": "Default Country",
+    "country": "Country",
+    "smsSettings": "SMS / WhatsApp settings:",
+    "callSettings": "Call settings:",
+    "provider": "Provider",
+    "uponRegistration": "Upon registration",
+    "allowedNotificationWindow": {
+      "label": "Allowed notification window:",
+      "from": "From",
+      "to": "To"
+    },
+    "bestContactTime": {
+      "label": "Best contact time:",
+      "placeholder": "Best contact time"
+    },
+    "visitReminder": {
+      "label": "Visit reminder (days before visit):",
+      "placeholder": "Days before visit",
+      "switch": "Visit reminder"
+    },
+    "button": {
+      "expand": "Expand all",
+      "collapse": "Collapse all",
+      "addNewCountry": "Add new Country"
+    },
+    "confirmationModal": {
+      "header": "Submit Notification Configuration",
+      "body": "Are you sure you want to submit Notification Configuration?"
+    },
+    "success": "Configuration saved successfully!"
+  },
+  "notificationTemplates": {
+    "title": "Manage Notification Templates",
+    "notificationTemplate": "Notification Template",
+    "injectedServices": {
+      "label": "Injected Services",
+      "tooltip": "Values which represent the map of services which should be injected into the messaging notification template.",
+      "key": "Key",
+      "value": "Value"
+    },
+    "template": {
+      "customTemplateName": {
+        "label": "Custom Template Name",
+        "tooltip": "When creating a custom template, use only lowercase letters and ‘-’ with no spaces.",
+        "invalid": "The Template Name should only contain lowercase letters, and ‘-’, no spaces"
+      },
+      "description": "Description",
+      "text": "SMS Text"
+    },
+    "button": {
+      "expand": "Expand all",
+      "collapse": "Collapse all",
+      "addNewTemplate": "Add new Template"
+    },
+    "saveModal": {
+      "header": "Submit Notification Templates",
+      "body": "Are you sure you want to submit Notification Templates?"
+    },
+    "removeTemplateModal": {
+      "header": "Delete Notification Template",
+      "body": "Are you sure you want to delete {templateName}?"
+    },
+    "success": "Configuration saved successfully!"
+  },
+  "locations": {
+    "location": {
+      "create.title": "Add New Location",
+      "edit.title": "Edit Location",
+      "name": "Location Name",
+      "description": "Description",
+      "address1": "Address (line 1)",
+      "address2": "Address (line 2)",
+      "cityVillage": "City/Village",
+      "stateProvince": "State/Province",
+      "postalCode": "Postal Code",
+      "country": "Country",
+      "delete": "Delete Location"
+    }
+  },
+  "common": {
+    "yes": "Yes",
+    "no": "No",
+    "ok": "Ok",
+    "cancel": "Cancel",
+    "moveUp": "Move up",
+    "moveDown": "Move down",
+    "ordinalSuffix": {
+      "st": "st",
+      "nd": "nd",
+      "rd": "rd",
+      "th": "th"
+    },
+    "required": "(Required)",
+    "error": {
+      "required": "Required",
+      "nameUnique": "The name should be unique. Please try again.",
+      "nameInvalid": "Username is invalid. It must be between 2 and 50 characters. Only letters, digits, '.', '-', and '_' are allowed.",
+      "invalidEmail": "The email address is invalid. Please correct it.",
+      "invalidPassword": "Your entered password does not match the needed complexity. It should be minimum 8 characters long and contain at least: one upper and one lower case characters, one digit. Please try again.",
+      "confirmPassword": "Your entered passwords do not match. Please try again."
+    },
+    "switch": {
+      "on": "on",
+      "off": "off"
+    },
+    "return": "Return",
+    "save": "Save",
+    "true": "True",
+    "false": "False",
+    "grandTotal": "Grand Total",
+    "downloadCsv": "Download csv"
+  },
+  "userAccount": {
+    "title": "User Account",
+    "add": "Add New Account",
+    "edit": "Edit Account",
+    "accountNotSaved": "Not all fields have been filled in correctly. Please try again.",
+    "auditInfo": {
+      "title": "Audit info",
+      "created": "Created By {creator} On {date}",
+      "changedBy": "Changed By {changedBy} On {date}"
+    },
+    "personDetails": {
+      "title": "Person Details",
+      "familyName": "Family Name",
+      "givenName": "Given Name",
+      "phone": "Phone",
+      "email": "Email"
+    },
+    "userAccountDetails": {
+      "title": "User Account Details",
+      "username": "Username",
+      "locations": "Locations",
+      "userRole": "User Role",
+      "password": "Password",
+      "confirmPassword": "Confirm Password",
+      "forcePasswordChange": "Force Password Change"
+    },
+    "deleteAccount": {
+      "label": "Delete Account",
+      "confirmationModal": {
+        "header": "Warning",
+        "body": "Are you sure you want to delete this account?"
+      }
+    }
+  },
+  "manageRegimens": {
+    "title": "Manage Regimens",
+    "regimenName": "Regimen Name",
+    "drugName": "Drug Name",
+    "drugAbbreviation": "Drug Abbreviation",
+    "doseUnitType": "Dose Unit Type",
+    "numberOfUnits": "Number Of Units",
+    "frequency": "Frequency",
+    "addNewRegimen": "Add New Regimen",
+    "deleteRegimenModal": {
+      "header": "Warning",
+      "body": "Are you sure you want to delete this regimen?"
+    },
+    "deleteDrugModal": {
+      "header": "Warning",
+      "body": "Are you sure you want to delete this drug?"
+    },
+    "regimenDeleted": "The regimen has been deleted.",
+    "drugDeleted": "The drug has been deleted.",
+    "regimensNotSaved": "The regimens have not been saved. Please try again.",
+    "regimensSaved": "The regimens have been saved.",
+    "error": {
+      "regimenNameUnique": "The regimen name should be unique. Please try again."
+    }
+  },
+  "findPatientColumnsConfiguration": {
+    "title": "Manage Patient's Record Columns Configuration",
+    "columnName": "Column Name",
+    "configureColumns": "Configure Columns",
+    "configurationNotSaved": "The columns configuration has not been saved.",
+    "emptyColumnsConfiguration": "Please configure at least one column.",
+    "configurationSaved": "The columns configuration has been saved.",
+    "modal": {
+      "header": "Submit Columns Configuration",
+      "body": "Are you sure you want to submit Columns Configuration for the Patient's Record?"
+    }
+  },
+  "dataVisualization": {
+    "title": "Data Visualization"
+  },
+  "dataVisualizationConfiguration": {
+    "title": "Data Visualization Configuration",
+    "addNewReport": "Add New report",
+    "report": "Report",
+    "configurationNotSaved": "Not all required fields have been filled. Please try again.",
+    "chart": {
+      "title": "Chart Title",
+      "type": "Chart Type",
+      "xAxis": "Chart X-Axis",
+      "yAxis": "Chart Y-Axis",
+      "legend": "Chart Legend",
+      "description": "Chart Description",
+      "width": "Chart width in pixels",
+      "height": "Chart height in pixels",
+      "marginTop": "Chart margin top in pixels",
+      "marginBottom": "Chart margin bottom in pixels",
+      "marginRight": "Chart margin right in pixels",
+      "marginLeft": "Chart margin left in pixels",
+      "colors": "Chart colors"
+    }
+  }
+}

@@ -1,0 +1,71 @@
+/*!
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at http://mozilla.org/MPL/2.0/. OpenMRS is also distributed under
+ * the terms of the Healthcare Disclaimer located at http://openmrs.org/license.
+ * <p>
+ * Copyright (C) OpenMRS Inc. OpenMRS is a registered trademark and the OpenMRS
+ * graphic logo is a trademark of OpenMRS Inc.
+ */
+
+.register-patient {
+  .step-list {
+    li.list-group-item {
+      padding: 0.75rem 1.25rem !important;
+      border: none;
+      img.step-icon {
+        color: white;
+        margin-left: -1.1em;
+        margin-right: 0.1em;
+      }
+      &:hover {
+        background-color: rgba(0, 0, 0, 0.1);
+      }
+      &.valid {
+        background-color: #00455c;
+        color: white;
+      }
+      &.active {
+        background-color: #00455c;
+      }
+    }
+    font-size: 12px;
+    @media only screen and (min-width: 768px) {
+      font-size: 14px;
+    }
+  }
+  .step {
+    background-color: white;
+    padding-top: 15px;
+    min-height: 400px;
+    .step-content {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
+      .step-buttons {
+        width: 100%;
+        justify-content: space-between;
+        display: flex;
+        margin-bottom: 1em;
+        button {
+          padding: 0.5rem 1.85rem;
+          font-size: 12px;
+          text-transform: uppercase;
+          background-color: #00455c;
+        }
+      }
+      .step-title {
+        margin-bottom: 2em;
+      }
+    }
+    .form-group > div {
+      padding-left: 0;
+      padding-right: 1em;
+      padding-bottom: 0.5em;
+    }
+    .other-person {
+      min-width: 150px;
+    }
+  }
+}

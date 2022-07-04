@@ -1,0 +1,789 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at http://mozilla.org/MPL/2.0/. OpenMRS is also distributed under
+ * the terms of the Healthcare Disclaimer located at http://openmrs.org/license.
+ * <p>
+ * Copyright (C) OpenMRS Inc. OpenMRS is a registered trademark and the OpenMRS
+ * graphic logo is a trademark of OpenMRS Inc.
+ */
+
+:root {
+  --default-button-border-color: #6c757d;
+  --default-button-line-height: 1.5;
+  --default-button-border-radius: 4px;
+}
+
+/** Fonts **/
+@font-face {
+  font-family: 'CircularStd';
+  font-style: normal;
+  font-weight: normal;
+  src: url('font/CircularStd-Medium.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'CircularStd';
+  font-style: normal;
+  font-weight: bold;
+  src: url('font/CircularStd-Bold.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'CircularStd-Book';
+  font-style: normal;
+  font-weight: normal;
+  src: url('font/CircularStd-Book.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'CircularStd-Book';
+  font-style: italic;
+  font-weight: normal;
+  src: url('font/CircularStd-BookItalic.otf') format('opentype');
+}
+
+/** Common **/
+html {
+  font-size: 16px;
+}
+
+#error-message ul {
+  display: inline-block;
+  margin-top: 0.25rem;
+}
+
+.helper-text {
+  font-family: CircularStd-Book;
+  font-size: 16px;
+  color: #333333;
+  opacity: 0.5;
+}
+
+/** Apps **/
+.homeList > a.button {
+  background: white !important;
+  border-color: #eaeaea !important;
+  font-family: CircularStd-Book !important;
+  color: black !important;
+  font-size: 14px !important;
+  padding: 0 25px 10px 25px !important;
+  height: 145px !important;
+}
+
+.homeList > a.button > i {
+  margin: 25px auto 15px auto !important;
+  color: #7f7f7f !important;
+  height: 45px !important;
+  font-size: 40px !important;
+  padding: 0 !important;
+  line-height: normal !important;
+}
+
+i[class^='cfl-'] {
+  padding: 0 !important;
+}
+
+i.cfl-find-patient {
+  content: url('img/find-patient.png');
+}
+
+i.cfl-find-caregiver {
+  content: url('img/find-caregiver.png');
+}
+
+i.cfl-register-caregiver {
+  content: url('img/register-caregiver.png');
+}
+
+i.cfl-register-patient {
+  content: url('img/register-patient.png');
+}
+
+#apps {
+  padding-left: 0 !important;
+}
+
+#tasks > div {
+  padding-left: 0 !important;
+}
+
+/** disable CFL Register Patient/Caregiver **/
+#cfl-registrationapp-registerPatient-homepageLink-cfl-registrationapp-registerPatient-homepageLink-extension {
+  display: none;
+}
+
+#cfl-registerCaregiver-homepageLink-cfl-registerCaregiver-homepageLink-extension {
+  display: none;
+}
+
+/** Home **/
+#content h4 {
+  font-family: CircularStd-Book !important;
+  font-size: 16px !important;
+  color: #333333 !important;
+  opacity: 0.5 !important;
+  font-weight: normal !important;
+  margin-left: 0 !important;
+  margin-top: 0 !important;
+}
+
+.homepage-heading {
+  font-size: 40px;
+  color: #333333;
+  padding-top: 1rem;
+}
+
+/** Breadcrumbs **/
+#breadcrumbs {
+  padding: 0 1rem 0;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+#breadcrumbs {
+  border-bottom: none !important;
+  color: #4e5155 !important;
+  font-size: 12px !important;
+  background-color: transparent;
+}
+
+#breadcrumbs a,
+#breadcrumbs li,
+#breadcrumbs span {
+  font-size: 12px !important;
+  color: black !important;
+  font-family: CircularStd !important;
+  font-weight: normal !important;
+  text-decoration: none !important;
+}
+
+#breadcrumbs .separator {
+  margin: 0 0.35em !important;
+  color: #4e5155 !important;
+}
+
+#breadcrumbs li:first-child a i {
+  display: none;
+}
+
+#breadcrumbs li:first-child a::after {
+  content: 'Home';
+}
+
+#breadcrumbs li i {
+  display: none;
+}
+
+#breadcrumbs li::after {
+  content: '>>';
+  color: #4e5155 !important;
+  margin: 0 0.1em !important;
+}
+
+#breadcrumbs li:last-child::after {
+  content: none;
+}
+
+/** Breadcrumbs - Visits **/
+#breadcrumbs > a:first-child::after {
+  content: 'Home';
+}
+
+#breadcrumbs a:first-child {
+  margin-left: 0;
+  padding: 0;
+}
+
+#breadcrumbs a:first-child svg {
+  display: none;
+}
+
+#breadcrumbs.breadcrumb a:not(:first-child),
+#breadcrumbs.breadcrumb span:not(:first-child) {
+  margin-left: 0.35em !important;
+}
+
+#breadcrumbs span::after {
+  content: '>>';
+  color: #4e5155 !important;
+}
+
+#breadcrumbs span svg,
+#breadcrumbs span:last-child::after {
+  display: none;
+}
+
+/** Patient Dashboard **/
+@media only screen and (min-width: 576px) {
+  .container .dashboard .info-container:not(:first-of-type) {
+    margin-left: 200px !important;
+  }
+  .info-container {
+    max-width: calc(100% - 200px) !important;
+  }
+}
+
+.patient-header {
+  background: none !important;
+  border: none !important;
+  font-size: 14px;
+  line-height: 1;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  font-variant-numeric: normal;
+  font-feature-settings: normal;
+  padding: 5px 0 !important;
+  margin: -10px 0 10px 0 !important;
+}
+
+.patient-header > .patient-id,
+.patient-header > .patient-location {
+  margin-bottom: 0.35em;
+}
+
+.patient-header .header-label,
+.dashboard .label {
+  font-family: CircularStd-Book;
+  color: #333333;
+  opacity: 0.5;
+  display: inline-block;
+}
+
+.patient-header .header-label {
+  min-width: 125px;
+}
+
+.patient-header h1 {
+  font-size: 2em !important;
+  margin: 10px 0 5px 0 !important;
+  color: #2b3640 !important;
+}
+
+.patient-header .header-buttons {
+  margin-top: 0.5rem;
+}
+
+.patient-header .header-buttons button {
+  margin-bottom: 0.25rem;
+  color: white;
+}
+
+button.btn {
+  padding: 0.5rem 1.25rem;
+  font-size: 11px !important;
+  text-transform: uppercase;
+  background: #00455c;
+  border-color: var(--default-button-border-color) !important;
+}
+
+button.btn:hover {
+  background-color: #00455c;
+}
+
+button.btn.cancel:hover {
+  background-color: transparent;
+}
+
+#content button.cancel {
+  background: transparent;
+  color: black;
+  padding: 0.5rem 1.85rem;
+  border-radius: var(--default-button-border-radius);
+  line-height: var(--default-button-line-height);
+}
+
+.info-container,
+.info-container > [privilege] {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: auto !important;
+  margin: 0 !important;
+  order: 2;
+}
+
+.container {
+  position: relative;
+  max-width: none !important;
+  padding: 0 !important;
+}
+
+.action-section {
+  margin-top: 10px !important;
+  border: none !important;
+}
+
+.action-section h3 {
+  margin-left: 5px !important;
+}
+
+.action-section i {
+  margin-left: 0 !important;
+}
+
+.action-container {
+  order: 1;
+  width: 200px !important;
+  margin: 0 !important;
+}
+
+.dashboard {
+  background-color: inherit !important;
+  display: flex;
+  flex-flow: row;
+  flex-wrap: wrap;
+}
+
+.info-section {
+  width: 280px !important;
+  min-height: 260px;
+  background-color: white !important;
+  margin-left: 15px !important;
+  margin-bottom: 15px !important;
+  display: inline-flex !important;
+  flex-direction: column;
+  font-size: 14px;
+}
+
+.info-header {
+  border-bottom: 3px solid #00455c !important;
+  min-height: 34px;
+  margin: 5px 10px 0;
+  padding-bottom: 5px;
+}
+
+.info-header h3 {
+  text-transform: lowercase !important;
+}
+.info-header h3::first-letter {
+  text-transform: capitalize !important;
+}
+
+.info-body {
+  background: none !important;
+  background-color: inherit !important;
+  border: none !important;
+  flex: 1;
+}
+
+.info-body.empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px !important;
+}
+
+.dashboard .action-section h3 {
+  border: none !important;
+}
+
+.dashboard .action-section h3::before {
+  content: none !important;
+}
+
+.action-container .float-left {
+  float: none !important;
+  width: auto !important;
+}
+
+#generalActions {
+  background-color: #00455c;
+  padding: 0.1em;
+}
+
+.general-actions-toggle {
+  margin-bottom: 5px;
+  width: 280px;
+}
+
+.general-actions-toggle .navbar-toggler {
+  color: white !important;
+  padding: 0.5rem 1.25rem !important;
+  background-color: #00455c !important;
+}
+
+.general-actions-toggle .navbar-toggler[aria-expanded='true'] {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.5) !important;
+}
+
+#generalActions > div {
+  padding-left: 0.5em;
+}
+
+#generalActions > div > a {
+  font-size: 0.9em;
+  color: white;
+}
+
+#generalActions .float-left {
+  float: none !important;
+  width: auto !important;
+}
+
+.general-actions-toggle button.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/** Common **/
+div#content {
+  padding: 0;
+}
+
+p {
+  font-family: CircularStd-Book;
+}
+
+div#body-wrapper,
+div.body-wrapper {
+  padding: 0 1em 0 1em;
+  margin: 0;
+  background-color: transparent !important;
+}
+
+@media only screen and (max-width: 575px) {
+  .action-container,
+  .action-section ul {
+    display: none !important;
+  }
+  .patient-header {
+    margin: -10px 0 0 0 !important;
+  }
+  .info-section {
+    margin-left: 0 !important;
+  }
+  .header-buttons .btn,
+  .general-actions-toggle .btn,
+  .header-buttons {
+    display: block;
+    width: 100%;
+    max-width: 280px;
+  }
+}
+@media only screen and (min-width: 576px) {
+  #breadcrumbs {
+    padding: 0 2rem 0;
+  }
+  .container > .dashboard {
+    margin-right: -2rem;
+    max-width: 500px;
+  }
+  .general-actions-toggle {
+    display: none;
+  }
+}
+@media only screen and (min-width: 768px) {
+  #breadcrumbs {
+    padding: 0 4rem 0;
+  }
+  .container > .dashboard {
+    margin-right: -4rem;
+  }
+}
+@media only screen and (min-width: 992px) {
+  #breadcrumbs {
+    padding: 0 6rem 0;
+  }
+}
+@media only screen and (min-width: 1280px) {
+  #breadcrumbs {
+    padding: 0 8rem 0;
+  }
+}
+/** Patient Dashboard cols **/
+@media only screen and (min-width: 860px) {
+  .container > .dashboard {
+    max-width: 800px;
+  }
+}
+@media only screen and (min-width: 1200px) {
+  .container > .dashboard {
+    max-width: 1100px;
+  }
+}
+@media only screen and (min-width: 1580px) {
+  .container > .dashboard {
+    /* max-width: 1400px; */
+    /* allow for unlimited number of widgets per row */
+    max-width: none;
+  }
+}
+
+/** Hamburger menu **/
+.navbar-toggler {
+  background: unset !important;
+  padding: 0 !important;
+  border: unset !important;
+}
+
+/** Header collapse **/
+#navbarSupportedContent.show,
+#navbarSupportedContent.collapsing,
+header > .user-options.show {
+  position: absolute;
+  top: 43px;
+  right: 0;
+  background-color: rgb(0, 69, 92);
+  padding-inline-start: 0;
+  padding-right: 25px;
+  padding-bottom: 5px;
+  padding-top: 5px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  z-index: 99;
+}
+
+#navbarSupportedContent.show li,
+#navbarSupportedContent.collapsing li,
+header > .user-options.show li {
+  padding: 0.15em;
+}
+
+#navbarSupportedContent.show li:not(:last-of-type),
+#navbarSupportedContent.collapsing li:not(:last-of-type),
+header > .user-options.show li:not(:last-of-type) {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.5) !important;
+}
+
+nav.navbar {
+  position: initial;
+}
+
+/** Header overrides for React apps **/
+#app header .navbar-nav li a {
+  line-height: normal;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+#app header .navbar-nav {
+  align-items: flex-end;
+}
+
+#app header .user-options li i {
+  padding: 0.2em 0.35em;
+}
+
+.toggler-icon-container {
+  align-items: center;
+  flex: 1;
+  justify-content: flex-end;
+  display: flex;
+}
+
+@media only screen and (max-width: 991px) {
+  header > .user-options:not(.show) {
+    display: none !important;
+  }
+  header > .user-options {
+    display: flex !important;
+    flex-direction: column;
+  }
+}
+@media only screen and (min-width: 992px) {
+  .toggler-icon-container {
+    display: none;
+  }
+}
+
+/** Spinner **/
+@-webkit-keyframes spinner-border {
+  to {
+    transform: rotate(360deg) /* rtl:ignore */;
+  }
+}
+
+@keyframes spinner-border {
+  to {
+    transform: rotate(360deg) /* rtl:ignore */;
+  }
+}
+
+.spinner-border {
+  display: inline-block;
+  width: 2rem;
+  height: 2rem;
+  vertical-align: -0.125em;
+  border: 0.25em solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  -webkit-animation: 0.75s linear infinite spinner-border;
+  animation: 0.75s linear infinite spinner-border;
+}
+
+.spinner-border-sm {
+  width: 1rem;
+  height: 1rem;
+  border-width: 0.2em;
+}
+
+/** Allergy UI **/
+.allergies-container {
+  background-color: white;
+  border: 1px solid #ededed;
+  padding-bottom: 2rem;
+}
+
+.allergies-container h2,
+#allergy h2 {
+  color: #2b3640 !important;
+  font-weight: normal !important;
+  font-size: 22px;
+}
+
+.allergies-header {
+  padding: 10px 15px;
+  margin-bottom: 0.5rem;
+}
+
+.allergies-container h2,
+.allergies-container .helper-text {
+  margin-bottom: 0;
+}
+
+#allergies {
+  border-top: 1px solid #ededed !important;
+  padding: 1em;
+}
+
+#allergies .allergyStatus {
+  background-color: white !important;
+}
+
+table,
+thead,
+tbody,
+tr,
+th,
+td {
+  border: none !important;
+  background: white !important;
+  font-family: CircularStd !important;
+}
+
+th {
+  text-transform: uppercase;
+  color: #212529;
+  font-weight: 400;
+}
+
+#allergies th,
+#allergies td {
+  padding: 0.2rem;
+  font-size: 12px;
+  text-align: center !important;
+}
+@media only screen and (min-width: 768px) {
+  #allergies th,
+  #allergies td {
+    padding: 0.5rem !important;
+    font-size: 14px;
+  }
+}
+@media only screen and (min-width: 1280px) {
+  #allergies th,
+  #allergies td {
+    padding: 0.75rem !important;
+    font-size: 16px;
+  }
+}
+
+#adminui-configure-metadata-table td {
+  background-color: #fafafa !important;
+  cursor: default;
+}
+
+tr:nth-child(odd) td {
+  background-color: #ededed !important;
+}
+
+tr:hover td:not(.allergyStatus) {
+  background-color: #d5d5d5 !important;
+  cursor: pointer;
+}
+
+#allergies td i:not(:hover) {
+  color: black;
+}
+
+#content button,
+#allergy > #actions > input {
+  background: #00455c;
+  color: white;
+  border-color: var(--default-button-border-color) !important;
+  font-size: 11px !important;
+  text-transform: uppercase;
+}
+
+#allergy > #actions > input.cancel,
+#body-wrapper #content.container-fluid input.cancel {
+  background: none !important;
+  border: none !important;
+  color: #00455c !important;
+}
+
+/** Add new/edit Allergy **/
+#allergy {
+  background-color: white;
+  padding: 1rem;
+}
+
+#body-wrapper #content.container-fluid button.confirm.right {
+  background: #00455c !important;
+}
+
+#allergy label {
+  font-family: CircularStd-Book;
+  font-size: 14px !important;
+}
+
+#allergy li {
+  margin-bottom: 0.5em !important;
+}
+
+#body-wrapper #content.container-fluid div textarea {
+  border-radius: 4px !important;
+}
+
+#types.button-group > .button {
+  font-family: CircularStd;
+  background: #d5d5d5 !important;
+  font-size: 11px !important;
+  border: 1px solid var(--default-button-border-color) !important;
+  padding: 0.5rem 1.25rem !important;
+  color: black;
+  margin-right: 0.75rem !important;
+  background: white !important;
+  border-radius: var(--default-button-border-radius) !important;
+  line-height: var(--default-button-line-height);
+}
+
+#types.button-group > .button.active {
+  background: #00455c !important;
+  color: white;
+}
+
+#body-wrapper #content.container-fluid #allergy input[type='checkbox'] {
+  background-color: white !important;
+  border: 1px solid #ededed !important;
+  box-shadow: 0 0 2px #ededed;
+  border-radius: 2px;
+  color: #00455c !important;
+  margin-right: 0.5em;
+  margin-top: 0.2em;
+}
+
+#body-wrapper #content.container-fluid #allergy input[type='radio'] {
+  border: 1px solid #ededed !important;
+  margin-right: 0.5em;
+  margin-top: 0.35em;
+}
+
+#body-wrapper #content.container-fluid #allergy input[type='checkbox']:checked:after {
+  color: #00455c !important;
+  font-size: 18px !important;
+}

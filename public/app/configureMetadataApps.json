@@ -1,0 +1,76 @@
+{
+  "id": "cflui.configureMetadataApps",
+  "description": "CFL UI Configure Metadata Apps",
+  "order": 1,
+  "extensions": [
+    {
+      "id": "cflUi.adminGroup",
+      "extensionPointId": "org.openmrs.module.adminui.adminGroups",
+      "type": "group",
+      "label": "CFL",
+      "icon": "icon-book"
+    },
+    {
+      "id": "cflUi.addressDataLink",
+      "extensionPointId": "org.openmrs.module.adminui.adminLinks",
+      "type": "link",
+      "label": "Manage Address Data",
+      "url": "owa/cfl/index.html#/address-data",
+      "extensionParams": {
+        "group": "cflUi.adminGroup"
+      }
+    },
+    {
+      "id": "cflUi.notificationConfigurationLink",
+      "extensionPointId": "org.openmrs.module.adminui.adminLinks",
+      "type": "link",
+      "label": "Manage Notification Configuration",
+      "url": "owa/cfl/index.html#/notification-configuration",
+      "extensionParams": {
+        "group": "cflUi.adminGroup"
+      }
+    },
+    {
+      "id": "cflUi.notificationTemplatesLink",
+      "extensionPointId": "org.openmrs.module.adminui.adminLinks",
+      "type": "link",
+      "label": "Manage Notification Templates",
+      "url": "owa/cfl/index.html#/notification-templates",
+      "extensionParams": {
+        "group": "cflUi.adminGroup"
+      }
+    }
+  ],
+  "config": {
+    "syncScopes": [
+      {
+        "value": "country",
+        "label": "Country"
+      },
+      {
+        "value": "site",
+        "label": "Site"
+      },
+      {
+        "value": "cluster",
+        "label": "Cluster"
+      }
+    ],
+    "authSteps": [
+      {
+        "value": "id_card",
+        "label": "ID Card"
+      },
+      {
+        "value": "phone",
+        "label": "Phone"
+      },
+      {
+        "value": "iris_scan",
+        "label": "Iris Scan"
+      }
+    ],
+    "dosingVisitTypes": ["Dosing"],
+    "regimenUpdatePermitted": true
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "id": "cflui.findPatient",
+  "description": "CFL UI",
+  "order": 1,
+  "extensions": [
+    {
+      "id": "demoapp.homepageLink",
+      "extensionPointId": "org.openmrs.referenceapplication.homepageLink",
+      "type": "link",
+      "label": "Find Patient Record",
+      "url": "owa/cfl/index.html#/find-patient",
+      "icon": "cfl-find-patient",
+      "requiredPrivilege": "Get Patients"
+    }
+  ],
+  "config": {
+    "tableColumns": "patientIdentifier,display,gender,age,birthdate,phoneNumber"
+  }
+}

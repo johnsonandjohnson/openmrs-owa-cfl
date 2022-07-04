@@ -1,0 +1,282 @@
+/*!
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at http://mozilla.org/MPL/2.0/. OpenMRS is also distributed under
+ * the terms of the Healthcare Disclaimer located at http://openmrs.org/license.
+ * <p>
+ * Copyright (C) OpenMRS Inc. OpenMRS is a registered trademark and the OpenMRS
+ * graphic logo is a trademark of OpenMRS Inc.
+ */
+
+// default #app header css
+#app header {
+  position: relative;
+  background-color: #00473f;
+  color: #ccc;
+  line-height: 1em;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  border-radius: 5px;
+}
+
+#app header .app-title {
+  display: block;
+  float: right;
+  color: #eeeeee;
+  font-size: 32px;
+  margin: 4px;
+  height: 100%;
+  padding-top: 12px;
+  padding-right: 5px;
+}
+
+#app header:before,
+#app header:after {
+  content: ' ';
+  display: table;
+}
+
+#app header:after {
+  clear: both;
+}
+
+#app header a,
+#app header a:visited,
+#app header a:hover,
+#app header a:link {
+  color: white;
+}
+
+#app header h1 {
+  color: #fff;
+  margin: 0;
+  padding: 10px;
+}
+
+#app header .logo {
+  float: left;
+  margin: 4px;
+}
+
+#app header .logo img {
+  width: 120px;
+}
+
+#app header .user-options {
+  text-align: right;
+}
+
+#app header .user-options li {
+  display: inline-block;
+  margin: 10px 0 10px 20px;
+}
+
+#app header .user-options li.change-location,
+#app header .user-options li.logout {
+  color: white;
+}
+
+#app header .user-options li.change-location {
+  border: 1px solid #006056;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
+  border-radius: 3px;
+}
+
+#app header .user-options li.change-location a {
+  display: block;
+}
+
+#app header .user-options li.change-location:hover,
+#app header .user-options li.change-location .focus {
+  background: #006056;
+}
+
+#app header .user-options li.change-location:hover a:hover,
+#app header .user-options li.change-location .focus a:hover {
+  text-decoration: none;
+}
+
+#app header #session-location {
+  position: absolute;
+  display: none;
+  top: 60px;
+  left: 70px;
+  background: white;
+  border: 2px solid #006056;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
+  border-radius: 3px;
+  width: 853px;
+  font-size: 0.8em;
+  z-index: 1;
+}
+
+#app header #session-location .select {
+  font-size: 1em;
+}
+
+#app header #session-location li {
+  width: 239px;
+}
+
+i.link {
+  font-size: 0.7em;
+}
+
+// CFL's #app header css
+#app header {
+  background-color: #00455c;
+  color: white;
+}
+
+#app header .navbar {
+  height: auto;
+}
+
+#app header .user-options li.change-location {
+  border: none;
+}
+
+#app header .user-options li.change-location:hover,
+#app header .user-options li.change-location .focus {
+  background: #10708e;
+}
+
+#app header #session-location {
+  border: 2px solid #10708e;
+}
+
+#app header a:active,
+a:hover {
+  text-decoration: none;
+}
+
+.navbar-nav {
+  color: #fff !important;
+}
+
+#app header {
+  background-color: #00455c;
+  padding-bottom: 8px;
+  padding-left: 16px;
+  padding-right: 16px;
+  padding-top: 8px;
+}
+
+#app header .logo {
+  max-height: initial;
+  margin: 4px;
+}
+
+#app header .user-options {
+  margin-top: 10px;
+  margin-right: 0;
+}
+
+#app header .location-container {
+  border: 2px solid #10708e;
+  padding: 0 20px;
+  font-size: 0.8em;
+}
+
+#app header .location-container li {
+  width: 30%;
+  margin: 0 10px !important;
+}
+
+#app header #user-account-menu li a:hover,
+.location-container li.selected,
+.location-container li:hover,
+#session-location li:hover,
+#session-location li.selected {
+  background-color: #10708e;
+  color: #fff;
+}
+
+#app header #user-account-menu {
+  position: absolute;
+  background: #fff;
+  color: #10708e;
+  border: 2px solid #10708e;
+  border-radius: 0;
+  padding: 5px 10px 5px 10px;
+}
+
+#app header #user-account-menu li {
+  margin: 10px;
+  padding: 0;
+}
+
+#app header #user-account-menu li a {
+  padding: 5px;
+  background: #fff;
+  color: #10708e;
+}
+
+// overrides
+#app header {
+  border-radius: 0 !important;
+  padding: 0 1em 0 1em !important;
+}
+
+#app header .logo {
+  margin: 5px 0 !important;
+}
+
+#app header .logo img {
+  content: url('../../assets/img/logo.png');
+  height: 30px !important;
+  width: auto !important;
+}
+
+#app header nav.navbar {
+  padding: 0 !important;
+}
+
+#app header .user-options li i {
+  display: inline-block;
+  width: 1.25em;
+  text-align: center;
+  padding: 0.2em;
+}
+
+#app header i.small {
+  font-size: 1.2em !important;
+}
+
+#app header #user-account-menu li a {
+  padding: 0 !important;
+}
+
+@media only screen and (min-width: 576px) {
+  #app header {
+    padding: 0 2em 0 2em !important;
+  }
+}
+@media only screen and (min-width: 768px) {
+  #app header {
+    padding: 0 4em 0 4em !important;
+  }
+}
+@media only screen and (min-width: 992px) {
+  #app header {
+    padding: 0 6em 0 6em !important;
+  }
+}
+@media only screen and (min-width: 1280px) {
+  #app header {
+    padding: 0 8em 0 8em !important;
+  }
+}
+
+#app header .user-options {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}

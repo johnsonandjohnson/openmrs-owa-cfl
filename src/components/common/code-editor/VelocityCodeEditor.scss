@@ -1,0 +1,28 @@
+/*!
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at http://mozilla.org/MPL/2.0/. OpenMRS is also distributed under
+ * the terms of the Healthcare Disclaimer located at http://openmrs.org/license.
+ * <p>
+ * Copyright (C) OpenMRS Inc. OpenMRS is a registered trademark and the OpenMRS
+ * graphic logo is a trademark of OpenMRS Inc.
+ */
+
+#app .react-codemirror2 .CodeMirror {
+  padding-top: 2rem;
+  min-height: calc(var(--input-min-height) + 2px);
+  box-shadow: var(--input-box-shadow);
+  border: var(--input-border);
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  font-family: CircularStd;
+  font-size: var(--default-placeholder-font-size);
+  color: var(--main-color);
+
+  &.CodeMirror-empty {
+    color: var(--placeholder-color);
+  }
+
+  &.CodeMirror-focused {
+    box-shadow: var(--input-box-shadow), var(--input-focused-box-shadow);
+  }
+}

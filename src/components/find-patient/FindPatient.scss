@@ -1,0 +1,37 @@
+/*!
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at http://mozilla.org/MPL/2.0/. OpenMRS is also distributed under
+ * the terms of the Healthcare Disclaimer located at http://openmrs.org/license.
+ * <p>
+ * Copyright (C) OpenMRS Inc. OpenMRS is a registered trademark and the OpenMRS
+ * graphic logo is a trademark of OpenMRS Inc.
+ */
+
+#app .find-patient {
+  .search-section {
+    margin-top: 1rem;
+    background-color: white;
+    .patient-search {
+      position: relative;
+      .search-icon {
+        position: absolute;
+        top: 1em;
+        left: 2em;
+      }
+      .search-input {
+        padding: 1.65em 1.65em 1.65em 4em;
+        font-size: 16px;
+        border-color: #eaeaea !important;
+        font-family: CircularStd-Book;
+        font-style: italic;
+      }
+    }
+    .patient-table {
+      .helper-text {
+        font-size: 14px;
+        padding: 0 0 0.5rem 2rem;
+      }
+    }
+  }
+}

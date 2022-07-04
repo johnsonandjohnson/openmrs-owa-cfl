@@ -1,0 +1,19 @@
+{
+  "version": "1.6.2-snapshot",
+  "name": "cfl",
+  "description": "CFL UI for OpenMRS",
+  "launch_path": "index.html",
+  "icons": {
+    "48": "/img/cfl48.png"
+  },
+  "developer": {
+    "name": "Connect for Life",
+    "url": ""
+  },
+  "default_locale": "en",
+    "activities": {
+      "openmrs": {
+        "href": "*"
+      }
+    }
+}
