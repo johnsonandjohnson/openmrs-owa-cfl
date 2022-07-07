@@ -23,20 +23,8 @@ import Location from '../../components/locations/Location';
 import UserAccount from '../../components/user-account/UserAccount';
 import ManageRegimens from '../../components/manage-regimens/ManageRegimens';
 import FindPatientColumnsConfiguration from '../../components/find-patient-columns-configuration/FindPatientColumnsConfiguration';
-import DataVisualization from '../../components/data-visualization/DataVisialization';
-import DataVisualizationConfiguration from '../../components/data-visualization-configuration/DataVisualizationConfiguration';
 
 export const routeConfig = [
-  {
-    path: '/data-visualization-configuration',
-    component: DataVisualizationConfiguration,
-    breadcrumb: 'dataVisualizationConfiguration.title'
-  },
-  {
-    path: '/data-visualization',
-    component: DataVisualization,
-    breadcrumb: 'dataVisualization.title'
-  },
   {
     path: '/patient-record-columns-configuration',
     component: FindPatientColumnsConfiguration,
