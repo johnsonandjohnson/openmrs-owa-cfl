@@ -81,31 +81,49 @@ class Confirm extends React.Component<IConfirmProps> {
         });
 
   getFieldValue = (patient, field) => {
-    const val = patient[field.name];
+    const modelValue = patient[field.name];
+
     if (!!field.options) {
-      const option = field.options.find(opt => opt.value === val || opt === val);
+      const option = field.options.find(opt => opt.value === modelValue || opt === modelValue);
       if (!!option) {
         return option.label || option;
       }
     }
-    if (field.type === 'phone' && !!val) {
-      return formatPhoneNumberIntl(getPhoneNumberWithPlusSign(val));
+
+    if (field.type === 'phone' && !!modelValue) {
+      return formatPhoneNumberIntl(getPhoneNumberWithPlusSign(modelValue));
     }
-    return val;
+
+    if(field.type === 'date' && !!modelValue) {
+      const { intl } = this.props;
+      return formatDate(intl, new Date(modelValue));
+    }
+
+    return modelValue;
   };
 
   sections = patient => {
     const { steps } = this.props;
     const sections = [] as any[];
+
     steps.forEach(step => {
-      let value;
       const locField = step.fields.find(field => field.optionSource === LOCATIONS_OPTION_SOURCE);
+
       if (step.fields.find(field => BIRTHDATE_FIELD === field.name || ESTIMATED_BIRTHDATE_FIELDS.includes(field.name))) {
-        value = this.birthdate(patient);
+        sections.push({
+          label: step.label,
+          value: this.birthdate(patient)
+        });
       } else if (step.fields.find(field => field.type === RELATIVES_FIELD_TYPE)) {
-        value = this.relatives(patient);
+        sections.push({
+          label: step.label,
+          value: this.relatives(patient)
+        });
       } else if (locField) {
-        value = this.location(patient, locField.name);
+        sections.push({
+          label: step.label,
+          value: this.location(patient, locField.name)
+        });
       } else {
         step.fields
           .filter(field => !!field.name && !!this.getFieldValue(patient, field))
@@ -115,13 +133,9 @@ class Confirm extends React.Component<IConfirmProps> {
               value: this.getFieldValue(patient, field)
             });
           });
-        return sections;
       }
-      sections.push({
-        label: step.label,
-        value
-      });
     });
+
     return sections;
   };
 
