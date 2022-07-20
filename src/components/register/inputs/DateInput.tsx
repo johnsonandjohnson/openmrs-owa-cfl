@@ -15,7 +15,7 @@ import DatePicker from 'react-datepicker';
 import {IFieldProps, IFieldState} from './Field';
 import ValidationError from './ValidationError';
 import {getCommonInputProps, getPlaceholder} from '../../../shared/util/patient-form-util';
-import {DATE_FORMAT} from '../../../shared/util/date-util';
+import {DATE_FORMAT, MILLIS_PER_MINUTE} from '../../../shared/util/date-util';
 
 export interface IDateInputProps extends StateProps, DispatchProps, IFieldProps {
   intl: any;
@@ -32,8 +32,8 @@ class DateInput extends React.Component<IDateInputProps, IFieldState> {
 
   getDateFromDateTime = (dateTimeValue) => {
     if(!!dateTimeValue) {
-      const offset = dateTimeValue.getTimezoneOffset();
-      const date = new Date(dateTimeValue.getTime() - (offset*60*1000));
+      const offsetInMinutes = dateTimeValue.getTimezoneOffset();
+      const date = new Date(dateTimeValue.getTime() - (offsetInMinutes * MILLIS_PER_MINUTE));
       return date.toISOString().split('T')[0];
     } else {
       return null;

@@ -94,7 +94,7 @@ class Confirm extends React.Component<IConfirmProps> {
       return formatPhoneNumberIntl(getPhoneNumberWithPlusSign(modelValue));
     }
 
-    if(field.type === 'date' && !!modelValue) {
+    if (field.type === 'date' && !!modelValue) {
       const { intl } = this.props;
       return formatDate(intl, new Date(modelValue));
     }
