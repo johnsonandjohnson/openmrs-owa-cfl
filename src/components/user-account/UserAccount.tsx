@@ -81,7 +81,7 @@ interface IStore {
     };
   };
   settings: { settings: [{ property: string; value: string }]; loading: boolean };
-  cflPerson: { person: { preferredName: { familyName: string; givenName: string }; attributes: IPersonAttribute[]; gender: string } };
+  cflPerson: { person: { uuid: string, preferredName: { familyName: string; givenName: string }; attributes: IPersonAttribute[]; gender: string } };
 }
 
 interface ILocationProps extends StateProps, DispatchProps, RouteComponentProps {
@@ -325,6 +325,7 @@ const UserAccount = (props: ILocationProps) => {
             }
           ],
           person: {
+            uuid: person?.uuid,
             gender: person?.gender || GENDER_OTHER,
             attributes: personAttributes,
             names: [
