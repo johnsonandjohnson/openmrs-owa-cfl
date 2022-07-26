@@ -17,7 +17,7 @@ import ErrorBoundary from './common/ErrorBoundary';
 import { connect } from 'react-redux';
 import Unauthorized from './common/Unauthorized';
 import { Spinner } from 'reactstrap';
-import Customize from '@bit/soldevelo-cfl.omrs-components.customize';
+import Customize from './customize/customize';
 import { routeConfig } from '../shared/constants/routes';
 
 export interface IRoutesProps extends StateProps, DispatchProps {}

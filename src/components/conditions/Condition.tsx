@@ -27,7 +27,7 @@ import { addBreadcrumbs, resetBreadcrumbs } from '../../redux/reducers/breadcrum
 import { PATIENT_PAGE_URL } from '../../shared/constants/openmrs';
 import { STATUS_ACTIVE, STATUS_INACTIVE } from '../../shared/constants/condition';
 import { getPatient } from '../../redux/reducers/patient';
-import { successToast } from '@bit/soldevelo-omrs.cfl-components.toast-handler';
+import { successToast } from '../toast-handler/toast-handler';
 
 export interface IConditionsProps extends StateProps, DispatchProps, RouteComponentProps<{ patientUuid?: string }> {
   intl: any;
