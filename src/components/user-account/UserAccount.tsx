@@ -30,7 +30,7 @@ import './UserAccount.scss';
 import { getSettings } from '../../redux/reducers/setttings';
 import { getPerson } from '../../redux/reducers/person';
 import { isPossiblePhoneNumber } from 'react-phone-number-input';
-import { errorToast } from '@bit/soldevelo-omrs.cfl-components.toast-handler';
+import { errorToast } from '../toast-handler/toast-handler';
 import {
   PERSON_ID_LOOKUP_STRING,
   SETTING_ATTRIBUTE_TYPE_PREFIX,

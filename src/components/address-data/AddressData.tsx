@@ -18,7 +18,7 @@ import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { ROOT_URL } from '../../shared/constants/openmrs';
 import { ZERO } from '../../shared/constants/input';
 import { ConfirmationModal } from '../common/form/ConfirmationModal';
-import { successToast, errorToast } from '@bit/soldevelo-omrs.cfl-components.toast-handler';
+import { successToast, errorToast } from '../toast-handler/toast-handler';
 import InfiniteTable from '../common/InfiniteTable';
 import { getAddressDataPage, getAddressData, postAddressData } from '../../redux/reducers/address-data';
 import {
