@@ -15,6 +15,7 @@ import Select from './Select';
 import Relatives from './Relatives';
 import DateInput from './DateInput';
 import PhoneInput from './PhoneInput';
+import TimeInput from "./TimeInput";
 
 const DEFAULT_FIELD_TYPE = 'text';
 const DEFAULT_INPUT = Input;
@@ -43,7 +44,8 @@ export const inputsByType = {
   text: Input,
   phone: PhoneInput,
   date: DateInput,
-  relatives: Relatives
+  relatives: Relatives,
+  time: TimeInput
 };
 
 function Field(props: IFieldProps) {
