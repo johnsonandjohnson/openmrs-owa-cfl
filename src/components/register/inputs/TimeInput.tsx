@@ -9,37 +9,41 @@
  */
 
 import React from 'react';
-import {connect} from 'react-redux';
-import {injectIntl} from 'react-intl';
-import {IFieldProps, IFieldState} from './Field';
-import {getCommonInputProps, getPlaceholder} from "../../../shared/util/patient-form-util";
-import ValidationError from "./ValidationError";
-import {TimePicker} from "../../common/time-picker/TimePicker";
+import {useIntl} from 'react-intl';
 import moment from "moment";
+import {TimePicker} from "../../common/time-picker/TimePicker";
+import {getCommonInputProps, getPlaceholder} from "../../../shared/util/patient-form-util";
 import {DEFAULT_TIME_FORMAT} from "../../../shared/constants/input";
+import {IFieldProps} from './Field';
+import ValidationError from "./ValidationError";
 
-export interface ITimeInputProps extends StateProps, DispatchProps, IFieldProps {
-  intl: any;
+interface ITimeInputProps extends IFieldProps {
 }
 
-class TimeInput extends React.Component<ITimeInputProps, IFieldState> {
-  createOnChangeCallback = (patient, fieldName, callback) => event =>
-    this.setValueInModel(patient, fieldName, callback, event && event.target ? event.target.value : event);
+export const TimeInput = (props: ITimeInputProps) => {
+  const intl = useIntl();
+  const {field, isInvalid, isDirty, className, value, patient, onPatientChange} = props;
+  const {name, required, label} = field;
+  const hasValue = !value || !patient[field.name];
+  const placeholder = getPlaceholder(intl, label, name, required);
 
-  setValueInModel = (patient, fieldName, callback, value) => {
-    patient[fieldName] = this.getTimeFromDateTime(value);
+  const createOnChangeCallback = (patient, fieldName, callback) => event =>
+    setValueInModel(patient, fieldName, callback, event && event.target ? event.target.value : event);
+
+  const setValueInModel = (patient, fieldName, callback, value) => {
+    patient[fieldName] = getTimeFromDateTime(value);
     callback(patient);
   };
 
-  getTimeFromDateTime = (dateTimeValue) => {
-    if (!!dateTimeValue) {
-      return moment.isMoment(dateTimeValue) ? dateTimeValue.format(DEFAULT_TIME_FORMAT) : dateTimeValue.toString();
-    } else {
+  const getTimeFromDateTime = dateTimeValue => {
+    if (!dateTimeValue) {
       return null;
     }
+
+    return moment.isMoment(dateTimeValue) ? dateTimeValue.format(DEFAULT_TIME_FORMAT) : dateTimeValue.toString();
   };
 
-  getDateTimeFromModel = (patient, name) => {
+  const getDateTimeFromModel = (patient, name) => {
     const modelValue = patient[name];
 
     if (typeof modelValue === 'string') {
@@ -49,33 +53,21 @@ class TimeInput extends React.Component<ITimeInputProps, IFieldState> {
     }
   };
 
-  render = () => {
-    const {intl, field, isInvalid, isDirty, className, value, patient, onPatientChange} = this.props;
-    const {name, required, label} = field;
-    const hasValue = !!value || !!patient[field.name];
-    const placeholder = getPlaceholder(intl, label, name, required);
-    const props = {
-      ...getCommonInputProps(this.props, placeholder),
-      placeholderText: placeholder,
-      value: value != null ? value : this.getDateTimeFromModel(patient, name),
-      selected: value != null ? value : this.getDateTimeFromModel(patient, name),
-      onChange: this.createOnChangeCallback(patient, name, onPatientChange)
-    };
-    return (
-      <div className={`${className} input-container`}>
-        <TimePicker {...props} />
-        {hasValue && <span className="placeholder">{placeholder}</span>}
-        {isDirty && isInvalid && <ValidationError hasValue={hasValue} field={field}/>}
-      </div>
-    );
+  const timePickerProps = {
+    ...getCommonInputProps(props, placeholder),
+    placeholderText: placeholder,
+    value: value ? value : getDateTimeFromModel(patient, name),
+    selected: value ? value : getDateTimeFromModel(patient, name),
+    onChange: createOnChangeCallback(patient, name, onPatientChange)
   };
-}
 
-const mapStateToProps = () => ({});
+  return (
+    <div className={`${className} input-container`}>
+      <TimePicker {...timePickerProps} />
+      {hasValue && <span className="placeholder">{placeholder}</span>}
+      {isDirty && isInvalid && <ValidationError hasValue={hasValue} field={field}/>}
+    </div>
+  );
+};
 
-const mapDispatchToProps = {};
-
-type StateProps = ReturnType<typeof mapStateToProps>;
-type DispatchProps = typeof mapDispatchToProps;
-
-export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(TimeInput));
+export default TimeInput;
