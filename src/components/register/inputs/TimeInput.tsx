@@ -20,11 +20,11 @@ import ValidationError from "./ValidationError";
 interface ITimeInputProps extends IFieldProps {
 }
 
-export const TimeInput = (props: ITimeInputProps) => {
+const TimeInput = (props: ITimeInputProps) => {
   const intl = useIntl();
   const {field, isInvalid, isDirty, className, value, patient, onPatientChange} = props;
   const {name, required, label} = field;
-  const hasValue = !value || !patient[field.name];
+  const hasValue = !!value || !!patient[field.name];
   const placeholder = getPlaceholder(intl, label, name, required);
 
   const createOnChangeCallback = (patient, fieldName, callback) => event =>
