@@ -33,7 +33,8 @@ export const getAppsState = apps => ({
   findPatientTableColumns: getAppConfig(apps, FIND_PATIENT_APP)?.tableColumns,
   findCaregiverTableColumns: getAppConfig(apps, FIND_CAREGIVER_APP)?.tableColumns,
   patientRegistrationSteps: getAppConfig(apps, REGISTER_PATIENT_APP)?.steps,
-  caregiverRegistrationSteps: getAppConfig(apps, REGISTER_CAREGIVER_APP)?.steps
+  caregiverRegistrationSteps: getAppConfig(apps, REGISTER_CAREGIVER_APP)?.steps,
+  registrationRedirectUrl: getAppConfig(apps, REGISTER_PATIENT_APP)?.redirectUrl
 });
 
 const reducer = (state = initialState, action) => {

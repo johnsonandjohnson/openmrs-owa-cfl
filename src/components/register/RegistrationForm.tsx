@@ -9,34 +9,34 @@
  */
 
 import React from 'react';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import './RegisterPatient.scss';
 import '../Inputs.scss';
-import { FormattedMessage, injectIntl } from 'react-intl';
-import { Button, Col, Form, ListGroup, ListGroupItem, Row, Spinner } from 'reactstrap';
+import {FormattedMessage, injectIntl} from 'react-intl';
+import {Button, Col, Form, ListGroup, ListGroupItem, Row, Spinner} from 'reactstrap';
 import _ from 'lodash';
-import { IPatient } from '../../shared/models/patient';
-import { extractPatientOrPersonData, extractPersonRelationships } from '../../shared/util/patient-util';
+import {IPatient} from '../../shared/models/patient';
+import {extractPatientOrPersonData, extractPersonRelationships} from '../../shared/util/patient-util';
 import Check from '../../assets/img/check.svg';
 import CheckCircle from '../../assets/img/check-circle.svg';
 import {
   editPatient,
   editPerson,
+  getPatientIdentifierTypes,
   register,
   registerPerson,
-  updateRelationships,
-  getPatientIdentifierTypes
+  updateRelationships
 } from '../../redux/reducers/registration';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
-import { getPatient } from '../../redux/reducers/patient';
-import { getPerson, getPersonRelationships } from '../../redux/reducers/person';
+import {RouteComponentProps, withRouter} from 'react-router-dom';
+import {getPatient} from '../../redux/reducers/patient';
+import {getPerson, getPersonRelationships} from '../../redux/reducers/person';
 import defaultSteps from './patientDefaultSteps.json';
 import caregiverDefaultSteps from './caregiverDefaultSteps.json';
 import Step from './Step';
 import Confirm from './Confirm';
 import queryString from 'query-string';
-import { redirectUrl } from '../../shared/util/url-util';
-import { PATIENT_PAGE_URL } from '../../shared/constants/openmrs';
+import {redirectUrl} from '../../shared/util/url-util';
+import {DEFAULT_REGISTRATION_FORM_REDIRECT} from '../../shared/constants/openmrs';
 
 export interface IRegistrationProps extends StateProps, DispatchProps, RouteComponentProps<{ id?: string }> {
   intl: any;
@@ -282,11 +282,19 @@ class RegistrationForm extends React.Component<IRegistrationProps, IRegistration
   success = () => {
     const { location, id } = this.props;
     window.location.href = id
-      ? `${PATIENT_PAGE_URL}?patientId=${id}${this.props.isCaregiver ? '&dashboard=person' : ''}`
+      ? this.createRedirectURL()
       : queryString.stringifyUrl({
           url: redirectUrl(location.search)
         });
     return <Spinner />;
+  };
+
+  createRedirectURL = () => {
+    const replacements = {
+      "%PATIENT_ID%": this.props.id,
+      "%PERSON_TYPE%": this.props.isCaregiver ? "person" : "patient"
+    };
+    return this.props.registrationRedirectUrl.replace(/%\w+%/g, placeholder => replacements[placeholder] || placeholder);
   };
 
   render() {
@@ -332,6 +340,7 @@ const mapStateToProps = ({ registration, cflPatient, cflPerson, apps }) => ({
   personRelationships: cflPerson.personRelationships,
   patientSteps: apps.patientRegistrationSteps || defaultSteps,
   caregiverSteps: apps.caregiverRegistrationSteps || caregiverDefaultSteps,
+  registrationRedirectUrl: apps.registrationRedirectUrl || DEFAULT_REGISTRATION_FORM_REDIRECT,
   settingsLoading: apps.loading || registration.loading
 });
 
