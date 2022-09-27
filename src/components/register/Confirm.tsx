@@ -111,8 +111,12 @@ class Confirm extends React.Component<IConfirmProps> {
   sections = patient => {
     const { steps, settings: { settings } } = this.props;
     const sections = [] as any[];
+    const stepsToShow = steps.map(step => ({
+      ...step,
+      fields: step.fields.filter(({ showOnSummary = true }) => showOnSummary)
+    }));
 
-    steps.forEach(step => {
+    stepsToShow.forEach(step => {
       const locField = step.fields.find(field => field.optionSource === LOCATIONS_OPTION_SOURCE);
       const addressFields = step.fields.find(({ type }) => type === INPUT_ADDRESS_FIELDS_TYPE);
       const foundSetting = settings.find(({ property }) => property === addressFields?.optionUuid);
