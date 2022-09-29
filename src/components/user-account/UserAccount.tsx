@@ -30,7 +30,7 @@ import './UserAccount.scss';
 import { getSettings } from '../../redux/reducers/setttings';
 import { getPerson } from '../../redux/reducers/person';
 import { isPossiblePhoneNumber } from 'react-phone-number-input';
-import { errorToast } from '@bit/soldevelo-omrs.cfl-components.toast-handler';
+import { errorToast } from '../toast-handler/toast-handler';
 import {
   PERSON_ID_LOOKUP_STRING,
   SETTING_ATTRIBUTE_TYPE_PREFIX,
@@ -81,7 +81,7 @@ interface IStore {
     };
   };
   settings: { settings: [{ property: string; value: string }]; loading: boolean };
-  cflPerson: { person: { preferredName: { familyName: string; givenName: string }; attributes: IPersonAttribute[]; gender: string } };
+  cflPerson: { person: { uuid: string; preferredName: { uuid: string; familyName: string; givenName: string }; attributes: IPersonAttribute[]; gender: string } };
 }
 
 interface ILocationProps extends StateProps, DispatchProps, RouteComponentProps {
@@ -325,10 +325,12 @@ const UserAccount = (props: ILocationProps) => {
             }
           ],
           person: {
+            uuid: person?.uuid,
             gender: person?.gender || GENDER_OTHER,
             attributes: personAttributes,
             names: [
               {
+                uuid: person?.preferredName?.uuid,
                 givenName: userAccount.givenName.value,
                 familyName: userAccount.familyName.value
               }

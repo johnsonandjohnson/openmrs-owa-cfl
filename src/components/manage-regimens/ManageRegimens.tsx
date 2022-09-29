@@ -53,7 +53,7 @@ import { cloneDeep, uniq, without } from 'lodash';
 import '../Inputs.scss';
 import './ManageRegimens.scss';
 import { ConfirmationModal } from '../common/form/ConfirmationModal';
-import { successToast, errorToast } from '@bit/soldevelo-omrs.cfl-components.toast-handler';
+import { successToast, errorToast } from '../toast-handler/toast-handler';
 import { IDrugToDelete, IRegimenToDelete, IManageRegimensState, IRegimen } from '../../shared/models/manage-regimens';
 import { IOrderSetState } from '../../shared/models/order-set';
 import { IConceptState } from '../../shared/models/concept';

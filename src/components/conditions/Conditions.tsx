@@ -19,11 +19,11 @@ import { getConditionHistory, saveCondition, saveConditions } from '../../redux/
 import { addBreadcrumbs, resetBreadcrumbs } from '../../redux/reducers/breadcrumbs';
 import { PATIENT_PAGE_URL } from '../../shared/constants/openmrs';
 import { getPatient } from '../../redux/reducers/patient';
-import Header from '@bit/soldevelo-omrs.cfl-components.person-header';
-import PersonStatus from '@bit/soldevelo-cfl.omrs-components.person-status';
+import Header from '../person-header/person-header';
+import PersonStatus from '../person-status/person-status';
 import { STATUS_ACTIVE, STATUS_INACTIVE } from '../../shared/constants/condition';
 import { formatDate } from '../../shared/util/date-util';
-import { successToast } from '@bit/soldevelo-omrs.cfl-components.toast-handler';
+import { successToast } from '../toast-handler/toast-handler';
 
 export interface IConditionsProps extends StateProps, DispatchProps, RouteComponentProps<{ patientUuid?: string }> {
   intl: any;

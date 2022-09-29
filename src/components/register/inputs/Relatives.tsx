@@ -108,6 +108,8 @@ class Relatives extends React.Component<IRelativesProps, IRelativesState> {
     const { relatives } = this.state;
     if (relatives.length > 1) {
       relatives.splice(rowNo, 1);
+    } else {
+      relatives[0] = { ...emptyRelative };
     }
     this.setState({
       relatives

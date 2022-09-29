@@ -8,18 +8,20 @@
  * graphic logo is a trademark of OpenMRS Inc.
  */
 
-import React from 'react';
-import { FormattedMessage } from 'react-intl';
+import React, {useEffect} from 'react';
+import {IFieldProps} from "./Field";
 
-interface IChartDescription {
-  description: string;
-}
+const StaticInput = (props: IFieldProps) => {
+  const {field, patient, onPatientChange} = props;
+  const {name, staticValue} = field;
 
-const ChartDescription = ({ description }: IChartDescription) => (
-  <div className="chart-description">
-    <FormattedMessage id="dataVisualizationConfiguration.chart.description" tagName="h5" />
-    <p>{description}</p>
-  </div>
-);
+  useEffect(() => {
+    if (!patient[name]) {
+      onPatientChange({...patient, [name]: staticValue});
+    }
+  }, [staticValue, name, onPatientChange, patient]);
 
-export default ChartDescription;
+  return null;
+};
+
+export default StaticInput;

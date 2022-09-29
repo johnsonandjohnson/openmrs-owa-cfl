@@ -27,3 +27,5 @@ export const formatDate = (intl, date) =>
   }).format(date);
 
 export const isoDateString = jsDate => (jsDate ? jsDate.toISOString().split('T')[0] : null);
+
+export const MILLIS_PER_MINUTE = 60 * 1000;

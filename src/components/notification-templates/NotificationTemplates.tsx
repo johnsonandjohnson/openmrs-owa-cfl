@@ -19,7 +19,7 @@ import { Button, Label, Spinner } from 'reactstrap';
 import ExpandableSection from '../common/expandable-section/ExpandableSection';
 import { InputWithPlaceholder } from '../common/form/withPlaceholder';
 import { extractEventValue } from '../../shared/util/form-util';
-import { successToast, errorToast } from '@bit/soldevelo-omrs.cfl-components.toast-handler';
+import { successToast, errorToast } from '../toast-handler/toast-handler';
 import _ from 'lodash';
 import { PlusMinusButtons } from '../common/form/PlusMinusButtons';
 import { ConfirmationModal } from '../common/form/ConfirmationModal';

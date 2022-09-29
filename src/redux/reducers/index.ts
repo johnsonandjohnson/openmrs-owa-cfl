@@ -20,10 +20,10 @@ import relationshipType from './relationship-type';
 import registration from './registration';
 import { reducers as openmrsReducers } from '@openmrs/react-components';
 import { reducer as reduxFormReducer } from 'redux-form';
-import customizeReducer from '@bit/soldevelo-cfl.omrs-components.customize/customize.reducer';
-import person from '@bit/soldevelo-omrs.cfl-components.person-header/person-header/person.reducer';
-import patient from '@bit/soldevelo-omrs.cfl-components.person-header/person-header/patient.reducer';
-import personStatus from '@bit/soldevelo-cfl.omrs-components.person-status/person-status/person-status.reducer';
+import customizeReducer from '../../components/customize/customize.reducer';
+import person from '../../components/person-header/person.reducer';
+import patient from '../../components/person-header/patient.reducer';
+import personStatus from '../../components/person-status/person-status.reducer';
 import apps from './apps';
 import concept from './concept';
 import condition from './condition';
@@ -40,7 +40,6 @@ import drugs from './drugs';
 import orderFrequency from './order-frequency';
 import orderType from './order-type';
 import findPatientColumnsConfiguration from './columns-configuration';
-import reports from './data-visualization-configuration';
 
 export default combineReducers({
   cflPatient,
@@ -72,7 +71,6 @@ export default combineReducers({
   orderFrequency,
   orderType,
   findPatientColumnsConfiguration,
-  reports,
   openmrs: openmrsReducers,
   form: reduxFormReducer
 });

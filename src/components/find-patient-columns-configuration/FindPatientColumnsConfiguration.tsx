@@ -27,7 +27,7 @@ import {
 import { IColumnConfiguration } from '../../shared/models/columns-configuration';
 import { EMPTY_STRING } from '../../shared/constants/input';
 import { ConfirmationModal } from '../common/form/ConfirmationModal';
-import { successToast, errorToast } from '@bit/soldevelo-omrs.cfl-components.toast-handler';
+import { successToast, errorToast } from '../toast-handler/toast-handler';
 import '../Inputs.scss';
 import './FindPatientColumnsConfiguration.scss';
 

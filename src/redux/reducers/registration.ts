@@ -85,7 +85,6 @@ const extractFormData = patient => {
     formData.birthdate = null;
   } else {
     formData.birthdateEstimated = false;
-    formData.birthdate = formData.birthdate.toISOString().split('T')[0];
   }
   return formData;
 };
