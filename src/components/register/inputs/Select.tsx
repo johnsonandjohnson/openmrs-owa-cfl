@@ -8,7 +8,7 @@
  * graphic logo is a trademark of OpenMRS Inc.
  */
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import ValidationError from './ValidationError';
 import cx from 'classnames';
 import { connect } from 'react-redux';
@@ -28,6 +28,7 @@ export interface ISelectProps extends StateProps, DispatchProps, IFieldProps {
 interface IStore {
   concept: IConceptState;
   settings: { setting: { value: string } };
+  openmrs: { session: { sessionLocation: { uuid: string }}}
 }
 
 export const Select = (props: ISelectProps) => {
@@ -46,15 +47,28 @@ export const Select = (props: ISelectProps) => {
     onPatientChange,
     settings,
     getConcept,
-    getSettingByQuery
+    getSettingByQuery,
+    sessionLocation
   } = props;
-  const { name, required, label, options, defaultOption = '', optionSource = '', optionUuid = '', optionKey = '' } = field;
+  const { name, required, label, options, defaultOption = field.name === 'LocationAttribute' ? sessionLocation?.uuid : '', optionSource = '', optionUuid = '', optionKey = '' } = field;
   const hasValue = value || patient[name] || defaultOption;
   const placeholder = getPlaceholder(intl, label, name, required);
   const commonProps = getCommonInputProps(props, placeholder);
   const dataTestId = props['data-testid'] || name;
   const isConceptOptionSource = optionSource === CONCEPT;
   const isGlobalPropertyOptionSource = optionSource === GLOBAL_PROPERTY;
+
+  const usePrevious = value => {
+    const ref = useRef();
+
+    useEffect(() => {
+      ref.current = value;
+    }, [value]);
+
+    return ref.current;
+  };
+
+  const prevSessionLocation = usePrevious(sessionLocation?.uuid);
 
   useEffect(() => {
     if (isConceptOptionSource) {
@@ -65,6 +79,12 @@ export const Select = (props: ISelectProps) => {
       // Do nothing
     }
   }, [getConcept, getSettingByQuery, isConceptOptionSource, isGlobalPropertyOptionSource, optionSource, optionUuid]);
+
+  useEffect(() => {
+    if (prevSessionLocation !== sessionLocation?.uuid) {
+      onPatientChange({ ...patient, 'LocationAttribute': sessionLocation.uuid });
+    }
+  },[onPatientChange, patient, prevSessionLocation, sessionLocation]);
 
   useEffect(() => {
     if (!patient[name] && defaultOption) {
@@ -101,7 +121,7 @@ export const Select = (props: ISelectProps) => {
       );
     }
   };
-
+  
   return (
     <div className={`${className} input-container`}>
       <ReactstrapInput
@@ -122,7 +142,7 @@ export const Select = (props: ISelectProps) => {
   );
 };
 
-const mapStateToProps = ({ concept, settings }: IStore) => ({ concept, settings });
+const mapStateToProps = ({ concept, settings, openmrs: { session: { sessionLocation }} }: IStore) => ({ concept, settings, sessionLocation });
 
 const mapDispatchToProps = { getConcept, getSettingByQuery };
 
