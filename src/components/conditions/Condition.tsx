@@ -15,7 +15,7 @@ import _ from 'lodash';
 import { Button, FormGroup } from 'reactstrap';
 import './Conditions.scss';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { getSettingByQuery } from '../../redux/reducers/setttings';
+import { getSettingByQuery } from '../../redux/reducers/settings';
 import Select from 'react-select/creatable';
 import '../Inputs.scss';
 import { DATE_FORMAT, isoDateString } from '../../shared/util/date-util';

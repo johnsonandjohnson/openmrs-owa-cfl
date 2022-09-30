@@ -12,7 +12,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
-import { createSetting, getSettings, updateSetting, deleteSetting } from '../../redux/reducers/setttings';
+import { createSetting, getSettings, updateSetting, deleteSetting } from '../../redux/reducers/settings';
 import { getCallflowsProviders, getSmsProviders } from '../../redux/reducers/provider';
 import { getMessagesTemplatesGlobalProperties } from '../../redux/reducers/messages';
 import { Button, Label, Spinner } from 'reactstrap';

@@ -1,0 +1,14 @@
+.address-fields-container {
+  width: 100%;
+
+  .address-field-country {
+    padding: 5px;
+    float: none;
+  }
+
+  .address-fields > div {
+    flex: 1 50%;
+    padding: 5px;
+    margin: 0;
+  }
+};

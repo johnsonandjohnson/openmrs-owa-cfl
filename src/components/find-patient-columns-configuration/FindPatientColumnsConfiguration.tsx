@@ -15,7 +15,7 @@ import { FormattedMessage, injectIntl, IntlShape } from 'react-intl';
 import { Button, Spinner } from 'reactstrap';
 import { uniqWith, isEqual, cloneDeep } from 'lodash';
 import { setAllPossibleColumns, setColumnsConfiguration } from '../../redux/reducers/columns-configuration';
-import { createSetting, getSettingByQuery, updateSetting } from '../../redux/reducers/setttings';
+import { createSetting, getSettingByQuery, updateSetting } from '../../redux/reducers/settings';
 import { IRegistrationStep } from '../../shared/models/registration-steps';
 import {
   ADJACENT_LOWER_AND_UPPER_LETTERS_REGEX,

@@ -15,11 +15,10 @@ import { connect } from 'react-redux';
 import { injectIntl, IntlShape } from 'react-intl';
 import { Input as ReactstrapInput } from 'reactstrap';
 import { IFieldProps } from './Field';
-import { getConcept } from '../../../redux/reducers/concept';
-import { getSettingByQuery } from '../../../redux/reducers/setttings';
 import { getCommonInputProps, getPlaceholder } from '../../../shared/util/patient-form-util';
 import { IConceptState } from '../../../shared/models/concept';
-import { CONCEPT_CUSTOM_REPRESENTATION } from '../../../shared/constants/manage-regimens';
+import { CONCEPT, GLOBAL_PROPERTY } from '../../../shared/constants/concept';
+import { INPUT_COUNTRY_NAME } from '../../../shared/constants/input';
 
 export interface ISelectProps extends StateProps, DispatchProps, IFieldProps {
   intl: IntlShape;
@@ -27,13 +26,14 @@ export interface ISelectProps extends StateProps, DispatchProps, IFieldProps {
 
 interface IStore {
   concept: IConceptState;
-  settings: { setting: { value: string } };
-  openmrs: { session: { sessionLocation: { uuid: string }}}
+  settings: {
+    settings: [{ property: string, value: string }], 
+    setting: { value: string }
+  };
+  openmrs: { session: { sessionLocation: { uuid: string }}};
 }
 
 export const Select = (props: ISelectProps) => {
-  const GLOBAL_PROPERTY = 'globalProperty';
-  const CONCEPT = 'concept';
   const {
     field,
     isInvalid,
@@ -46,8 +46,6 @@ export const Select = (props: ISelectProps) => {
     concept,
     onPatientChange,
     settings,
-    getConcept,
-    getSettingByQuery,
     sessionLocation
   } = props;
   const { name, required, label, options, defaultOption = field.name === 'LocationAttribute' ? sessionLocation?.uuid : '', optionSource = '', optionUuid = '', optionKey = '' } = field;
@@ -71,16 +69,6 @@ export const Select = (props: ISelectProps) => {
   const prevSessionLocation = usePrevious(sessionLocation?.uuid);
 
   useEffect(() => {
-    if (isConceptOptionSource) {
-      getConcept(optionUuid, CONCEPT_CUSTOM_REPRESENTATION);
-    } else if (isGlobalPropertyOptionSource) {
-      getSettingByQuery(optionUuid);
-    } else {
-      // Do nothing
-    }
-  }, [getConcept, getSettingByQuery, isConceptOptionSource, isGlobalPropertyOptionSource, optionSource, optionUuid]);
-
-  useEffect(() => {
     if (prevSessionLocation !== sessionLocation?.uuid) {
       onPatientChange({ ...patient, 'LocationAttribute': sessionLocation.uuid });
     }
@@ -93,13 +81,19 @@ export const Select = (props: ISelectProps) => {
   }, [defaultOption, name, onPatientChange, patient]);
 
   const getSelectOptions = () => {
+    const foundGlobalPropert = settings?.settings.find(({ property }) => property === optionUuid);
+    const foundConcept = concept?.concepts.find(({ uuid }) => uuid === optionUuid);
     let opts = selectOptions || options;
 
-    if (isGlobalPropertyOptionSource && settings?.setting?.value) {
-      const configParsed = JSON.parse(settings.setting.value);
-      opts = configParsed[optionKey].map(mappedConfig => mappedConfig.name);
-    } else if (isConceptOptionSource && concept?.concept?.setMembers.length) {
-      opts = concept.concept.setMembers.map(({ display }) => display).sort();
+    if (isGlobalPropertyOptionSource && foundGlobalPropert?.value) {
+      const configParsed = JSON.parse(foundGlobalPropert.value);
+      if (name === INPUT_COUNTRY_NAME) {
+        opts = Object.keys(configParsed[optionKey]);
+      } else {
+        opts = configParsed[optionKey].map(mappedConfig => mappedConfig.name);
+      }
+    } else if (isConceptOptionSource && foundConcept?.setMembers.length) {
+      opts = foundConcept.setMembers.map(({ display }) => display).sort();
     } else {
       // Do nothing
     }
@@ -144,7 +138,7 @@ export const Select = (props: ISelectProps) => {
 
 const mapStateToProps = ({ concept, settings, openmrs: { session: { sessionLocation }} }: IStore) => ({ concept, settings, sessionLocation });
 
-const mapDispatchToProps = { getConcept, getSettingByQuery };
+const mapDispatchToProps = {};
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;

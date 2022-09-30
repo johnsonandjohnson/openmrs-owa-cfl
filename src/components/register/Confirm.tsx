@@ -103,11 +103,13 @@ class Confirm extends React.Component<IConfirmProps> {
   };
 
   sections = patient => {
-    const { steps } = this.props;
+    const { steps, settings: { settings } } = this.props;
     const sections = [] as any[];
 
     steps.forEach(step => {
       const locField = step.fields.find(field => field.optionSource === LOCATIONS_OPTION_SOURCE);
+      const addressFields = step.fields.find(({ type }) => type === 'addressFields');
+      const foundSetting = settings.find(({ property }) => property === addressFields?.optionUuid);
 
       if (step.fields.find(field => BIRTHDATE_FIELD === field.name || ESTIMATED_BIRTHDATE_FIELDS.includes(field.name))) {
         sections.push({
@@ -133,6 +135,18 @@ class Confirm extends React.Component<IConfirmProps> {
               value: this.getFieldValue(patient, field)
             });
           });
+      }
+
+      if (addressFields && foundSetting) {
+        const configParsed = JSON.parse(foundSetting?.value);
+        const selectedCountryFields = configParsed[addressFields.optionKey][patient.country];
+
+        selectedCountryFields?.forEach(field => {
+          sections.push({
+            label: this.getFieldLabel(field),
+            value: patient[field.field]
+          });
+        })
       }
     });
 
@@ -162,6 +176,7 @@ class Confirm extends React.Component<IConfirmProps> {
     const fields = this.sections(this.props.patient);
     const itemsPerColumn = Math.floor(fields.length / 2);
     const { errors } = this.props;
+
     return (
       <>
         <div className="step-fields">
@@ -185,10 +200,11 @@ class Confirm extends React.Component<IConfirmProps> {
   }
 }
 
-const mapStateToProps = ({ relationshipType, location, registration }) => ({
+const mapStateToProps = ({ relationshipType, location, registration, settings }) => ({
   relationshipTypes: relationshipType.relationshipTypes,
   locations: location.locations,
-  errors: registration.errors
+  errors: registration.errors,
+  settings
 });
 
 const mapDispatchToProps = {};

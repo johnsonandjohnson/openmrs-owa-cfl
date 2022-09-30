@@ -56,16 +56,22 @@ const reducer = (state = initialState, action) => {
         loading: false,
         settings: action.payload.data.results
       };
-    case SUCCESS(ACTION_TYPES.GET_SETTING):
+    case SUCCESS(ACTION_TYPES.GET_SETTING): {
       const results = action.payload.data.results;
       const isSettingExist = !!results && results.length > 0;
+
       return {
         ...state,
         loading: false,
         errorMessage: null,
         isSettingExist: { settingPropertyUrl: action.payload.config.url, value: isSettingExist },
-        setting: isSettingExist ? results[0] : state.setting
+        setting: isSettingExist ? results[0] : state.setting,
+        settings: [
+          ...state.settings,
+          results[0]
+        ] 
       };
+    }
     case SUCCESS(ACTION_TYPES.CREATE_SETTING):
     case SUCCESS(ACTION_TYPES.DELETE_SETTING):
       return {

@@ -18,3 +18,5 @@ export const EMPTY_STRING = '';
 export const DEFAULT_TIME_FORMAT = 'HH:mm';
 export const STRING_TRUE = 'true';
 export const STRING_FALSE = 'false';
+export const INPUT_ADDRESS_FIELDS_TYPE = 'addressFields';
+export const INPUT_COUNTRY_NAME = 'country';

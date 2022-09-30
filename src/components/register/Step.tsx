@@ -18,7 +18,8 @@ import Field from './inputs/Field';
 import { isPossiblePhoneNumber } from 'react-phone-number-input';
 import { searchLocations } from '../../redux/reducers/location';
 import { getPhoneNumberWithPlusSign } from '../../shared/util/person-util';
-import { EMPTY_STRING } from '../../shared/constants/input';
+import { EMPTY_STRING, INPUT_ADDRESS_FIELDS_TYPE } from '../../shared/constants/input';
+import { GLOBAL_PROPERTY } from '../../shared/constants/concept';
 
 export interface IPatientIdentifierType {
   format: string;
@@ -37,6 +38,7 @@ export interface IStepProps extends StateProps, DispatchProps {
   setStep: any;
   stepNumber: number;
   patientIdentifierTypes: IPatientIdentifierType[];
+  isEdit: boolean;
 }
 
 export interface IStepState {
@@ -141,6 +143,21 @@ export class Step extends React.Component<IStepProps, IStepState> {
       }
     }
 
+    const isGlobalPropertyOptionSource = field.optionSource === GLOBAL_PROPERTY;
+    const foundGlobalPropert = this.props.settings?.settings.find(({ property }) => property === field.optionUuid);
+
+    if (isGlobalPropertyOptionSource && foundGlobalPropert?.value) {
+      const configParsed = JSON.parse(foundGlobalPropert.value);
+
+      if (field.type === INPUT_ADDRESS_FIELDS_TYPE) {
+        const addressFields = configParsed[field.optionKey][this.props.patient.country]?.map(({ field }) => field);
+
+        return field?.allAddressFieldsRequired ? !addressFields?.every(field => this.props.patient[field]) : false;
+      }
+    } else {
+      // Do nothing
+    }
+
     return isInvalid;
   };
 
@@ -159,6 +176,7 @@ export class Step extends React.Component<IStepProps, IStepState> {
     const isStepValid = invalidFields.length === 0;
     const isStepDirty = dirtyFields.length > 0;
     this.props.setValidity(isStepValid, isStepDirty);
+
     return isStepValid;
   };
 
@@ -171,8 +189,8 @@ export class Step extends React.Component<IStepProps, IStepState> {
         }
       } else {
         const isValid = this.validate(fields, fields);
-        e.preventDefault();
         if (isValid) {
+          e.preventDefault();
           this.props.setStep(this.props.stepNumber + 1);
         }
       }
@@ -232,8 +250,10 @@ export class Step extends React.Component<IStepProps, IStepState> {
   }
 }
 
-const mapStateToProps = ({ location }) => ({
-  locations: location.locations
+const mapStateToProps = ({ location, settings, concept }) => ({
+  locations: location.locations,
+  settings,
+  concept
 });
 
 const mapDispatchToProps = {
