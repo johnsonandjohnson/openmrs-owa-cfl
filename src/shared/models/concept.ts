@@ -49,7 +49,7 @@ export interface IConceptState {
     concept: boolean;
   };
   query: string;
-  concepts: IConceptItem[];
+  concepts: IConcept[];
   concept: IConcept;
   errorMessage: string;
 }

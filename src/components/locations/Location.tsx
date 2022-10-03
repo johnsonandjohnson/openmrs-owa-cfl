@@ -26,7 +26,7 @@ import { TextareaWithPlaceholder } from '../common/textarea/Textarea';
 import ValidationError from '../common/form/ValidationError';
 import { scrollToTop } from '../../shared/util/window-util';
 import cx from 'classnames';
-import { getSettingByQuery } from '../../redux/reducers/setttings';
+import { getSettingByQuery } from '../../redux/reducers/settings';
 import { getConcept } from '../../redux/reducers/concept';
 import {
   BOOLEAN_RADIOS_PREFERRED_HANDLER,

@@ -13,7 +13,7 @@ import cflPatient from './patient';
 import cflPerson from './person';
 import cflPeople from './cfl-people';
 import session from './session';
-import settings from './setttings';
+import settings from './settings';
 import countryProperty from './countryProperty';
 import location from './location';
 import relationshipType from './relationship-type';

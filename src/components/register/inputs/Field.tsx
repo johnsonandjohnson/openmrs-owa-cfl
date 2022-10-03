@@ -17,6 +17,7 @@ import DateInput from './DateInput';
 import PhoneInput from './PhoneInput';
 import TimeInput from "./TimeInput";
 import StaticInput from "./StaticInput";
+import AddressFields from "./AddressFields";
 
 const DEFAULT_FIELD_TYPE = 'text';
 const DEFAULT_INPUT = Input;
@@ -47,7 +48,8 @@ export const inputsByType = {
   date: DateInput,
   relatives: Relatives,
   time: TimeInput,
-  static: StaticInput
+  static: StaticInput,
+  addressFields: AddressFields
 };
 
 function Field(props: IFieldProps) {

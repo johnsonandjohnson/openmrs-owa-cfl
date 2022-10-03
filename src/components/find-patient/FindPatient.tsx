@@ -22,7 +22,7 @@ import { helperText } from '../../shared/util/table-util';
 import { PATIENT_PAGE_URL } from '../../shared/constants/openmrs';
 import InfiniteTable from '../common/InfiniteTable';
 import { COLUMNS_CONFIGURATION_SETTING_KEY, DEFAULT_COLUMNS } from '../../shared/constants/columns-configuration';
-import { getSettingByQuery } from '../../redux/reducers/setttings';
+import { getSettingByQuery } from '../../redux/reducers/settings';
 
 export interface IPatientsProps extends StateProps, DispatchProps {
   intl: any;
