@@ -19,6 +19,7 @@ import { BIRTHDATE_FIELD, ESTIMATED_BIRTHDATE_FIELDS, LOCATIONS_OPTION_SOURCE, R
 import { formatDate } from '../../shared/util/date-util';
 import { formatPhoneNumberIntl } from 'react-phone-number-input';
 import { getPhoneNumberWithPlusSign } from '../../shared/util/person-util';
+import { INPUT_ADDRESS_FIELDS_TYPE } from '../../shared/constants/input';
 
 export interface IConfirmProps extends StateProps, DispatchProps {
   intl: any;
@@ -108,7 +109,7 @@ class Confirm extends React.Component<IConfirmProps> {
 
     steps.forEach(step => {
       const locField = step.fields.find(field => field.optionSource === LOCATIONS_OPTION_SOURCE);
-      const addressFields = step.fields.find(({ type }) => type === 'addressFields');
+      const addressFields = step.fields.find(({ type }) => type === INPUT_ADDRESS_FIELDS_TYPE);
       const foundSetting = settings.find(({ property }) => property === addressFields?.optionUuid);
 
       if (step.fields.find(field => BIRTHDATE_FIELD === field.name || ESTIMATED_BIRTHDATE_FIELDS.includes(field.name))) {

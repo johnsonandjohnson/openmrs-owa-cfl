@@ -61,21 +61,21 @@ const AddressFields = (props: IAddressFieldsProps) => {
     }
   } = props;
   const isGlobalPropertyOptionSource = optionSource === GLOBAL_PROPERTY;
-  const foundGlobalPropert = settings.find(({ property }) => property === optionUuid);
+  const foundGlobalProperty = settings.find(({ property }) => property === optionUuid);
   
   const [addressFields, setAddresFields] = useState([]);
   const [dirtyFields, setDirtyFields] = useState([]);
 
   useEffect(() => {
-    if (isGlobalPropertyOptionSource && foundGlobalPropert?.value) {
-      const configParsed = JSON.parse(foundGlobalPropert.value);
+    if (isGlobalPropertyOptionSource && foundGlobalProperty?.value) {
+      const configParsed = JSON.parse(foundGlobalProperty.value);
 
       if (country) {
         setAddresFields(configParsed[optionKey][country]);
       }
 
     }
-  },[country, foundGlobalPropert, isGlobalPropertyOptionSource, optionKey]);
+  },[country, foundGlobalProperty, isGlobalPropertyOptionSource, optionKey]);
 
 
   const selectProps = {

@@ -81,12 +81,12 @@ export const Select = (props: ISelectProps) => {
   }, [defaultOption, name, onPatientChange, patient]);
 
   const getSelectOptions = () => {
-    const foundGlobalPropert = settings?.settings.find(({ property }) => property === optionUuid);
+    const foundGlobalProperty = settings?.settings.find(({ property }) => property === optionUuid);
     const foundConcept = concept?.concepts.find(({ uuid }) => uuid === optionUuid);
     let opts = selectOptions || options;
 
-    if (isGlobalPropertyOptionSource && foundGlobalPropert?.value) {
-      const configParsed = JSON.parse(foundGlobalPropert.value);
+    if (isGlobalPropertyOptionSource && foundGlobalProperty?.value) {
+      const configParsed = JSON.parse(foundGlobalProperty.value);
       if (name === INPUT_COUNTRY_NAME) {
         opts = Object.keys(configParsed[optionKey]);
       } else {
