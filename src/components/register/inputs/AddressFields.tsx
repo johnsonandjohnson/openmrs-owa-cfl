@@ -89,7 +89,7 @@ const AddressFields = (props: IAddressFieldsProps) => {
     },
     isInvalid: !country,
     onPatientChange: () => {
-      addressFields.forEach(({ field }) => props.patient[field] = '');
+      addressFields?.forEach(({ field }) => props.patient[field] = '');
 
       setDirtyFields([]);
       props.onPatientChange(props.patient);
@@ -102,7 +102,7 @@ const AddressFields = (props: IAddressFieldsProps) => {
       <Select {...selectProps}/>
 
       <div className="inline-fields address-fields">
-        {!!addressFields.length && addressFields.map(addressField => {
+        {!!addressFields?.length && addressFields.map(addressField => {
           const inputProps = {
             ...props,
             onPatientChange: () => {
