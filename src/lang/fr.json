@@ -1,0 +1,465 @@
+{
+    "home": {
+      "title": "Maison"
+    },
+    "plusMinusButtons": {
+      "delete": "Effacer",
+      "addNew": "Ajouter nouveau"
+    },
+    "table": {
+      "enterSearch": "Pour que les résultats de la recherche s'affichent, saisissez au moins 3 caractères.",
+      "noRecords": "Pas d'enregistrements.",
+      "recordsFound": "enregistrements trouvés."
+    },
+    "dashboard": {
+      "findPatient": "Trouver le dossier du patient",
+      "registerPatient": "Inscrire les patients de la LCF",
+      "findCaregiver": "Trouver le dossier du soignant"
+    },
+    "findPatient": {
+      "title": "Trouver le dossier du patient",
+      "searchInputPlaceholder": "Recherche par identifiant, nom ou numéro de téléphone"
+    },
+    "findCaregiver": {
+      "title": "Trouver le dossier du soignant",
+      "searchInputPlaceholder": "Recherche par identifiant, nom ou numéro de téléphone"
+    },
+    "dropzone": {
+      "openFileDialog": "Boîte de dialogue Ouvrir un fichier",
+      "acceptedFile": "Fichier accepté :",
+      "rejectedFile": "Fichier rejeté :"
+    },
+    "addressData": {
+      "title": "Gérer les données d'adresse",
+      "upload": {
+        "title": "Télécharger les données d'adresse",
+        "instruction1": "Veuillez télécharger le fichier au format <b>.csv</b> ou <b>.txt</b>. Le fichier doit contenir un <b>délimiteur virgule</b>.",
+        "instruction2": "Téléchargez des exemples de fichiers ici :",
+        "overwriteAddressData": {
+          "true": {
+            "radioLabel": "Écraser les données d'adresse existantes",
+            "modalHeader": "Écraser les données existantes",
+            "modalBody": "Voulez-vous vraiment écraser les données existantes ?"
+          },
+          "false": {
+            "radioLabel": "Ajouter aux données d'adresse existantes",
+            "modalHeader": "Ajout de nouvelles données au fichier existant",
+            "modalBody": "Voulez-vous vraiment ajouter de nouvelles données au fichier existant ?"
+          }
+        },
+        "success": "Les données d'adresse ont été téléchargées avec succès",
+        "addressDataEmpty": "Il n'y a pas encore de fichier à afficher",
+        "button": "Téléverser un fichier",
+        "errorMessage1": "{numberOfInvalidRecords} sur {numberOfTotalRecords} ",
+        "errorMessage2": "les enregistrements n'ont pas pu être importés. Téléchargez le fichier .csv avec les enregistrements ayant échoué",
+        "csvDownloadLink": "ici",
+        "dot": "."
+      },
+      "dropzone": {
+        "instruction": "Faites glisser et déposez le fichier de données d'adresse ici. Le fichier doit être au format .csv ou .txt."
+      },
+      "table": {
+        "title": "Fichier téléchargé"
+      },
+      "download": {
+        "csvFileSample": "exemple de fichier csv",
+        "txtFileSample": "exemple de fichier txt",
+        "button": "Télécharger un fichier"
+      }
+    },
+    "conditions": {
+      "title": "Gérer les conditions",
+      "success": "État enregistré avec succès",
+      "set": "POSITIONNER",
+      "active": "Actif",
+      "inactive": "Inactif",
+      "addNew": "Ajouter une nouvelle condition",
+      "remove": "Supprimer la condition",
+      "removeConfirmation": "Voulez-vous vraiment supprimer la condition de ce patient ?",
+      "yes": "Oui",
+      "no": "Non",
+      "condition": "Condition",
+      "onsetDate": "Date de début",
+      "actions": "Actions"
+    },
+    "manageCondition": {
+      "title": "Condition",
+      "editCondition": "Modifier l'état",
+      "addNewCondition": "Ajouter une nouvelle condition",
+      "conditions": "Les conditions",
+      "condition": "Condition",
+      "onsetDate": "Date de début",
+      "endDate": "Date de fin",
+      "cancel": "Annuler"
+    },
+    "columnNames": {
+      "patientIdentifier": "Identifiant",
+      "personIdentifier": "Identifier",
+      "givenName": "Prénom",
+      "middleName": "Deuxième nom",
+      "familyName": "Nom de famille",
+      "display": "Nom",
+      "gender": "Le genre",
+      "age": "Âge",
+      "birthdate": "Date de naissance",
+      "birthdateEstimated": "La date de naissance est-elle estimée",
+      "birthtime": "Heure de naissance",
+      "causeOfDeath": "Cause de décès",
+      "dead": "Est mort",
+      "deathDate": "Date de mort",
+      "deathDateEstimated": "La date de décès est-elle estimée",
+      "preferredAddress": "Adresse préférée",
+      "phoneNumber": "Numéro de téléphone",
+      "uuid": "IDENTIFIANT",
+      "personLanguage": "Langue",
+      "field1": "Pays",
+      "field2": "Hiérarchie niveau 2",
+      "field3": "Hiérarchie niveau 3",
+      "field4": "Hiérarchie niveau 4",
+      "field5": "Hiérarchie niveau 5"
+    },
+    "editPatient": {
+      "title": "Profil du patient",
+      "subtitle": "Veuillez modifier le profil du patient ci-dessous",
+      "success": {
+        "subtitle": "Le patient a été enregistré avec succès."
+      }
+    },
+    "editCaregiver": {
+      "title": "Profil de l'aidant",
+      "subtitle": "Veuillez modifier le profil de l'aidant ci-dessous"
+    },
+    "registerCaregiver": {
+      "title": "Inscrire un aidant",
+      "subtitle": "Veuillez inscrire un soignant ci-dessous",
+      "steps": {
+        "confirm": {
+          "title": "Démographie de la personne",
+          "subtitle": "Confirmez que les détails de la personne sont corrects."
+        }
+      }
+    },
+    "registerPatient": {
+      "title": "Inscrire un patient",
+      "subtitle": "Veuillez inscrire un patient ci-dessous",
+      "steps": {
+        "name": {
+          "label": "Nom",
+          "title": "Données démographiques des patients",
+          "subtitle": "Comment s'appelle le patient ?"
+        },
+        "gender": {
+          "label": "Le genre",
+          "title": "Données démographiques des patients",
+          "subtitle": "Quel est le sexe du patient ?",
+          "male": "Mâle",
+          "female": "Femelle"
+        },
+        "birthdate": {
+          "label": "Date de naissance",
+          "title": "Données démographiques des patients",
+          "subtitle": "Quelle est la date de naissance du patient ?",
+          "or": "Ou"
+        },
+        "address": {
+          "label": "Adresse",
+          "title": "Données démographiques des patients",
+          "subtitle": "Quelle est l'adresse du patient ?"
+        },
+        "language": {
+          "label": "Langue",
+          "title": "Données démographiques des patients",
+          "subtitle": "What language does the patient prefer?"
+        },
+        "phoneNumber": {
+          "label": "Numéro de téléphone",
+          "title": "Données démographiques des patients",
+          "subtitle": "Quel est le numéro de téléphone du patient ?"
+        },
+        "patientLocation": {
+          "label": "Emplacement du patient",
+          "title": "Données démographiques des patients",
+          "subtitle": "Où est le patient ?"
+        },
+        "aadharNumber": {
+          "label": "Nombre Adhar",
+          "title": "Données démographiques des patients",
+          "subtitle": "Quel est le numéro Aadhar du patient ?"
+        },
+        "artNumber": {
+          "label": "Numéro de TAR",
+          "title": "Données démographiques des patients",
+          "subtitle": "Quel est le numéro ART du patient ?"
+        },
+        "relatives": {
+          "label": "Les proches",
+          "title": "Données démographiques des patients",
+          "subtitle": "À qui le patient est-il lié ?"
+        },
+        "confirm": {
+          "label": "Confirmer",
+          "title": "Données démographiques des patients",
+          "subtitle": "Confirmez que les détails du patient sont corrects.",
+          "estimated": "Estimé",
+          "years": "Ans)",
+          "months": "Mois)"
+        }
+      },
+      "fields": {
+        "givenName": "Prénom",
+        "middleName": "Deuxième nom",
+        "familyName": "Nom de famille",
+        "gender": "Le genre",
+        "birthdateDay": "Jour",
+        "birthdateMonth": "Mois",
+        "birthdateYear": "An",
+        "birthdateYears": "Années estimées",
+        "birthdateMonths": "Mois estimés",
+        "address1": "Adresse 1",
+        "address2": "Adresse 2",
+        "cityVillage": "Village de la ville",
+        "stateProvince": "État/Province",
+        "country": "Pays",
+        "postalCode": "code postal",
+        "personLanguage": "Langue",
+        "Telephone Number": "Numéro de téléphone",
+        "patientLocation": "Emplacement",
+        "Aadhar Number": "AADHAR Number",
+        "ART Number": "Numéro de TAR",
+        "relationshipType": "Type de relation",
+        "otherPerson": "Nom de la personne",
+        "LocationAttribute": "Emplacement",
+        "relatives": "Les proches",
+        "language": "Langue",
+        "name": "Nom",
+        "birthdate": " Date de naissance",
+        "address": "Adresse",
+        "location": "Emplacement",
+        "required": "(Obligatoire)"
+      },
+      "success": {
+        "title": "Succès",
+        "subtitle": "Le patient a été enregistré avec succès.",
+        "editSubtitle": "Le patient a été enregistré avec succès",
+        "goBack": "Retourner"
+
+      },
+      "unknown": "Inconnue",
+      "required": "Obligatoire",
+      "invalid": "Non valide",
+      "previous": "Précédent",
+      "next": "Prochain",
+      "confirm": "Confirmer",
+      "invalidPhoneNumber": "Veuillez fournir un numéro de téléphone valide, y compris l'indicatif du pays. Exemple : +1 555 555 1234"
+    },
+    "notificationConfiguration": {
+      "title": "Gérer la configuration des notifications",
+      "configureSettings": "Configurer les paramètres",
+      "defaultCountry": "Pays par défaut",
+      "country": "Pays",
+      "smsSettings": "Paramètres SMS/WhatsApp :",
+      "callSettings": "Paramètres d'appel:",
+      "provider": "Fournisseur",
+      "uponRegistration": "Lors de l'inscription",
+      "allowedNotificationWindow": {
+        "label": "Fenêtre de notification autorisée:",
+        "from": "De",
+        "to": "À"
+      },
+      "bestContactTime": {
+        "label": "Meilleur moment de contact:",
+        "placeholder": "Meilleur temps de contact"
+      },
+      "visitReminder": {
+        "label": "Rappel de visite (jours avant la visite):",
+        "placeholder": "Jours avant la visite",
+        "switch": "Rappel de visite"
+      },
+      "button": {
+        "expand": "Développer tout",
+        "collapse": "Réduire tout",
+        "addNewCountry": "Ajouter un nouveau pays"
+      },
+      "confirmationModal": {
+        "header": "Soumettre la configuration des notifications",
+        "body": "Voulez-vous vraiment soumettre la configuration de notification?"
+      },
+      "success": "Configuration enregistrée avec succès!"
+    },
+    "notificationTemplates": {
+      "title": "Gérer les modèles de notification",
+      "notificationTemplate": "Modèle de notification",
+      "injectedServices": {
+        "label": "Services injectés",
+        "tooltip": "Valeurs qui représentent la carte des services qui doivent être injectés dans le modèle de notification de messagerie.",
+        "key": "Clé",
+        "value": "Évaluer"
+      },
+      "template": {
+        "customTemplateName": {
+          "label": "Nom du modèle personnalisé",
+          "tooltip": "Lors de la création d'un modèle personnalisé, n'utilisez que des lettres minuscules et "-" sans espaces.",
+          "invalid": "Le nom du modèle ne doit contenir que des lettres minuscules et '-', pas d'espaces"
+        },
+        "description": "La description",
+        "text": "Texte SMS"
+      },
+      "button": {
+        "expand": "Développer tout",
+        "collapse": "Réduire tout",
+        "addNewTemplate": "Ajouter un nouveau modèle"
+      },
+      "saveModal": {
+        "header": "Soumettre des modèles de notification",
+        "body": "Voulez-vous vraiment soumettre des modèles de notification ?"
+      },
+      "removeTemplateModal": {
+        "header": "Supprimer le modèle de notification",
+        "body": "Voulez-vous vraiment supprimer {templateName} ?"
+      },
+      "success": "Configuration enregistrée avec succès !"
+    },
+    "locations": {
+      "location": {
+        "create.title": "Ajouter un nouvel emplacement",
+        "edit.title": "Ajouter un nouvel emplacement",
+        "name": "Nom de la localisation",
+        "description": "La description",
+        "address1": "Adresse 1)",
+        "address2": "Adresse 2)",
+        "cityVillage": "Village de la ville",
+        "stateProvince": "État/Province",
+        "postalCode": "code postal",
+        "country": "Pays",
+        "delete": "Supprimer l'emplacement"
+      }
+    },
+    "common": {
+      "yes": "Oui",
+      "no": "Non",
+      "ok": "D'accord",
+      "cancel": "Annuler",
+      "moveUp": "Déplacer vers le haut",
+      "moveDown": "Descendre",
+      "ordinalSuffix": {
+        "st": "St",
+        "nd": "nd",
+        "rd": "rd",
+        "th": "e"
+      },
+      "required": "(Obligatoire)",
+      "error": {
+        "required": "Obligatoire",
+        "nameUnique": "Le nom doit être unique. Veuillez réessayer.",
+        "nameInvalid": "Nom d'utilisateur invalide. Il doit comporter entre 2 et 50 caractères. Seuls les lettres, chiffres, '.', '-' et '_' sont autorisés.",
+        "invalidEmail": "L'adresse mail est invalide. Veuillez corriger s'il vous plait.",
+        "invalidPassword": "Votre mot de passe saisi ne correspond pas à la complexité requise. Il doit comporter au minimum 8 caractères et contenir au moins : une majuscule et une minuscule, un chiffre. Veuillez réessayer.",
+        "confirmPassword": "Vos mots de passe saisis ne correspondent pas. Veuillez réessayer."
+      },
+      "switch": {
+        "on": "sur",
+        "off": "à l'arrêt"
+      },
+      "return": "Revenir",
+      "save": "enregistrer",
+      "true": "Vrai",
+      "false": "Faux",
+      "grandTotal": "Total",
+      "downloadCsv": "Télécharger le csv"
+    },
+    "userAccount": {
+      "title": "Compte d'utilisateur",
+      "add": "Ajouter un nouveau compte",
+      "edit": "Modifier le compte",
+      "accountNotSaved": "Tous les champs n'ont pas été remplis correctement. Veuillez réessayer.",
+      "auditInfo": {
+        "title": "Informations d'audit",
+        "created": "Créé par {creator} le {date}",
+        "changedBy": "Modifié par {changedBy} le {date}"
+      },
+      "personDetails": {
+        "title": "Détails de la personne",
+        "familyName": "Nom de famille",
+        "givenName": "Prénom",
+        "phone": "Téléphoner",
+        "email": "E-mail"
+      },
+      "userAccountDetails": {
+        "title": "Détails du compte utilisateur",
+        "username": "Nom d'utilisateur",
+        "locations": "Emplacements",
+        "userRole": "Rôle d'utilisateur",
+        "password": "Mot de passe",
+        "confirmPassword": "Confirmez le mot de passe",
+        "forcePasswordChange": "Forcer le changement de mot de passe"
+      },
+      "deleteAccount": {
+        "label": "Supprimer le compte",
+        "confirmationModal": {
+          "header": "Avertissement",
+          "body": "Are you sure you want to delete this account?"
+        }
+      }
+    },
+    "manageRegimens": {
+      "title": "Gérer les régimes",
+      "regimenName": "Nom du régime",
+      "drugName": "Nom du médicament",
+      "drugAbbreviation": "Abréviation du médicament",
+      "doseUnitType": "Type d'unité posologique",
+      "numberOfUnits": "Nombre d'unités",
+      "frequency": "Frequency",
+      "addNewRegimen": "La fréquence",
+      "deleteRegimenModal": {
+        "header": "Avertissement",
+        "body": "Voulez-vous vraiment supprimer ce régime ?"
+      },
+      "deleteDrugModal": {
+        "header": "Avertissement",
+        "body": "Voulez-vous vraiment supprimer ce médicament ?"
+      },
+      "regimenDeleted": "The regimen has been deleted.",
+      "drugDeleted": "Le médicament a été supprimé.",
+      "regimensNotSaved": "Les régimes n'ont pas été sauvegardés. Veuillez réessayer.",
+      "regimensSaved": "Les régimes ont été sauvés.",
+      "error": {
+        "regimenNameUnique": "Le nom du régime doit être unique. Veuillez réessayer."
+      }
+    },
+    "findPatientColumnsConfiguration": {
+      "title": "Gérer la configuration des colonnes du dossier patient",
+      "columnName": "Nom de colonne",
+      "configureColumns": "Configurer les colonnes",
+      "configurationNotSaved": "La configuration des colonnes n'a pas été enregistrée.",
+      "emptyColumnsConfiguration": "Veuillez configurer au moins une colonne.",
+      "configurationSaved": "La configuration des colonnes a été enregistrée.",
+      "modal": {
+        "header": "Envoyer la configuration des colonnes",
+        "body": "Êtes-vous sûr de vouloir soumettre la configuration des colonnes pour le dossier du patient ?"
+      }
+    },
+    "dataVisualization": {
+      "title": "Visualisation de données"
+    },
+    "dataVisualizationConfiguration": {
+      "title": "Configuration de la visualisation des données",
+      "addNewReport": "Ajouter un nouveau rapport",
+      "report": "Report",
+      "configurationNotSaved": "Tous les champs obligatoires n'ont pas été remplis. Veuillez réessayer.",
+      "chart": {
+        "title": "Titre du graphique",
+        "type": "Type de graphique",
+        "xAxis": "Axe X du graphique",
+        "yAxis": "Axe Y du graphique",
+        "legend": "Légende du graphique",
+        "description": "Description du graphique",
+        "width": "Largeur du graphique en pixels",
+        "height": "Hauteur du graphique en pixels",
+        "marginTop": "Haut de la marge du graphique en pixels",
+        "marginBottom": "Marge inférieure du graphique en pixels",
+        "marginRight": "Marge droite du graphique en pixels",
+        "marginLeft": "Marge gauche du graphique en pixels",
+        "colors": "Couleurs du graphique"
+      }
+    }
+  }
