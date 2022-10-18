@@ -11,6 +11,8 @@
 import axios from 'axios';
 import { FAILURE, REQUEST, SUCCESS } from '../action-type.util';
 import { IPatientFlagsOverviewState } from '../../shared/models/patient-flags-overview';
+import { DEFAULT_PAGE_NUMBER_TO_SEND, DEFAULT_PAGE_SIZE } from '../../shared/constants/patient-flags-overview';
+import { ZERO } from '../../shared/constants/input';
 
 export const ACTION_TYPES = {
   GET_PATIENT_FLAGS: 'patientFlagsOverview/GET_PATIENT_FLAGS',
@@ -31,7 +33,7 @@ const initialState: IPatientFlagsOverviewState = {
       patientStatus: '',
       patientUuid: ''
     }],
-    totalCount: 0
+    totalCount: ZERO
   }
 };
 
@@ -44,9 +46,6 @@ const reducer = (state = initialState, action) => {
         flagsSuccess: false
       };
     case REQUEST(ACTION_TYPES.GET_FLAGGED_PATIENTS):
-      console.log('')
-      console.log(' REQUEST(ACTION_TYPES.GET_FLAGGED_PATIENTS)', action)
-      console.log('')
       return {
         ...state,
         flaggedPatientsLoading: true,
@@ -72,9 +71,6 @@ const reducer = (state = initialState, action) => {
         flags: action.payload.data
       };
     case SUCCESS(ACTION_TYPES.GET_FLAGGED_PATIENTS):
-      console.log('')
-      console.log(' SUCCESS(ACTION_TYPES.GET_FLAGGED_PATIENTS)', action)
-      console.log('')
       return {
         ...state,
         flaggedPatientsLoading: false,
@@ -90,9 +86,9 @@ export const getPatientFlags = () => ({
   type: ACTION_TYPES.GET_PATIENT_FLAGS,
   payload: axios.get('/openmrs/ws/cfl/flags')
 });
-export const getFlaggedPatientsOverview = (uuidLocation: string, name?: string, flagName?: string, page: number = 1, pageSize: number = 2) => ({
+export const getFlaggedPatientsOverview = (uuidLocation: string, query?: string, flagName?: string, page: number = DEFAULT_PAGE_NUMBER_TO_SEND, pageSize: number = DEFAULT_PAGE_SIZE) => ({
   type: ACTION_TYPES.GET_FLAGGED_PATIENTS,
-  payload: axios.get(`/openmrs/ws/cfl/patientFlags/${uuidLocation}?${name ? `query=${name}&` : ''}${flagName ? `flagName=${flagName}&` : ''}${page ? `pageNumber=${page}&` : ''}${pageSize ? `pageSize=${pageSize}&` : ''}`)
+  payload: axios.get(`/openmrs/ws/cfl/patientFlags/${uuidLocation}?${query ? `query=${query}&` : ''}${flagName ? `flagName=${flagName}&` : ''}${page ? `pageNumber=${page}&` : ''}${pageSize ? `pageSize=${pageSize}&` : ''}`)
 });
 
 export default reducer;

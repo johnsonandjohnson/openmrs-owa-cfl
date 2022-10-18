@@ -15,6 +15,8 @@ import { getFlaggedPatientsOverview, getPatientFlags } from '../../redux/reducer
 import { IPatientFlagsOverviewState } from '../../shared/models/patient-flags-overview';
 import { Spinner } from 'reactstrap';
 import { EMPTY_STRING } from '../../shared/constants/input';
+import { DEFAULT_PAGE_SIZE } from '../../redux/page.util';
+import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_NUMBER_TO_SEND } from '../../shared/constants/patient-flags-overview';
 import './PatientFlagsOverview.scss'
 
 interface IStore {
@@ -45,26 +47,25 @@ const PatientFlagsOverview = ({
     return ref.current;
   };
   const prevSessionLocationUuid = usePrevious(sessionLocation?.uuid);
-  const [patientName, setPatientName] = useState(EMPTY_STRING);
+  const [inputValue, setInputValue] = useState(EMPTY_STRING);
   const [flagName, setFlagName] = useState(EMPTY_STRING);
-  const [page, setPage] = useState(0);
-  const [pageSize, setPageSize] = useState(2);
+  const [page, setPage] = useState(DEFAULT_PAGE_NUMBER);
+  const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
 
   useEffect(() => {
     getPatientFlags();
   }, [getPatientFlags]);
 
   useEffect(() => {
-    if (sessionLocation?.uuid && (patientName || flagName)) {
+    if (sessionLocation?.uuid && (inputValue || flagName)) {
       let pageToSend = page + 1;
       if (prevSessionLocationUuid !== sessionLocation.uuid) {
-        pageToSend = 1;
-        setPage(0);
+        pageToSend = DEFAULT_PAGE_NUMBER_TO_SEND;
+        setPage(DEFAULT_PAGE_NUMBER);
       }
-      getFlaggedPatientsOverview(sessionLocation.uuid, patientName, flagName, pageToSend, pageSize);
+      getFlaggedPatientsOverview(sessionLocation.uuid, inputValue, flagName, pageToSend, pageSize);
     }
-  }, [getFlaggedPatientsOverview, sessionLocation?.uuid, patientName, flagName, page, pageSize, prevSessionLocationUuid]);
-
+  }, [getFlaggedPatientsOverview, sessionLocation?.uuid, inputValue, flagName, page, pageSize, prevSessionLocationUuid]);
 
   return (
     <div className="patient-flags-overview">
@@ -75,8 +76,8 @@ const PatientFlagsOverview = ({
       ) : (
         <>
           <PatientFlagsOverviewSearch
-            patientName={patientName}
-            setPatientName={setPatientName}
+            inputValue={inputValue}
+            setInputValue={setInputValue}
             setFlagName={setFlagName}
             flags={flags}
           />
@@ -87,7 +88,7 @@ const PatientFlagsOverview = ({
             flaggedPatientsLoading={flaggedPatientsLoading}
             pageSize={pageSize}
             totalCount={totalCount}
-            showNoDataComponent={!!(patientName || flagName)}
+            showNoDataComponent={!!(inputValue || flagName)}
           />
         </>
       )}
