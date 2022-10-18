@@ -436,5 +436,11 @@
       "header": "Submit Columns Configuration",
       "body": "Are you sure you want to submit Columns Configuration for the Patient's Record?"
     }
+  },
+  "patientFlagsOverview": {
+    "title": "Patient Flags Overview",
+    "noRecordsFound": "No records found",
+    "searchInputPlaceholder": "Search by Id, name or phone number",
+    "selectPatientFlagsPlaceholder": "Patient flags"
   }
 }

@@ -40,6 +40,7 @@ import drugs from './drugs';
 import orderFrequency from './order-frequency';
 import orderType from './order-type';
 import findPatientColumnsConfiguration from './columns-configuration';
+import patientFlagsOverview from './patient-flags-overview';
 
 export default combineReducers({
   cflPatient,
@@ -57,6 +58,7 @@ export default combineReducers({
   breadcrumbs,
   person,
   patient,
+  patientFlagsOverview,
   personStatus,
   role,
   user,
