@@ -22,6 +22,7 @@ import { getApps } from '../redux/reducers/apps';
 import '@openmrs/style-referenceapplication/lib/referenceapplication.css';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { PROJECT_LOCATION_ATTRIBUTE_TYPE_NAME } from 'src/shared/constants/app';
 
 toast.configure();
 
@@ -30,7 +31,26 @@ export interface IAppProps extends StateProps, DispatchProps {}
 class App extends React.Component<IAppProps> {
   componentDidMount() {
     this.props.getSession();
-    this.props.getApps();
+  }
+
+  componentDidUpdate(prevProps) {
+    const projectName = this.getProjectName();
+    const currentLocationUuid = this.props.session?.sessionLocation?.uuid;
+    const previousLocationUuid = prevProps.session?.sessionLocation?.uuid;
+    if (currentLocationUuid && previousLocationUuid !== currentLocationUuid) {
+      this.props.getApps(projectName);
+    }
+  }
+
+  getProjectName() {
+    const projectNameObject = this.props.userLocation.attributes?.filter(attr => attr.display.startsWith(PROJECT_LOCATION_ATTRIBUTE_TYPE_NAME));
+    let projectName = null;
+    if (projectNameObject.length) {
+      const displayText = projectNameObject[0].display;
+      projectName = displayText.substring(displayText.indexOf(':') + 1).trim();
+    }
+
+    return projectName;
   }
 
   render() {
@@ -44,7 +64,8 @@ class App extends React.Component<IAppProps> {
 }
 
 const mapStateToProps = ({ session }) => ({
-  session: session.session
+  session: session.session,
+  userLocation: session.session?.sessionLocation
 });
 
 const mapDispatchToProps = { getSession, getApps };

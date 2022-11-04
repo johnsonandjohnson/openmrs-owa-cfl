@@ -28,13 +28,13 @@ const initialState = {
   caregiverRegistrationSteps: null
 };
 
-export const getAppsState = apps => ({
+export const getAppsState = (apps, projectName) => ({
   apps,
-  findPatientTableColumns: getAppConfig(apps, FIND_PATIENT_APP)?.tableColumns,
-  findCaregiverTableColumns: getAppConfig(apps, FIND_CAREGIVER_APP)?.tableColumns,
-  patientRegistrationSteps: getAppConfig(apps, REGISTER_PATIENT_APP)?.steps,
-  caregiverRegistrationSteps: getAppConfig(apps, REGISTER_CAREGIVER_APP)?.steps,
-  registrationRedirectUrl: getAppConfig(apps, REGISTER_PATIENT_APP)?.redirectUrl
+  findPatientTableColumns: getAppConfig(apps, FIND_PATIENT_APP, projectName)?.tableColumns,
+  findCaregiverTableColumns: getAppConfig(apps, FIND_CAREGIVER_APP, projectName)?.tableColumns,
+  patientRegistrationSteps: getAppConfig(apps, REGISTER_PATIENT_APP, projectName)?.steps,
+  caregiverRegistrationSteps: getAppConfig(apps, REGISTER_CAREGIVER_APP, projectName)?.steps,
+  registrationRedirectUrl: getAppConfig(apps, REGISTER_PATIENT_APP, projectName)?.redirectUrl
 });
 
 const reducer = (state = initialState, action) => {
@@ -52,21 +52,26 @@ const reducer = (state = initialState, action) => {
         errorMessage: action.payload.message
       };
     case SUCCESS(ACTION_TYPES.GET_APPS):
+      const projectName = action.meta.projectName;
       return {
         ...initialState,
-        ...getAppsState(action.payload.data.results)
+        ...getAppsState(action.payload.data, projectName)
       };
+      
     default:
       return state;
   }
 };
 
 // actions
-export const getApps = () => {
-  const requestUrl = `/openmrs/ws/rest/v1/app?v=default`;
+export const getApps = (projectName: string) => {
+  const requestUrl = `/openmrs/ws/cfl/apps`;
   return {
     type: ACTION_TYPES.GET_APPS,
-    payload: axios.get(requestUrl)
+    payload: axios.get(requestUrl),
+    meta: {
+      projectName
+    }
   };
 };
 
