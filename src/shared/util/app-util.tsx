@@ -8,9 +8,15 @@
  * graphic logo is a trademark of OpenMRS Inc.
  */
 
-export const getAppConfig = (apps, appName) => {
-  const app = getApp(apps, appName);
+export const getAppConfig = (apps, appName, projectName) => {
+  const projectSpecificAppName = appName + "." + projectName;
+  let app = getApp(apps, projectSpecificAppName);
+
+  if (!app) {
+    app = getApp(apps, appName);
+  }
+
   return app && app.config;
 };
 
-export const getApp = (apps, uuid) => apps && apps.find(app => app.uuid === uuid);
+export const getApp = (apps, id) => apps && apps.find(app => app.id === id);
