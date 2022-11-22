@@ -436,5 +436,12 @@
       "header": "Submeter Configuração das Colunas",
       "body": "Você tem certeza de que deseja enviar a configuração das colunas para o Registro do Paciente?"
     }
+  },
+  "patientFlagsOverview": {
+    "title": "Visão geral dos sinalizadores do paciente",
+    "noRecordsFound": "Nenhum registro foi encontrado",
+    "searchInputPlaceholder": "Pesquise por id, nome ou número de telefone",
+    "selectPatientFlagsPlaceholder": "Sinalizadores do paciente",
+    "pleaseSelectFilter": "Selecione um filtro para ver os resultados"
   }
 }
