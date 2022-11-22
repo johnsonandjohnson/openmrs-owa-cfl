@@ -15,21 +15,14 @@ import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
 import initStore from './redux/store';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { IntlProvider } from 'react-intl';
-import en from './lang/en.json';
-import flatten from 'flat';
 
 const store = initStore();
-const messages = flatten(en);
-const locale = 'en';
 
 // @ts-ignore
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <IntlProvider locale={locale} messages={messages}>
-        <App />
-      </IntlProvider>
+      <App />
     </Provider>
   </React.StrictMode>,
   document.getElementById('root')
