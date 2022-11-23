@@ -461,5 +461,12 @@
       "marginLeft": "Marge gauche du graphique en pixels",
       "colors": "Couleurs du graphique"
     }
+  },
+  "patientFlagsOverview": {
+    "title": "Aperçu des indicateurs de patient",
+    "noRecordsFound": "Aucun enregistrement trouvé",
+    "searchInputPlaceholder": "Recherche par identifiant, nom ou numéro de téléphone",
+    "selectPatientFlagsPlaceholder": "Drapeaux patients",
+    "pleaseSelectFilter": "Veuillez sélectionner un filtre pour voir les résultats"
   }
 }

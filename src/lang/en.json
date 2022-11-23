@@ -441,6 +441,7 @@
     "title": "Patient Flags Overview",
     "noRecordsFound": "No records found",
     "searchInputPlaceholder": "Search by Id, name or phone number",
-    "selectPatientFlagsPlaceholder": "Patient flags"
+    "selectPatientFlagsPlaceholder": "Patient flags",
+    "pleaseSelectFilter": "Please select a filter to see results"
   }
 }

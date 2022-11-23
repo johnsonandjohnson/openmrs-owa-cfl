@@ -18,6 +18,7 @@ import { EMPTY_STRING } from '../../shared/constants/input';
 import { DEFAULT_PAGE_SIZE } from '../../redux/page.util';
 import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_NUMBER_TO_SEND } from '../../shared/constants/patient-flags-overview';
 import './PatientFlagsOverview.scss'
+import { useIntl } from 'react-intl';
 
 interface IStore {
   openmrs: {
@@ -46,11 +47,14 @@ const PatientFlagsOverview = ({
 
     return ref.current;
   };
+
+  const { formatMessage } = useIntl();
   const prevSessionLocationUuid = usePrevious(sessionLocation?.uuid);
   const [inputValue, setInputValue] = useState(EMPTY_STRING);
   const [flagName, setFlagName] = useState(EMPTY_STRING);
   const [page, setPage] = useState(DEFAULT_PAGE_NUMBER);
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
+  const [isSelectFilterTextEnabled, setInitialTextEnabled] = useState(true);
 
   useEffect(() => {
     getPatientFlags();
@@ -64,6 +68,10 @@ const PatientFlagsOverview = ({
         setPage(DEFAULT_PAGE_NUMBER);
       }
       getFlaggedPatientsOverview(sessionLocation.uuid, inputValue, flagName, pageToSend, pageSize);
+    }
+
+    if (inputValue || flagName) {
+      setInitialTextEnabled(false);
     }
   }, [getFlaggedPatientsOverview, sessionLocation?.uuid, inputValue, flagName, page, pageSize, prevSessionLocationUuid]);
 
@@ -90,6 +98,9 @@ const PatientFlagsOverview = ({
             totalCount={totalCount}
             showNoDataComponent={!!(inputValue || flagName)}
           />
+          <div className="td-cell select-filter-text">
+            {isSelectFilterTextEnabled ? formatMessage({ id: 'patientFlagsOverview.pleaseSelectFilter' }) : ''}
+          </div>
         </>
       )}
     </div>
