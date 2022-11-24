@@ -9,7 +9,8 @@
  */
 export interface IFlag {
   name: string,
-  uuid: string
+  uuid: string,
+  priority: string
 };
 
 export interface IFlaggedPatient {

@@ -32,9 +32,15 @@ const PatientFlagsOverviewSearch = ({
     setInputValue(value)
   };
 
-  const handleSelectOnChange = ({ label }) => {
-    setFlagName(label)
+  const handleSelectOnChange = ({ name }) => {
+    setFlagName(name)
   };
+
+  const flagOptions = flags.map(({ name, uuid, priority }) => ({
+    label: priority ? name.concat(" (").concat(priority).concat(")") : name,
+    value: uuid,
+    name
+  }))
 
   return (
     <div className="patient-flags-overview-search">
@@ -49,7 +55,7 @@ const PatientFlagsOverviewSearch = ({
       <Select
         className="flags-select"
         classNamePrefix="flags-select"
-        options={flags.map(({ name, uuid }) =>({ label: name, value: uuid }))}
+        options={flagOptions}
         onChange={handleSelectOnChange}
         placeholder={formatMessage({ id: 'patientFlagsOverview.selectPatientFlagsPlaceholder' })}
       />

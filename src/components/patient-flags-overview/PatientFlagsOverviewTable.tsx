@@ -7,13 +7,14 @@
  * Copyright (C) OpenMRS Inc. OpenMRS is a registered trademark and the OpenMRS
  * graphic logo is a trademark of OpenMRS Inc.
  */
-import React from 'react';
+import React, { useEffect } from 'react';
 import ReactTable from 'react-table';
 import { useIntl } from 'react-intl';
 import { IFlaggedPatient } from '../../shared/models/patient-flags-overview';
 import { PATIENT_PAGE_URL } from '../../shared/constants/openmrs';
-import { DEFAULT_PAGE_SIZE, PAGE_SIZE_OPTIONS, COLUMNS } from '../../shared/constants/patient-flags-overview';
+import { DEFAULT_PAGE_SIZE, PAGE_SIZE_OPTIONS, DEFAULT_COLUMNS } from '../../shared/constants/patient-flags-overview';
 import { ZERO } from '../../shared/constants/input';
+import { connect } from 'react-redux';
 
 interface IPatientFlagsOverviewTableProps {
   flaggedPatientsLoading: boolean,
@@ -22,7 +23,8 @@ interface IPatientFlagsOverviewTableProps {
   setPage: (page: number) => void,
   setPageSize: (pageSize: number) => void,
   pageSize: number,
-  showNoDataComponent: boolean
+  showNoDataComponent: boolean,
+  app: any
 }
 
 const PatientFlagsOverviewTable = ({
@@ -32,8 +34,10 @@ const PatientFlagsOverviewTable = ({
   setPage,
   setPageSize,
   pageSize,
-  showNoDataComponent
+  showNoDataComponent,
+  app
 }: IPatientFlagsOverviewTableProps) => {
+
   const { formatMessage } = useIntl();
 
   const fetchData = ({ page, pageSize }) => {
@@ -45,7 +49,18 @@ const PatientFlagsOverviewTable = ({
     window.location.href = `${PATIENT_PAGE_URL}?patientId=${patientUuid}`
   };
 
-  const tableColumns = COLUMNS.map(({ label, value }) => ({
+  const getColumnsToDisplay = () => {
+    if (app && app.config && app.config.tableColumns) {
+      const tableColumnsConfig = app.config.tableColumns;
+      return Object.keys(tableColumnsConfig).map(obj => {
+        return { label: obj, value: tableColumnsConfig[obj] }
+      });
+    } else {
+      return DEFAULT_COLUMNS;
+    }
+  }
+
+  const tableColumns = getColumnsToDisplay().map(({ label, value }) => ({
     Header: label,
     accessor: value,
     Cell: ({ value }) => {
@@ -74,4 +89,8 @@ const PatientFlagsOverviewTable = ({
   )
 };
 
-export default PatientFlagsOverviewTable;
+const mapStateToProps = ({ apps: { app } }) => ({
+  app
+});
+
+export default connect(mapStateToProps)(PatientFlagsOverviewTable);
