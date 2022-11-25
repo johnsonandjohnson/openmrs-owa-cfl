@@ -16,27 +16,30 @@ import { IPatientFlagsOverviewState } from '../../shared/models/patient-flags-ov
 import { Spinner } from 'reactstrap';
 import { EMPTY_STRING } from '../../shared/constants/input';
 import { DEFAULT_PAGE_SIZE } from '../../redux/page.util';
-import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_NUMBER_TO_SEND } from '../../shared/constants/patient-flags-overview';
+import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_NUMBER_TO_SEND, PATIENT_FLAGS_OVERVIEW_APP_NAME } from '../../shared/constants/patient-flags-overview';
 import './PatientFlagsOverview.scss'
 import { useIntl } from 'react-intl';
+import { getAppById } from '../../redux/reducers/apps';
 
 interface IStore {
   openmrs: {
     session: {
       sessionLocation: { uuid: string } }
   },
-  patientFlagsOverview: IPatientFlagsOverviewState
+  patientFlagsOverview: IPatientFlagsOverviewState,
+  apps
 };
 
 const PatientFlagsOverview = ({
   sessionLocation,
-  flagsLoading,
   flags,
   flaggedPatientsLoading,
   flaggedPatients,
   totalCount,
   getPatientFlags,
-  getFlaggedPatientsOverview
+  getFlaggedPatientsOverview,
+  getAppById,
+  isLoading
 }: StateProps & DispatchProps) => {
   const usePrevious = value => {
     const ref = useRef();
@@ -55,6 +58,10 @@ const PatientFlagsOverview = ({
   const [page, setPage] = useState(DEFAULT_PAGE_NUMBER);
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
   const [isSelectFilterTextEnabled, setInitialTextEnabled] = useState(true);
+
+  useEffect(() => {
+    getAppById(PATIENT_FLAGS_OVERVIEW_APP_NAME);
+  }, [])
 
   useEffect(() => {
     getPatientFlags();
@@ -77,7 +84,7 @@ const PatientFlagsOverview = ({
 
   return (
     <div className="patient-flags-overview">
-      {flagsLoading ? (
+      {isLoading ? (
         <div className="spinner">
           <Spinner />
         </div>
@@ -122,6 +129,9 @@ const mapStateToProps = ({
       flaggedPatients,
       totalCount
     }
+  },
+  apps: { 
+    appLoading
   }
 }: IStore) => ({
   sessionLocation,
@@ -130,10 +140,11 @@ const mapStateToProps = ({
   flagsSuccess,
   flaggedPatientsLoading,
   flaggedPatients,
-  totalCount
+  totalCount,
+  isLoading: appLoading || flagsLoading
 });
 
-const mapDispatchToProps = { getPatientFlags, getFlaggedPatientsOverview };
+const mapDispatchToProps = { getPatientFlags, getFlaggedPatientsOverview, getAppById };
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;

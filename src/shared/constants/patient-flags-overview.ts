@@ -11,9 +11,11 @@ export const DEFAULT_PAGE_SIZE = 50;
 export const DEFAULT_PAGE_NUMBER = 0;
 export const DEFAULT_PAGE_NUMBER_TO_SEND = 1;
 export const PAGE_SIZE_OPTIONS = [10, 20, 50, 100];
-export const COLUMNS = [
+export const DEFAULT_COLUMNS = [
   { label: 'Patient ID', value: 'patientIdentifier'},
   { label: 'Patient name', value: 'patientName'},
   { label: 'Phone number', value: 'phoneNumber'},
   { label: 'Status', value: 'patientStatus'},
-] 
+  { label: 'Gender', value: 'gender' }
+];
+export const PATIENT_FLAGS_OVERVIEW_APP_NAME = "cfl.patientFlagsOverview";

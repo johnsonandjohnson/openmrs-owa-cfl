@@ -24,7 +24,7 @@ const initialState: IPatientFlagsOverviewState = {
   flaggedPatientsLoading: false,
   flagsSuccess: false,
   flaggedPatientsSuccess: false,
-  flags: [{ name: '', uuid: ''}],
+  flags: [{ name: '', uuid: '', priority: '' }],
   flaggedPatients: {
     flaggedPatients: [{
       patientIdentifier: '',
