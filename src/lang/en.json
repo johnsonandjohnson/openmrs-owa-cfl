@@ -442,6 +442,9 @@
     "noRecordsFound": "No records found",
     "searchInputPlaceholder": "Search by Id, name or phone number",
     "selectPatientFlagsPlaceholder": "Patient flags",
-    "pleaseSelectFilter": "Please select a filter to see results"
+    "pleaseSelectFilter": "Please select a filter to see results",
+    "description": "The results presented below are related to the current location.",
+    "recordsFound": "records found.",
+    "noRecords": "No records."
   }
 }

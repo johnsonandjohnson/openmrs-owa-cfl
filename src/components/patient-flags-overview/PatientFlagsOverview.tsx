@@ -90,9 +90,11 @@ const PatientFlagsOverview = ({
         </div>
       ) : (
         <>
+          <div>
+            <h2 className="title-header">{formatMessage({ id: 'patientFlagsOverview.title' })}</h2>
+            <div className="helper-text">{formatMessage({ id: 'patientFlagsOverview.description' })}</div>
+          </div>
           <PatientFlagsOverviewSearch
-            inputValue={inputValue}
-            setInputValue={setInputValue}
             setFlagName={setFlagName}
             flags={flags}
           />
@@ -103,7 +105,7 @@ const PatientFlagsOverview = ({
             flaggedPatientsLoading={flaggedPatientsLoading}
             pageSize={pageSize}
             totalCount={totalCount}
-            showNoDataComponent={!!(inputValue || flagName)}
+            showNoDataComponent={null}
           />
           <div className="td-cell select-filter-text">
             {isSelectFilterTextEnabled ? formatMessage({ id: 'patientFlagsOverview.pleaseSelectFilter' }) : ''}

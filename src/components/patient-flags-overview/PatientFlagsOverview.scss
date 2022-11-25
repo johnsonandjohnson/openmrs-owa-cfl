@@ -48,13 +48,23 @@
         .flags-select__input input {
           outline: none !important;
         }
+
+        .flags-select__placeholder {
+          color: #333333;
+          opacity: 0.5;
+          font-size: 14px;
+        }
+
+        .flags-select__value-container {
+          padding: 8px 8px;
+        }
       }
     }
   }
 
   .ReactTable {
     border: none;
-    font-size: 14px;
+    font-size: 16px;
   
     .rt-thead.-header {
       pointer-events: none;
@@ -74,7 +84,7 @@
   
       .td-cell {
         text-align: center;
-        margin: 0;
+        margin: auto;
       }
   
       .rt-tr {
@@ -116,5 +126,18 @@
 
   .select-filter-text {
     padding-top: 10px;
+  }
+
+  .helper-text {
+    font-family: CircularStd-Book;
+    font-size: 14px;
+    font-weight: inherit;
+    color: #333333;
+    opacity: 0.5;
+    margin-bottom: 16px;
+  }
+
+  .title-header {
+    margin-bottom: 0px;
   }
 }
