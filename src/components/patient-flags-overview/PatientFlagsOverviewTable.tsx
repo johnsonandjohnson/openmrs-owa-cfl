@@ -7,7 +7,7 @@
  * Copyright (C) OpenMRS Inc. OpenMRS is a registered trademark and the OpenMRS
  * graphic logo is a trademark of OpenMRS Inc.
  */
-import React, { useEffect } from 'react';
+import React from 'react';
 import ReactTable from 'react-table';
 import { useIntl } from 'react-intl';
 import { IFlaggedPatient } from '../../shared/models/patient-flags-overview';
@@ -68,24 +68,45 @@ const PatientFlagsOverviewTable = ({
     }
   }));
   
+  const helperText = (loading: boolean, totalCount: number) => {
+    if (totalCount > 0) {
+      return (
+        <span>
+          {totalCount} {formatMessage({ id: 'patientFlagsOverview.recordsFound' })}
+        </span>
+      );
+    } else if (!loading && totalCount === 0) {
+      return formatMessage({ id: 'patientFlagsOverview.noRecords' });
+    }
+  };
+
   return (
-    <ReactTable
-      className="-striped -highlight"
-      manual={true}
-      loading={flaggedPatientsLoading}
-      data={flaggedPatients[0]?.patientUuid ? flaggedPatients : []}
-      defaultPageSize={DEFAULT_PAGE_SIZE}
-      pageSizeOptions={PAGE_SIZE_OPTIONS}
-      minRows={ZERO}
-      NoDataComponent={() => showNoDataComponent && <div className="td-cell">{formatMessage({ id: 'patientFlagsOverview.noRecordsFound' })}</div>}
-      showPagination={!!totalCount && !flaggedPatientsLoading}
-      onFetchData={fetchData}
-      pages={Math.ceil(totalCount / pageSize)}
-      getTrProps={(_, { original: { patientUuid } }) => ({
-        onClick: () => onRowClick(patientUuid)
-      })}
-      columns={tableColumns}
-    />
+    <>
+      <div className="helper-text">
+        {flaggedPatientsLoading ? (
+            <div className="spinner-border spinner-border-sm" />
+        ) : (
+            helperText(flaggedPatientsLoading, totalCount)
+        )}
+      </div>    
+      <ReactTable
+        className="-striped -highlight"
+        manual={true}
+        loading={flaggedPatientsLoading}
+        data={flaggedPatients[0]?.patientUuid ? flaggedPatients : []}
+        defaultPageSize={DEFAULT_PAGE_SIZE}
+        pageSizeOptions={PAGE_SIZE_OPTIONS}
+        minRows={ZERO}
+        NoDataComponent={() => <div></div>}
+        showPagination={!!totalCount && !flaggedPatientsLoading}
+        onFetchData={fetchData}
+        pages={Math.ceil(totalCount / pageSize)}
+        getTrProps={(_, { original: { patientUuid } }) => ({
+          onClick: () => onRowClick(patientUuid)
+        })}
+        columns={tableColumns}
+      />
+    </>
   )
 };
 

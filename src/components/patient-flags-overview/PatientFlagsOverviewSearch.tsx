@@ -9,28 +9,19 @@
  */
 import React from 'react';
 import Select from 'react-select';
-import searchIcon from '../../assets/img/search.png';
 import { useIntl } from 'react-intl';
-import { Input } from 'reactstrap';
 import { IFlag } from '../../shared/models/patient-flags-overview';
 
 interface IPatientFlagsOverviewSearchProps {
-  inputValue: string,
   flags: IFlag[],
-  setInputValue: (inputValue: string) => void,
   setFlagName: (flag: string) => void
 }
 
 const PatientFlagsOverviewSearch = ({
-  inputValue,
   flags,
-  setInputValue,
   setFlagName
 }: IPatientFlagsOverviewSearchProps) => {
   const { formatMessage } = useIntl();
-  const handleInputOnChange = ({ target: { value } }) => {
-    setInputValue(value)
-  };
 
   const handleSelectOnChange = ({ name }) => {
     setFlagName(name)
@@ -44,14 +35,6 @@ const PatientFlagsOverviewSearch = ({
 
   return (
     <div className="patient-flags-overview-search">
-      <div className="search-bar">
-        <img src={searchIcon} alt="search" className="search-icon" />
-        <Input
-          value={inputValue}
-          onChange={handleInputOnChange}
-          placeholder={formatMessage({ id: 'patientFlagsOverview.searchInputPlaceholder' })}
-        />
-      </div>
       <Select
         className="flags-select"
         classNamePrefix="flags-select"

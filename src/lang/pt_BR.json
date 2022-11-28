@@ -442,6 +442,9 @@
     "noRecordsFound": "Nenhum registro foi encontrado",
     "searchInputPlaceholder": "Pesquise por id, nome ou número de telefone",
     "selectPatientFlagsPlaceholder": "Sinalizadores do paciente",
-    "pleaseSelectFilter": "Selecione um filtro para ver os resultados"
+    "pleaseSelectFilter": "Selecione um filtro para ver os resultados",
+    "description": "Os resultados apresentados abaixo estão relacionados com a localização atual.",
+    "recordsFound": "registros encontrados.",
+    "noRecords": "Não há registros."
   }
 }
