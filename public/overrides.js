@@ -253,7 +253,14 @@ function overridePatientHeader() {
       let personStatusDialog = patientHeader.querySelector('#person-status-update-dialog');
       personStatusDialog = personStatusDialog?.parentElement.removeChild(personStatusDialog);
       // construct a new header
-      const ageAndGender = ' (' + age.split(' ')[0] + '/' + gender[0] + ')';
+      let ageAndGender = "";
+      if (age.split(' ')[0]  != "unknown" && gender[0] != "U") {
+        ageAndGender = ' (' + age.split(' ')[0] + '/' + gender[0] + ')';
+       } else if(age.split(' ')[0]  == "unknown" && gender[0] != "U") {
+        ageAndGender = ' (' + gender[0] + ')';
+       } else if(age.split(' ')[0]  != "unknown" && gender[0] == "U"){
+        ageAndGender = ' (' + age.split(' ')[0] + ')';
+       }
       // extract the status out of status: <status>
       const status = personStatus?.textContent.split(':');
       if (status.length) {
