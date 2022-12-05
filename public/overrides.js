@@ -12,6 +12,8 @@ const CFL_UI_BASE = '/openmrs/owa/cfl/';
 const NODE_TYPE_ELEMENT = 1;
 const NODE_TYPE_TEXT = 3;
 const DATE_PICKER_PLACEHOLDER_REGEX = /\([dmy]{2,4}\/[dmy]{2,4}\/[dmy]{2,4}\)/g;
+const UNKNOWN_AGE = "unknown";
+const UNKNOWN_GENDER = "U";
 
 // Vanilla JS overrides - both for core OpenMRS and OWAs
 window.addEventListener('load', redesignAllergyUI);
@@ -227,6 +229,17 @@ function addCollapseToTheHeader() {
   });
 }
 
+function getAgeGender(age, gender) {
+  // checks whether age and gender are unknown or not
+  if (age.split(' ')[0]  != UNKNOWN_AGE && gender[0] != UNKNOWN_GENDER) {
+         return ' (' + age.split(' ')[0] + '/' + gender[0] + ')';
+  } else if (age.split(' ')[0]  == UNKNOWN_AGE && gender[0] != UNKNOWN_GENDER) {
+         return ' (' + gender[0] + ')';
+  } else if (age.split(' ')[0]  != UNKNOWN_AGE && gender[0] == UNKNOWN_GENDER) {
+         return ' (' + age.split(' ')[0] + ')';
+  } else return "";
+}
+
 function overridePatientHeader() {
   const patientHeader = document.querySelector('.patient-header:not(.custom)');
   // re-design Patient header
@@ -253,14 +266,7 @@ function overridePatientHeader() {
       let personStatusDialog = patientHeader.querySelector('#person-status-update-dialog');
       personStatusDialog = personStatusDialog?.parentElement.removeChild(personStatusDialog);
       // construct a new header
-      let ageAndGender = "";
-      if (age.split(' ')[0]  != "unknown" && gender[0] != "U") {
-        ageAndGender = ' (' + age.split(' ')[0] + '/' + gender[0] + ')';
-       } else if(age.split(' ')[0]  == "unknown" && gender[0] != "U") {
-        ageAndGender = ' (' + gender[0] + ')';
-       } else if(age.split(' ')[0]  != "unknown" && gender[0] == "U"){
-        ageAndGender = ' (' + age.split(' ')[0] + ')';
-       }
+      let ageAndGender = getAgeGender(age, gender);
       // extract the status out of status: <status>
       const status = personStatus?.textContent.split(':');
       if (status.length) {
