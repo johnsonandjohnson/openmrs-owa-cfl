@@ -187,7 +187,7 @@ class RegistrationForm extends React.Component<IRegistrationProps, IRegistration
               className={isValid && isVisited ? 'valid' : ''}
             >
               {icon && <img src={icon} alt="step" className="step-icon" />}
-              {stepDefinition.label}
+              <FormattedMessage id={`${stepDefinition.label}`} />
             </ListGroupItem>
           );
         })}

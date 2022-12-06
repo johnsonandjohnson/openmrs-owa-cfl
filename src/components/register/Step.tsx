@@ -207,8 +207,8 @@ export class Step extends React.Component<IStepProps, IStepState> {
       <>
         <div className="step-fields" key={stepDefinition.name}>
           <div className="step-title">
-            <h2>{stepDefinition.title}</h2>
-            <p>{stepDefinition.subtitle}</p>
+            <h2>{this.props.intl.formatMessage({ id: `${stepDefinition.title}` })}</h2>
+            <p>{this.props.intl.formatMessage({ id: `${stepDefinition.subtitle}` })}</p>
           </div>
           <FormGroup className="d-flex flex-row flex-wrap">
             {_.map(stepDefinition.fields, (field, i) => {
@@ -226,7 +226,7 @@ export class Step extends React.Component<IStepProps, IStepState> {
 
               return field.type === SEPARATOR_FIELD_TYPE ? (
                 <p className={field.class || 'col-7 offset-5 col-sm-10 offset-sm-2 mb-5 mt-5'} key={`field-${i}`}>
-                  {field.label}
+                  {this.props.intl.formatMessage({ id: `${field.label}` })}
                 </p>
               ) : (
                 <Field

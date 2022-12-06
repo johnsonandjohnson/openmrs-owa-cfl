@@ -151,9 +151,11 @@
       "gender": {
         "label": "Gênero'",
         "title": "Dados Demográficos Pessoais",
-        "subtitle": "Qual é o gênero do Paciente?",
+        "subtitle": "Qual é o sexo do paciente?",
         "male": "Masculino",
-        "female": "Feminino"
+        "female": "Feminino",
+        "transgender": "Transexual",
+        "other": "Outro"
       },
       "birthdate": {
         "label": "Data de Nascimento",
@@ -169,7 +171,7 @@
       "language": {
         "label": "Idioma",
         "title": "Dados Demográficos do paciente",
-        "subtitle": "Qual é o idioma preferido do paciente?"
+        "subtitle": "Que idioma o paciente prefere?"
       },
       "phoneNumber": {
         "label": "Número de Telefone",
@@ -196,6 +198,21 @@
         "title": "Dados Demográficos do paciente",
         "subtitle": "Quem são os parentes do paciente?"
       },
+      "nationality": {
+        "label": "Nacionalidade",
+        "title": "Dados Demográficos do paciente",
+        "subtitle": "Qual é a nacionalidade do paciente?"
+      },
+      "edcNumber": {
+        "label": "Número EDC",
+        "title": "Dados Demográficos do paciente",
+        "subtitle": "Qual é o número de EDC do paciente?"
+      },
+      "messagesConfiguration": {
+        "label": "Configuração de mensagens",
+        "title": "Configuração de mensagens",
+        "subtitle": "Configuração de mensagens"
+      },
       "confirm": {
         "label": "Confirmar",
         "title": "Dados Demográficos do paciente",
@@ -206,6 +223,7 @@
       }
     },
     "fields": {
+      "firstName": "Sobrenome",
       "givenName": "Nome",
       "middleName": "Nome do meio",
       "familyName": "Sobrenome",
@@ -235,7 +253,14 @@
       "birthdate": "Data de Nascimento",
       "address": "Morada",
       "location": "Local",
-      "required": "(Obrigatório)"
+      "required": "(Obrigatório)",
+      "city": "City",
+      "startDate": "Data de Início",
+      "dailyContactTime": "Hora de contacto (dia)",
+      "eveningContactTime": "Tempo de contato noturno",
+      "or": "Ou",
+      "sexAssignedAtBirth": "Sexo atribuído no nascimento",
+      "genderIdentity": "Identidade de gênero"
     },
     "success": {
       "title": "Sucesso",
@@ -249,7 +274,32 @@
     "previous": "Anterior",
     "next": "Próximo",
     "confirm": "Confirmar",
-    "invalidPhoneNumber": "Favor fornecer um número de telefone válido, incluindo o código do país. Exemplo: +1 555 555 1234"
+    "invalidPhoneNumber": "Favor fornecer um número de telefone válido, incluindo o código do país. Exemplo: +1 555 555 1234",
+    "name": "Nome",
+    "middleName": "Nome do Meio",
+    "firstName": "Sobrenome",
+    "birthdate": "Data de Nascimento",
+    "gender": "Gênero",
+    "patientLocation": "Local do Paciente",
+    "address": "Endereço",
+    "nationality": "Nacionalidade",
+    "language": "Idioma",
+    "phoneNumber": "Número de Telefone",
+    "city": "Cidade",
+    "messagesConfiguration": "Configuração de mensagens",
+    "startDate": "Data de Início",
+    "dailyContactTime": "Hora de contacto (dia)",
+    "edcNumber": "Número EDC",
+    "patientDemographics": "Dados Demográficos do paciente",
+    "patientNameQuestion": "Qual é o nome do paciente?",
+    "patientBirthdateQUestion": "Qual é a data de nascimento do paciente?",
+    "patientGenderQuestion": "Qual é o sexo do paciente?",
+    "patientLocationQuestion": "Qual é o local do paciente?",
+    "patientAddressQuestion": "Qual é a endereço do paciente?",
+    "patientNationalityQuestion": "Qual é a nacionalidade do paciente?",
+    "patientLanguageQuestion": "Que idioma o paciente prefere?",
+    "patientPhoneNumberQuestion": "Qual é o número de telefone do paciente?",
+    "patientEDCNumberQuestion": "Qual é o número de EDC do paciente?"
   },
   "notificationConfiguration": {
     "title": "Gerenciar a configuração da Notificação",
@@ -438,13 +488,13 @@
     }
   },
   "patientFlagsOverview": {
-    "title": "Visão geral dos sinalizadores do paciente",
+    "title": "Visão Geral de Alertas",
     "noRecordsFound": "Nenhum registro foi encontrado",
-    "searchInputPlaceholder": "Pesquise por id, nome ou número de telefone",
-    "selectPatientFlagsPlaceholder": "Sinalizadores do paciente",
+    "searchInputPlaceholder": "Pesquisar por ID, nome ou número de telefone",
+    "selectPatientFlagsPlaceholder": "Alertas para os pacientes",
     "pleaseSelectFilter": "Selecione um filtro para ver os resultados",
-    "description": "Os resultados apresentados abaixo estão relacionados com a localização atual.",
+    "description": "Os resultados apresentados abaixo estão relacionados com o local atual.",
     "recordsFound": "registros encontrados.",
-    "noRecords": "Não há registros."
+    "noRecords": "Sem registros."
   }
 }

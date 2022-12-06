@@ -146,55 +146,72 @@
       "name": {
         "label": "Nom",
         "title": "Données démographiques des patients",
-        "subtitle": "Comment s'appelle le patient ?"
+        "subtitle": "Comment s'appelle le patient?"
       },
       "gender": {
         "label": "Genre",
         "title": "Données démographiques des patients",
-        "subtitle": "Quel est le sexe du patient ?",
+        "subtitle": "Quel est le sexe du patient?",
         "male": "Mâle",
-        "female": "Femelle"
+        "female": "Femelle",
+        "transgender": "Transgenres",
+        "other": "Autre"
       },
       "birthdate": {
         "label": "Date de naissance",
         "title": "Données démographiques des patients",
-        "subtitle": "Quelle est la date de naissance du patient ?",
+        "subtitle": "Quelle est la date de naissance du patient?",
         "or": "Ou"
       },
       "address": {
         "label": "Adresse",
         "title": "Données démographiques des patients",
-        "subtitle": "Quelle est l'adresse du patient ?"
+        "subtitle": "Quelle est l'adresse du patient?"
       },
       "language": {
         "label": "Langue",
         "title": "Données démographiques des patients",
-        "subtitle": "What language does the patient prefer?"
+        "subtitle": "Quelle est la langue préférée du patient?"
       },
       "phoneNumber": {
         "label": "Numéro de téléphone",
         "title": "Données démographiques des patients",
-        "subtitle": "Quel est le numéro de téléphone du patient ?"
+        "subtitle": "Quel est le numéro de téléphone du patient?"
       },
       "patientLocation": {
         "label": "Localisation du patient",
         "title": "Données démographiques des patients",
-        "subtitle": "Où est le patient ?"
+        "subtitle": "Où est le patient?"
       },
       "aadharNumber": {
         "label": "Nombre Adhar",
         "title": "Données démographiques des patients",
-        "subtitle": "Quel est le numéro Aadhar du patient ?"
+        "subtitle": "Quel est le numéro Aadhar du patient?"
       },
       "artNumber": {
         "label": "Numéro de TAR",
         "title": "Données démographiques des patients",
-        "subtitle": "Quel est le numéro ART du patient ?"
+        "subtitle": "Quel est le numéro ART du patient?"
       },
       "relatives": {
         "label": "Les proches",
         "title": "Données démographiques des patients",
-        "subtitle": "À qui le patient est-il lié ?"
+        "subtitle": "À qui le patient est-il lié?"
+      },
+      "nationality": {
+        "label": "Nationalité",
+        "title": "Données démographiques des patients",
+        "subtitle": "Quelle est la nationalité du patient?"
+      },
+      "edcNumber": {
+        "label": "Numéro EDC",
+        "title": "Données démographiques des patients",
+        "subtitle": "Quel est le numéro EDC du participant?"
+      },
+      "messagesConfiguration": {
+        "label": "Configuration des messages",
+        "title": "Configuration des messages",
+        "subtitle": "Configuration des messages"
       },
       "confirm": {
         "label": "Confirmer",
@@ -206,6 +223,7 @@
       }
     },
     "fields": {
+      "firstName": "Prénom",
       "givenName": "Prénom",
       "middleName": "Deuxième prénom",
       "familyName": "Nom de famille",
@@ -235,7 +253,14 @@
       "birthdate": " Date de naissance",
       "address": "Adresse",
       "location": "Localisation",
-      "required": "(Obligatoire)"
+      "required": "(Obligatoire)",
+      "city": "City",
+      "startDate": "Date de début",
+      "dailyContactTime": "Heure de contact quotidien",
+      "eveningContactTime": "Temps de contact du soir",
+      "or": "Ou",
+      "sexAssignedAtBirth": "Sexe attribué à la naissance",
+      "genderIdentity": "Identité de genre"
     },
     "success": {
       "title": "Succès",
@@ -250,7 +275,32 @@
     "previous": "Précédent",
     "next": "Prochain",
     "confirm": "Confirmer",
-    "invalidPhoneNumber": "Veuillez fournir un numéro de téléphone valide, y compris l'indicatif du pays. Exemple : +1 555 555 1234"
+    "invalidPhoneNumber": "Veuillez fournir un numéro de téléphone valide, y compris l'indicatif du pays. Exemple : +1 555 555 1234",
+    "name": "Nom",
+    "middleName": "Deuxième prénom",
+    "firstName": "Prénom",
+    "birthdate": "Date de naissance",
+    "gender": "Sexe",
+    "patientLocation": "Localisation du patient",
+    "address": "Adresse",
+    "nationality": "Nationalité",
+    "language": "Langue",
+    "phoneNumber": "Numéro de téléphone",
+    "city": "Ville",
+    "messagesConfiguration": "Configuration des messages",
+    "startDate": "Date de début",
+    "dailyContactTime": "Heure de contact quotidien",
+    "edcNumber": "Numéro EDC",
+    "patientDemographics": "Données démographiques du patient",
+    "patientNameQuestion": "Quel est le nom du patient?",
+    "patientBirthdateQUestion": "Quelle est la date de naissance du patient?",
+    "patientGenderQuestion": "Quel est le sexe du patient?",
+    "patientLocationQuestion": "Quel est le localisation du patient?",
+    "patientAddressQuestion": "Quelle est l'adresse du patient?",
+    "patientNationalityQuestion": "Quelle est la nationalité du patient?",
+    "patientLanguageQuestion": "Quelle est la langue préférée du patient?",
+    "patientPhoneNumberQuestion": "Quel est le numéro de téléphone du patient?",
+    "patientEDCNumberQuestion": "Quel est le numéro EDC du participant?"
   },
   "notificationConfiguration": {
     "title": "Générer la configuration des notifications",
@@ -463,13 +513,17 @@
     }
   },
   "patientFlagsOverview": {
-    "title": "Aperçu des indicateurs de patient",
+    "title": "Aperçu des indicateurs",
     "noRecordsFound": "Aucun enregistrement trouvé",
-    "searchInputPlaceholder": "Recherche par identifiant, nom ou numéro de téléphone",
-    "selectPatientFlagsPlaceholder": "Drapeaux patients",
+    "searchInputPlaceholder": "Recherche par Id, nom ou numéro de téléphone",
+    "selectPatientFlagsPlaceholder": "Indicateurs de patients",
     "pleaseSelectFilter": "Veuillez sélectionner un filtre pour voir les résultats",
-    "description": "Les résultats présentés ci-dessous sont liés à l'emplacement actuel.",
+    "description": "Les résultats présentés ci-dessous sont liés à la localisation actuelle.",
     "recordsFound":"enregistrements trouvés.",
-    "noRecords": "Pas d'enregistrements."
+    "noRecords": "Aucun enregistrement."
+  },
+  "patientRegistration": {
+    "name": "Name",
+    "patientDemographics": "Patient Demographics"
   }
 }

@@ -17,6 +17,9 @@ export const getPlaceholder = (intl, label, fieldName, required) => {
       id: 'registerPatient.fields.' + fieldName
     }) ||
     fieldName;
+
+  placeholder =  intl.formatMessage({ id: `${placeholder}` })
+
   if (required) {
     placeholder = [
       placeholder,
@@ -25,7 +28,8 @@ export const getPlaceholder = (intl, label, fieldName, required) => {
       })
     ].join(' ');
   }
-  return placeholder;
+
+  return intl.formatMessage({ id: `${placeholder}` });
 };
 
 export const getCommonInputProps = (props: IFieldProps, placeholder) => {
