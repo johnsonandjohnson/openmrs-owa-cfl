@@ -229,14 +229,25 @@ function addCollapseToTheHeader() {
   });
 }
 
-function getAgeGender(age, gender) {
-  // checks whether age and gender are unknown or not
-  if (age.split(' ')[0]  != UNKNOWN_AGE && gender[0] != UNKNOWN_GENDER) {
-         return ' (' + age.split(' ')[0] + '/' + gender[0] + ')';
-  } else if (age.split(' ')[0]  == UNKNOWN_AGE && gender[0] != UNKNOWN_GENDER) {
-         return ' (' + gender[0] + ')';
-  } else if (age.split(' ')[0]  != UNKNOWN_AGE && gender[0] == UNKNOWN_GENDER) {
-         return ' (' + age.split(' ')[0] + ')';
+function isAgeAndGenderKnown(age, gender) {
+  return age != UNKNOWN_AGE && gender != UNKNOWN_GENDER;
+}
+
+function isAgeUnknownAndGenderKnown(age, gender) {
+  return age == UNKNOWN_AGE && gender != UNKNOWN_GENDER;
+}
+
+function isAgeKnownAndGenderUnknown(age, gender) {
+  return age != UNKNOWN_AGE && gender == UNKNOWN_GENDER;
+}
+
+function getAgeAndGenderLabelText(age, gender) {
+  if (isAgeAndGenderKnown(age, gender)) {
+    return ' (' + age+ '/' + gender + ')';
+  } else if (isAgeUnknownAndGenderKnown(age, gender)) {
+    return ' (' + gender + ')';
+  } else if (isAgeKnownAndGenderUnknown(age, gender)) {
+    return ' (' + age + ')';
   } else return "";
 }
 
@@ -266,7 +277,7 @@ function overridePatientHeader() {
       let personStatusDialog = patientHeader.querySelector('#person-status-update-dialog');
       personStatusDialog = personStatusDialog?.parentElement.removeChild(personStatusDialog);
       // construct a new header
-      let ageAndGender = getAgeGender(age, gender);
+      let ageAndGender = getAgeAndGenderLabelText(age.split(' ')[0], gender[0]);
       // extract the status out of status: <status>
       const status = personStatus?.textContent.split(':');
       if (status.length) {
