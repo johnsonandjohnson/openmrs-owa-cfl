@@ -41,7 +41,7 @@ import orderFrequency from './order-frequency';
 import orderType from './order-type';
 import findPatientColumnsConfiguration from './columns-configuration';
 import patientFlagsOverview from './patient-flags-overview';
-
+import globalPropertyReducer from './global-property.reducer';
 export default combineReducers({
   cflPatient,
   cflPerson,
@@ -73,6 +73,7 @@ export default combineReducers({
   orderFrequency,
   orderType,
   findPatientColumnsConfiguration,
+  globalPropertyReducer,
   openmrs: openmrsReducers,
   form: reduxFormReducer
 });
