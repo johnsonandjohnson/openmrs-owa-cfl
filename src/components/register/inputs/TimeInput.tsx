@@ -64,7 +64,7 @@ const TimeInput = (props: ITimeInputProps) => {
   return (
     <div className={`${className} input-container`}>
       <TimePicker {...timePickerProps} />
-      {hasValue && <span className="placeholder">{placeholder}</span>}
+      {hasValue && <span className="placeholder">{intl.formatMessage({ id: `${placeholder}` })}</span>}
       {isDirty && isInvalid && <ValidationError hasValue={hasValue} field={field}/>}
     </div>
   );
