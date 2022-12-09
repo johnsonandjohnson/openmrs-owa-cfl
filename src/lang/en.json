@@ -470,6 +470,11 @@
     "pleaseSelectFilter": "Please select a filter to see results",
     "description": "The results presented below are related to the current location.",
     "recordsFound": "records found.",
-    "noRecords": "No records."
+    "noRecords": "No records.",
+    "identifierColumnLabel": "Identifier",
+    "nameColumnLabel": "Name",
+    "phoneNumberColumnLabel": "Phone number",
+    "statusColumnLabel": "Status",
+    "genderColumnLabel": "Gender"
   }
 }

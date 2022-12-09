@@ -53,7 +53,10 @@ const PatientFlagsOverviewTable = ({
     if (app && app.config && app.config.tableColumns) {
       const tableColumnsConfig = app.config.tableColumns;
       return Object.keys(tableColumnsConfig).map(obj => {
-        return { label: obj, value: tableColumnsConfig[obj] }
+        return { 
+          label: formatMessage({ id: `${obj}` }), 
+          value: tableColumnsConfig[obj] 
+        }
       });
     } else {
       return DEFAULT_COLUMNS;

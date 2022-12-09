@@ -495,6 +495,11 @@
     "pleaseSelectFilter": "Selecione um filtro para ver os resultados",
     "description": "Os resultados apresentados abaixo estão relacionados com o local atual.",
     "recordsFound": "registros encontrados.",
-    "noRecords": "Sem registros."
+    "noRecords": "Sem registros.",
+    "identifierColumnLabel": "Identificador",
+    "nameColumnLabel": "Nome",
+    "phoneNumberColumnLabel": "Número de telefone",
+    "statusColumnLabel": "Status",
+    "genderColumnLabel": "Gênero"
   }
 }

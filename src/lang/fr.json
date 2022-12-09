@@ -520,10 +520,11 @@
     "pleaseSelectFilter": "Veuillez sélectionner un filtre pour voir les résultats",
     "description": "Les résultats présentés ci-dessous sont liés à la localisation actuelle.",
     "recordsFound":"enregistrements trouvés.",
-    "noRecords": "Aucun enregistrement."
-  },
-  "patientRegistration": {
-    "name": "Name",
-    "patientDemographics": "Patient Demographics"
+    "noRecords": "Aucun enregistrement.",
+    "identifierColumnLabel": "Identifiant",
+    "nameColumnLabel": "Nom",
+    "phoneNumberColumnLabel": "Numéro de téléphone",
+    "statusColumnLabel": "Statut",
+    "genderColumnLabel": "Le genre"
   }
 }
