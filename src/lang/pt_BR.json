@@ -257,10 +257,10 @@
       "city": "City",
       "startDate": "Data de Início",
       "dailyContactTime": "Hora de contacto (dia)",
-      "eveningContactTime": "Tempo de contato noturno",
+      "eveningContactTime": "Hora de contacto noturna",
       "or": "Ou",
-      "sexAssignedAtBirth": "Sexo atribuído no nascimento",
-      "genderIdentity": "Identidade de gênero"
+      "sexAssignedAtBirth": "Sexo atribuído à nascença",
+      "genderIdentity": "Identidade sexual"
     },
     "success": {
       "title": "Sucesso",
