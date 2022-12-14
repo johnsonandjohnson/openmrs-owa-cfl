@@ -515,6 +515,7 @@
   "patientFlagsOverview": {
     "title": "Aperçu des indicateurs",
     "noRecordsFound": "Aucun enregistrement trouvé",
+    "somethingWentWrong": "quelque chose s'est mal passé",
     "searchInputPlaceholder": "Recherche par Id, nom ou numéro de téléphone",
     "selectPatientFlagsPlaceholder": "Indicateurs de patients",
     "pleaseSelectFilter": "Veuillez sélectionner un filtre pour voir les résultats",

@@ -34,6 +34,7 @@ const PatientFlagsOverview = ({
   sessionLocation,
   flags,
   flaggedPatientsLoading,
+  showMessageError,
   flaggedPatients,
   totalCount,
   getPatientFlags,
@@ -103,6 +104,7 @@ const PatientFlagsOverview = ({
             setPageSize={setPageSize}
             flaggedPatients={flaggedPatients}
             flaggedPatientsLoading={flaggedPatientsLoading}
+            showMessageError={showMessageError}
             pageSize={pageSize}
             totalCount={totalCount}
             showNoDataComponent={null}
@@ -127,12 +129,13 @@ const mapStateToProps = ({
     flagsLoading,
     flagsSuccess,
     flaggedPatientsLoading,
+    showMessageError,
     flaggedPatients: {
       flaggedPatients,
       totalCount
     }
   },
-  apps: { 
+  apps: {
     appLoading
   }
 }: IStore) => ({
@@ -141,6 +144,7 @@ const mapStateToProps = ({
   flagsLoading,
   flagsSuccess,
   flaggedPatientsLoading,
+  showMessageError,
   flaggedPatients,
   totalCount,
   isLoading: appLoading || flagsLoading

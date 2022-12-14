@@ -24,6 +24,7 @@ export interface IFlaggedPatient {
 export interface IPatientFlagsOverviewState {
   flagsLoading: boolean,
   flaggedPatientsLoading: boolean,
+  showMessageError: boolean,
   flagsSuccess: boolean,
   flaggedPatientsSuccess: boolean,
   flags: IFlag[],
