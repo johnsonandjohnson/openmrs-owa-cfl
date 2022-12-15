@@ -88,7 +88,7 @@ class Confirm extends React.Component<IConfirmProps> {
       const option = field.options.find(opt => opt.value === modelValue || opt === modelValue);
       if (!!option) {
         if (option.label?.startsWith('registerPatient.')) {
-          return this.props.intl.formatMessage({ id: `${option.label}` });
+          return option.label ? this.props.intl.formatMessage({ id: `${option.label}` }) : '';
         }
 
         return option.label || option;
@@ -164,7 +164,7 @@ class Confirm extends React.Component<IConfirmProps> {
       <div className="mb-3 col-confirm" key={`field-${field.label}`}>
         <div className="col-sm-4 col-confirm-label">
           <span className="helper-text">
-          {this.props.intl.formatMessage({ id: `${field.label}` })}
+            {field.label ? this.props.intl.formatMessage({ id: `${field.label}` }) : ''}
             {COLON}
           </span>
         </div>

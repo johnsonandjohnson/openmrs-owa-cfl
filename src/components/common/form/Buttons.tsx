@@ -40,7 +40,7 @@ export const Buttons = (props: IButtonsProps) => {
                   onKeyDown
                 })}
             >
-              {intl.formatMessage({ id: `${label}` })}
+              {label ? intl.formatMessage({ id: `${label}` }) : ''}
             </Button>
           </FormGroup>
         );

@@ -18,7 +18,7 @@ export const getPlaceholder = (intl, label, fieldName, required) => {
     }) ||
     fieldName;
 
-  placeholder =  intl.formatMessage({ id: `${placeholder}` })
+  placeholder =  placeholder ? intl.formatMessage({ id: `${placeholder}` }) : '';
 
   if (required) {
     placeholder = [
@@ -29,7 +29,7 @@ export const getPlaceholder = (intl, label, fieldName, required) => {
     ].join(' ');
   }
 
-  return intl.formatMessage({ id: `${placeholder}` });
+  return placeholder ? intl.formatMessage({ id: `${placeholder}` }) : '';
 };
 
 export const getCommonInputProps = (props: IFieldProps, placeholder) => {
