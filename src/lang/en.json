@@ -465,6 +465,7 @@
   "patientFlagsOverview": {
     "title": "Patient Flags Overview",
     "noRecordsFound": "No records found",
+    "somethingWentWrong": "Something Went Wrong",
     "searchInputPlaceholder": "Search by Id, name or phone number",
     "selectPatientFlagsPlaceholder": "Patient flags",
     "pleaseSelectFilter": "Please select a filter to see results",

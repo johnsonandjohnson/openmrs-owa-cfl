@@ -24,6 +24,7 @@ const initialState: IPatientFlagsOverviewState = {
   flaggedPatientsLoading: false,
   flagsSuccess: false,
   flaggedPatientsSuccess: false,
+  showMessageError: false,
   flags: [{ name: '', uuid: '', priority: '' }],
   flaggedPatients: {
     flaggedPatients: [{
@@ -50,6 +51,17 @@ const reducer = (state = initialState, action) => {
         ...state,
         flaggedPatientsLoading: true,
         flaggedPatientsSuccess: false,
+        showMessageError:false,
+        flaggedPatients: {
+            flaggedPatients: [{
+              patientIdentifier: '',
+              patientName: '',
+              phoneNumber: '',
+              patientStatus: '',
+              patientUuid: ''
+            }],
+            totalCount: ZERO
+        },
       };
     case FAILURE(ACTION_TYPES.GET_PATIENT_FLAGS):
       return {
@@ -62,6 +74,17 @@ const reducer = (state = initialState, action) => {
         ...state,
         flaggedPatientsLoading: false,
         flaggedPatientsSuccess: false,
+        showMessageError: true,
+        flaggedPatients: {
+            flaggedPatients: [{
+              patientIdentifier: '',
+              patientName: '',
+              phoneNumber: '',
+              patientStatus: '',
+              patientUuid: ''
+            }],
+            totalCount: ZERO
+        },
       };
     case SUCCESS(ACTION_TYPES.GET_PATIENT_FLAGS):
       return {
@@ -75,7 +98,8 @@ const reducer = (state = initialState, action) => {
         ...state,
         flaggedPatientsLoading: false,
         flaggedPatientsSuccess: true,
-        flaggedPatients: action.payload.data
+        flaggedPatients: action.payload.data,
+        showMessageError: false,
       };
     default:
       return state;

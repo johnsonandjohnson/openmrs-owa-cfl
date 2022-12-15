@@ -18,6 +18,7 @@ import { connect } from 'react-redux';
 
 interface IPatientFlagsOverviewTableProps {
   flaggedPatientsLoading: boolean,
+  showMessageError: boolean,
   flaggedPatients: IFlaggedPatient[],
   totalCount: number,
   setPage: (page: number) => void,
@@ -29,6 +30,7 @@ interface IPatientFlagsOverviewTableProps {
 
 const PatientFlagsOverviewTable = ({
   flaggedPatientsLoading,
+  showMessageError,
   flaggedPatients,
   totalCount,
   setPage,
@@ -53,9 +55,9 @@ const PatientFlagsOverviewTable = ({
     if (app && app.config && app.config.tableColumns) {
       const tableColumnsConfig = app.config.tableColumns;
       return Object.keys(tableColumnsConfig).map(obj => {
-        return { 
-          label: formatMessage({ id: `${obj}` }), 
-          value: tableColumnsConfig[obj] 
+        return {
+          label: formatMessage({ id: `${obj}` }),
+          value: tableColumnsConfig[obj]
         }
       });
     } else {
@@ -70,14 +72,16 @@ const PatientFlagsOverviewTable = ({
       return <div className="td-cell">{value}</div>;
     }
   }));
-  
-  const helperText = (loading: boolean, totalCount: number) => {
+
+  const helperText = (loading: boolean, totalCount: number, showMessageError: boolean) => {
     if (totalCount > 0) {
       return (
         <span>
           {totalCount} {formatMessage({ id: 'patientFlagsOverview.recordsFound' })}
         </span>
       );
+    } else if (showMessageError) {
+      return formatMessage({ id: 'patientFlagsOverview.somethingWentWrong' });
     } else if (!loading && totalCount === 0) {
       return formatMessage({ id: 'patientFlagsOverview.noRecords' });
     }
@@ -89,9 +93,9 @@ const PatientFlagsOverviewTable = ({
         {flaggedPatientsLoading ? (
             <div className="spinner-border spinner-border-sm" />
         ) : (
-            helperText(flaggedPatientsLoading, totalCount)
+            helperText(flaggedPatientsLoading, totalCount, showMessageError)
         )}
-      </div>    
+      </div>
       <ReactTable
         className="-striped -highlight"
         manual={true}

@@ -490,6 +490,7 @@
   "patientFlagsOverview": {
     "title": "Visão Geral de Alertas",
     "noRecordsFound": "Nenhum registro foi encontrado",
+    "somethingWentWrong": "algo deu errado",
     "searchInputPlaceholder": "Pesquisar por ID, nome ou número de telefone",
     "selectPatientFlagsPlaceholder": "Alertas para os pacientes",
     "pleaseSelectFilter": "Selecione um filtro para ver os resultados",
