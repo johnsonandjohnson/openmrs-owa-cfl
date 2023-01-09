@@ -208,6 +208,11 @@
         "title": "Patient Demographics",
         "subtitle": "What's the participant's EDC-number?"
       },
+      "subjectID": {
+        "label": "Subject ID",
+        "title": "Patient Demographics",
+        "subtitle": "What's the subject ID?"
+      },
       "messagesConfiguration": {
         "label": "Messages configuration",
         "title": "Messages configuration",

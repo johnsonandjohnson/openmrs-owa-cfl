@@ -208,6 +208,11 @@
         "title": "Dados Demográficos do paciente",
         "subtitle": "Qual é o número de EDC do paciente?"
       },
+      "subjectID": {
+        "label": "ID do assunto",
+        "title": "Dados Demográficos do paciente",
+        "subtitle": "Qual é o ID do assunto?"
+      },
       "messagesConfiguration": {
         "label": "Configuração de mensagens",
         "title": "Configuração de mensagens",
