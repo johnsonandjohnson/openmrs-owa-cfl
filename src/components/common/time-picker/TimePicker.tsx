@@ -11,7 +11,7 @@
 import React from 'react';
 import { TimePicker as ReactTimePicker } from 'antd';
 import { DEFAULT_TIME_FORMAT, EMPTY_STRING } from '../../../shared/constants/input';
-import 'antd/dist/antd.min.css';
+import 'antd/dist/antd.css';
 import './TimePicker.scss';
 import '../../Inputs.scss';
 
@@ -19,7 +19,6 @@ export const TimePicker = ({
   format = DEFAULT_TIME_FORMAT,
   placeholder = null,
   showPlaceholder = false,
-  showNow = false,
   value,
   onChange
 }) => (
@@ -27,7 +26,6 @@ export const TimePicker = ({
     <ReactTimePicker
       format={format}
       placeholder={placeholder}
-      showNow={showNow}
       value={value}
       onChange={onChange}
       className="default-time-picker"
