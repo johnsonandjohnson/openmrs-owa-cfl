@@ -170,6 +170,12 @@ jqr &&
     }
   });
 
+//redirects the user to CfL find patient page instead of the default one
+const url = $(location).attr('href');
+if (url.endsWith('app=coreapps.findPatient')) {
+  window.location.href = '/openmrs/owa/cfl/index.html#/find-patient'
+}
+
 function overrideEditUserAccountLinks(editUserAccoutLinks) {
   editUserAccoutLinks.forEach(editUserAccoutLink => {
     const currentLocationHref = editUserAccoutLink.getAttribute('onclick');
