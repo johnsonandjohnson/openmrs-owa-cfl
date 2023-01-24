@@ -27,7 +27,7 @@ import _ from 'lodash';
 import { IUserAccount, IDetailsOption, ICurrentUser, IPersonAttribute } from '../../shared/models/user-account';
 import '../Inputs.scss';
 import './UserAccount.scss';
-import { getSettings } from '../../redux/reducers/setttings';
+import { getSettings } from '../../redux/reducers/settings';
 import { getPerson } from '../../redux/reducers/person';
 import { isPossiblePhoneNumber } from 'react-phone-number-input';
 import { errorToast } from '../toast-handler/toast-handler';

@@ -13,7 +13,7 @@ import cflPatient from './patient';
 import cflPerson from './person';
 import cflPeople from './cfl-people';
 import session from './session';
-import settings from './setttings';
+import settings from './settings';
 import countryProperty from './countryProperty';
 import location from './location';
 import relationshipType from './relationship-type';
@@ -40,7 +40,8 @@ import drugs from './drugs';
 import orderFrequency from './order-frequency';
 import orderType from './order-type';
 import findPatientColumnsConfiguration from './columns-configuration';
-
+import patientFlagsOverview from './patient-flags-overview';
+import globalPropertyReducer from './global-property.reducer';
 export default combineReducers({
   cflPatient,
   cflPerson,
@@ -57,6 +58,7 @@ export default combineReducers({
   breadcrumbs,
   person,
   patient,
+  patientFlagsOverview,
   personStatus,
   role,
   user,
@@ -71,6 +73,7 @@ export default combineReducers({
   orderFrequency,
   orderType,
   findPatientColumnsConfiguration,
+  globalPropertyReducer,
   openmrs: openmrsReducers,
   form: reduxFormReducer
 });

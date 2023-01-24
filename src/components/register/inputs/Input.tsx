@@ -19,11 +19,14 @@ import InputMask from 'react-input-mask';
 
 export interface IInputProps extends StateProps, DispatchProps, IFieldProps {
   intl: any;
+  isEdit: boolean;
 }
 
 class Input extends React.Component<IInputProps, IFieldState> {
-  isDisabled = (patient, fieldName) => {
-    if (ESTIMATED_BIRTHDATE_FIELDS.includes(fieldName)) {
+  isDisabled = (patient, fieldName, editable = true) => {
+    if (!editable && this.props.isEdit) {
+      return !editable;
+    } else if (ESTIMATED_BIRTHDATE_FIELDS.includes(fieldName)) {
       return !!patient[BIRTHDATE_FIELD];
     }
     return false;
@@ -31,12 +34,12 @@ class Input extends React.Component<IInputProps, IFieldState> {
 
   render = () => {
     const { intl, field, isInvalid, isDirty, className, value, patient, message } = this.props;
-    const { name, required, type, label, mask } = field;
+    const { name, required, type, label, mask, editable } = field;
     const hasValue = !!value || !!patient[field.name];
     const placeholder = getPlaceholder(intl, label, name, required);
     const props = getCommonInputProps(this.props, placeholder);
 
-    props['disabled'] = this.isDisabled(patient, name);
+    props['disabled'] = this.isDisabled(patient, name, editable);
     props['data-testid'] = this.props['data-testid'] || name;
 
     if (type === 'number') {

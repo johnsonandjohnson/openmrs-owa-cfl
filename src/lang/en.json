@@ -153,7 +153,9 @@
         "title": "Patient Demographics",
         "subtitle": "What's the patient's gender?",
         "male": "Male",
-        "female": "Female"
+        "female": "Female",
+        "transgender": "Transgender",
+        "other": "Other"
       },
       "birthdate": {
         "label": "Birthdate",
@@ -169,7 +171,7 @@
       "language": {
         "label": "Language",
         "title": "Patient Demographics",
-        "subtitle": "What language does the patient prefer?"
+        "subtitle": "What's the patient's preferred language?"
       },
       "phoneNumber": {
         "label": "Phone Number",
@@ -196,6 +198,26 @@
         "title": "Patient Demographics",
         "subtitle": "Who is the patient related to?"
       },
+      "nationality": {
+        "label": "Nationality",
+        "title": "Patient Demographics",
+        "subtitle": "What's the patient's nationality?"
+      },
+      "edcNumber": {
+        "label": "EDC-number",
+        "title": "Patient Demographics",
+        "subtitle": "What's the participant's EDC-number?"
+      },
+      "subjectID": {
+        "label": "Subject ID",
+        "title": "Patient Demographics",
+        "subtitle": "What's the subject ID?"
+      },
+      "messagesConfiguration": {
+        "label": "Messages configuration",
+        "title": "Messages configuration",
+        "subtitle": "Messages configuration"
+      },
       "confirm": {
         "label": "Confirm",
         "title": "Patient Demographics",
@@ -206,6 +228,7 @@
       }
     },
     "fields": {
+      "firstName": "First Name",
       "givenName": "Given Name",
       "middleName": "Middle Name",
       "familyName": "Family Name",
@@ -235,7 +258,14 @@
       "birthdate": "Birthdate",
       "address": "Address",
       "location": "Location",
-      "required": "(Required)"
+      "required": "(Required)",
+      "city": "City",
+      "startDate": "Start date",
+      "dailyContactTime": "Daily contact time",
+      "eveningContactTime": "Evening contact time",
+      "or": "Or",
+      "sexAssignedAtBirth": "Sex assigned at birth",
+      "genderIdentity": "Gender identity"
     },
     "success": {
       "title": "Success",
@@ -436,5 +466,21 @@
       "header": "Submit Columns Configuration",
       "body": "Are you sure you want to submit Columns Configuration for the Patient's Record?"
     }
+  },
+  "patientFlagsOverview": {
+    "title": "Patient Flags Overview",
+    "noRecordsFound": "No records found",
+    "somethingWentWrong": "Something Went Wrong",
+    "searchInputPlaceholder": "Search by Id, name or phone number",
+    "selectPatientFlagsPlaceholder": "Patient flags",
+    "pleaseSelectFilter": "Please select a filter to see results",
+    "description": "The results presented below are related to the current location.",
+    "recordsFound": "records found.",
+    "noRecords": "No records.",
+    "identifierColumnLabel": "Identifier",
+    "nameColumnLabel": "Name",
+    "phoneNumberColumnLabel": "Phone number",
+    "statusColumnLabel": "Status",
+    "genderColumnLabel": "Gender"
   }
 }

@@ -23,8 +23,14 @@ import Location from '../../components/locations/Location';
 import UserAccount from '../../components/user-account/UserAccount';
 import ManageRegimens from '../../components/manage-regimens/ManageRegimens';
 import FindPatientColumnsConfiguration from '../../components/find-patient-columns-configuration/FindPatientColumnsConfiguration';
+import PatientFlagsOverview from '../../components/patient-flags-overview/PatientFlagsOverview';
 
 export const routeConfig = [
+  {
+    path: '/patient-flags-overview',
+    component: PatientFlagsOverview,
+    breadcrumb: 'patientFlagsOverview.title'
+  },
   {
     path: '/patient-record-columns-configuration',
     component: FindPatientColumnsConfiguration,

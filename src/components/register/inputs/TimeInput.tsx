@@ -8,13 +8,13 @@
  * graphic logo is a trademark of OpenMRS Inc.
  */
 
-import React from 'react';
-import {useIntl} from 'react-intl';
+import React, { useEffect }  from 'react';
+import { useIntl } from 'react-intl';
 import moment from "moment";
-import {TimePicker} from "../../common/time-picker/TimePicker";
-import {getCommonInputProps, getPlaceholder} from "../../../shared/util/patient-form-util";
-import {DEFAULT_TIME_FORMAT} from "../../../shared/constants/input";
-import {IFieldProps} from './Field';
+import { TimePicker } from "../../common/time-picker/TimePicker";
+import { getCommonInputProps, getPlaceholder } from "../../../shared/util/patient-form-util";
+import { DEFAULT_TIME_FORMAT } from "../../../shared/constants/input";
+import { IFieldProps } from './Field';
 import ValidationError from "./ValidationError";
 
 interface ITimeInputProps extends IFieldProps {
@@ -26,6 +26,10 @@ const TimeInput = (props: ITimeInputProps) => {
   const {name, required, label} = field;
   const hasValue = !!value || !!patient[field.name];
   const placeholder = getPlaceholder(intl, label, name, required);
+
+  useEffect(() => {
+    setValueInModel(patient, field.name, onPatientChange, field.defaultValue);
+  }, []);
 
   const createOnChangeCallback = (patient, fieldName, callback) => event =>
     setValueInModel(patient, fieldName, callback, event && event.target ? event.target.value : event);
@@ -64,7 +68,7 @@ const TimeInput = (props: ITimeInputProps) => {
   return (
     <div className={`${className} input-container`}>
       <TimePicker {...timePickerProps} />
-      {hasValue && <span className="placeholder">{placeholder}</span>}
+      {hasValue && <span className="placeholder">{placeholder ? intl.formatMessage({ id: `${placeholder}` }) : ''}</span>}
       {isDirty && isInvalid && <ValidationError hasValue={hasValue} field={field}/>}
     </div>
   );

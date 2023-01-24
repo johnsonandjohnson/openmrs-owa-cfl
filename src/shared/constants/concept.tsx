@@ -10,3 +10,6 @@
 
 export const COUNTRY_CONCEPT_UUID = '165657AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
 export const COUNTRY_CONCEPT_REPRESENTATION = 'setMembers';
+export const GLOBAL_PROPERTY = 'globalProperty';
+export const CONCEPT = 'concept';
+export const OPTION_UUID = 'optionUuid';

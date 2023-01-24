@@ -37,6 +37,10 @@ import Confirm from './Confirm';
 import queryString from 'query-string';
 import {redirectUrl} from '../../shared/util/url-util';
 import {DEFAULT_REGISTRATION_FORM_REDIRECT} from '../../shared/constants/openmrs';
+import { CONCEPT_CUSTOM_REPRESENTATION } from '../../shared/constants/manage-regimens';
+import { getConcept } from '../../redux/reducers/concept';
+import { getSettingByQuery } from '../../redux/reducers/settings';
+import { CONCEPT, GLOBAL_PROPERTY, OPTION_UUID } from '../../shared/constants/concept';
 
 export interface IRegistrationProps extends StateProps, DispatchProps, RouteComponentProps<{ id?: string }> {
   intl: any;
@@ -74,6 +78,8 @@ class RegistrationForm extends React.Component<IRegistrationProps, IRegistration
         this.props.getPatient(this.props.match.params.id);
       }
     }
+
+    this.getConceptsAndSetings();
   }
 
   componentDidUpdate(prevProps: Readonly<IRegistrationProps>, prevState: Readonly<IRegistrationState>, snapshot?: any) {
@@ -106,6 +112,25 @@ class RegistrationForm extends React.Component<IRegistrationProps, IRegistration
         success: true
       });
     }
+
+    if (_.differenceWith(prevProps.patientSteps, this.props.patientSteps, _.isEqual).length) {
+      this.getConceptsAndSetings();
+    }
+  }
+
+  getConceptsAndSetings() {
+    const fieldOptionUuids = [];
+    this.steps().forEach(({ fields }) => fields.forEach(({ optionSource, optionUuid }) => optionSource && optionUuid ? fieldOptionUuids.push({optionSource, optionUuid}) : null));
+
+    _.uniqBy(fieldOptionUuids, OPTION_UUID).forEach(({ optionSource, optionUuid }) => {
+      if (optionSource === CONCEPT) {
+        this.props.getConcept(optionUuid, CONCEPT_CUSTOM_REPRESENTATION);
+      } else if (optionSource === GLOBAL_PROPERTY) {
+        this.props.getSettingByQuery(optionUuid);
+      } else {
+        // Do nothing
+      }
+    });
   }
 
   isEdit() {
@@ -162,7 +187,7 @@ class RegistrationForm extends React.Component<IRegistrationProps, IRegistration
               className={isValid && isVisited ? 'valid' : ''}
             >
               {icon && <img src={icon} alt="step" className="step-icon" />}
-              {stepDefinition.label}
+              {stepDefinition.label ? <FormattedMessage id={`${stepDefinition.label}`} /> : ''}
             </ListGroupItem>
           );
         })}
@@ -186,6 +211,7 @@ class RegistrationForm extends React.Component<IRegistrationProps, IRegistration
             setValidity={this.setValidity(i)}
             setStep={this.setStep}
             stepNumber={i}
+            isEdit={!!this.isEdit()}
           />
         </div>
       ))}
@@ -329,7 +355,7 @@ class RegistrationForm extends React.Component<IRegistrationProps, IRegistration
   }
 }
 
-const mapStateToProps = ({ registration, cflPatient, cflPerson, apps }) => ({
+const mapStateToProps = ({ registration, cflPatient, cflPerson, apps, settings, concept }) => ({
   loading: registration.loading,
   success: registration.success,
   message: registration.message,
@@ -341,7 +367,7 @@ const mapStateToProps = ({ registration, cflPatient, cflPerson, apps }) => ({
   patientSteps: apps.patientRegistrationSteps || defaultSteps,
   caregiverSteps: apps.caregiverRegistrationSteps || caregiverDefaultSteps,
   registrationRedirectUrl: apps.registrationRedirectUrl || DEFAULT_REGISTRATION_FORM_REDIRECT,
-  settingsLoading: apps.loading || registration.loading
+  settingsLoading: apps.loading || registration.loading || settings.loading || concept.loading.concept
 });
 
 const mapDispatchToProps = {
@@ -353,7 +379,9 @@ const mapDispatchToProps = {
   editPerson,
   updateRelationships,
   getPersonRelationships,
-  getPatientIdentifierTypes
+  getPatientIdentifierTypes,
+  getConcept,
+  getSettingByQuery
 };
 
 type StateProps = ReturnType<typeof mapStateToProps>;

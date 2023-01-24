@@ -36,10 +36,11 @@ export const columnContent = (patient, column, intl) => {
 
 export const extractPatientOrPersonData = patient => {
   const person = patient.person || patient;
-  const { preferredName, preferredAddress, gender, uuid, personId } = person;
+  const { preferredName, preferredAddress = {}, gender, uuid, personId } = person;
   const { givenName, middleName, familyName } = preferredName;
-  const { address1, address2, cityVillage, stateProvince, country, postalCode } = preferredAddress || {};
+
   return {
+    ...preferredAddress,
     patientId: patient.patientId || uuid,
     uuid: patient.uuid,
     personId,
@@ -48,12 +49,6 @@ export const extractPatientOrPersonData = patient => {
     familyName,
     gender,
     birthdate: !!person.birthdate ? new Date(person.birthdate) : null,
-    address1,
-    address2,
-    cityVillage,
-    stateProvince,
-    country,
-    postalCode,
     ...extractAttributes(person),
     ...extractIdentifiers(patient)
   } as IPatient;

@@ -36,7 +36,7 @@ import {
   FIELD_REQUIRED_ERROR_MESSAGE,
   UNIQUE_REGIMEN_NAME_ERROR_MESSAGE
 } from '../../shared/constants/manage-regimens';
-import { getSettings } from '../../redux/reducers/setttings';
+import { getSettings } from '../../redux/reducers/settings';
 import {
   setRegimens,
   setEditedRegimens,

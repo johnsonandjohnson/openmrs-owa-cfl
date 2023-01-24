@@ -80,15 +80,22 @@ const reducer = (state = initialState, action) => {
         query: action.meta.q,
         concepts: action.payload.data.results
       };
-    case SUCCESS(ACTION_TYPES.GET_CONCEPT):
+    case SUCCESS(ACTION_TYPES.GET_CONCEPT): {
+      const payloadData = action.payload.data;
+      
       return {
         ...state,
         loading: {
           ...state.loading,
           concept: false
         },
-        concept: action.payload.data
+        concept: payloadData,
+        concepts: [
+          ...state.concepts,
+          payloadData
+        ]
       };
+    }
     case ACTION_TYPES.RESET_CONCEPTS:
       return {
         ...initialState

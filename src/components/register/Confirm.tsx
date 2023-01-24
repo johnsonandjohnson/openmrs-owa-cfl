@@ -19,6 +19,7 @@ import { BIRTHDATE_FIELD, ESTIMATED_BIRTHDATE_FIELDS, LOCATIONS_OPTION_SOURCE, R
 import { formatDate } from '../../shared/util/date-util';
 import { formatPhoneNumberIntl } from 'react-phone-number-input';
 import { getPhoneNumberWithPlusSign } from '../../shared/util/person-util';
+import { INPUT_ADDRESS_FIELDS_TYPE } from '../../shared/constants/input';
 
 export interface IConfirmProps extends StateProps, DispatchProps {
   intl: any;
@@ -86,6 +87,10 @@ class Confirm extends React.Component<IConfirmProps> {
     if (!!field.options) {
       const option = field.options.find(opt => opt.value === modelValue || opt === modelValue);
       if (!!option) {
+        if (option.label?.startsWith('registerPatient.')) {
+          return option.label ? this.props.intl.formatMessage({ id: `${option.label}` }) : '';
+        }
+
         return option.label || option;
       }
     }
@@ -103,11 +108,13 @@ class Confirm extends React.Component<IConfirmProps> {
   };
 
   sections = patient => {
-    const { steps } = this.props;
+    const { steps, settings: { settings } } = this.props;
     const sections = [] as any[];
 
     steps.forEach(step => {
       const locField = step.fields.find(field => field.optionSource === LOCATIONS_OPTION_SOURCE);
+      const addressFields = step.fields.find(({ type }) => type === INPUT_ADDRESS_FIELDS_TYPE);
+      const foundSetting = settings.find(({ property }) => property === addressFields?.optionUuid);
 
       if (step.fields.find(field => BIRTHDATE_FIELD === field.name || ESTIMATED_BIRTHDATE_FIELDS.includes(field.name))) {
         sections.push({
@@ -134,6 +141,18 @@ class Confirm extends React.Component<IConfirmProps> {
             });
           });
       }
+
+      if (addressFields && foundSetting) {
+        const configParsed = JSON.parse(foundSetting?.value);
+        const selectedCountryFields = configParsed[addressFields.optionKey][patient.country];
+
+        selectedCountryFields?.forEach(field => {
+          sections.push({
+            label: this.getFieldLabel(field),
+            value: patient[field.field]
+          });
+        })
+      }
     });
 
     return sections;
@@ -145,7 +164,7 @@ class Confirm extends React.Component<IConfirmProps> {
       <div className="mb-3 col-confirm" key={`field-${field.label}`}>
         <div className="col-sm-4 col-confirm-label">
           <span className="helper-text">
-            {field.label}
+            {field.label ? this.props.intl.formatMessage({ id: `${field.label}` }) : ''}
             {COLON}
           </span>
         </div>
@@ -162,6 +181,7 @@ class Confirm extends React.Component<IConfirmProps> {
     const fields = this.sections(this.props.patient);
     const itemsPerColumn = Math.floor(fields.length / 2);
     const { errors } = this.props;
+
     return (
       <>
         <div className="step-fields">
@@ -185,10 +205,11 @@ class Confirm extends React.Component<IConfirmProps> {
   }
 }
 
-const mapStateToProps = ({ relationshipType, location, registration }) => ({
+const mapStateToProps = ({ relationshipType, location, registration, settings }) => ({
   relationshipTypes: relationshipType.relationshipTypes,
   locations: location.locations,
-  errors: registration.errors
+  errors: registration.errors,
+  settings
 });
 
 const mapDispatchToProps = {};

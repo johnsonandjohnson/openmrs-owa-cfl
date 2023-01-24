@@ -22,32 +22,86 @@ import { getApps } from '../redux/reducers/apps';
 import '@openmrs/style-referenceapplication/lib/referenceapplication.css';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { PROJECT_LOCATION_ATTRIBUTE_TYPE_NAME } from 'src/shared/constants/app';
+import { IntlProvider } from "react-intl";
+import { merge } from 'lodash';
+import flatten from 'flat';
+import messagesEN from '../lang/en.json'
+import messagesFR from '../lang/fr.json'
+import messagesPTBR from '../lang/pt_BR.json'
 
 toast.configure();
 
-export interface IAppProps extends StateProps, DispatchProps {}
+export interface IAppProps extends StateProps, DispatchProps {
+}
 
 class App extends React.Component<IAppProps> {
+  defaultLocale = 'en';
+  localeMessages = {
+    en: flatten(messagesEN),
+    fr: flatten(messagesFR),
+    'pt-BR': flatten(messagesPTBR)
+  };
+
   componentDidMount() {
     this.props.getSession();
-    this.props.getApps();
   }
 
+  componentDidUpdate(prevProps) {
+    const projectName = this.getProjectName();
+    const currentLocationUuid = this.props.session?.sessionLocation?.uuid;
+    const previousLocationUuid = prevProps.session?.sessionLocation?.uuid;
+    if (currentLocationUuid && previousLocationUuid !== currentLocationUuid) {
+      this.props.getApps(projectName);
+    }
+  }
+
+  getProjectName() {
+    const projectNameObject = this.props.userLocation.attributes?.filter(attr => attr.display.startsWith(PROJECT_LOCATION_ATTRIBUTE_TYPE_NAME));
+    let projectName = null;
+    if (projectNameObject.length) {
+      const displayText = projectNameObject[0].display;
+      projectName = displayText.substring(displayText.indexOf(':') + 1).trim();
+    }
+
+    return projectName;
+  }
+
+  // Translation fallback:
+  // locale -> locale without region codes -> default locale without region codes
+  getMessagesForLocale = (locale) => {
+    const localeWithoutRegionCode = this.getLocaleWithoutRegionCode(locale);
+    const defaultLocaleWithoutRegionCode = this.getLocaleWithoutRegionCode(this.defaultLocale);
+    return merge({}, this.localeMessages[defaultLocaleWithoutRegionCode], this.localeMessages[localeWithoutRegionCode], this.localeMessages[locale]);
+  };
+
+  getLocaleWithoutRegionCode = (locale) => {
+    const regionCodeSeparatorRegex = /[_-]+/;
+    return locale.toLowerCase().split(regionCodeSeparatorRegex)[0];
+  };
+
   render() {
+    const locale = this.props.locale ? this.props.locale : this.defaultLocale;
+    const messages = this.getMessagesForLocale(locale);
+
     return (
-      <div id="app" className="app">
-        <Routes />
-        <ScrollUpButton />
-      </div>
+      <IntlProvider locale={locale} messages={messages}>
+        <div id="app" className="app">
+          <Routes/>
+          <ScrollUpButton/>
+        </div>
+      </IntlProvider>
     );
   }
 }
 
-const mapStateToProps = ({ session }) => ({
-  session: session.session
+const mapStateToProps = ({session}) => ({
+  session: session.session,
+  userLocation: session.session?.sessionLocation,
+  locale: session.session?.locale.replace("_", "-")
 });
 
-const mapDispatchToProps = { getSession, getApps };
+const mapDispatchToProps = {getSession, getApps};
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;

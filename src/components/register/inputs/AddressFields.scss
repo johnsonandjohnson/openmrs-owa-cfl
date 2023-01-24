@@ -7,16 +7,17 @@
  * Copyright (C) OpenMRS Inc. OpenMRS is a registered trademark and the OpenMRS
  * graphic logo is a trademark of OpenMRS Inc.
  */
+.address-fields-container {
+  width: 100%;
 
-export const getAppConfig = (apps, appName, projectName) => {
-  const projectSpecificAppName = appName + "." + projectName;
-  let app = getApp(apps, projectSpecificAppName);
-
-  if (!app) {
-    app = getApp(apps, appName);
+  .address-field-country {
+    padding: 5px;
+    float: none;
   }
 
-  return app && app.config;
+  .address-fields > div {
+    flex: 1 50%;
+    padding: 5px;
+    margin: 0;
+  }
 };
-
-export const getApp = (apps, id) => apps && apps.find(app => app.id === id);

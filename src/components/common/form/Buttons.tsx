@@ -16,12 +16,13 @@ export interface IButtonsProps {
   options: any[];
   entity: any;
   fieldName: any;
+  intl: any;
   onChange: (value) => void;
   onKeyDown?: () => void;
 }
 
 export const Buttons = (props: IButtonsProps) => {
-  const { options, entity, fieldName, onKeyDown, onChange } = props;
+  const { options, entity, fieldName, onKeyDown, onChange, intl } = props;
   const handleOnChange = value => evt => onChange(value);
 
   return (
@@ -39,7 +40,7 @@ export const Buttons = (props: IButtonsProps) => {
                   onKeyDown
                 })}
             >
-              {label}
+              {label ? intl.formatMessage({ id: `${label}` }) : ''}
             </Button>
           </FormGroup>
         );
