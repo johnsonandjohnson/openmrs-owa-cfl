@@ -30,6 +30,8 @@ export const NOTIFICATION_TIME_WINDOW_FROM_PROPERTY_NAME = 'patientNotificationT
 export const NOTIFICATION_TIME_WINDOW_TO_PROPERTY_NAME = 'patientNotificationTimeWindowTo';
 export const BEST_CONTACT_TIME_PROPERTY_NAME = 'message.bestContactTime.default';
 export const VISIT_REMINDER_PROPERTY_NAME = 'message.daysToCallBeforeVisit.default';
+export const SHOULD_CREATE_FIRST_VISIT = 'shouldCreateFirstVisit';
+export const SHOULD_CREATE_FUTURE_VISITS = 'shouldCreateFutureVisit';
 export const DEFAULT_COUNTRY_CONFIGURATION = {
   [CONFIGURATION_NAME_PROPERTY_NAME]: '',
   [SMS_PROPERTY_NAME]: '',
@@ -38,8 +40,8 @@ export const DEFAULT_COUNTRY_CONFIGURATION = {
   [SEND_SMS_UPON_REGISTRATION_PROPERTY_NAME]: false,
   [SEND_CALL_REMINDER_PROPERTY_NAME]: false,
   [SEND_SMS_REMINDER_PROPERTY_NAME]: false,
-  shouldCreateFirstVisit: false,
-  shouldCreateFutureVisit: false,
+  [SHOULD_CREATE_FIRST_VISIT]: false,
+  [SHOULD_CREATE_FUTURE_VISITS]: false,
   [NOTIFICATION_TIME_WINDOW_FROM_PROPERTY_NAME]: null,
   [NOTIFICATION_TIME_WINDOW_TO_PROPERTY_NAME]: null,
   [BEST_CONTACT_TIME_PROPERTY_NAME]: null,
@@ -54,8 +56,8 @@ export const COUNTRY_CONFIGURATION_TO_PROPERTY_MAPPING = {
   'messages.sendSmsOnPatientRegistration': SEND_SMS_UPON_REGISTRATION_PROPERTY_NAME,
   'messages.shouldSendReminderViaCall': SEND_CALL_REMINDER_PROPERTY_NAME,
   'messages.shouldSendReminderViaSms': SEND_SMS_REMINDER_PROPERTY_NAME,
-  'visits.shouldCreateFirstVisit': 'shouldCreateFirstVisit',
-  'visits.shouldCreateFutureVisit': 'shouldCreateFutureVisit',
+  'visits.shouldCreateFirstVisit': SHOULD_CREATE_FIRST_VISIT,
+  'visits.shouldCreateFutureVisit': SHOULD_CREATE_FUTURE_VISITS,
   'messages.patientNotificationTimeWindowFrom': NOTIFICATION_TIME_WINDOW_FROM_PROPERTY_NAME,
   'messages.patientNotificationTimeWindowTo': NOTIFICATION_TIME_WINDOW_TO_PROPERTY_NAME,
   [BEST_CONTACT_TIME_PROPERTY_NAME]: BEST_CONTACT_TIME_PROPERTY_NAME,
@@ -94,7 +96,7 @@ export const PROPERTY_TO_COUNTRY_CONFIGURATION_MAPPING = Object.entries(COUNTRY_
 );
 
 // Default getter used to extract proper value from Notification Configuration, for Country Property.
-export const PROPERTY_TO_COUNTRY_CONFIGURATION_GETTER_DEFAULT = propertyValue => (propertyValue ? propertyValue.toString() : null);
+export const PROPERTY_TO_COUNTRY_CONFIGURATION_GETTER_DEFAULT = propertyValue => propertyValue ? propertyValue.toString() : null;
 
 const safeMomentToTimeString = value =>
   moment.isMoment(value) ? value.format(DEFAULT_TIME_FORMAT) : PROPERTY_TO_COUNTRY_CONFIGURATION_GETTER_DEFAULT(value);
@@ -103,7 +105,7 @@ const safeMomentToTimeString = value =>
 export const PROPERTY_TO_COUNTRY_CONFIGURATION_GETTER = {
   [BEST_CONTACT_TIME_PROPERTY_NAME]: value => {
     const timeAsString = safeMomentToTimeString(value);
-    return `{ "${BEST_CONTACT_TIME_VALUE_JSON_PROPERTY}": "${timeAsString}"}`;
+    return timeAsString ? `{ "${BEST_CONTACT_TIME_VALUE_JSON_PROPERTY}": "${timeAsString}"}` : null;
   },
   [NOTIFICATION_TIME_WINDOW_FROM_PROPERTY_NAME]: safeMomentToTimeString,
   [NOTIFICATION_TIME_WINDOW_TO_PROPERTY_NAME]: safeMomentToTimeString,

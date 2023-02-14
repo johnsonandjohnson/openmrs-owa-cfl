@@ -289,7 +289,7 @@
     "smsSettings": "SMS / WhatsApp settings:",
     "callSettings": "Call settings:",
     "provider": "Provider",
-    "uponRegistration": "Upon registration",
+    "uponRegistration": "Upon registration:",
     "allowedNotificationWindow": {
       "label": "Allowed notification window:",
       "from": "From",
@@ -302,7 +302,7 @@
     "visitReminder": {
       "label": "Visit reminder (days before visit):",
       "placeholder": "Days before visit",
-      "switch": "Visit reminder"
+      "switch": "Visit reminder:"
     },
     "button": {
       "expand": "Expand all",
@@ -313,7 +313,9 @@
       "header": "Submit Notification Configuration",
       "body": "Are you sure you want to submit Notification Configuration?"
     },
-    "success": "Configuration saved successfully!"
+    "success": "Configuration saved successfully!",
+    "createFirstVisit": "Create first visit:",
+    "createFutureVisits": "Create future visits:"
   },
   "notificationTemplates": {
     "title": "Manage Notification Templates",

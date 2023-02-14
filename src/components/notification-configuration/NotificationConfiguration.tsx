@@ -38,7 +38,6 @@ import {
   COUNTRY_CONFIGURATION_TO_PROPERTY_MAPPING,
   DEFAULT_COUNTRY_CONFIGURATION,
   DEFAULT_COUNTRY_CONFIGURATION_NAME,
-  MESSAGES_COUNTRY_PROPERTIES_PREFIX,
   NOTIFICATION_TIME_WINDOW_FROM_PROPERTY_NAME,
   NOTIFICATION_TIME_WINDOW_TO_PROPERTY_NAME,
   PERFORM_CALL_UPON_REGISTRATION_PROPERTY_NAME,
@@ -48,6 +47,8 @@ import {
   SEND_CALL_REMINDER_PROPERTY_NAME,
   SEND_SMS_REMINDER_PROPERTY_NAME,
   SEND_SMS_UPON_REGISTRATION_PROPERTY_NAME,
+  SHOULD_CREATE_FIRST_VISIT,
+  SHOULD_CREATE_FUTURE_VISITS,
   SMS_PROPERTY_NAME,
   VISIT_REMINDER_PROPERTY_NAME
 } from '../../shared/constants/notification-configuration';
@@ -88,7 +89,7 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
   };
 
   componentDidMount() {
-    this.props.getCountryProperties(MESSAGES_COUNTRY_PROPERTIES_PREFIX);
+    this.props.getCountryProperties();
     this.props.getCallflowsProviders();
     this.props.getSmsProviders();
     this.props.getConcept(COUNTRY_CONCEPT_UUID, COUNTRY_CONCEPT_REPRESENTATION);
@@ -179,17 +180,19 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
       newMessageCountryPropertiesMap.set(name, [] as ICountryPropertyValue[]);
 
       Object.keys(configurationProps).forEach(notificationConfigurationPropertyName => {
-        const valueGetter =
-          PROPERTY_TO_COUNTRY_CONFIGURATION_GETTER[notificationConfigurationPropertyName] ??
-          PROPERTY_TO_COUNTRY_CONFIGURATION_GETTER_DEFAULT;
+        if (notificationConfigurationPropertyName !== "undefined") {
+          const valueGetter =
+            PROPERTY_TO_COUNTRY_CONFIGURATION_GETTER[notificationConfigurationPropertyName] ??
+            PROPERTY_TO_COUNTRY_CONFIGURATION_GETTER_DEFAULT;
 
-        const countryPropertyValue = {
-          country: this.getCountryNameFromConfigurationName(configuration[CONFIGURATION_NAME_PROPERTY_NAME]),
-          name: PROPERTY_TO_COUNTRY_CONFIGURATION_MAPPING[notificationConfigurationPropertyName],
-          value: valueGetter(configuration[notificationConfigurationPropertyName])
-        } as ICountryPropertyValue;
+          const countryPropertyValue = {
+            country: this.getCountryNameFromConfigurationName(configuration[CONFIGURATION_NAME_PROPERTY_NAME]),
+            name: PROPERTY_TO_COUNTRY_CONFIGURATION_MAPPING[notificationConfigurationPropertyName],
+            value: valueGetter(configuration[notificationConfigurationPropertyName])
+          } as ICountryPropertyValue;
 
-        newMessageCountryPropertiesMap.get(name).push(countryPropertyValue);
+          newMessageCountryPropertiesMap.get(name).push(countryPropertyValue);
+        }
       });
     });
 
@@ -265,16 +268,18 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
     this.setState({ notificationConfiguration });
   };
 
-  selectTextOption = value => ({ label: value, value });
+  getBooleanValue = value => {
+    return (value === "true" || value === true) ? true : false;
+  }
 
   smsSettings = configurationIdx => {
     const { intl, smsProviders } = this.props;
     const { notificationConfiguration } = this.state;
     const configuration = notificationConfiguration[configurationIdx];
     const smsProviderOptions = smsProviders.map(provider => ({ label: provider.name, value: provider.name }));
-    const smsProvider = !!configuration?.[SMS_PROPERTY_NAME] ? this.selectTextOption(configuration[SMS_PROPERTY_NAME]) : null;
-    const shouldSendSmsUponRegistration = !!configuration?.[SEND_SMS_UPON_REGISTRATION_PROPERTY_NAME];
-    const shouldSendSmsReminder = !!configuration?.[SEND_SMS_REMINDER_PROPERTY_NAME];
+    const smsProvider = smsProviderOptions.find(provider => provider.value === configuration?.[SMS_PROPERTY_NAME]);
+    const shouldSendSmsUponRegistration = this.getBooleanValue(configuration?.[SEND_SMS_UPON_REGISTRATION_PROPERTY_NAME])
+    const shouldSendSmsReminder = this.getBooleanValue(configuration?.[SEND_SMS_REMINDER_PROPERTY_NAME]);
 
     return (
       <>
@@ -327,9 +332,10 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
     const { notificationConfiguration } = this.state;
     const configuration = notificationConfiguration[configurationIdx];
     const callflowsProviderOptions = callflowsProviders.map(provider => ({ label: provider.name, value: provider.name }));
-    const callflowsProvider = !!configuration?.[CALL_PROPERTY_NAME] ? this.selectTextOption(configuration[CALL_PROPERTY_NAME]) : null;
-    const shouldPerformCallUponRegistration = !!configuration?.[PERFORM_CALL_UPON_REGISTRATION_PROPERTY_NAME];
-    const shouldSendCallReminder = !!configuration?.[SEND_CALL_REMINDER_PROPERTY_NAME];
+    const callflowsProvider = callflowsProviderOptions.find(provider => provider.value === configuration?.[CALL_PROPERTY_NAME]);
+    const shouldPerformCallUponRegistration = this.getBooleanValue(configuration?.[PERFORM_CALL_UPON_REGISTRATION_PROPERTY_NAME]);
+    const shouldSendCallReminder = this.getBooleanValue(configuration?.[SEND_CALL_REMINDER_PROPERTY_NAME]);
+   
     return (
       <>
         <div className="py-3">
@@ -389,38 +395,43 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
     const bestContactTime = !!configuration?.[BEST_CONTACT_TIME_PROPERTY_NAME] ? configuration[BEST_CONTACT_TIME_PROPERTY_NAME] : null;
 
     return (
-      <div className="inline-fields py-3">
-        <div className="col-6 pl-0">
-          <Label>
-            <FormattedMessage id="notificationConfiguration.allowedNotificationWindow.label" />
-          </Label>
-          <div className="inline-fields">
-            <TimePicker
-              placeholder={intl.formatMessage({ id: 'notificationConfiguration.allowedNotificationWindow.from' })}
-              showPlaceholder={!!notificationTimeWindowFrom}
-              value={notificationTimeWindowFrom}
-              onChange={this.onChange(configurationIdx, NOTIFICATION_TIME_WINDOW_FROM_PROPERTY_NAME)}
-            />
-            <TimePicker
-              placeholder={intl.formatMessage({ id: 'notificationConfiguration.allowedNotificationWindow.to' })}
-              showPlaceholder={!!notificationTimeWindowTo}
-              value={notificationTimeWindowTo}
-              onChange={this.onChange(configurationIdx, NOTIFICATION_TIME_WINDOW_TO_PROPERTY_NAME)}
-            />
+      <>
+        <div className="inline-fields py-3">
+          <div className="col-6 pl-0">
+            <Label>
+              <FormattedMessage id="notificationConfiguration.allowedNotificationWindow.label" />
+            </Label>
+            <div className="inline-fields">
+              <TimePicker
+                placeholder={intl.formatMessage({ id: 'notificationConfiguration.allowedNotificationWindow.from' })}
+                showPlaceholder={!!notificationTimeWindowFrom}
+                value={notificationTimeWindowFrom}
+                onChange={this.onChange(configurationIdx, NOTIFICATION_TIME_WINDOW_FROM_PROPERTY_NAME)}
+              />
+              <TimePicker
+                placeholder={intl.formatMessage({ id: 'notificationConfiguration.allowedNotificationWindow.to' })}
+                showPlaceholder={!!notificationTimeWindowTo}
+                value={notificationTimeWindowTo}
+                onChange={this.onChange(configurationIdx, NOTIFICATION_TIME_WINDOW_TO_PROPERTY_NAME)}
+              />
+            </div>
+          </div>
+          <div className="col-6 pl-5">
+            <Label>
+              <FormattedMessage id="notificationConfiguration.bestContactTime.label" />
+            </Label>
+            <div className="inline-fields">
+              <TimePicker
+                placeholder={intl.formatMessage({ id: 'notificationConfiguration.bestContactTime.placeholder' })}
+                showPlaceholder={!!bestContactTime}
+                value={bestContactTime}
+                onChange={this.onChange(configurationIdx, BEST_CONTACT_TIME_PROPERTY_NAME)}
+              />
+            </div>
           </div>
         </div>
-        <div className="col-6 pl-5">
-          <Label>
-            <FormattedMessage id="notificationConfiguration.bestContactTime.label" />
-          </Label>
-          <TimePicker
-            placeholder={intl.formatMessage({ id: 'notificationConfiguration.bestContactTime.placeholder' })}
-            showPlaceholder={!!bestContactTime}
-            value={bestContactTime}
-            onChange={this.onChange(configurationIdx, BEST_CONTACT_TIME_PROPERTY_NAME)}
-          />
-        </div>
-      </div>
+        <Divider />
+      </>
     );
   };
 
@@ -455,30 +466,65 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
     const { notificationConfiguration } = this.state;
     const configuration = notificationConfiguration[configurationIdx];
     const visitReminders = !!configuration?.[VISIT_REMINDER_PROPERTY_NAME] ? configuration[VISIT_REMINDER_PROPERTY_NAME] : [ZERO];
+    
     return (
-      <div className="pt-5">
-        <Label>
-          <FormattedMessage id="notificationConfiguration.visitReminder.label" />
-        </Label>
-        {visitReminders.map((reminder, i) => (
-          <div className="inline-fields py-1" key={`${configuration}-${configurationIdx}-reminder-${i}`}>
-            <InputWithPlaceholder
-              placeholder={intl.formatMessage({ id: 'notificationConfiguration.visitReminder.placeholder' })}
-              showPlaceholder
-              value={reminder}
-              onChange={this.onVisitReminderChange(configurationIdx, i)}
-              type="number"
-              pattern="[1-9]"
-              min={ZERO}
-            />
-            <PlusMinusButtons
-              intl={intl}
-              onPlusClick={() => this.addVisitReminder(configurationIdx)}
-              onMinusClick={() => this.removeVisitReminder(configurationIdx, i)}
-              isPlusButtonVisible={i === visitReminders.length - 1}
-            />
-          </div>
-        ))}
+      <>
+        <div className="pt-3 py-3">
+          <Label>
+            <FormattedMessage id="notificationConfiguration.visitReminder.label" />
+          </Label>
+          {visitReminders.map((reminder, i) => (
+            <div className="inline-fields py-1" key={`${configuration}-${configurationIdx}-reminder-${i}`}>
+              <InputWithPlaceholder
+                placeholder={intl.formatMessage({ id: 'notificationConfiguration.visitReminder.placeholder' })}
+                showPlaceholder
+                value={reminder}
+                onChange={this.onVisitReminderChange(configurationIdx, i)}
+                type="number"
+                pattern="[1-9]"
+                min={ZERO}
+              />
+              <PlusMinusButtons
+                intl={intl}
+                onPlusClick={() => this.addVisitReminder(configurationIdx)}
+                onMinusClick={() => this.removeVisitReminder(configurationIdx, i)}
+                isPlusButtonVisible={i === visitReminders.length - 1}
+              />
+            </div>
+          ))}
+        </div>
+        <Divider />
+      </>
+    );
+  };
+
+  firstAndFutureVisitsSettings = configurationIdx => {
+    const { intl } = this.props;
+    const { notificationConfiguration } = this.state;
+    const configuration = notificationConfiguration[configurationIdx];
+    const shouldCreateFirstVisit = this.getBooleanValue(configuration?.[SHOULD_CREATE_FIRST_VISIT]);
+    const shouldCreateFutureVisits = this.getBooleanValue(configuration?.[SHOULD_CREATE_FUTURE_VISITS]);
+
+    return (
+      <div className="col-6 px-0 py-1">
+        <Switch
+          id={`creating-first-visit-switch-${configurationIdx}`}
+          intl={intl}
+          labelTranslationId="notificationConfiguration.createFirstVisit"
+          checked={shouldCreateFirstVisit}
+          checkedTranslationId="common.switch.on"
+          uncheckedTranslationId="common.switch.off"
+          onChange={this.onChange(configurationIdx, SHOULD_CREATE_FIRST_VISIT)}
+        />
+        <Switch
+          id={`creating-future-visits-switch-${configurationIdx}`}
+          intl={intl}
+          labelTranslationId="notificationConfiguration.createFutureVisits"
+          checked={shouldCreateFutureVisits}
+          checkedTranslationId="common.switch.on"
+          uncheckedTranslationId="common.switch.off"
+          onChange={this.onChange(configurationIdx, SHOULD_CREATE_FUTURE_VISITS)}
+        />
       </div>
     );
   };
@@ -544,7 +590,8 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
       this.smsSettings(configurationIdx),
       this.callSettings(configurationIdx),
       this.notificationWindowAndBestContactTime(configurationIdx),
-      this.visitReminder(configurationIdx)
+      this.visitReminder(configurationIdx),
+      this.firstAndFutureVisitsSettings(configurationIdx)
     ];
     return (
       <ExpandableSection

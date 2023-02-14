@@ -78,9 +78,9 @@ const reducer = (state: ICountryPropertyState = initialState, action) => {
   }
 };
 
-export const getCountryProperties = (nameFragment = '') => ({
+export const getCountryProperties = () => ({
   type: ACTION_TYPES.GET_PROPERTIES,
-  payload: axios.get(`/openmrs/ws/rest/v1/countryProperty?v=default&q=${nameFragment}`)
+  payload: axios.get(`/openmrs/ws/rest/v1/countryProperty?v=default`)
 });
 
 export const createCountryProperty = (name: string, country = '', value = '', description = '') => {
