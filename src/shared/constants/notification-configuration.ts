@@ -34,8 +34,8 @@ export const SHOULD_CREATE_FIRST_VISIT = 'shouldCreateFirstVisit';
 export const SHOULD_CREATE_FUTURE_VISITS = 'shouldCreateFutureVisit';
 export const DEFAULT_COUNTRY_CONFIGURATION = {
   [CONFIGURATION_NAME_PROPERTY_NAME]: '',
-  [SMS_PROPERTY_NAME]: '',
-  [CALL_PROPERTY_NAME]: '',
+  [SMS_PROPERTY_NAME]: null,
+  [CALL_PROPERTY_NAME]: null,
   [PERFORM_CALL_UPON_REGISTRATION_PROPERTY_NAME]: false,
   [SEND_SMS_UPON_REGISTRATION_PROPERTY_NAME]: false,
   [SEND_CALL_REMINDER_PROPERTY_NAME]: false,
@@ -96,7 +96,13 @@ export const PROPERTY_TO_COUNTRY_CONFIGURATION_MAPPING = Object.entries(COUNTRY_
 );
 
 // Default getter used to extract proper value from Notification Configuration, for Country Property.
-export const PROPERTY_TO_COUNTRY_CONFIGURATION_GETTER_DEFAULT = propertyValue => propertyValue ? propertyValue.toString() : null;
+export const PROPERTY_TO_COUNTRY_CONFIGURATION_GETTER_DEFAULT = propertyValue => {
+  if (propertyValue != null) {
+    return propertyValue.toString();
+  } else {
+    return null;
+  }
+}
 
 const safeMomentToTimeString = value =>
   moment.isMoment(value) ? value.format(DEFAULT_TIME_FORMAT) : PROPERTY_TO_COUNTRY_CONFIGURATION_GETTER_DEFAULT(value);
