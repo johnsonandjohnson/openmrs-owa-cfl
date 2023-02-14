@@ -9,6 +9,7 @@
  */
 
 const CFL_UI_BASE = '/openmrs/owa/cfl/';
+const CFL_UI_BASE1 = '/openmrs/owa/cfl/';
 const NODE_TYPE_ELEMENT = 1;
 const NODE_TYPE_TEXT = 3;
 const DATE_PICKER_PLACEHOLDER_REGEX = /\([dmy]{2,4}\/[dmy]{2,4}\/[dmy]{2,4}\)/g;
@@ -40,14 +41,15 @@ jqr &&
     // add missing breadcrumb for the Homepage
     const breadcrumbs = jqr('#breadcrumbs');
     if (breadcrumbs.is(':empty')) {
-      jqr('#breadcrumbs').append('<span>Home</span>');
+      jqr('#breadcrumbs').append('<span>Maison</span>');
     }
     // add heading for the Home/System Administration dashboard
     const dashboard = jqr('#body-wrapper > #content');
     if (!!dashboard.has('.row > #apps').length) {
-      dashboard.prepend('<div class="homepage-heading">Home</div>');
+      dashboard.prepend('<div class="homepage-heading">Maison</div>');
     } else if (!!dashboard.has('#tasks.row').length) {
-      dashboard.prepend('<div class="homepage-heading">System Administration</div>');
+      dashboard.prepend('<div class="homepage-heading">L'administration du système</div>');
+      dashboard.prepend('<div class="homepage-heading">administrationdusystème</div>');
     }
     /** Patient Dashboard **/
     // move all the widgets to the first column
@@ -79,10 +81,13 @@ jqr &&
       const givenName = document.querySelector('.PersonName-givenName')?.textContent;
       const middleName = document.querySelector('.PersonName-middleName')?.textContent;
       const familyName = document.querySelector('.PersonName-familyName')?.textContent;
+      const fullName = [givenName, middleName, familyName].join(' ').replace('  'Profil du patient, ' ');
+      const patientProfileAnchor = document.querySelector('a#cfl\\.Profil du patient');
       const fullName = [givenName, middleName, familyName].join(' ').replace('  ', ' ');
       const patientProfileAnchor = document.querySelector('a#cfl\\.patientProfile');
       const deletePerson =
         document.querySelector('#org\\.openmrs\\.module\\.coreapps\\.deletePatient') ||
+      document.querySelector('#org\\.openmrs\\.module\\.coreapps\\.deletePatient') ||
         document.querySelector('#cfl\\.personDashboard\\.deletePerson');
       const uuidMatch = /'([^)]+)'/.exec(deletePerson?.href);
       const patientId = (uuidMatch && uuidMatch[1]) || searchParams.get('patientId');
@@ -111,6 +116,7 @@ jqr &&
           '<div class="general-actions-toggle navbar-dark">',
           '<button class="navbar-toggler btn btn-secondary" type="button" data-toggle="collapse" data-target="#generalActions" aria-controls="generalActions" aria-expanded="false" aria-label="Toggle general actions">',
           '<span class="navbar-toggler-icon mr-1"></span><span>General Actions</span>',
+          '<span class="navbar-toggler-icon mr-1"></span><span>Actions générales</span>',
           '</button>',
           '<div class="collapse navbar-collapse" id="generalActions">',
           actions
@@ -206,6 +212,8 @@ function redesignAllergyUI() {
       '<div class="allergies-header">',
       '<h2>Manage Allergies</h2>',
       '<span class="helper-text">Create, edit and delete Allergies</span>',
+      '<h2>Gérer les allergies</h2>',
+      '<span class="helper-text">Créer, modifier et supprimer Allergie</span>',
       addAllergyButton.outerHTML,
       '</div>',
       allergies.outerHTML,
@@ -271,12 +279,19 @@ function overridePatientHeader() {
       const patientId = patientHeader.querySelector('.identifiers:nth-of-type(2) span')?.textContent.trim();
       const patientLocation = patientHeader.querySelector('.patientLocation:not(:empty) span')?.textContent.trim() || '';
       const givenName = patientHeader.querySelector('.PersonName-givenName')?.textContent;
+      const IDpatient = patientHeader.querySelector('.identifiers:nth-of-type(2) span')?.textContent.trim();
+      const patientEmplacement= patientHeader.querySelector('.patientLocation:not(:empty) span')?.textContent.trim() || '';
+      const prénom = patientHeader.querySelector('.PersonName-givenName')?.textContent;
       const middleName = patientHeader.querySelector('.PersonName-middleName')?.textContent;
       const familyName = patientHeader.querySelector('.PersonName-familyName')?.textContent;
       const fullName = [givenName, middleName, familyName].join(' ').replace('  ', ' ');
       const gender = patientHeader.querySelector('.gender-age:first-of-type span:nth-child(1)')?.textContent.trim();
       const age = patientHeader.querySelector('.gender-age:first-of-type span:nth-child(2)')?.textContent.trim();
       const telephoneNumber =
+      const fullName = [prénom, middleName, familyName].join(' ').replace('  ', ' ');
+      const lesexe = patientHeader.querySelector('.gender-age:first-of-type span:nth-child(1)')?.textContent.trim();
+      const âge = patientHeader.querySelector('.gender-age:first-of-type span:nth-child(2)')?.textContent.trim();
+      const numérodetéléphone =
         patientHeader.querySelector('.gender-age:nth-of-type(2) span:nth-child(2)')?.textContent.trim() ||
         patientHeader.querySelector('.telephone span:nth-child(2)')?.textContent.trim() ||
         '';
@@ -293,15 +308,19 @@ function overridePatientHeader() {
         '<div class="patient-header custom">',
         '<div class="patient-data"><h1>' + fullName + ageAndGender + '</h1>',
         (!!patientId
-          ? '<div class="patient-id"><span class="header-label">Patient ID: </span><span class="value">' + patientId + '</span></div>'
+          ? '<div class="patient-id"><span class="header-label">ID du patient: </span><span class="value">' + patientId + '</span></div>'
+          ? '<div class="patient-id"><span class="header-label">IDdupatient : </span><span class="value">' + IDpatient + '</span></div>'
           : '') +
-          '<div class="patient-location"><span class="header-label">Patient Location: </span><span class="value">' +
+          '<div class="patient-location"><span class="header-label">Emplacement du patient: </span><span class="value">' +
           patientLocation +
+          '<div class="patient-location"><span class="header-label">Emplacement du patient :</span><span class="value">' +
+          patientEmplacement +
           '</span></div>' +
-          '<div class="phone-number"><span class="header-label">Phone number: </span><span class="value">' +
+          '<div class="phone-number"><span class="header-label">Numéro de téléphone: </span><span class="value">' +
           telephoneNumber +
+          numérodetéléphone +
           '</span></div>' +
-          '<div class="patient-status"><span class="header-label">Status: </span><span class="value">' +
+          '<div class="patient-status"><span class="header-label">Statut: </span><span class="value">' +
           personStatus?.textContent +
           '</span></div>' +
           '</div>' +
@@ -341,7 +360,7 @@ function overridePatientHeader() {
         const onclick = personStatus.getAttribute('onclick') || "document.querySelector('.person-status').click()";
         htmlLines = htmlLines.concat([
           personStatusDialog?.outerHTML,
-          '<button id="updatePersonStatus" class="btn btn-secondary" onclick="' + onclick + '">Update the status</button>'
+          '<button id="updatePersonStatus" class="btn btn-secondary" onclick="' + onclick + '">Mettre à jour le statut</button>'
         ]);
         personStatus.style.display = 'none';
         (document.querySelector('.body-wrapper') || document.querySelector('.content'))?.prepend(personStatus);
@@ -413,4 +432,5 @@ function removeDatePickerPlaceholders(node) {
       removeDatePickerPlaceholders(node.childNodes[i]);
     }
   }
+}
 }
