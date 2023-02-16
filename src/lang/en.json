@@ -314,8 +314,8 @@
       "body": "Are you sure you want to submit Notification Configuration?"
     },
     "success": "Configuration saved successfully!",
-    "createFirstVisit": "Create first visit:",
-    "createFutureVisits": "Create future visits:"
+    "createFirstVisit": "Automatically create first visit upon registration:",
+    "createFutureVisits": "Automatically create visits according to schedule:"
   },
   "notificationTemplates": {
     "title": "Manage Notification Templates",
