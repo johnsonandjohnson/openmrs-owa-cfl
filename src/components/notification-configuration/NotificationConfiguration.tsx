@@ -47,10 +47,13 @@ import {
   SEND_CALL_REMINDER_PROPERTY_NAME,
   SEND_SMS_REMINDER_PROPERTY_NAME,
   SEND_SMS_UPON_REGISTRATION_PROPERTY_NAME,
+  SEND_WHATSAPP_REMINDER_PROPERTY_NAME,
+  SEND_WHATSAPP_UPON_REGISTRATION_PROPERTY_NAME,
   SHOULD_CREATE_FIRST_VISIT,
   SHOULD_CREATE_FUTURE_VISITS,
   SMS_PROPERTY_NAME,
-  VISIT_REMINDER_PROPERTY_NAME
+  VISIT_REMINDER_PROPERTY_NAME,
+  WHATSAPP_PROPERTY_NAME
 } from '../../shared/constants/notification-configuration';
 import { ONE, TEN, ZERO } from '../../shared/constants/input';
 import { ROOT_URL } from '../../shared/constants/openmrs';
@@ -278,7 +281,7 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
     const configuration = notificationConfiguration[configurationIdx];
     const smsProviderOptions = smsProviders.map(provider => ({ label: provider.name, value: provider.name }));
     const smsProvider = smsProviderOptions.find(provider => provider.value === configuration?.[SMS_PROPERTY_NAME]);
-    const shouldSendSmsUponRegistration = this.getBooleanValue(configuration?.[SEND_SMS_UPON_REGISTRATION_PROPERTY_NAME])
+    const shouldSendSmsUponRegistration = this.getBooleanValue(configuration?.[SEND_SMS_UPON_REGISTRATION_PROPERTY_NAME]);
     const shouldSendSmsReminder = this.getBooleanValue(configuration?.[SEND_SMS_REMINDER_PROPERTY_NAME]);
 
     return (
@@ -326,6 +329,60 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
       </>
     );
   };
+
+  whatsAppSettings = configurationIdx => {
+    const { intl, smsProviders } = this.props;
+    const { notificationConfiguration } = this.state;
+    const configuration = notificationConfiguration[configurationIdx];
+    const whatsAppProviderOptions = smsProviders.map(provider => ({ label: provider.name, value: provider.name }));
+    const whatsAppProvider = whatsAppProviderOptions.find(provider => provider.value === configuration?.[WHATSAPP_PROPERTY_NAME]);
+    const shouldSendWhatsAppUponRegistration = this.getBooleanValue(configuration?.[SEND_WHATSAPP_UPON_REGISTRATION_PROPERTY_NAME]);
+    const shouldSendWhatsAppReminder = this.getBooleanValue(configuration?.[SEND_WHATSAPP_REMINDER_PROPERTY_NAME]);
+    return (
+      <>
+        <div className="py-3">
+          <Label>
+            <FormattedMessage id="notificationConfiguration.whatsAppSettings" />
+          </Label>
+          <div className="inline-fields">
+            <div className="col-6 pl-0">
+              <SelectWithPlaceholder
+                placeholder={intl.formatMessage({ id: 'notificationConfiguration.provider' })}
+                showPlaceholder={!!whatsAppProvider}
+                value={whatsAppProvider}
+                onChange={this.onChange(configurationIdx, WHATSAPP_PROPERTY_NAME, true)}
+                options={whatsAppProviderOptions}
+                wrapperClassName="flex-1"
+                classNamePrefix="default-select"
+                theme={selectDefaultTheme}
+              />
+            </div>
+            <div className="col-6 px-5">
+              <Switch
+                id={`whatsApp-upon-registration-switch-${configurationIdx}`}
+                intl={intl}
+                labelTranslationId="notificationConfiguration.uponRegistration"
+                checked={shouldSendWhatsAppUponRegistration}
+                checkedTranslationId="common.switch.on"
+                uncheckedTranslationId="common.switch.off"
+                onChange={this.onChange(configurationIdx, SEND_WHATSAPP_UPON_REGISTRATION_PROPERTY_NAME)}
+              />
+              <Switch
+                id={`whatsApp-visit-reminder-switch-${configurationIdx}`}
+                intl={intl}
+                labelTranslationId="notificationConfiguration.visitReminder.switch"
+                checked={shouldSendWhatsAppReminder}
+                checkedTranslationId="common.switch.on"
+                uncheckedTranslationId="common.switch.off"
+                onChange={this.onChange(configurationIdx, SEND_WHATSAPP_REMINDER_PROPERTY_NAME)}
+              />
+            </div>
+          </div>
+        </div>
+        <Divider />
+      </>
+    );
+  }
 
   callSettings = configurationIdx => {
     const { intl, callflowsProviders } = this.props;
@@ -588,6 +645,7 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
     );
     const bodyComponent = [
       this.smsSettings(configurationIdx),
+      this.whatsAppSettings(configurationIdx),
       this.callSettings(configurationIdx),
       this.notificationWindowAndBestContactTime(configurationIdx),
       this.visitReminder(configurationIdx),
