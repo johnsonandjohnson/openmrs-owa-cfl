@@ -28,6 +28,7 @@ export interface IConfirmProps extends StateProps, DispatchProps {
   stepButtons: any;
   steps: any[];
   isCaregiver: boolean;
+  customElements: any;
 }
 
 class Confirm extends React.Component<IConfirmProps> {
@@ -198,6 +199,7 @@ class Confirm extends React.Component<IConfirmProps> {
             <div className="col-sm-6">{fields.slice(0, itemsPerColumn).map(field => this.renderField(field))}</div>
             <div className="col-sm-6">{fields.slice(itemsPerColumn).map(field => this.renderField(field))}</div>
           </div>
+          {this.props.customElements()}
         </div>
         {this.props.stepButtons(this.validate)}
       </>
