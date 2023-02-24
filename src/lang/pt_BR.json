@@ -265,7 +265,8 @@
       "eveningContactTime": "Hora de contacto noturna",
       "or": "Ou",
       "sexAssignedAtBirth": "Sexo atribuído à nascença",
-      "genderIdentity": "Identidade sexual"
+      "genderIdentity": "Identidade sexual",
+      "participantConsent": "Participante recebeu informações"
     },
     "success": {
       "title": "Sucesso",

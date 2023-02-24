@@ -53,6 +53,7 @@ export interface IRegistrationState {
   stepValidity: object;
   visitedSteps: number[];
   success: boolean;
+  requiredCustomElementsChecked: boolean;
 }
 
 class RegistrationForm extends React.Component<IRegistrationProps, IRegistrationState> {
@@ -61,7 +62,8 @@ class RegistrationForm extends React.Component<IRegistrationProps, IRegistration
     patient: {} as IPatient,
     stepValidity: {},
     visitedSteps: [0] as number[],
-    success: false
+    success: false,
+    requiredCustomElementsChecked: false
   };
   entityName = this.props.isCaregiver ? 'Caregiver' : 'Patient';
   steps = () => (this.props.isCaregiver ? this.props.caregiverSteps : this.props.patientSteps);
@@ -222,6 +224,7 @@ class RegistrationForm extends React.Component<IRegistrationProps, IRegistration
           stepButtons={this.stepButtons(this.steps().length)}
           steps={this.steps()}
           isCaregiver={this.props.isCaregiver}
+          customElements={this.confirmPageCustomElements}
         />
       </div>
     </Form>
@@ -233,7 +236,22 @@ class RegistrationForm extends React.Component<IRegistrationProps, IRegistration
     }
   };
 
-  isFormValid = () => _.isEmpty(_.pickBy(this.state.stepValidity, step => !step.isValid));
+  isFormValid = () => _.isEmpty(_.pickBy(this.state.stepValidity, step => !step.isValid)) && this.customRequiredElementsChecked();
+  
+  customRequiredElementsChecked = () => {
+    const { patient } = this.state;
+    const { confirmPageCustomElements } = this.props;
+    const requiredFields = confirmPageCustomElements.filter(obj => obj.required);
+    let requiredElementsChecked = true;
+    requiredFields.forEach(field => {
+      const fieldValue = patient[field.name];
+      if (!fieldValue) {
+        requiredElementsChecked = false;
+      }
+    });
+
+    return requiredElementsChecked;
+  }
 
   onConfirmClick = e => {
     if (!this.props.loading && this.isFormValid()) {
@@ -252,6 +270,31 @@ class RegistrationForm extends React.Component<IRegistrationProps, IRegistration
         }
       }
     }
+  };
+
+  handleCustomElementsOnChange = (event, customElementName) => {
+    const { patient } = this.state;
+    const value = event.target?.checked;
+    patient[customElementName] = value;
+
+    this.setState({ patient });
+  };
+
+  confirmPageCustomElements = () => {
+    const { confirmPageCustomElements } = this.props;    
+    return (
+      <>
+        <div className='custom-elements-section'>
+          {!this.isEdit() && _.map(confirmPageCustomElements, element => (
+            <div className="row">
+              <input type='checkbox' onClick={event => this.handleCustomElementsOnChange(event, element.name)} />
+              <span style={{color: '#333333'}}><FormattedMessage id={`${element.label}`} /></span>
+              {element.required && <span style={{color: 'red'}}>*</span>}
+            </div>
+          ))}
+        </div>
+      </>
+    )
   };
 
   stepButtons = stepNumber => isValid => {
@@ -367,7 +410,8 @@ const mapStateToProps = ({ registration, cflPatient, cflPerson, apps, settings, 
   patientSteps: apps.patientRegistrationSteps || defaultSteps,
   caregiverSteps: apps.caregiverRegistrationSteps || caregiverDefaultSteps,
   registrationRedirectUrl: apps.registrationRedirectUrl || DEFAULT_REGISTRATION_FORM_REDIRECT,
-  settingsLoading: apps.loading || registration.loading || settings.loading || concept.loading.concept
+  settingsLoading: apps.loading || registration.loading || settings.loading || concept.loading.concept,
+  confirmPageCustomElements: apps.confirmPageCustomElements || []
 });
 
 const mapDispatchToProps = {
