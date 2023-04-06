@@ -19,10 +19,9 @@ const UNKNOWN_GENDER = "U";
 window.addEventListener('load', redesignAllergyUI);
 window.addEventListener('load', addCollapseToTheHeader);
 // Override Patient Header both on load and on page change (OWAs)
-window.addEventListener('load', overridePatientHeader);
-window.addEventListener('popstate', function (event) {
-  // the page has changed, wait for the header to revert to the default one
-  elementReady('.patient-header:not(.custom)').then(overridePatientHeader);
+window.addEventListener('load', () => {
+  overridePatientHeader();
+  watchElementMutations('.patient-header:not(.custom)', overridePatientHeader);
 });
 
 // JQuery overrides (only for core OpenMRS)
@@ -171,7 +170,7 @@ jqr &&
   });
 
 //redirects the user to CfL find patient page instead of the default one
-const url = $(location).attr('href');
+const url = location.href;
 if (url.endsWith('app=coreapps.findPatient')) {
   window.location.href = '/openmrs/owa/cfl/index.html#/find-patient'
 }
@@ -380,6 +379,7 @@ function htmlToElements(htmlString) {
  * Useful for resolving race conditions.
  *
  * @param selector
+ * @param parentElement
  * @param notEmpty
  * @returns {Promise}
  */
@@ -402,6 +402,28 @@ function elementReady(selector, parentElement = document, notEmpty = false) {
       childList: true,
       subtree: true
     });
+  });
+}
+
+/**
+ * Observes changes to DOM starting from {@code parentElement} and its children, then calls {@code callback} on all elements
+ * fitting {@code selector} once a change is detected.
+ *
+ * @param selector
+ * @param callback
+ * @param parentElement
+ */
+function watchElementMutations(selector, callback, parentElement = document) {
+  new MutationObserver((mutationRecords, observer) => {
+    // Query for elements matching the specified selector
+    Array.from(parentElement.querySelectorAll(selector)).forEach(element => {
+      if (!!element.textContent) {
+        callback(element);
+      }
+    });
+  }).observe(parentElement === document ? document.documentElement : parentElement, {
+    childList: true,
+    subtree: true
   });
 }
 
