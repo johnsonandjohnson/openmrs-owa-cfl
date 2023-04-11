@@ -22,24 +22,32 @@ export const DEFAULT_COUNTRY_SETTINGS_MAP = { [DEFAULT_COUNTRY_CONFIGURATION_NAM
 export const CONFIGURATION_NAME_PROPERTY_NAME = 'name';
 export const SMS_PROPERTY_NAME = 'SMS';
 export const CALL_PROPERTY_NAME = 'CALL';
+export const WHATSAPP_PROPERTY_NAME = 'WhatsApp';
 export const PERFORM_CALL_UPON_REGISTRATION_PROPERTY_NAME = 'performCallOnPatientRegistration';
 export const SEND_SMS_UPON_REGISTRATION_PROPERTY_NAME = 'sendSmsOnPatientRegistration';
 export const SEND_CALL_REMINDER_PROPERTY_NAME = 'shouldSendReminderViaCall';
 export const SEND_SMS_REMINDER_PROPERTY_NAME = 'shouldSendReminderViaSms';
+export const SEND_WHATSAPP_UPON_REGISTRATION_PROPERTY_NAME = 'sendWhatsAppOnPatientRegistration';
+export const SEND_WHATSAPP_REMINDER_PROPERTY_NAME = 'shouldSendReminderViaWhatsApp';
 export const NOTIFICATION_TIME_WINDOW_FROM_PROPERTY_NAME = 'patientNotificationTimeWindowFrom';
 export const NOTIFICATION_TIME_WINDOW_TO_PROPERTY_NAME = 'patientNotificationTimeWindowTo';
 export const BEST_CONTACT_TIME_PROPERTY_NAME = 'message.bestContactTime.default';
 export const VISIT_REMINDER_PROPERTY_NAME = 'message.daysToCallBeforeVisit.default';
+export const SHOULD_CREATE_FIRST_VISIT = 'shouldCreateFirstVisit';
+export const SHOULD_CREATE_FUTURE_VISITS = 'shouldCreateFutureVisit';
 export const DEFAULT_COUNTRY_CONFIGURATION = {
   [CONFIGURATION_NAME_PROPERTY_NAME]: '',
-  [SMS_PROPERTY_NAME]: '',
-  [CALL_PROPERTY_NAME]: '',
+  [SMS_PROPERTY_NAME]: null,
+  [CALL_PROPERTY_NAME]: null,
+  [WHATSAPP_PROPERTY_NAME]: null,
   [PERFORM_CALL_UPON_REGISTRATION_PROPERTY_NAME]: false,
   [SEND_SMS_UPON_REGISTRATION_PROPERTY_NAME]: false,
   [SEND_CALL_REMINDER_PROPERTY_NAME]: false,
   [SEND_SMS_REMINDER_PROPERTY_NAME]: false,
-  shouldCreateFirstVisit: false,
-  shouldCreateFutureVisit: false,
+  [SEND_WHATSAPP_UPON_REGISTRATION_PROPERTY_NAME]: false,
+  [SEND_WHATSAPP_REMINDER_PROPERTY_NAME]: false,
+  [SHOULD_CREATE_FIRST_VISIT]: false,
+  [SHOULD_CREATE_FUTURE_VISITS]: false,
   [NOTIFICATION_TIME_WINDOW_FROM_PROPERTY_NAME]: null,
   [NOTIFICATION_TIME_WINDOW_TO_PROPERTY_NAME]: null,
   [BEST_CONTACT_TIME_PROPERTY_NAME]: null,
@@ -50,12 +58,15 @@ export const DEFAULT_COUNTRY_CONFIGURATION = {
 export const COUNTRY_CONFIGURATION_TO_PROPERTY_MAPPING = {
   'messages.smsConfig': SMS_PROPERTY_NAME,
   'messages.callConfig': CALL_PROPERTY_NAME,
+  'messages.whatsAppConfig': WHATSAPP_PROPERTY_NAME,
   'messages.performCallOnPatientRegistration': PERFORM_CALL_UPON_REGISTRATION_PROPERTY_NAME,
   'messages.sendSmsOnPatientRegistration': SEND_SMS_UPON_REGISTRATION_PROPERTY_NAME,
   'messages.shouldSendReminderViaCall': SEND_CALL_REMINDER_PROPERTY_NAME,
   'messages.shouldSendReminderViaSms': SEND_SMS_REMINDER_PROPERTY_NAME,
-  'visits.shouldCreateFirstVisit': 'shouldCreateFirstVisit',
-  'visits.shouldCreateFutureVisit': 'shouldCreateFutureVisit',
+  'messages.sendWhatsAppOnPatientRegistration': SEND_WHATSAPP_UPON_REGISTRATION_PROPERTY_NAME,
+  'messages.shouldSendReminderViaWhatsApp': SEND_WHATSAPP_REMINDER_PROPERTY_NAME,
+  'visits.shouldCreateFirstVisit': SHOULD_CREATE_FIRST_VISIT,
+  'visits.shouldCreateFutureVisit': SHOULD_CREATE_FUTURE_VISITS,
   'messages.patientNotificationTimeWindowFrom': NOTIFICATION_TIME_WINDOW_FROM_PROPERTY_NAME,
   'messages.patientNotificationTimeWindowTo': NOTIFICATION_TIME_WINDOW_TO_PROPERTY_NAME,
   [BEST_CONTACT_TIME_PROPERTY_NAME]: BEST_CONTACT_TIME_PROPERTY_NAME,
@@ -94,7 +105,13 @@ export const PROPERTY_TO_COUNTRY_CONFIGURATION_MAPPING = Object.entries(COUNTRY_
 );
 
 // Default getter used to extract proper value from Notification Configuration, for Country Property.
-export const PROPERTY_TO_COUNTRY_CONFIGURATION_GETTER_DEFAULT = propertyValue => (propertyValue ? propertyValue.toString() : null);
+export const PROPERTY_TO_COUNTRY_CONFIGURATION_GETTER_DEFAULT = propertyValue => {
+  if (propertyValue != null) {
+    return propertyValue.toString();
+  } else {
+    return null;
+  }
+}
 
 const safeMomentToTimeString = value =>
   moment.isMoment(value) ? value.format(DEFAULT_TIME_FORMAT) : PROPERTY_TO_COUNTRY_CONFIGURATION_GETTER_DEFAULT(value);
@@ -103,7 +120,7 @@ const safeMomentToTimeString = value =>
 export const PROPERTY_TO_COUNTRY_CONFIGURATION_GETTER = {
   [BEST_CONTACT_TIME_PROPERTY_NAME]: value => {
     const timeAsString = safeMomentToTimeString(value);
-    return `{ "${BEST_CONTACT_TIME_VALUE_JSON_PROPERTY}": "${timeAsString}"}`;
+    return timeAsString ? `{ "${BEST_CONTACT_TIME_VALUE_JSON_PROPERTY}": "${timeAsString}"}` : null;
   },
   [NOTIFICATION_TIME_WINDOW_FROM_PROPERTY_NAME]: safeMomentToTimeString,
   [NOTIFICATION_TIME_WINDOW_TO_PROPERTY_NAME]: safeMomentToTimeString,

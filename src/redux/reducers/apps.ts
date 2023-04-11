@@ -29,8 +29,8 @@ const initialState = {
   findCaregiverTableColumns: null,
   patientRegistrationSteps: null,
   caregiverRegistrationSteps: null,
-  patientFlagsOverviewTableColumns: null
-  
+  patientFlagsOverviewTableColumns: null,
+  confirmPageCustomElements: null
 };
 
 export const getAppsState = (apps, projectName) => ({
@@ -39,7 +39,8 @@ export const getAppsState = (apps, projectName) => ({
   findCaregiverTableColumns: getAppConfig(apps, FIND_CAREGIVER_APP, projectName)?.tableColumns,
   patientRegistrationSteps: getAppConfig(apps, REGISTER_PATIENT_APP, projectName)?.steps,
   caregiverRegistrationSteps: getAppConfig(apps, REGISTER_CAREGIVER_APP, projectName)?.steps,
-  registrationRedirectUrl: getAppConfig(apps, REGISTER_PATIENT_APP, projectName)?.redirectUrl
+  registrationRedirectUrl: getAppConfig(apps, REGISTER_PATIENT_APP, projectName)?.redirectUrl,
+  confirmPageCustomElements: getAppConfig(apps, REGISTER_PATIENT_APP, projectName)?.confirmPageCustomElements
 });
 
 const reducer = (state = initialState, action) => {

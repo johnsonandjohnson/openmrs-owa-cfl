@@ -265,7 +265,8 @@
       "eveningContactTime": "Temps de contact du soir",
       "or": "Ou",
       "sexAssignedAtBirth": "Sexe attribué à la naissance",
-      "genderIdentity": "Identité de genre"
+      "genderIdentity": "Identité de genre",
+      "participantConsent": "Le participant a reçu des informations"
     },
     "success": {
       "title": "Succès",
@@ -312,7 +313,8 @@
     "configureSettings": "Configurer les paramètres",
     "defaultCountry": "Pays par défaut",
     "country": "Pays",
-    "smsSettings": "Paramètres SMS/WhatsApp :",
+    "smsSettings": "Paramètres SMS:",
+    "whatsAppSettings": "Paramètres WhatsApp:",
     "callSettings": "Paramètres d'appel:",
     "provider": "Fournisseur",
     "uponRegistration": "Lors de l'inscription",

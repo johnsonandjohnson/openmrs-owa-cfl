@@ -265,7 +265,8 @@
       "eveningContactTime": "Hora de contacto noturna",
       "or": "Ou",
       "sexAssignedAtBirth": "Sexo atribuído à nascença",
-      "genderIdentity": "Identidade sexual"
+      "genderIdentity": "Identidade sexual",
+      "participantConsent": "Participante recebeu informações"
     },
     "success": {
       "title": "Sucesso",
@@ -311,7 +312,8 @@
     "configureSettings": "Configurar definições",
     "defaultCountry": "País Padrão",
     "country": "País",
-    "smsSettings": "Definições SMS / WhatsApp:",
+    "smsSettings": "Definições SMS:",
+    "whatsAppSettings": "Definições WhatsApp:",
     "callSettings": "Configurações de chamada:",
     "provider": "Fornecedor",
     "uponRegistration": "No momento do registro",

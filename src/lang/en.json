@@ -265,7 +265,8 @@
       "eveningContactTime": "Evening contact time",
       "or": "Or",
       "sexAssignedAtBirth": "Sex assigned at birth",
-      "genderIdentity": "Gender identity"
+      "genderIdentity": "Gender identity",
+      "participantConsent": "Participant received information"
     },
     "success": {
       "title": "Success",
@@ -286,10 +287,11 @@
     "configureSettings": "Configure Settings",
     "defaultCountry": "Default Country",
     "country": "Country",
-    "smsSettings": "SMS / WhatsApp settings:",
+    "smsSettings": "SMS settings:",
+    "whatsAppSettings": "WhatsApp settings:",
     "callSettings": "Call settings:",
     "provider": "Provider",
-    "uponRegistration": "Upon registration",
+    "uponRegistration": "Upon registration:",
     "allowedNotificationWindow": {
       "label": "Allowed notification window:",
       "from": "From",
@@ -302,7 +304,7 @@
     "visitReminder": {
       "label": "Visit reminder (days before visit):",
       "placeholder": "Days before visit",
-      "switch": "Visit reminder"
+      "switch": "Visit reminder:"
     },
     "button": {
       "expand": "Expand all",
@@ -313,7 +315,9 @@
       "header": "Submit Notification Configuration",
       "body": "Are you sure you want to submit Notification Configuration?"
     },
-    "success": "Configuration saved successfully!"
+    "success": "Configuration saved successfully!",
+    "createFirstVisit": "Automatically create first visit upon registration:",
+    "createFutureVisits": "Automatically create visits according to schedule:"
   },
   "notificationTemplates": {
     "title": "Manage Notification Templates",
