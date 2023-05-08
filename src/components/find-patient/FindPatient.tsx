@@ -87,7 +87,7 @@ class FindPatient extends React.Component<IPatientsProps, IPatientsState> {
     return (
       <div className="find-patient">
         <h2>
-          <FormattedMessage id="findPatient.title" />
+          <FormattedMessage id="cfl.findPatient.title" />
         </h2>
         <div className="error">{this.props.error}</div>
         <div className="search-section">

@@ -18,7 +18,7 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import { getSettingByQuery } from '../../redux/reducers/settings';
 import Select from 'react-select/creatable';
 import '../Inputs.scss';
-import { DATE_FORMAT, isoDateString } from '../../shared/util/date-util';
+import { DATE_FORMAT, MONTH_NAMES_KEYS, WEEK_DAYS_KEYS, isoDateString } from '../../shared/util/date-util';
 import DatePicker from 'react-datepicker';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { getCondition, saveCondition } from '../../redux/reducers/condition';
@@ -209,6 +209,30 @@ class Condition extends React.Component<IConditionsProps, IConditionsState> {
 
   getEndDate = () => !this.state.active ? isoDateString(this.state.endDate) : '';
 
+  getDayLabelsKey = () => {
+    return WEEK_DAYS_KEYS.map(key => this.props.intl.formatMessage({ id: key }));
+  }
+
+  getMonthLabelsKey = () => {
+    return MONTH_NAMES_KEYS.map(key => this.props.intl.formatMessage({ id: key }));
+  }
+
+  getDatePickerLocaleConfig = () => {
+    const days = this.getDayLabelsKey();
+    const months = this.getMonthLabelsKey();
+
+    const locale = {
+      localize: {
+        day: n => days[n],
+        month: n => months[n]
+      },
+      formatLong: {
+        date: () => DATE_FORMAT
+      }
+    }
+    return locale;
+  }
+
   render() {
     const { intl } = this.props;
     const conditionId = this.conditionId();
@@ -251,6 +275,7 @@ class Condition extends React.Component<IConditionsProps, IConditionsState> {
                   showYearDropdown
                   dropdownMode="select"
                   dateFormat={DATE_FORMAT}
+                  locale={this.getDatePickerLocaleConfig()}
                 />
                 {this.state.onsetDate && <span className="placeholder">{intl.formatMessage({ id: 'manageCondition.onsetDate' })}</span>}
               </div>
@@ -268,6 +293,7 @@ class Condition extends React.Component<IConditionsProps, IConditionsState> {
                     showYearDropdown
                     dropdownMode="select"
                     dateFormat={DATE_FORMAT}
+                    locale={this.getDatePickerLocaleConfig()}
                   />
                   {this.state.onsetDate && <span className="placeholder">{intl.formatMessage({ id: 'manageCondition.endDate' })}</span>}
                 </div>

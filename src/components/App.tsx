@@ -23,12 +23,7 @@ import '@openmrs/style-referenceapplication/lib/referenceapplication.css';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { PROJECT_LOCATION_ATTRIBUTE_TYPE_NAME } from 'src/shared/constants/app';
-import { IntlProvider } from "react-intl";
-import { merge } from 'lodash';
-import flatten from 'flat';
-import messagesEN from '../lang/en.json'
-import messagesFR from '../lang/fr.json'
-import messagesPTBR from '../lang/pt_BR.json'
+import TranslationProvider from './translation/translation-provider';
 
 toast.configure();
 
@@ -36,13 +31,6 @@ export interface IAppProps extends StateProps, DispatchProps {
 }
 
 class App extends React.Component<IAppProps> {
-  defaultLocale = 'en';
-  localeMessages = {
-    en: flatten(messagesEN),
-    fr: flatten(messagesFR),
-    'pt-BR': flatten(messagesPTBR)
-  };
-
   componentDidMount() {
     this.props.getSession();
   }
@@ -67,41 +55,25 @@ class App extends React.Component<IAppProps> {
     return projectName;
   }
 
-  // Translation fallback:
-  // locale -> locale without region codes -> default locale without region codes
-  getMessagesForLocale = (locale) => {
-    const localeWithoutRegionCode = this.getLocaleWithoutRegionCode(locale);
-    const defaultLocaleWithoutRegionCode = this.getLocaleWithoutRegionCode(this.defaultLocale);
-    return merge({}, this.localeMessages[defaultLocaleWithoutRegionCode], this.localeMessages[localeWithoutRegionCode], this.localeMessages[locale]);
-  };
-
-  getLocaleWithoutRegionCode = (locale) => {
-    const regionCodeSeparatorRegex = /[_-]+/;
-    return locale.toLowerCase().split(regionCodeSeparatorRegex)[0];
-  };
-
   render() {
-    const locale = this.props.locale ? this.props.locale : this.defaultLocale;
-    const messages = this.getMessagesForLocale(locale);
-
-    return (
-      <IntlProvider locale={locale} messages={messages}>
+    return ( 
+      <TranslationProvider>
         <div id="app" className="app">
           <Routes/>
           <ScrollUpButton/>
         </div>
-      </IntlProvider>
+      </TranslationProvider>
     );
   }
 }
 
-const mapStateToProps = ({session}) => ({
+const mapStateToProps = ({ session }) => ({
   session: session.session,
   userLocation: session.session?.sessionLocation,
   locale: session.session?.locale.replace("_", "-")
 });
 
-const mapDispatchToProps = {getSession, getApps};
+const mapDispatchToProps = { getSession, getApps };
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;

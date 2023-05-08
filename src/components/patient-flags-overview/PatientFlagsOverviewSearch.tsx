@@ -9,8 +9,8 @@
  */
 import React from 'react';
 import Select from 'react-select';
-import { useIntl } from 'react-intl';
 import { IFlag } from '../../shared/models/patient-flags-overview';
+import { injectIntl } from 'react-intl';
 
 interface IPatientFlagsOverviewSearchProps {
   flags: IFlag[],
@@ -19,10 +19,9 @@ interface IPatientFlagsOverviewSearchProps {
 
 const PatientFlagsOverviewSearch = ({
   flags,
-  setFlagName
-}: IPatientFlagsOverviewSearchProps) => {
-  const { formatMessage } = useIntl();
-
+  setFlagName,
+  intl
+}: PropsWithIntl<IPatientFlagsOverviewSearchProps>) => {
   const handleSelectOnChange = ({ name }) => {
     setFlagName(name)
   };
@@ -40,10 +39,10 @@ const PatientFlagsOverviewSearch = ({
         classNamePrefix="flags-select"
         options={flagOptions}
         onChange={handleSelectOnChange}
-        placeholder={formatMessage({ id: 'patientFlagsOverview.selectPatientFlagsPlaceholder' })}
+        placeholder={intl.formatMessage({ id: 'patientFlagsOverview.selectPatientFlagsPlaceholder' })}
       />
     </div>
   )
 };
 
-export default PatientFlagsOverviewSearch;
+export default injectIntl(PatientFlagsOverviewSearch);

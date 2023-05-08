@@ -9,7 +9,6 @@
  */
 
 import React, { useEffect }  from 'react';
-import { useIntl } from 'react-intl';
 import moment from "moment";
 import { TimePicker } from "../../common/time-picker/TimePicker";
 import { getCommonInputProps, getPlaceholder } from "../../../shared/util/patient-form-util";
@@ -20,12 +19,11 @@ import ValidationError from "./ValidationError";
 interface ITimeInputProps extends IFieldProps {
 }
 
-const TimeInput = (props: ITimeInputProps) => {
-  const intl = useIntl();
+const TimeInput = (props: PropsWithIntl<ITimeInputProps>) => {
   const {field, isInvalid, isDirty, className, value, patient, onPatientChange} = props;
   const {name, required, label} = field;
   const hasValue = !!value || !!patient[field.name];
-  const placeholder = getPlaceholder(intl, label, name, required);
+  const placeholder = getPlaceholder(props.intl, label, name, required);
 
   useEffect(() => {
     setValueInModel(patient, field.name, onPatientChange, field.defaultValue);
@@ -68,7 +66,7 @@ const TimeInput = (props: ITimeInputProps) => {
   return (
     <div className={`${className} input-container`}>
       <TimePicker {...timePickerProps} />
-      {hasValue && <span className="placeholder">{placeholder ? intl.formatMessage({ id: `${placeholder}` }) : ''}</span>}
+      {hasValue && <span className="placeholder">{placeholder ? props.intl.formatMessage({ id: `${placeholder}` }) : ''}</span>}
       {isDirty && isInvalid && <ValidationError hasValue={hasValue} field={field}/>}
     </div>
   );

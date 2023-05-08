@@ -9,7 +9,7 @@
  */
 
 import './Table.scss';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Pagination, PaginationItem, PaginationLink, Table } from 'reactstrap';
 import React from 'react';
 import _ from 'lodash';
@@ -37,8 +37,7 @@ const switchPage = (callback, page, enabled) => evt => {
 const MAX_PAGES_SHOWN = 5;
 const PAGE_DELTA = Math.floor((MAX_PAGES_SHOWN - 1) / 2);
 
-const PagedTable = (props: PagedTableProps) => {
-  const intl = useIntl();
+const PagedTable = (props: PropsWithIntl<PagedTableProps>) => {
   const handleRowClick = entity => {
     if (!!props.getRecordLink) {
       window.location.href = props.getRecordLink(entity);
@@ -64,7 +63,7 @@ const PagedTable = (props: PagedTableProps) => {
           {_.map(props.entities, (entity, i) => (
             <tr key={i} onClick={() => handleRowClick(entity)}>
               {_.map(props.columns, column => (
-                <td className={!!props.getRecordLink ? 'td-clickable' : undefined}>{props.columnContent(entity, column, intl)}</td>
+                <td className={!!props.getRecordLink ? 'td-clickable' : undefined}>{props.columnContent(entity, column, props.intl)}</td>
               ))}
             </tr>
           ))}

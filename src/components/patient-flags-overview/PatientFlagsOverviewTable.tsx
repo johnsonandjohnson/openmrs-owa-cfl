@@ -9,12 +9,12 @@
  */
 import React from 'react';
 import ReactTable from 'react-table';
-import { useIntl } from 'react-intl';
 import { IFlaggedPatient } from '../../shared/models/patient-flags-overview';
 import { PATIENT_PAGE_URL } from '../../shared/constants/openmrs';
 import { DEFAULT_PAGE_SIZE, PAGE_SIZE_OPTIONS, DEFAULT_COLUMNS } from '../../shared/constants/patient-flags-overview';
 import { ZERO } from '../../shared/constants/input';
 import { connect } from 'react-redux';
+import { injectIntl, FormattedMessage } from 'react-intl';
 
 interface IPatientFlagsOverviewTableProps {
   flaggedPatientsLoading: boolean,
@@ -37,10 +37,9 @@ const PatientFlagsOverviewTable = ({
   setPageSize,
   pageSize,
   showNoDataComponent,
-  app
-}: IPatientFlagsOverviewTableProps) => {
-
-  const { formatMessage } = useIntl();
+  app,
+  intl
+}: PropsWithIntl<IPatientFlagsOverviewTableProps>) => {
 
   const fetchData = ({ page, pageSize }) => {
     setPage(page);
@@ -56,7 +55,7 @@ const PatientFlagsOverviewTable = ({
       const tableColumnsConfig = app.config.tableColumns;
       return Object.keys(tableColumnsConfig).map(obj => {
         return {
-          label: formatMessage({ id: `${obj}` }),
+          label: intl.formatMessage({ id: `${obj}` }),
           value: tableColumnsConfig[obj]
         }
       });
@@ -77,15 +76,22 @@ const PatientFlagsOverviewTable = ({
     if (totalCount > 0) {
       return (
         <span>
-          {totalCount} {formatMessage({ id: 'patientFlagsOverview.recordsFound' })}
+          {totalCount} {intl.formatMessage({ id: 'patientFlagsOverview.recordsFound' })}
         </span>
       );
     } else if (showMessageError) {
-      return formatMessage({ id: 'patientFlagsOverview.somethingWentWrong' });
+      return intl.formatMessage({ id: 'patientFlagsOverview.somethingWentWrong' });
     } else if (!loading && totalCount === 0) {
-      return formatMessage({ id: 'patientFlagsOverview.noRecords' });
+      return intl.formatMessage({ id: 'patientFlagsOverview.noRecords' });
     }
   };
+
+  const previousText = intl.formatMessage({ id: 'common.table.previousLabel' });
+  const nextText = intl.formatMessage({ id: 'common.table.nextLabel' });
+  const loadingText = intl.formatMessage({ id: 'common.table.loadingLabel' });
+  const pageText = intl.formatMessage({ id: 'common.table.pageLabel' });
+  const ofText = intl.formatMessage({ id: 'common.table.ofLabel' });
+  const rowsText = intl.formatMessage({ id: 'common.table.resultsLabel' });
 
   return (
     <>
@@ -112,6 +118,12 @@ const PatientFlagsOverviewTable = ({
           onClick: () => onRowClick(patientUuid)
         })}
         columns={tableColumns}
+        nextText={nextText}
+        previousText={previousText}
+        pageText={pageText}
+        ofText={ofText}
+        rowsText={rowsText}
+        loadingText={loadingText}
       />
     </>
   )
@@ -121,4 +133,4 @@ const mapStateToProps = ({ apps: { app } }) => ({
   app
 });
 
-export default connect(mapStateToProps)(PatientFlagsOverviewTable);
+export default injectIntl(connect(mapStateToProps)(PatientFlagsOverviewTable));

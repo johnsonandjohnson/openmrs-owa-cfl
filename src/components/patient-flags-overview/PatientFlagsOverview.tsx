@@ -18,8 +18,8 @@ import { EMPTY_STRING } from '../../shared/constants/input';
 import { DEFAULT_PAGE_SIZE } from '../../redux/page.util';
 import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_NUMBER_TO_SEND, PATIENT_FLAGS_OVERVIEW_APP_NAME } from '../../shared/constants/patient-flags-overview';
 import './PatientFlagsOverview.scss'
-import { useIntl } from 'react-intl';
 import { getAppById } from '../../redux/reducers/apps';
+import { injectIntl } from 'react-intl';
 
 interface IStore {
   openmrs: {
@@ -40,8 +40,9 @@ const PatientFlagsOverview = ({
   getPatientFlags,
   getFlaggedPatientsOverview,
   getAppById,
-  isLoading
-}: StateProps & DispatchProps) => {
+  isLoading,
+  intl
+}: PropsWithIntl<StateProps & DispatchProps>) => {
   const usePrevious = value => {
     const ref = useRef();
 
@@ -52,7 +53,6 @@ const PatientFlagsOverview = ({
     return ref.current;
   };
 
-  const { formatMessage } = useIntl();
   const prevSessionLocationUuid = usePrevious(sessionLocation?.uuid);
   const [inputValue, setInputValue] = useState(EMPTY_STRING);
   const [flagName, setFlagName] = useState(EMPTY_STRING);
@@ -92,8 +92,8 @@ const PatientFlagsOverview = ({
       ) : (
         <>
           <div>
-            <h2 className="title-header">{formatMessage({ id: 'patientFlagsOverview.title' })}</h2>
-            <div className="helper-text">{formatMessage({ id: 'patientFlagsOverview.description' })}</div>
+            <h2 className="title-header">{intl.formatMessage({ id: 'patientFlagsOverview.title' })}</h2>
+            <div className="helper-text">{intl.formatMessage({ id: 'patientFlagsOverview.description' })}</div>
           </div>
           <PatientFlagsOverviewSearch
             setFlagName={setFlagName}
@@ -110,7 +110,7 @@ const PatientFlagsOverview = ({
             showNoDataComponent={null}
           />
           <div className="td-cell select-filter-text">
-            {isSelectFilterTextEnabled ? formatMessage({ id: 'patientFlagsOverview.pleaseSelectFilter' }) : ''}
+            {isSelectFilterTextEnabled ? intl.formatMessage({ id: 'patientFlagsOverview.pleaseSelectFilter' }) : ''}
           </div>
         </>
       )}
@@ -155,4 +155,4 @@ const mapDispatchToProps = { getPatientFlags, getFlaggedPatientsOverview, getApp
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
 
-export default connect(mapStateToProps, mapDispatchToProps)(PatientFlagsOverview);
+export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(PatientFlagsOverview));
