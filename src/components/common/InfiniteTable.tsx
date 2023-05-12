@@ -51,7 +51,7 @@ const InfiniteTable = (props: PropsWithIntl<InfiniteTableProps>) => {
         <thead>
           <tr>
             {_.map(props.columns, (column, i) => (
-              <th key={i}>{isColumnObject ? column.label : <FormattedMessage id={`columnNames.${column}`} />}</th>
+              <th key={i}>{isColumnObject ? props.intl.formatMessage({ id: `columnNames.${column.label}` }) : props.intl.formatMessage({ id: `columnNames.${column}` })}</th>
             ))}
           </tr>
         </thead>
