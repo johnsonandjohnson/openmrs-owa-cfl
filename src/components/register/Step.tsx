@@ -50,6 +50,7 @@ export const LOCATIONS_OPTION_SOURCE = 'locations';
 export const SEPARATOR_FIELD_TYPE = 'separator';
 export const RELATIVES_FIELD_TYPE = 'relatives';
 export const PHONE_FIELD_TYPE = 'phone';
+export const STATIC_FIELD_TYPE = 'static';
 export const BIRTHDATE_FIELD = 'birthdate';
 export const ESTIMATED_BIRTHDATE_FIELDS = ['birthdateYears', 'birthdateMonths'];
 
@@ -216,7 +217,8 @@ export class Step extends React.Component<IStepProps, IStepState> {
               const additionalProps = {} as any;
               const patientIdentifierType = this.getPatientIdentifierType(field);
 
-              if (i === stepDefinition.fields.length - 1 || (field.name === BIRTHDATE_FIELD && !!patient[BIRTHDATE_FIELD])) {
+              if (i === stepDefinition.fields.filter(field => field.type !== STATIC_FIELD_TYPE).length - 1 || 
+                (field.name === BIRTHDATE_FIELD && !!patient[BIRTHDATE_FIELD])) {
                 additionalProps.onKeyDown = this.handleLastFieldKeyDown;
               }
 

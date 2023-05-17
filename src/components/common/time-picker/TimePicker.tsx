@@ -20,9 +20,11 @@ export const TimePicker = ({
   placeholder = null,
   showPlaceholder = false,
   value,
-  onChange
+  onChange,
+  onKeyDown = undefined
 }) => (
-  <div className="input-container">
+  <div className="input-container"
+    onKeyDown={!!onKeyDown && onKeyDown}>
     <ReactTimePicker
       format={format}
       placeholder={placeholder}
