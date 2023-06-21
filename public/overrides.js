@@ -159,10 +159,13 @@ function overridePatientHeader() {
       } else {
         patientHeader.replaceWith(...updatedHeader);
       }
-      // add (age/gender) to the breadcrumb
-      elementReady('#breadcrumbs li:last-child:not(:empty)').then(element => {
-        element.textContent = element.textContent.replace(fullName, fullName + ageAndGender);
-      });
+
+      if(!new URL(window.location.href).pathname.includes("/htmlformentryui/htmlform")) {
+        // add (age/gender) to the breadcrumb
+        elementReady('#breadcrumbs li:last-child:not(:empty)').then(element => {
+          element.textContent = shownName + ageAndGender;
+        });
+      }
     });
   }
 }
