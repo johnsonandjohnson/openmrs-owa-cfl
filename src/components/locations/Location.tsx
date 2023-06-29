@@ -39,10 +39,12 @@ import {
   REQUIRED_OCCURRENCE,
   COUNTRY_CODE_LOCATION_ATTRIBUTE_TYPE_UUID,
   CLUSTER_LOCATION_ATTRIBUTE_TYPE_UUID,
+  PROJECT_LOCATION_ATTRIBUTE_TYPE_UUID,
   MANDATORY_LOCATION_ATTRIBUTE_TYPE_UUID
 } from '../../shared/constants/location';
 import { COUNTRY_CONCEPT_UUID, COUNTRY_CONCEPT_REPRESENTATION } from '../../shared/constants/concept';
 import { IConceptSetMember } from '../../shared/models/concept';
+import { getProjectNames } from 'src/redux/reducers/project';
 
 export interface ILocationProps extends StateProps, DispatchProps, RouteComponentProps {
   intl: IntlShape;
@@ -71,6 +73,9 @@ interface IStore {
       concept: boolean;
     };
   };
+  project: {
+    projects: any[];
+  };
 }
 
 interface IUrlParams {
@@ -94,12 +99,14 @@ export const Location = ({
   match,
   settingValue,
   success,
+  projects,
   getConcept,
   getLocation,
   getLocationAttributeTypes,
   getSettingByQuery,
   saveLocation,
-  searchLocations
+  searchLocations,
+  getProjectNames
 }: ILocationProps) => {
   const [location, setLocation] = useState(DEFAULT_LOCATION);
   const [showValidationErrors, setShowValidationErrors] = useState(false);
@@ -109,6 +116,7 @@ export const Location = ({
     getLocationAttributeTypes();
     searchLocations();
     getSettingByQuery(LOCATION_DEFAULT_TAG_LIST_SETTING_KEY);
+    getProjectNames();
     getConcept(COUNTRY_CONCEPT_UUID, COUNTRY_CONCEPT_REPRESENTATION);
     if (locationId) {
       getLocation(locationId);
@@ -249,6 +257,25 @@ export const Location = ({
           {showValidationErrors && isInvalid && <ValidationError message="common.error.required" />}
         </div>
       );
+    } else if (locationAttributeTypeUuid === PROJECT_LOCATION_ATTRIBUTE_TYPE_UUID) {
+      const options: Array<IOption> = projects.map(({ display, uuid }) => ({ label: display, value: uuid }));
+      const projectUuid = value ? value['uuid'] : '';
+      return (
+        <div className="input-container" key={key}>
+          <SelectWithPlaceholder
+            placeholder={placeholder}
+            showPlaceholder={!!value}
+            value={value && options.find(option => option.value === projectUuid)}
+            onChange={(option: IOption | null) => onChange(option?.value || '')}
+            options={options}
+            wrapperClassName={cx('flex-1', { invalid: showValidationErrors && isInvalid })}
+            classNamePrefix="default-select"
+            theme={selectDefaultTheme}
+            isClearable
+          />
+          {showValidationErrors && isInvalid && <ValidationError message="common.error.required" />}
+        </div>
+      );
     } else if (locationAttributeTypeUuid === COUNTRY_CODE_LOCATION_ATTRIBUTE_TYPE_UUID) {
       return (
         <div className="input-container" key={key}>
@@ -326,7 +353,7 @@ export const Location = ({
               {showValidationErrors && isInvalid && <ValidationError message="common.error.required" />}
             </div>
           );
-      }
+    }
   };
 
   return (
@@ -460,7 +487,8 @@ const mapStateToProps = ({
   concept: {
     concept: { setMembers: countries },
     loading: { concept: loadingConcept }
-  }
+  },
+  project: { projects },
 }: IStore) => ({
   isLocationLoading: loadingLocationAttributeTypes || loadingLocation || loadingSetting || loadingConcept,
   locationAttributeTypes: locationAttributeTypes.filter(locationAttributeType => !locationAttributeType.retired),
@@ -468,6 +496,7 @@ const mapStateToProps = ({
   success,
   editedLocation,
   settingValue: setting?.value,
+  projects,
   countryOptions: countries
     .sort((countryA, countryB) => countryA.display.localeCompare(countryB.display))
     .map(({ display }) => ({ label: display, value: display })),
@@ -481,7 +510,7 @@ const mapStateToProps = ({
   }))
 });
 
-const mapDispatchToProps = { getLocationAttributeTypes, searchLocations, saveLocation, getLocation, getSettingByQuery, getConcept };
+const mapDispatchToProps = { getLocationAttributeTypes, searchLocations, saveLocation, getLocation, getSettingByQuery, getConcept, getProjectNames };
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;

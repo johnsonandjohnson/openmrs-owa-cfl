@@ -42,7 +42,8 @@ import orderType from './order-type';
 import findPatientColumnsConfiguration from './columns-configuration';
 import patientFlagsOverview from './patient-flags-overview';
 import globalPropertyReducer from './global-property.reducer';
-import translationMessages from './translation-messages'; 
+import translationMessages from './translation-messages';
+import project from './project';
 
 export default combineReducers({
   cflPatient,
@@ -62,6 +63,7 @@ export default combineReducers({
   patient,
   patientFlagsOverview,
   personStatus,
+  project,
   role,
   user,
   customizeReducer,
