@@ -10,7 +10,6 @@
 
 import axios from 'axios';
 import { FAILURE, REQUEST, SUCCESS } from '../action-type.util';
-import { PURGE_TRUE_FLAG } from '../../shared/constants/openmrs';
 import { USER, USER_URL, PROVIDER_URL, PASSWORD_URL } from '../../shared/constants/user-account';
 
 export const ACTION_TYPES = {
@@ -145,12 +144,12 @@ export const saveProvider = (provider: { uuid: string; data: {} }) => ({
 
 export const deleteUser = (uuid: string) => ({
   type: ACTION_TYPES.DELETE_USER,
-  payload: axios.delete(`${USER_URL}/${uuid}?${PURGE_TRUE_FLAG}`)
+  payload: axios.delete(`${USER_URL}/${uuid}`)
 });
 
 export const deleteProvider = (providerUuid: string) => ({
   type: ACTION_TYPES.DELETE_PROVIDER,
-  payload: axios.delete(`${PROVIDER_URL}/${providerUuid}?${PURGE_TRUE_FLAG}`)
+  payload: axios.delete(`${PROVIDER_URL}/${providerUuid}`)
 });
 
 export default reducer;
