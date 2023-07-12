@@ -108,7 +108,13 @@ class RegistrationForm extends React.Component<IRegistrationProps, IRegistration
       } else {
         // Do nothing
       }
+    } else {
+      // Handle default values for Patient
+      if(prevState.patient.LocationAttribute !== this.props.sessionLocation?.uuid) {
+        this.setState({patient: {...this.state.patient, LocationAttribute: this.props.sessionLocation.uuid}});
+      }
     }
+
     if (!prevProps.success && this.props.success) {
       this.setState({
         success: true
@@ -237,7 +243,7 @@ class RegistrationForm extends React.Component<IRegistrationProps, IRegistration
   };
 
   isFormValid = () => _.isEmpty(_.pickBy(this.state.stepValidity, step => !step.isValid)) && this.customRequiredElementsChecked();
-  
+
   customRequiredElementsChecked = () => {
     const { patient } = this.state;
     const { confirmPageCustomElements } = this.props;
@@ -281,7 +287,7 @@ class RegistrationForm extends React.Component<IRegistrationProps, IRegistration
   };
 
   confirmPageCustomElements = () => {
-    const { confirmPageCustomElements } = this.props;    
+    const { confirmPageCustomElements } = this.props;
     return (
       <>
         <div className='custom-elements-section'>
@@ -398,7 +404,7 @@ class RegistrationForm extends React.Component<IRegistrationProps, IRegistration
   }
 }
 
-const mapStateToProps = ({ registration, cflPatient, cflPerson, apps, settings, concept }) => ({
+const mapStateToProps = ({ registration, cflPatient, cflPerson, apps, settings, concept, openmrs: { session: { sessionLocation }} }) => ({
   loading: registration.loading,
   success: registration.success,
   message: registration.message,
@@ -411,7 +417,8 @@ const mapStateToProps = ({ registration, cflPatient, cflPerson, apps, settings, 
   caregiverSteps: apps.caregiverRegistrationSteps || caregiverDefaultSteps,
   registrationRedirectUrl: apps.registrationRedirectUrl || DEFAULT_REGISTRATION_FORM_REDIRECT,
   settingsLoading: apps.loading || registration.loading || settings.loading || concept.loading.concept,
-  confirmPageCustomElements: apps.confirmPageCustomElements || []
+  confirmPageCustomElements: apps.confirmPageCustomElements || [],
+  sessionLocation
 });
 
 const mapDispatchToProps = {
