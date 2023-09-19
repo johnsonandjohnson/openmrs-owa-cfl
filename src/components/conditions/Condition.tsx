@@ -90,10 +90,10 @@ class Condition extends React.Component<IConditionsProps, IConditionsState> {
     const { condition, patient, match, conditionUpdated, conceptListClasses } = this.props;
     const id = match.params.patientUuid;
     if (prevProps.condition !== condition && !!condition) {
-      const { concept, status, onSetDate, endDate } = condition;
+      const { concept, status, onSetDate, endDate, conditionNonCoded } = condition;
       this.setState({
         concept: concept && {
-          label: concept.name,
+          label: conditionNonCoded ? `"${conditionNonCoded}"` : concept.name,
           value: concept.uuid
         },
         active: status === STATUS_ACTIVE,
