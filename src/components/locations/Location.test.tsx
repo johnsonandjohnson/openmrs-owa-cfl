@@ -15,25 +15,32 @@ import { Location, ILocationProps } from './Location';
 import IntlShape from '../../mocks/Intl';
 
 const initialProps: ILocationProps = {
+  countryClusters: undefined,
+  countryNames: undefined,
+  countryOptions: undefined,
+  editedLocation: null,
+  getConcept: undefined,
+  getLocation: jest.fn(),
+  getLocationAttributeTypes: jest.fn(),
+  getProjectNames: undefined,
+  getSettingByQuery: undefined,
+  history: null,
   intl: IntlShape,
-  loadingLocationAttributeTypes: false,
+  isLocationLoading: undefined,
+  location: undefined,
   locationAttributeTypes: [],
   locations: [],
-  success: false,
-  loadingLocation: false,
-  editedLocation: null,
-  getLocationAttributeTypes: jest.fn(),
-  saveLocation: jest.fn(),
-  searchLocations: jest.fn(),
-  getLocation: jest.fn(),
-  history: null,
   match: {
     params: {},
-    isExact: null,
-    path: null,
-    url: null
+    isExact: false,
+    path: "",
+    url: ""
   },
-  location: null
+  projects: undefined,
+  saveLocation: jest.fn(),
+  searchLocations: jest.fn(),
+  settingValue: undefined,
+  success: false
 };
 
 const props: ILocationProps = {
