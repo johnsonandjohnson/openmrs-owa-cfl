@@ -7,10 +7,10 @@
  * Copyright (C) OpenMRS Inc. OpenMRS is a registered trademark and the OpenMRS
  * graphic logo is a trademark of OpenMRS Inc.
  */
- 
+
 const UNKNOWN_AGE = "unknown";
 const UNKNOWN_GENDER = "U";
- 
+
 // Vanilla JS overrides - both for core OpenMRS and OWAs
 window.addEventListener('load', addCollapseToTheHeader);
 // Override Patient Header both on load and on page change (OWAs)
@@ -18,7 +18,7 @@ window.addEventListener('load', () => {
   overridePatientHeader();
   watchElementMutations('.patient-header:not(.custom)', overridePatientHeader);
 });
- 
+
 // JQuery overrides (only for core OpenMRS)
 const jqr = (typeof $ === 'function' || typeof jQuery === 'function') && ($ || jQuery);
 jqr &&
@@ -52,7 +52,7 @@ jqr &&
         conditionsIcon.setAttribute('onclick', `location.href = '${CFL_UI_BASE}index.html#/conditions/${patientId}'`);
       }
     }
-    
+
     // Add hamburger menu for general actions (visible on smaller screens)
     const actionContainer = jqr('.action-container');
     if (actionContainer.length) {
@@ -74,7 +74,7 @@ jqr &&
       );
     }
   });
- 
+
 function addCollapseToTheHeader() {
   elementReady('.user-options').then(userOptions => {
     const collapse = window.document.getElementById('navbarSupportedContent');
@@ -94,19 +94,19 @@ function addCollapseToTheHeader() {
     }
   });
 }
- 
+
 function isAgeAndGenderKnown(age, gender) {
   return age != UNKNOWN_AGE && gender != UNKNOWN_GENDER;
 }
- 
+
 function isAgeUnknownAndGenderKnown(age, gender) {
   return age == UNKNOWN_AGE && gender != UNKNOWN_GENDER;
 }
- 
+
 function isAgeKnownAndGenderUnknown(age, gender) {
   return age != UNKNOWN_AGE && gender == UNKNOWN_GENDER;
 }
- 
+
 function getAgeAndGenderLabelText(age, gender) {
   if (isAgeAndGenderKnown(age, gender)) {
     return ' (' + age+ '/' + gender + ')';
@@ -116,7 +116,7 @@ function getAgeAndGenderLabelText(age, gender) {
     return ' (' + age + ')';
   } else return "";
 }
- 
+
 function overridePatientHeader() {
   const patientHeader = document.querySelector('.patient-header:not(.custom)');
   // re-design Patient header
@@ -149,7 +149,7 @@ function overridePatientHeader() {
       if (status.length) {
         personStatus.textContent = status[1]?.trim();
       }
- 
+
       var htmlLines = [
         '<div class="patient-header custom">',
         '<div class="patient-data"><h1>' + fullName + ageAndGender + '</h1>',
@@ -185,14 +185,14 @@ function overridePatientHeader() {
       const deletePatient = document.querySelector('#org\\.openmrs\\.module\\.coreapps\\.deletePatient');
       if (!!deletePatient) {
         const href = deletePatient.href;
-        htmlLines = htmlLines.concat(['<button class="btn btn-secondary" onclick="' + href + '">', deletePatient.textContent, '</button>']);
+        htmlLines = htmlLines.concat(['<button class="btn btn-danger" onclick="' + href + '">', deletePatient.textContent, '</button>']);
         deletePatient.parentElement.removeChild(deletePatient);
       }
       const deleteCaregiver = document.querySelector('#cfl\\.personDashboard\\.deletePerson');
       if (!!deleteCaregiver) {
         const href = deleteCaregiver.href;
         htmlLines = htmlLines.concat([
-          '<button class="btn btn-secondary" onclick="' + href + '">',
+          '<button class="btn btn-danger" onclick="' + href + '">',
           deleteCaregiver.textContent,
           '</button>'
         ]);
@@ -215,7 +215,7 @@ function overridePatientHeader() {
       } else {
         patientHeader.replaceWith(...updatedHeader);
       }
- 
+
       if(!new URL(window.location.href).pathname.includes("/htmlformentryui/htmlform")) {
         // add (age/gender) to the breadcrumb
         elementReady('#breadcrumbs li:last-child:not(:empty)').then(element => {
@@ -242,7 +242,7 @@ function overridePatientHeader() {
     });
   }
 }
- 
+
 /**
  * @return {NodeList}
  * @param htmlString
@@ -252,10 +252,10 @@ function htmlToElements(htmlString) {
   template.innerHTML = htmlString;
   return template.content.childNodes;
 }
- 
+
 // MIT Licensed
 // Author: jwilson8767
- 
+
 /**
  * Waits for an element satisfying selector to exist, then resolves promise with the element.
  * Useful for resolving race conditions.
@@ -286,7 +286,7 @@ function elementReady(selector, parentElement = document, notEmpty = false) {
     });
   });
 }
- 
+
 /**
  * Observes changes to DOM starting from {@code parentElement} and its children, then calls {@code callback} on all elements
  * fitting {@code selector} once a change is detected.
