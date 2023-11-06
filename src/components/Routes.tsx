@@ -17,7 +17,6 @@ import ErrorBoundary from './common/ErrorBoundary';
 import { connect } from 'react-redux';
 import Unauthorized from './common/Unauthorized';
 import { Spinner } from 'reactstrap';
-import Customize from './customize/customize';
 import { routeConfig } from '../shared/constants/routes';
 import { injectIntl } from 'react-intl';
 
@@ -41,7 +40,6 @@ class Routes extends React.Component<IRoutesProps> {
 
   render = () => (
     <Router>
-      <Customize />
       <Header />
       <div className="content">
         <Breadcrumbs />

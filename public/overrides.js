@@ -37,7 +37,9 @@ jqr &&
       const uuidMatch = /'([^)]+)'/.exec(deletePerson?.href);
       const patientId = (uuidMatch && uuidMatch[1]) || searchParams.get('patientId');
       if (!!patientProfileAnchor) {
-        patientProfileAnchor.href = `${CFL_UI_BASE}index.html#/edit-patient/${patientId}?redirect=${window.location.href}&name=${fullName}`;
+        const patientHeader = document.querySelector('.patient-header:not(.custom)');
+        const shipId = patientHeader.querySelector('#shipId')?.textContent.trim();
+        patientProfileAnchor.href = `${CFL_UI_BASE}index.html#/edit-patient/${patientId}?redirect=${window.location.href}&name=${shipId}`;
       }
       const caregiverProfileAnchor = document.querySelector('a#cfl\\.caregiverProfile');
       if (!!caregiverProfileAnchor) {
@@ -129,11 +131,9 @@ function overridePatientHeader() {
         await elementReady('.person-status:not(:empty)');
       }
       const patientId = patientHeader.querySelector('.identifiers:nth-of-type(2) span')?.textContent.trim();
+      const shipId = patientHeader.querySelector('#shipId')?.textContent.trim();
+      const shownName = shipId ? shipId : 'Patient Dashboard';
       const patientLocation = patientHeader.querySelector('.patientLocation:not(:empty) span')?.textContent.trim() || '';
-      const givenName = patientHeader.querySelector('.PersonName-givenName')?.textContent;
-      const middleName = patientHeader.querySelector('.PersonName-middleName')?.textContent;
-      const familyName = patientHeader.querySelector('.PersonName-familyName')?.textContent;
-      const fullName = [givenName, middleName, familyName].join(' ').replace('  ', ' ');
       const gender = patientHeader.querySelector('.gender-age:first-of-type span:nth-child(1)')?.textContent.trim();
       const age = patientHeader.querySelector('.gender-age:first-of-type span:nth-child(2)')?.textContent.trim();
       const telephoneNumber =
@@ -152,10 +152,11 @@ function overridePatientHeader() {
 
       var htmlLines = [
         '<div class="patient-header custom">',
-        '<div class="patient-data"><h1>' + fullName + ageAndGender + '</h1>',
-        (!!patientId
-          ? '<div class="patient-id"><span class="header-label">Patient ID: </span><span class="value">' + patientId + '</span></div>'
-          : '') +
+        '<div class="patient-data">',
+        (!!shipId ? '<h1>' + shipId + '</h1>' : '') +
+          (!!patientId
+            ? '<div class="patient-id"><span class="header-label">Patient ID: </span><span class="value">' + patientId + '</span></div>'
+            : '') +
           '<div class="patient-location"><span class="header-label">Patient Location: </span><span class="value">' +
           patientLocation +
           '</span></div>' +
@@ -216,14 +217,14 @@ function overridePatientHeader() {
         patientHeader.replaceWith(...updatedHeader);
       }
 
-      if(!new URL(window.location.href).pathname.includes("/htmlformentryui/htmlform")) {
-        // add (age/gender) to the breadcrumb
-        elementReady('#breadcrumbs li:last-child:not(:empty)').then(element => {
-          element.textContent = shownName + ageAndGender;
-        });
+      const breadcrumbs = document.querySelectorAll('#breadcrumbs a').length
+        ? document.querySelectorAll('#breadcrumbs a')
+        : document.querySelectorAll('.breadcrumbs a');
+      if (breadcrumbs[1]?.href.includes('patientId')) {
+        breadcrumbs[1].textContent = shownName + ageAndGender;
       }
 
-      // Customize breadcrumbs for the allergies page
+      // Customize breadcrumbs for the allergies & htmlform pages
       if (new URL(window.location.href).pathname.includes("/allergyui")) {
         const homeBreadcrumb = $('#breadcrumbs li:first-child:not(:empty)');
         const nameBreadCrumb = homeBreadcrumb.next();
@@ -234,11 +235,23 @@ function overridePatientHeader() {
 
         const nameBreadCrumbWrapper = $('<a>', {
           href: patientDashboardURL,
-          text: fullName + ' '
+          text: shownName + ageAndGender + ' '
         });
 
         nameBreadCrumb.empty().append(nameBreadCrumbWrapper);
+      } else if (!new URL(window.location.href).pathname.includes("/htmlformentryui/htmlform")) {
+        elementReady('#breadcrumbs li:last-child:not(:empty)').then(element => {
+          element.textContent = shownName + ageAndGender;
+        });
       }
+
+      if(window.location.href.includes("/conditions")) {
+        document.getElementsByClassName('patient-header')[0].style.color = '#000000';
+        elementReady('.breadcrumbs > a:nth-of-type(2)').then(element => {
+          const shipId = patientHeader.querySelector('#shipId')?.textContent.trim();
+          element.textContent = shownName + ageAndGender;
+        });
+       }
     });
   }
 }

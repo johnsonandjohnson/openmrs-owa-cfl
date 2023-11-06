@@ -161,11 +161,14 @@ class Header extends React.Component<IHeaderProps, IHeaderState> {
 
   renderPatientIdentifier(personDetails) {
     const intl = getIntl();
+    const SHIP_ID_UUID = "871fd410-b8ab-11eb-988e-0242ac120002";
     const identifiers = personDetails.identifiers;
+    const shipId = identifiers.find( ({ identifierType }) => identifierType.uuid === SHIP_ID_UUID);
     const patientId = personDetails.isPerson ? intl.formatMessage({ id: "person.header.personId", defaultMessage: "Caregiver ID" })
       : intl.formatMessage({ id: "reactcomponents.patient.id", defaultMessage: "Patient ID" });
     return (this.hasPreferredId(personDetails) &&
       <div className="identifiers">
+        {shipId && <span id="shipId">{shipId.identifier}</span>}
         <em onClick={this.handlePatientLink}>{patientId}</em>
         <div className="identifiers-number">
           {identifiers.map(identifier => { return (identifier.preferred && <span key={identifier.identifier}>{identifier.identifier}</span>) })}

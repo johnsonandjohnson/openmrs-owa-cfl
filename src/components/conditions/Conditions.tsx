@@ -214,7 +214,7 @@ class Condition extends React.Component<IConditionsProps, IConditionsState> {
           </div>
           <div className="d-inline pull-right confirm-button-container">
             <Link to={this.props.location.pathname + '/manage'} className="save btn">
-              <FormattedMessage id={'conditions.addNew'} />
+              <FormattedMessage id='Add New Condition' />
             </Link>
           </div>
         </div>
