@@ -16,9 +16,8 @@ import { IPatientFlagsOverviewState } from '../../shared/models/patient-flags-ov
 import { Spinner } from 'reactstrap';
 import { EMPTY_STRING } from '../../shared/constants/input';
 import { DEFAULT_PAGE_SIZE } from '../../redux/page.util';
-import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_NUMBER_TO_SEND, PATIENT_FLAGS_OVERVIEW_APP_NAME } from '../../shared/constants/patient-flags-overview';
-import './PatientFlagsOverview.scss'
-import { getAppById } from '../../redux/reducers/apps';
+import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_NUMBER_TO_SEND } from '../../shared/constants/patient-flags-overview';
+import './PatientFlagsOverview.scss';
 import { injectIntl } from 'react-intl';
 
 interface IStore {
@@ -39,9 +38,9 @@ const PatientFlagsOverview = ({
   totalCount,
   getPatientFlags,
   getFlaggedPatientsOverview,
-  getAppById,
   isLoading,
-  intl
+  intl,
+  patientFlagsOverviewTableColumns
 }: PropsWithIntl<StateProps & DispatchProps>) => {
   const usePrevious = value => {
     const ref = useRef();
@@ -61,10 +60,6 @@ const PatientFlagsOverview = ({
   const [isSelectFilterTextEnabled, setInitialTextEnabled] = useState(true);
 
   useEffect(() => {
-    getAppById(PATIENT_FLAGS_OVERVIEW_APP_NAME);
-  }, [])
-
-  useEffect(() => {
     getPatientFlags();
   }, [getPatientFlags]);
 
@@ -81,6 +76,7 @@ const PatientFlagsOverview = ({
     if (inputValue || flagName) {
       setInitialTextEnabled(false);
     }
+
   }, [getFlaggedPatientsOverview, sessionLocation?.uuid, inputValue, flagName, page, pageSize, prevSessionLocationUuid]);
 
   return (
@@ -107,7 +103,7 @@ const PatientFlagsOverview = ({
             showMessageError={showMessageError}
             pageSize={pageSize}
             totalCount={totalCount}
-            showNoDataComponent={null}
+            patientFlagsOverviewTableColumns={patientFlagsOverviewTableColumns}
           />
           <div className="td-cell select-filter-text">
             {isSelectFilterTextEnabled ? intl.formatMessage({ id: 'patientFlagsOverview.pleaseSelectFilter' }) : ''}
@@ -136,7 +132,8 @@ const mapStateToProps = ({
     }
   },
   apps: {
-    appLoading
+    appLoading,
+    patientFlagsOverviewTableColumns
   }
 }: IStore) => ({
   sessionLocation,
@@ -147,10 +144,11 @@ const mapStateToProps = ({
   showMessageError,
   flaggedPatients,
   totalCount,
-  isLoading: appLoading || flagsLoading
+  isLoading: appLoading || flagsLoading,
+  patientFlagsOverviewTableColumns
 });
 
-const mapDispatchToProps = { getPatientFlags, getFlaggedPatientsOverview, getAppById };
+const mapDispatchToProps = { getPatientFlags, getFlaggedPatientsOverview };
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
