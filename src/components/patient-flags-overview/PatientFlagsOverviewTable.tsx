@@ -14,7 +14,7 @@ import { PATIENT_PAGE_URL } from '../../shared/constants/openmrs';
 import { DEFAULT_PAGE_SIZE, PAGE_SIZE_OPTIONS, DEFAULT_COLUMNS } from '../../shared/constants/patient-flags-overview';
 import { ZERO } from '../../shared/constants/input';
 import { connect } from 'react-redux';
-import { injectIntl, FormattedMessage } from 'react-intl';
+import { injectIntl } from 'react-intl';
 
 interface IPatientFlagsOverviewTableProps {
   flaggedPatientsLoading: boolean,
@@ -24,8 +24,8 @@ interface IPatientFlagsOverviewTableProps {
   setPage: (page: number) => void,
   setPageSize: (pageSize: number) => void,
   pageSize: number,
-  showNoDataComponent: boolean,
-  app: any
+  app: any,
+  patientFlagsOverviewTableColumns: any
 }
 
 const PatientFlagsOverviewTable = ({
@@ -36,9 +36,9 @@ const PatientFlagsOverviewTable = ({
   setPage,
   setPageSize,
   pageSize,
-  showNoDataComponent,
   app,
-  intl
+  intl,
+  patientFlagsOverviewTableColumns
 }: PropsWithIntl<IPatientFlagsOverviewTableProps>) => {
 
   const fetchData = ({ page, pageSize }) => {
@@ -51,12 +51,11 @@ const PatientFlagsOverviewTable = ({
   };
 
   const getColumnsToDisplay = () => {
-    if (app && app.config && app.config.tableColumns) {
-      const tableColumnsConfig = app.config.tableColumns;
-      return Object.keys(tableColumnsConfig).map(obj => {
+    if (patientFlagsOverviewTableColumns) {
+      return Object.keys(patientFlagsOverviewTableColumns).map(obj => {
         return {
           label: intl.formatMessage({ id: `${obj}` }),
-          value: tableColumnsConfig[obj]
+          value: patientFlagsOverviewTableColumns[obj]
         }
       });
     } else {

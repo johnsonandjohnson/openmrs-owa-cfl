@@ -18,4 +18,3 @@ export const DEFAULT_COLUMNS = [
   { label: 'Status', value: 'patientStatus'},
   { label: 'Gender', value: 'gender' }
 ];
-export const PATIENT_FLAGS_OVERVIEW_APP_NAME = "cfl.patientFlagsOverview";
