@@ -60,7 +60,6 @@ const InfiniteTable = (props: PropsWithIntl<InfiniteTableProps>) => {
             <tr key={i} onClick={() => handleRowClick(entity)}>
               {_.map(props.columns, column => {
                 const columnValue = isColumnObject ? column.value : column;
-
                 return (
                   <td key={columnValue} className={!!props.getRecordLink ? 'td-clickable' : undefined}>
                     {props.columnContent(entity, columnValue, props.intl)}
