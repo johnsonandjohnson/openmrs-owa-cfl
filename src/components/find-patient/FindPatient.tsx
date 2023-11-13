@@ -23,6 +23,7 @@ import { PATIENT_PAGE_URL } from '../../shared/constants/openmrs';
 import InfiniteTable from '../common/InfiniteTable';
 import { COLUMNS_CONFIGURATION_SETTING_KEY, DEFAULT_COLUMNS } from '../../shared/constants/columns-configuration';
 import { getSettingByQuery } from '../../redux/reducers/settings';
+import { DEFAULT_FIND_CAREGIVER_TABLE_COLUMNS } from 'src/shared/constants/patient';
 
 export interface IPatientsProps extends StateProps, DispatchProps {
   intl: any;
@@ -115,7 +116,7 @@ class FindPatient extends React.Component<IPatientsProps, IPatientsState> {
             </div>
             {this.props.totalCount > 0 && (
               <InfiniteTable
-                columns={this.props.tableColumns}
+                columns={this.props.tableColumns.split(",")}
                 entities={this.props.patients}
                 columnContent={columnContent}
                 hasNext={this.props.hasNext}
@@ -131,7 +132,7 @@ class FindPatient extends React.Component<IPatientsProps, IPatientsState> {
   }
 }
 
-const mapStateToProps = ({ cflPatient, settings: { setting } }) => ({
+const mapStateToProps = ({ cflPatient, apps }) => ({
   patients: cflPatient.patients,
   loading: cflPatient.loading,
   error: cflPatient.errorMessage,
@@ -139,7 +140,7 @@ const mapStateToProps = ({ cflPatient, settings: { setting } }) => ({
   hasPrev: cflPatient.hasPrev,
   currentPage: cflPatient.currentPage,
   totalCount: cflPatient.totalCount,
-  tableColumns: setting?.value ? JSON.parse(setting.value) : DEFAULT_COLUMNS
+  tableColumns: (apps.findPatientTableColumns && apps.findPatientTableColumns) || DEFAULT_FIND_CAREGIVER_TABLE_COLUMNS
 });
 
 const mapDispatchToProps = { search, reset, getSettingByQuery };
