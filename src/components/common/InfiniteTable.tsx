@@ -10,13 +10,12 @@
 
 import './Table.scss';
 import './InfiniteTable.scss';
-import { FormattedMessage } from 'react-intl';
+import { injectIntl } from 'react-intl';
 import { Spinner, Table } from 'reactstrap';
 import React from 'react';
 import _ from 'lodash';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { IColumnConfiguration } from '../../shared/models/columns-configuration';
-import { injectIntl } from 'react-intl';
 
 export interface InfiniteTableProps {
   columns: string[] | IColumnConfiguration[];
@@ -43,23 +42,28 @@ const InfiniteTable = (props: PropsWithIntl<InfiniteTableProps>) => {
       hasMore={props.hasNext}
       loader={
         <div className="spinner">
-          <Spinner />
+          <Spinner/>
         </div>
       }
     >
       <Table borderless striped responsive className="table">
         <thead>
-          <tr>
-            {_.map(props.columns, (column, i) => (
-              <th key={i}>{isColumnObject ? props.intl.formatMessage({ id: `columnNames.${column.label}` }) : props.intl.formatMessage({ id: `columnNames.${column}` })}</th>
-            ))}
-          </tr>
+        <tr>
+          {_.map(props.columns, (column, i) => (
+            <th
+              key={i}>{isColumnObject ? props.intl.formatMessage({
+              id: `columnNames.${column.label}`,
+              defaultMessage: column.label
+            }) : props.intl.formatMessage({ id: `columnNames.${column}`, defaultMessage: column })}</th>
+          ))}
+        </tr>
         </thead>
         <tbody>
           {_.map(props.entities, (entity, i) => (
             <tr key={i} onClick={() => handleRowClick(entity)}>
               {_.map(props.columns, column => {
                 const columnValue = isColumnObject ? column.value : column;
+
                 return (
                   <td key={columnValue} className={!!props.getRecordLink ? 'td-clickable' : undefined}>
                     {props.columnContent(entity, columnValue, props.intl)}
