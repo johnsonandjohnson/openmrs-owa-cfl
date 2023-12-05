@@ -43,7 +43,6 @@
     margin-bottom: 30px;
 
     .cfl-dialog-instructions {
-      padding-top: 1em;
       padding-bottom: 1em;
       font-style: italic;
     }
@@ -67,4 +66,12 @@
     .form-group {
       margin-bottom: 0px;
     }
+  }
+
+  .condition-select {
+    min-height: initial !important;
+    padding-top: 10px !important;
+    border-radius: initial !important;
+    text-align: initial !important;
+    text-align-last: initial !important;
   }

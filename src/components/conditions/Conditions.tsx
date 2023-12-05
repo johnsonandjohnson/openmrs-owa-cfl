@@ -19,11 +19,11 @@ import { getConditionHistory, saveCondition, saveConditions } from '../../redux/
 import { addBreadcrumbs, resetBreadcrumbs } from '../../redux/reducers/breadcrumbs';
 import { PATIENT_PAGE_URL } from '../../shared/constants/openmrs';
 import { getPatient } from '../../redux/reducers/patient';
-import Header from '../person-header/person-header';
 import PersonStatus from '../person-status/person-status';
 import { STATUS_ACTIVE, STATUS_INACTIVE } from '../../shared/constants/condition';
 import { formatDate } from '../../shared/util/date-util';
 import { successToast } from '../toast-handler/toast-handler';
+import PatientHeader from '../patient-header/patient-header';
 
 export interface IConditionsProps extends StateProps, DispatchProps, RouteComponentProps<{ patientUuid?: string }> {
   intl: any;
@@ -179,13 +179,15 @@ class Condition extends React.Component<IConditionsProps, IConditionsState> {
       patientUuid: this.props.match.params.patientUuid,
       dashboardType: 'PATIENT',
       redirectUrl: this.redirectUrl(),
-      displayTelephone: true
+      displayTelephone: true,
+      headerAppConfig: this.props.headerApp,
+      personId: this.props.match.params.patientUuid
     };
     return (
       <div className="conditions">
-        <Header {...headerProps}>
-          <PersonStatus patientUuid={headerProps.patientUuid} />
-        </Header>
+        <PatientHeader {...headerProps}>
+          <PersonStatus {...headerProps}/>
+        </PatientHeader>
         {!!this.state.conditionToDelete && this.renderDeleteModal()}
         <h2>
           <FormattedMessage id={'conditions.title'} />
@@ -223,13 +225,14 @@ class Condition extends React.Component<IConditionsProps, IConditionsState> {
   }
 }
 
-const mapStateToProps = ({ condition, cflPatient, cflPerson }) => ({
+const mapStateToProps = ({ condition, cflPatient, cflPerson, apps }) => ({
   error: condition.errorMessage,
   conditions: condition.conditions,
   loading: condition.loading,
   conditionUpdated: condition.conditionUpdated,
   patient: cflPatient.patient,
-  person: cflPerson.person
+  person: cflPerson.person,
+  headerApp: apps.headerAppConfig
 });
 
 const mapDispatchToProps = { saveCondition, saveConditions, getConditionHistory, addBreadcrumbs, resetBreadcrumbs, getPatient };

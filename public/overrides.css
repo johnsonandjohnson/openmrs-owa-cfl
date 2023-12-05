@@ -8,7 +8,7 @@
  * graphic logo is a trademark of OpenMRS Inc.
  */
 
-:root {
+ :root {
   --default-button-border-color: #6c757d;
   --default-button-line-height: 1.5;
   --default-button-border-radius: 4px;
@@ -207,52 +207,6 @@ i.cfl-register-patient {
   .info-container {
     max-width: calc(100% - 200px) !important;
   }
-}
-
-.patient-header {
-  background: none !important;
-  border: none !important;
-  font-size: 14px;
-  line-height: 1;
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  font-variant-numeric: normal;
-  font-feature-settings: normal;
-  padding: 5px 0 !important;
-  margin: -10px 0 10px 0 !important;
-}
-
-.patient-header > .patient-id,
-.patient-header > .patient-location {
-  margin-bottom: 0.35em;
-}
-
-.patient-header .header-label,
-.dashboard .label {
-  font-family: CircularStd-Book;
-  color: #333333;
-  opacity: 0.5;
-  display: inline-block;
-}
-
-.patient-header .header-label {
-  min-width: 150px;
-}
-
-.patient-header h1 {
-  font-size: 2em !important;
-  margin: 10px 0 5px 0 !important;
-  color: #2b3640 !important;
-}
-
-.patient-header .header-buttons {
-  margin-top: 0.5rem;
-}
-
-.patient-header .header-buttons button {
-  margin-bottom: 0.25rem;
-  color: white;
 }
 
 button.btn {

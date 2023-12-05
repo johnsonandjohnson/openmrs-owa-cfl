@@ -12,7 +12,7 @@ import axios from 'axios';
 
 import { FAILURE, REQUEST, SUCCESS } from '../action-type.util';
 import { getAppConfig } from '../../shared/util/app-util';
-import { FIND_CAREGIVER_APP, FIND_PATIENT_APP, PATIENT_FLAGS_OVERVIEW_APP, REGISTER_CAREGIVER_APP, REGISTER_PATIENT_APP } from '../../shared/constants/app';
+import { CONFIGURABLE_PATIENT_HEADER_APP, FIND_CAREGIVER_APP, FIND_PATIENT_APP, PATIENT_FLAGS_OVERVIEW_APP, REGISTER_CAREGIVER_APP, REGISTER_PATIENT_APP } from '../../shared/constants/app';
 
 export const ACTION_TYPES = {
   GET_APPS: 'settings/GET_APPS'
@@ -30,6 +30,7 @@ const initialState = {
   caregiverRegistrationSteps: null,
   confirmPageCustomElements: null,
   patientFlagsOverviewTableColumns: null,
+  headerAppConfig: null
 };
 
 export const getAppsState = (apps, projectName) => ({
@@ -40,7 +41,8 @@ export const getAppsState = (apps, projectName) => ({
   caregiverRegistrationSteps: getAppConfig(apps, REGISTER_CAREGIVER_APP, projectName)?.steps,
   registrationRedirectUrl: getAppConfig(apps, REGISTER_PATIENT_APP, projectName)?.redirectUrl,
   confirmPageCustomElements: getAppConfig(apps, REGISTER_PATIENT_APP, projectName)?.confirmPageCustomElements,
-  patientFlagsOverviewTableColumns: getAppConfig(apps, PATIENT_FLAGS_OVERVIEW_APP, projectName)?.tableColumns
+  patientFlagsOverviewTableColumns: getAppConfig(apps, PATIENT_FLAGS_OVERVIEW_APP, projectName)?.tableColumns,
+  headerAppConfig: getAppConfig(apps, CONFIGURABLE_PATIENT_HEADER_APP, projectName)
 });
 
 const reducer = (state = initialState, action) => {
