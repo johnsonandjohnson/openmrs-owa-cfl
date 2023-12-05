@@ -4,7 +4,7 @@
 
     <groupId>org.openmrs.owa</groupId>
     <artifactId>openmrs-owa-cfl</artifactId>
-    <version>1.9.2-1-ship-SNAPSHOT</version>
+    <version>1.9.2-ship</version>
     <packaging>pom</packaging>
     <name>openmrs-owa-cfl</name>
     <description>OpenMRS CFL UI OWA</description>

@@ -1,5 +1,5 @@
 {
-  "version": "1.5.1-1-ship-SNAPSHOT",
+  "version": "1.9.2-ship",
   "name": "cfl",
   "description": "CFL UI for OpenMRS",
   "launch_path": "index.html",
