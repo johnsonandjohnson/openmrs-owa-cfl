@@ -8,7 +8,7 @@
  *  graphic logo is a trademark of OpenMRS Inc.
  */
 
- import { IPersonStatus } from "./person-status.model";
+import { IPersonStatus } from "./person-status.model";
 import { ObjectUI } from "../../shared/object-ui";
 
 export class PersonStatusUI extends ObjectUI<IPersonStatus> implements IPersonStatus {
@@ -22,6 +22,7 @@ export class PersonStatusUI extends ObjectUI<IPersonStatus> implements IPersonSt
     constructor(model: IPersonStatus) {
         super(model);
         this.value = model.value;
+        this.reason = model.reason;
         this.styleObject = model.style ? this.parseStyles(model.style) : undefined;
     }
 

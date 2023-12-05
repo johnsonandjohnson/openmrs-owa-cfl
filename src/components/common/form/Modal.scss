@@ -30,21 +30,12 @@
 
     .modal-body {
       color: #333333;
-      padding: 0 30px;
 
-      .button.confirm.right,
-      .button.confirm.right:hover {
+      .button.cancel {
         background-image: none;
-        background-color: #00455c;
-        border-color: #00455c;
-      }
-
-      .button.cancel,
-      .button.cancel:hover {
-        background-image: none;
-        background-color: white;
-        border-color: #00455c;
-        color: #00455c;
+        background-color: #FF3D3D;
+        border-color: #FF3D3D;
+        color: white;
       }
     }
 

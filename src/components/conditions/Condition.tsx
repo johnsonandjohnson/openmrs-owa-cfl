@@ -28,6 +28,7 @@ import { PATIENT_PAGE_URL } from '../../shared/constants/openmrs';
 import { STATUS_ACTIVE, STATUS_INACTIVE } from '../../shared/constants/condition';
 import { getPatient } from '../../redux/reducers/patient';
 import { successToast } from '../toast-handler/toast-handler';
+import PatientHeader from '../patient-header/patient-header';
 
 export interface IConditionsProps extends StateProps, DispatchProps, RouteComponentProps<{ patientUuid?: string }> {
   intl: any;
@@ -236,8 +237,16 @@ class Condition extends React.Component<IConditionsProps, IConditionsState> {
   render() {
     const { intl } = this.props;
     const conditionId = this.conditionId();
+
+    const headerProps = {
+      ...this.props,
+      patientUuid: this.props.match.params.patientUuid,
+      dashboardType: 'PATIENT',
+      headerAppConfig: this.props.headerAppConfig
+    };
     return (
       <div className="condition">
+        <PatientHeader {...headerProps}/>
         <h2>
           <FormattedMessage id={!!conditionId ? 'manageCondition.editCondition' : 'manageCondition.addNewCondition'} />
         </h2>
@@ -335,14 +344,15 @@ class Condition extends React.Component<IConditionsProps, IConditionsState> {
   }
 }
 
-const mapStateToProps = ({ concept, settings, condition, cflPatient }) => ({
+const mapStateToProps = ({ concept, settings, condition, cflPatient, apps }) => ({
   concepts: concept.concepts,
   error: concept.errorMessage,
   conceptListClasses: settings.setting?.value,
   conceptQuery: concept.query,
   condition: condition.condition,
   conditionUpdated: condition.conditionUpdated,
-  patient: cflPatient.patient
+  patient: cflPatient.patient,
+  headerAppConfig: apps.headerAppConfig
 });
 
 const mapDispatchToProps = {

@@ -39,7 +39,7 @@ interface IChangeStatusState {
   possibleStatuses: Array<IPersonStatusEntry>
 }
 
-const FORM_CLASS = 'form-control';
+const FORM_CLASS = 'form-control condition-select';
 const ERROR_FORM_CLASS = FORM_CLASS + ' error-field';
 
 class ChangeStatusModal extends React.PureComponent<IChangeStatusProps, IChangeStatusState> {
@@ -81,20 +81,23 @@ class ChangeStatusModal extends React.PureComponent<IChangeStatusProps, IChangeS
         {options}
       </FormControl>
       {<ErrorDesc field={this.state.errors[fieldName]} />}
-    </FormGroup>;
+    </FormGroup>
 
-  renderStatusField = () =>
-  
-    this.renderDropdown(Msg.PERSON_STATUS_MODAL_FIELD_LABEL, 'statusValue',
+  renderStatusField = () => 
+    this.renderDropdown(Msg.PERSON_STATUS_MODAL_FIELD_LABEL, 
+      'statusValue',
       this.state.possibleStatuses.map(status =>
         <option value={status.value} key={status.value}>{status.label}</option>
-      ), true);
+      ), 
+      true);
 
   renderReasonField = () =>
-    this.renderDropdown(Msg.PERSON_STATUS_MODAL_REASON_FIELD_LABEL, 'statusReason',
+    this.renderDropdown(Msg.PERSON_STATUS_MODAL_REASON_FIELD_LABEL, 
+      'statusReason',
       this.props.possibleResults.map(reason =>
         <option value={reason} key={reason}>{reason}</option>
-      ), this.state.statusValue === Msg.DEACTIVATED_KEY);
+      ),
+      this.state.statusValue === Msg.DEACTIVATED_KEY);
 
   buildContext = () => {
     return (

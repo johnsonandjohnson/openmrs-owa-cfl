@@ -27,7 +27,7 @@ import { extractAttribute, extractValue } from './omrs-entity-util';
 import { formatDate } from './date-util';
 import { formatPhoneNumberIntl } from 'react-phone-number-input';
 
-const PLUS_SIGN = '+';
+export const PLUS_SIGN = '+';
 
 export const columnContent = (person, column, intl) => {
   switch (column) {

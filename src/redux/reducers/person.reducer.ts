@@ -10,38 +10,38 @@
 
 import _ from 'lodash';
 
-import { REQUEST, SUCCESS, FAILURE } from '../shared/action-type.util';
-import axiosInstance from '../shared/axios';
+import { REQUEST, SUCCESS, FAILURE } from '../../components/shared/action-type.util';
+import axiosInstance from '../../components/shared/axios';
 
 export const ACTION_TYPES = {
-  GET_PATIENT: 'patientReducer/GET_PATIENT',
-  RESET: 'patientReducer/RESET'
+  GET_PERSON: 'personReducer/GET_PERSON',
+  RESET: 'personReducer/RESET'
 };
 
 const initialState = {
-  patient: {} as any,
-  patientLoading: false
+  person: {} as any,
+  personLoading: false
 };
 
-export type PatientState = Readonly<typeof initialState>;
+export type PersonState = Readonly<typeof initialState>;
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case REQUEST(ACTION_TYPES.GET_PATIENT):
+    case REQUEST(ACTION_TYPES.GET_PERSON):
       return {
         ...state,
-        patientLoading: true
+        personLoading: true
       };
-    case FAILURE(ACTION_TYPES.GET_PATIENT):
+    case FAILURE(ACTION_TYPES.GET_PERSON):
       return {
         ...state,
-        patientLoading: false
+        personLoading: false
       };
-    case SUCCESS(ACTION_TYPES.GET_PATIENT):
+    case SUCCESS(ACTION_TYPES.GET_PERSON):
       return {
         ...state,
-        patientLoading: false,
-        patient: action.payload.data
+        personLoading: false,
+        person: action.payload.data
       };
     case ACTION_TYPES.RESET:
       return {
@@ -52,12 +52,12 @@ export default (state = initialState, action) => {
   }
 };
 
-const patientUrl = "/ws/rest/v1/patient/";
+const personUrl = "/ws/rest/v1/person/";
 
-export const getPatient = (patientId) => async (dispatch) => {
+export const getPerson = (personId) => async (dispatch) => {
   await dispatch({
-    type: ACTION_TYPES.GET_PATIENT,
-    payload: axiosInstance.get(`${patientUrl}${patientId}?v=full`)
+    type: ACTION_TYPES.GET_PERSON,
+    payload: axiosInstance.get(`${personUrl}${personId}?v=full`)
   });
 };
 
