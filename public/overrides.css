@@ -223,7 +223,7 @@ button.btn:hover {
 
 button.btn-danger,
 button.btn-danger:hover {
-  background: var(--danger) !important;
+  background: var(--danger);
 }
 
 button.btn.cancel:hover {
