@@ -16,10 +16,9 @@ import { IPatientFlagsOverviewState } from '../../shared/models/patient-flags-ov
 import { Spinner } from 'reactstrap';
 import { EMPTY_STRING } from '../../shared/constants/input';
 import { DEFAULT_PAGE_SIZE } from '../../redux/page.util';
-import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_NUMBER_TO_SEND, PATIENT_FLAGS_OVERVIEW_APP_NAME } from '../../shared/constants/patient-flags-overview';
-import './PatientFlagsOverview.scss'
-import { useIntl } from 'react-intl';
-import { getAppById } from '../../redux/reducers/apps';
+import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_NUMBER_TO_SEND } from '../../shared/constants/patient-flags-overview';
+import './PatientFlagsOverview.scss';
+import { injectIntl } from 'react-intl';
 
 interface IStore {
   openmrs: {
@@ -39,9 +38,10 @@ const PatientFlagsOverview = ({
   totalCount,
   getPatientFlags,
   getFlaggedPatientsOverview,
-  getAppById,
-  isLoading
-}: StateProps & DispatchProps) => {
+  isLoading,
+  intl,
+  patientFlagsOverviewTableColumns
+}: PropsWithIntl<StateProps & DispatchProps>) => {
   const usePrevious = value => {
     const ref = useRef();
 
@@ -52,17 +52,12 @@ const PatientFlagsOverview = ({
     return ref.current;
   };
 
-  const { formatMessage } = useIntl();
   const prevSessionLocationUuid = usePrevious(sessionLocation?.uuid);
   const [inputValue, setInputValue] = useState(EMPTY_STRING);
   const [flagName, setFlagName] = useState(EMPTY_STRING);
   const [page, setPage] = useState(DEFAULT_PAGE_NUMBER);
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
   const [isSelectFilterTextEnabled, setInitialTextEnabled] = useState(true);
-
-  useEffect(() => {
-    getAppById(PATIENT_FLAGS_OVERVIEW_APP_NAME);
-  }, [])
 
   useEffect(() => {
     getPatientFlags();
@@ -81,6 +76,7 @@ const PatientFlagsOverview = ({
     if (inputValue || flagName) {
       setInitialTextEnabled(false);
     }
+
   }, [getFlaggedPatientsOverview, sessionLocation?.uuid, inputValue, flagName, page, pageSize, prevSessionLocationUuid]);
 
   return (
@@ -92,8 +88,8 @@ const PatientFlagsOverview = ({
       ) : (
         <>
           <div>
-            <h2 className="title-header">{formatMessage({ id: 'patientFlagsOverview.title' })}</h2>
-            <div className="helper-text">{formatMessage({ id: 'patientFlagsOverview.description' })}</div>
+            <h2 className="title-header">{intl.formatMessage({ id: 'patientFlagsOverview.title' })}</h2>
+            <div className="helper-text">{intl.formatMessage({ id: 'patientFlagsOverview.description' })}</div>
           </div>
           <PatientFlagsOverviewSearch
             setFlagName={setFlagName}
@@ -107,10 +103,10 @@ const PatientFlagsOverview = ({
             showMessageError={showMessageError}
             pageSize={pageSize}
             totalCount={totalCount}
-            showNoDataComponent={null}
+            patientFlagsOverviewTableColumns={patientFlagsOverviewTableColumns}
           />
           <div className="td-cell select-filter-text">
-            {isSelectFilterTextEnabled ? formatMessage({ id: 'patientFlagsOverview.pleaseSelectFilter' }) : ''}
+            {isSelectFilterTextEnabled ? intl.formatMessage({ id: 'patientFlagsOverview.pleaseSelectFilter' }) : ''}
           </div>
         </>
       )}
@@ -136,7 +132,8 @@ const mapStateToProps = ({
     }
   },
   apps: {
-    appLoading
+    appLoading,
+    patientFlagsOverviewTableColumns
   }
 }: IStore) => ({
   sessionLocation,
@@ -147,12 +144,13 @@ const mapStateToProps = ({
   showMessageError,
   flaggedPatients,
   totalCount,
-  isLoading: appLoading || flagsLoading
+  isLoading: appLoading || flagsLoading,
+  patientFlagsOverviewTableColumns
 });
 
-const mapDispatchToProps = { getPatientFlags, getFlaggedPatientsOverview, getAppById };
+const mapDispatchToProps = { getPatientFlags, getFlaggedPatientsOverview };
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
 
-export default connect(mapStateToProps, mapDispatchToProps)(PatientFlagsOverview);
+export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(PatientFlagsOverview));

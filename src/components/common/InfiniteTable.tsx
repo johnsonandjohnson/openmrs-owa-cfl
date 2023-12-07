@@ -10,7 +10,7 @@
 
 import './Table.scss';
 import './InfiniteTable.scss';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { injectIntl } from 'react-intl';
 import { Spinner, Table } from 'reactstrap';
 import React from 'react';
 import _ from 'lodash';
@@ -27,8 +27,7 @@ export interface InfiniteTableProps {
   getRecordLink?: any;
 }
 
-const InfiniteTable = (props: InfiniteTableProps) => {
-  const intl = useIntl();
+const InfiniteTable = (props: PropsWithIntl<InfiniteTableProps>) => {
   const handleRowClick = entity => {
     if (!!props.getRecordLink) {
       window.location.href = props.getRecordLink(entity);
@@ -43,17 +42,21 @@ const InfiniteTable = (props: InfiniteTableProps) => {
       hasMore={props.hasNext}
       loader={
         <div className="spinner">
-          <Spinner />
+          <Spinner/>
         </div>
       }
     >
       <Table borderless striped responsive className="table">
         <thead>
-          <tr>
-            {_.map(props.columns, (column, i) => (
-              <th key={i}>{isColumnObject ? column.label : <FormattedMessage id={`columnNames.${column}`} />}</th>
-            ))}
-          </tr>
+        <tr>
+          {_.map(props.columns, (column, i) => (
+            <th
+              key={i}>{isColumnObject ? props.intl.formatMessage({
+              id: `columnNames.${column.label}`,
+              defaultMessage: column.label
+            }) : props.intl.formatMessage({ id: `columnNames.${column}`, defaultMessage: column })}</th>
+          ))}
+        </tr>
         </thead>
         <tbody>
           {_.map(props.entities, (entity, i) => (
@@ -63,7 +66,7 @@ const InfiniteTable = (props: InfiniteTableProps) => {
 
                 return (
                   <td key={columnValue} className={!!props.getRecordLink ? 'td-clickable' : undefined}>
-                    {props.columnContent(entity, columnValue, intl)}
+                    {props.columnContent(entity, columnValue, props.intl)}
                   </td>
                 );
               })}
@@ -75,4 +78,4 @@ const InfiniteTable = (props: InfiniteTableProps) => {
   );
 };
 
-export default InfiniteTable;
+export default injectIntl(InfiniteTable);

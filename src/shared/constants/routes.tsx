@@ -84,7 +84,7 @@ export const routeConfig = [
   {
     path: '/find-patient',
     component: FindPatient,
-    breadcrumb: 'findPatient.title',
+    breadcrumb: 'cfl.findPatient.title',
     requiredPrivilege: PRIVILEGES.GET_PATIENTS
   },
   {

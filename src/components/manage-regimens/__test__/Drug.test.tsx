@@ -9,7 +9,6 @@
  */
 
 import React from 'react';
-import en from '../../../lang/en.json';
 import flatten from 'flat';
 import userEvent from '@testing-library/user-event';
 import { drugProps, invalidEmptyDrugProps } from '../../../mocks/Drug';
@@ -18,7 +17,7 @@ import { IntlProvider } from 'react-intl';
 import { Drug } from '../Drug';
 import '@testing-library/jest-dom';
 
-const messages = flatten(en);
+const messages = flatten({});
 
 describe('<Drug />', () => {
   describe('with the set values', () => {

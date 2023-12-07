@@ -38,4 +38,5 @@ export interface IPatient {
   uuid?: string;
   // custom
   relatives?: any[];
+  LocationAttribute?: string;
 }

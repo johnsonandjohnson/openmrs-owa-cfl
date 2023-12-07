@@ -18,6 +18,6 @@ test('should render match snapshot', () => {
     { value: 'option2', label: 'option2' }
   ];
   const onChange = jest.fn();
-  const input = render(<RadioButtons name="testName" options={options} onChange={onChange} />);
+  const input = render(<RadioButtons name="testName" options={options} onChange={onChange}  value={undefined}/>);
   expect(input).toMatchSnapshot();
 });

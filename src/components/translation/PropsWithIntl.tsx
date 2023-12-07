@@ -8,10 +8,4 @@
  * graphic logo is a trademark of OpenMRS Inc.
  */
 
-export const APP_PREFIX = 'cflui.';
-export const FIND_PATIENT_APP = APP_PREFIX + 'findPatient';
-export const FIND_CAREGIVER_APP = APP_PREFIX + 'findCaregiver';
-export const REGISTER_PATIENT_APP = APP_PREFIX + 'registerPatient';
-export const REGISTER_CAREGIVER_APP = APP_PREFIX + 'registerCaregiver';
-export const PROJECT_LOCATION_ATTRIBUTE_TYPE_NAME = 'Project';
-export const PATIENT_FLAGS_OVERVIEW_APP = "cfl.patientFlagsOverview";
+type PropsWithIntl<P> = P & { intl: any };

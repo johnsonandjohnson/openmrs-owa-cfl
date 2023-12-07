@@ -313,15 +313,6 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
                 uncheckedTranslationId="common.switch.off"
                 onChange={this.onChange(configurationIdx, SEND_SMS_UPON_REGISTRATION_PROPERTY_NAME)}
               />
-              <Switch
-                id={`sms-visit-reminder-switch-${configurationIdx}`}
-                intl={intl}
-                labelTranslationId="notificationConfiguration.visitReminder.switch"
-                checked={shouldSendSmsReminder}
-                checkedTranslationId="common.switch.on"
-                uncheckedTranslationId="common.switch.off"
-                onChange={this.onChange(configurationIdx, SEND_SMS_REMINDER_PROPERTY_NAME)}
-              />
             </div>
           </div>
         </div>
@@ -366,15 +357,6 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
                 checkedTranslationId="common.switch.on"
                 uncheckedTranslationId="common.switch.off"
                 onChange={this.onChange(configurationIdx, SEND_WHATSAPP_UPON_REGISTRATION_PROPERTY_NAME)}
-              />
-              <Switch
-                id={`whatsApp-visit-reminder-switch-${configurationIdx}`}
-                intl={intl}
-                labelTranslationId="notificationConfiguration.visitReminder.switch"
-                checked={shouldSendWhatsAppReminder}
-                checkedTranslationId="common.switch.on"
-                uncheckedTranslationId="common.switch.off"
-                onChange={this.onChange(configurationIdx, SEND_WHATSAPP_REMINDER_PROPERTY_NAME)}
               />
             </div>
           </div>
@@ -421,15 +403,6 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
                 checkedTranslationId="common.switch.on"
                 uncheckedTranslationId="common.switch.off"
                 onChange={this.onChange(configurationIdx, PERFORM_CALL_UPON_REGISTRATION_PROPERTY_NAME)}
-              />
-              <Switch
-                id={`call-visit-reminder-switch-${configurationIdx}`}
-                intl={intl}
-                labelTranslationId="notificationConfiguration.visitReminder.switch"
-                checked={shouldSendCallReminder}
-                checkedTranslationId="common.switch.on"
-                uncheckedTranslationId="common.switch.off"
-                onChange={this.onChange(configurationIdx, SEND_CALL_REMINDER_PROPERTY_NAME)}
               />
             </div>
           </div>
@@ -647,9 +620,7 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
       this.smsSettings(configurationIdx),
       this.whatsAppSettings(configurationIdx),
       this.callSettings(configurationIdx),
-      this.notificationWindowAndBestContactTime(configurationIdx),
-      this.visitReminder(configurationIdx),
-      this.firstAndFutureVisitsSettings(configurationIdx)
+      this.notificationWindowAndBestContactTime(configurationIdx)
     ];
     return (
       <ExpandableSection

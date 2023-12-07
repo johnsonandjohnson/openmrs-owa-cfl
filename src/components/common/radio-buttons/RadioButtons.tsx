@@ -19,7 +19,7 @@ interface IRadioButtonOption {
 export interface IRadioButtonsProps {
   name: string;
   options: Array<IRadioButtonOption>;
-  value: string;
+  value: string | undefined;
   onChange: (event: FormEvent) => void;
 }
 

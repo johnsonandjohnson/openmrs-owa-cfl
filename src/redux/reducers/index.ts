@@ -42,6 +42,9 @@ import orderType from './order-type';
 import findPatientColumnsConfiguration from './columns-configuration';
 import patientFlagsOverview from './patient-flags-overview';
 import globalPropertyReducer from './global-property.reducer';
+import translationMessages from './translation-messages';
+import project from './project';
+
 export default combineReducers({
   cflPatient,
   cflPerson,
@@ -60,6 +63,7 @@ export default combineReducers({
   patient,
   patientFlagsOverview,
   personStatus,
+  project,
   role,
   user,
   customizeReducer,
@@ -74,6 +78,7 @@ export default combineReducers({
   orderType,
   findPatientColumnsConfiguration,
   globalPropertyReducer,
+  translationMessages,
   openmrs: openmrsReducers,
   form: reduxFormReducer
 });

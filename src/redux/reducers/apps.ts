@@ -12,11 +12,10 @@ import axios from 'axios';
 
 import { FAILURE, REQUEST, SUCCESS } from '../action-type.util';
 import { getAppConfig } from '../../shared/util/app-util';
-import { FIND_CAREGIVER_APP, FIND_PATIENT_APP, REGISTER_CAREGIVER_APP, REGISTER_PATIENT_APP } from '../../shared/constants/app';
+import { FIND_CAREGIVER_APP, FIND_PATIENT_APP, PATIENT_FLAGS_OVERVIEW_APP, REGISTER_CAREGIVER_APP, REGISTER_PATIENT_APP } from '../../shared/constants/app';
 
 export const ACTION_TYPES = {
-  GET_APPS: 'settings/GET_APPS',
-  GET_APP: 'settings/GET_APP'
+  GET_APPS: 'settings/GET_APPS'
 };
 
 const initialState = {
@@ -29,8 +28,8 @@ const initialState = {
   findCaregiverTableColumns: null,
   patientRegistrationSteps: null,
   caregiverRegistrationSteps: null,
+  confirmPageCustomElements: null,
   patientFlagsOverviewTableColumns: null,
-  confirmPageCustomElements: null
 };
 
 export const getAppsState = (apps, projectName) => ({
@@ -40,7 +39,8 @@ export const getAppsState = (apps, projectName) => ({
   patientRegistrationSteps: getAppConfig(apps, REGISTER_PATIENT_APP, projectName)?.steps,
   caregiverRegistrationSteps: getAppConfig(apps, REGISTER_CAREGIVER_APP, projectName)?.steps,
   registrationRedirectUrl: getAppConfig(apps, REGISTER_PATIENT_APP, projectName)?.redirectUrl,
-  confirmPageCustomElements: getAppConfig(apps, REGISTER_PATIENT_APP, projectName)?.confirmPageCustomElements
+  confirmPageCustomElements: getAppConfig(apps, REGISTER_PATIENT_APP, projectName)?.confirmPageCustomElements,
+  patientFlagsOverviewTableColumns: getAppConfig(apps, PATIENT_FLAGS_OVERVIEW_APP, projectName)?.tableColumns
 });
 
 const reducer = (state = initialState, action) => {
@@ -64,24 +64,6 @@ const reducer = (state = initialState, action) => {
         loading: false,
         ...getAppsState(action.payload.data, projectName)
       };
-    case REQUEST(ACTION_TYPES.GET_APP):
-      return {
-        ...state,
-        appLoading: true,
-        errorMessage: null
-      };
-    case FAILURE(ACTION_TYPES.GET_APP):
-      return {
-        ...state,
-        appLoading: false,
-        errorMessage: action.payload.message
-      };
-    case SUCCESS(ACTION_TYPES.GET_APP):
-      return {
-        ...state,
-        appLoading: false,
-        app: action.payload.data
-      };
     default:
       return state;
   }
@@ -97,14 +79,6 @@ export const getApps = (projectName: string) => {
       projectName
     }
   };
-};
-
-export const getAppById = (appId: string) => {
-  const requestUrl = `/openmrs/ws/rest/v1/app/${appId}`;
-  return {
-    type: ACTION_TYPES.GET_APP,
-    payload: axios.get(requestUrl)
-  }
 };
 
 export default reducer;

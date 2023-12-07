@@ -8,15 +8,10 @@
  * graphic logo is a trademark of OpenMRS Inc.
  */
 
-const CFL_UI_BASE = '/openmrs/owa/cfl/';
-const NODE_TYPE_ELEMENT = 1;
-const NODE_TYPE_TEXT = 3;
-const DATE_PICKER_PLACEHOLDER_REGEX = /\([dmy]{2,4}\/[dmy]{2,4}\/[dmy]{2,4}\)/g;
 const UNKNOWN_AGE = "unknown";
 const UNKNOWN_GENDER = "U";
 
 // Vanilla JS overrides - both for core OpenMRS and OWAs
-window.addEventListener('load', redesignAllergyUI);
 window.addEventListener('load', addCollapseToTheHeader);
 // Override Patient Header both on load and on page change (OWAs)
 window.addEventListener('load', () => {
@@ -28,50 +23,6 @@ window.addEventListener('load', () => {
 const jqr = (typeof $ === 'function' || typeof jQuery === 'function') && ($ || jQuery);
 jqr &&
   jqr(function () {
-    /** General **/
-    // OpenMRS bug: remove occasional (/undefined) from the System Administration breadcrumbs
-    setTimeout(function () {
-      elementReady('#breadcrumbs li:last-child:not(:empty)').then(element => {
-        element.textContent = element.textContent.replace('(/undefined)', '');
-      });
-    }, 100);
-    /** Home **/
-    // add missing breadcrumb for the Homepage
-    const breadcrumbs = jqr('#breadcrumbs');
-    if (breadcrumbs.is(':empty')) {
-      jqr('#breadcrumbs').append('<span>Home</span>');
-    }
-    // add heading for the Home/System Administration dashboard
-    const dashboard = jqr('#body-wrapper > #content');
-    if (!!dashboard.has('.row > #apps').length) {
-      dashboard.prepend('<div class="homepage-heading">Home</div>');
-    } else if (!!dashboard.has('#tasks.row').length) {
-      dashboard.prepend('<div class="homepage-heading">System Administration</div>');
-    }
-    /** Patient Dashboard **/
-    // move all the widgets to the first column
-    const firstInfoContainer = jqr('.info-container:first-of-type');
-    if (firstInfoContainer.length) {
-      const remainingContainersChildren = jqr('.info-container .info-section');
-      remainingContainersChildren.detach().appendTo(firstInfoContainer);
-    }
-    // replace 'None' with '-NO DATA-' in each widget
-    const noDataLabel = "<span class='label'>-NO DATA-</span>";
-    const emptyWidgetBody = `<div class='info-body empty'>${noDataLabel}</div>`;
-
-    jqr('.info-body').each((_, widgetBody) => {
-      const text = jqr(widgetBody).find('li').text().trim() || jqr(widgetBody).find('p').text().trim() || jqr(widgetBody).text().trim();
-      if (text.toLowerCase() === 'none' || text.toLowerCase() === 'unknown') {
-        jqr(widgetBody).replaceWith(emptyWidgetBody);
-      } else if (!text.length) {
-        jqr(widgetBody).append(noDataLabel);
-        jqr(widgetBody).addClass('empty');
-        elementReady('ul > li', widgetBody).then(() => {
-          jqr(widgetBody).children().last().remove();
-          jqr(widgetBody).removeClass('empty');
-        });
-      }
-    });
     // replace the url of 'Patient profile', 'Caregiver profile' and 'Conditions'
     const searchParams = new URLSearchParams(window.location.search);
     if (searchParams.has('patientId')) {
@@ -101,6 +52,7 @@ jqr &&
         conditionsIcon.setAttribute('onclick', `location.href = '${CFL_UI_BASE}index.html#/conditions/${patientId}'`);
       }
     }
+
     // Add hamburger menu for general actions (visible on smaller screens)
     const actionContainer = jqr('.action-container');
     if (actionContainer.length) {
@@ -121,98 +73,7 @@ jqr &&
         ].join('\n')
       );
     }
-    // HTML Forms bug: remove date picker placeholders - "(dd/mm/yyyy)" etc.
-    const htmlForm = document.getElementById('htmlform');
-    if (!!htmlForm) {
-      removeDatePickerPlaceholders(htmlForm);
-    }
-    // AGRE-15: replace URLs of 'Add New Location' and 'Edit' buttons on 'Manage Locations' page
-    if (this.URL.includes('locations/manageLocations.page')) {
-      const addNewLocationButton = document.querySelector('#content > a.button');
-      if (addNewLocationButton) {
-        addNewLocationButton.href = `${CFL_UI_BASE}index.html#/locations/create-location`;
-      }
-      const editLocationButtons = document.querySelectorAll('#content #list-locations .edit-action');
-      if (editLocationButtons) {
-        editLocationButtons.forEach(button => {
-          const buttonOnClick = button.getAttribute('onclick');
-          if (buttonOnClick && buttonOnClick.includes('locationId')) {
-            const regexp = /(?<=locationId=).+(?=&)/;
-            const locationId = buttonOnClick.match(regexp)[0];
-            button.setAttribute('onclick', `location.href='${CFL_UI_BASE}index.html#/locations/edit-location/${locationId}'`);
-          }
-        });
-      }
-    }
-
-    if (this.URL.includes('accounts/manageAccounts.page')) {
-      const addNewUserAccount = document.querySelector('#content > a.button');
-      const editUserAccount = document.querySelectorAll('#list-accounts .icon-pencil.edit-action');
-      const pagination = document.querySelector('#list-accounts_wrapper > .datatables-info-and-pg');
-      const accountFilterInput = document.querySelector('#list-accounts_filter input');
-
-      if (addNewUserAccount) {
-        addNewUserAccount.href = `${CFL_UI_BASE}index.html#/user-account`;
-      }
-
-      if (editUserAccount.length) {
-        overrideEditUserAccountLinks(editUserAccount);
-        pagination &&
-          pagination.addEventListener('click', function () {
-            overrideEditUserAccountLinks(document.querySelectorAll('#list-accounts .icon-pencil.edit-action'));
-          });
-        accountFilterInput &&
-          accountFilterInput.addEventListener('input', function () {
-            overrideEditUserAccountLinks(document.querySelectorAll('#list-accounts .icon-pencil.edit-action'));
-          });
-      }
-    }
   });
-
-//redirects the user to CfL find patient page instead of the default one
-const url = location.href;
-if (url.endsWith('app=coreapps.findPatient')) {
-  window.location.href = '/openmrs/owa/cfl/index.html#/find-patient'
-}
-
-function overrideEditUserAccountLinks(editUserAccoutLinks) {
-  editUserAccoutLinks.forEach(editUserAccoutLink => {
-    const currentLocationHref = editUserAccoutLink.getAttribute('onclick');
-    const personIdPosition = currentLocationHref.indexOf('personId=');
-    const personId = currentLocationHref.slice(personIdPosition, currentLocationHref.length - 2);
-
-    editUserAccoutLink.setAttribute('onclick', `location.href='${CFL_UI_BASE}index.html#/user-account?${personId}'`);
-  });
-}
-
-function redesignAllergyUI() {
-  const allergies = document.querySelector('#allergies');
-  if (!!allergies) {
-    const title = document.querySelector('#content > h2');
-    if (!!title) {
-      title.parentElement.removeChild(title);
-    }
-    const addAllergyButton = document.querySelector('#allergyui-addNewAllergy');
-    if (!!addAllergyButton) {
-      addAllergyButton.parentElement.removeChild(addAllergyButton);
-    }
-    const cancelButton = document.querySelector('#content > button.cancel');
-    if (!!cancelButton) {
-      cancelButton.classList.add('btn');
-    }
-    const htmlLines = [
-      '<div class="allergies-container">',
-      '<div class="allergies-header">',
-      '<h2>Manage Allergies</h2>',
-      '<span class="helper-text">Create, edit and delete Allergies</span>',
-      addAllergyButton.outerHTML,
-      '</div>',
-      allergies.outerHTML,
-      '</div>'
-    ];
-    allergies.replaceWith(...htmlToElements(htmlLines.join('\n')));
-  }
-}
 
 function addCollapseToTheHeader() {
   elementReady('.user-options').then(userOptions => {
@@ -288,6 +149,7 @@ function overridePatientHeader() {
       if (status.length) {
         personStatus.textContent = status[1]?.trim();
       }
+
       var htmlLines = [
         '<div class="patient-header custom">',
         '<div class="patient-data"><h1>' + fullName + ageAndGender + '</h1>',
@@ -323,14 +185,14 @@ function overridePatientHeader() {
       const deletePatient = document.querySelector('#org\\.openmrs\\.module\\.coreapps\\.deletePatient');
       if (!!deletePatient) {
         const href = deletePatient.href;
-        htmlLines = htmlLines.concat(['<button class="btn btn-secondary" onclick="' + href + '">', deletePatient.textContent, '</button>']);
+        htmlLines = htmlLines.concat(['<button class="btn btn-danger" onclick="' + href + '">', deletePatient.textContent, '</button>']);
         deletePatient.parentElement.removeChild(deletePatient);
       }
       const deleteCaregiver = document.querySelector('#cfl\\.personDashboard\\.deletePerson');
       if (!!deleteCaregiver) {
         const href = deleteCaregiver.href;
         htmlLines = htmlLines.concat([
-          '<button class="btn btn-secondary" onclick="' + href + '">',
+          '<button class="btn btn-danger" onclick="' + href + '">',
           deleteCaregiver.textContent,
           '</button>'
         ]);
@@ -353,10 +215,30 @@ function overridePatientHeader() {
       } else {
         patientHeader.replaceWith(...updatedHeader);
       }
-      // add (age/gender) to the breadcrumb
-      elementReady('#breadcrumbs li:last-child:not(:empty)').then(element => {
-        element.textContent = element.textContent.replace(fullName, fullName + ageAndGender);
-      });
+
+      if(!new URL(window.location.href).pathname.includes("/htmlformentryui/htmlform")) {
+        // add (age/gender) to the breadcrumb
+        elementReady('#breadcrumbs li:last-child:not(:empty)').then(element => {
+          element.textContent = shownName + ageAndGender;
+        });
+      }
+
+      // Customize breadcrumbs for the allergies page
+      if (new URL(window.location.href).pathname.includes("/allergyui")) {
+        const homeBreadcrumb = $('#breadcrumbs li:first-child:not(:empty)');
+        const nameBreadCrumb = homeBreadcrumb.next();
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const patientUuid = urlParams.get('patientId');
+        const patientDashboardURL = '/openmrs/coreapps/clinicianfacing/patient.page?patientId=' + patientUuid;
+
+        const nameBreadCrumbWrapper = $('<a>', {
+          href: patientDashboardURL,
+          text: fullName + ' '
+        });
+
+        nameBreadCrumb.empty().append(nameBreadCrumbWrapper);
+      }
     });
   }
 }
@@ -425,14 +307,4 @@ function watchElementMutations(selector, callback, parentElement = document) {
     childList: true,
     subtree: true
   });
-}
-
-function removeDatePickerPlaceholders(node) {
-  if (node.nodeType === NODE_TYPE_TEXT) {
-    node.data = node.data.replace(DATE_PICKER_PLACEHOLDER_REGEX, '');
-  } else if (node.nodeType === NODE_TYPE_ELEMENT) {
-    for (var i = 0; i < node.childNodes.length; i++) {
-      removeDatePickerPlaceholders(node.childNodes[i]);
-    }
-  }
 }

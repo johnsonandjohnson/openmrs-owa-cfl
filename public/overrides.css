@@ -128,12 +128,6 @@ i.cfl-register-patient {
   margin-top: 0 !important;
 }
 
-.homepage-heading {
-  font-size: 40px;
-  color: #333333;
-  padding-top: 1rem;
-}
-
 /** Breadcrumbs **/
 #breadcrumbs {
   padding: 0 1rem 0;
@@ -167,10 +161,6 @@ i.cfl-register-patient {
   display: none;
 }
 
-#breadcrumbs li:first-child a::after {
-  content: 'Home';
-}
-
 #breadcrumbs li i {
   display: none;
 }
@@ -183,11 +173,6 @@ i.cfl-register-patient {
 
 #breadcrumbs li:last-child::after {
   content: none;
-}
-
-/** Breadcrumbs - Visits **/
-#breadcrumbs > a:first-child::after {
-  content: 'Home';
 }
 
 #breadcrumbs a:first-child {
@@ -252,7 +237,7 @@ i.cfl-register-patient {
 }
 
 .patient-header .header-label {
-  min-width: 125px;
+  min-width: 150px;
 }
 
 .patient-header h1 {
@@ -280,6 +265,11 @@ button.btn {
 
 button.btn:hover {
   background-color: #00455c;
+}
+
+button.btn-danger,
+button.btn-danger:hover {
+  background: var(--danger) !important;
 }
 
 button.btn.cancel:hover {
@@ -710,6 +700,9 @@ tr:hover td:not(.allergyStatus) {
   color: black;
 }
 
+/*
+WARNING: This is not only for allergy, but at least for Program widget's enroll btn too.
+*/
 #content button,
 #allergy > #actions > input {
   background: #00455c;

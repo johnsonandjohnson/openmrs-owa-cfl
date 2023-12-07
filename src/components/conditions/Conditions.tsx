@@ -93,7 +93,7 @@ class Condition extends React.Component<IConditionsProps, IConditionsState> {
     if (isActive === this.state.active) {
       return (
         <tr>
-          <td>{lastCondition.concept?.name}</td>
+          <td>{lastCondition.conditionNonCoded ? `"${lastCondition.conditionNonCoded}"` : lastCondition.concept?.name}</td>
           <td>{lastCondition.onSetDate && formatDate(intl, new Date(lastCondition.onSetDate))}</td>
           <td>
             <i className="icon-pencil edit-action" onClick={this.editCondition(lastCondition.uuid)} />

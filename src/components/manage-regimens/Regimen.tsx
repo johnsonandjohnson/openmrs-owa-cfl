@@ -104,7 +104,13 @@ const Regimen = ({
   );
 
   const bodyComponent = drugs.map((drug, drugIdx) => (
-    <Drug key={`${drug.uuid}-${drugIdx}`} drug={drug} drugIdx={drugIdx} regimenUuid={regimenUuid} regimenIdx={regimenIdx} />
+    <Drug 
+      key={`${drug.uuid}-${drugIdx}`} 
+      drug={drug} 
+      drugIdx={drugIdx} 
+      regimenUuid={regimenUuid} 
+      regimenIdx={regimenIdx} 
+    />
   ));
 
   return (
@@ -135,4 +141,4 @@ const mapDispatchToProps = {
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
 
-export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(Regimen));
+export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(Regimen));

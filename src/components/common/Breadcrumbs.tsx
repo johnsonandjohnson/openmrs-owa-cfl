@@ -12,7 +12,7 @@ import React from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import withBreadcrumbs from 'react-router-breadcrumbs-hoc';
 import './Breadcrumbs.scss';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { nameParamVal, redirectUrl } from '../../shared/util/url-util';
 import { ROOT_URL } from '../../shared/constants/openmrs';
 import { connect } from 'react-redux';
@@ -25,7 +25,7 @@ export interface IBreadcrumbsProps extends StateProps, DispatchProps, RouteCompo
   breadcrumbs: any[];
 }
 
-class Breadcrumbs extends React.Component<IBreadcrumbsProps> {
+class Breadcrumbs extends React.Component<PropsWithIntl<IBreadcrumbsProps>> {
   routeBreadcrumbs = () => {
     const breadcrumbs = this.props.breadcrumbs;
     return breadcrumbs
@@ -81,4 +81,4 @@ const mapDispatchToProps = {};
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
 
-export default connect(mapStateToProps, mapDispatchToProps)(withBreadcrumbs(routeConfig)(withRouter(Breadcrumbs)));
+export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(withBreadcrumbs(routeConfig)(withRouter(Breadcrumbs))));

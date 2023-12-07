@@ -19,6 +19,7 @@ import Unauthorized from './common/Unauthorized';
 import { Spinner } from 'reactstrap';
 import Customize from './customize/customize';
 import { routeConfig } from '../shared/constants/routes';
+import { injectIntl } from 'react-intl';
 
 export interface IRoutesProps extends StateProps, DispatchProps {}
 
@@ -69,4 +70,4 @@ const mapDispatchToProps = {};
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
 
-export default connect(mapStateToProps, mapDispatchToProps)(Routes);
+export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(Routes));
