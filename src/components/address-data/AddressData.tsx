@@ -30,6 +30,8 @@ import {
 import { STRING_FALSE, STRING_TRUE } from '../../shared/constants/input';
 import downloadCsv from 'download-csv';
 import Dropzone from '../common/dropzone/Dropzone';
+import { addBreadcrumbs } from 'src/redux/reducers/breadcrumbs';
+import { CONFIGURE_METADATA_BREADCRUMB_ELEMENT } from 'src/shared/constants/breadcrumbs';
 
 export interface IAddressDataProps extends StateProps, DispatchProps, RouteComponentProps {
   intl: any;
@@ -66,9 +68,11 @@ class AddressData extends React.Component<IAddressDataProps, IAddressDataState> 
 
   componentDidMount() {
     this.props.getAddressDataPage(this.state.page);
+    this.props.addBreadcrumbs([CONFIGURE_METADATA_BREADCRUMB_ELEMENT]);
   }
 
   componentDidUpdate(prevProps: Readonly<IAddressDataProps>, prevState: Readonly<IAddressDataState>, snapshot?: any) {
+
     const { intl, error, addressDataUploaded, downloadableAddressData } = this.props;
     if (!prevProps.addressDataUploaded && addressDataUploaded) {
       successToast(intl.formatMessage({ id: 'addressData.upload.success' }));
@@ -286,7 +290,7 @@ const mapStateToProps = ({ apps, addressData }) => ({
   numberOfTotalRecords: addressData.numberOfTotalRecords
 });
 
-const mapDispatchToProps = { getAddressDataPage, getAddressData, postAddressData };
+const mapDispatchToProps = { getAddressDataPage, getAddressData, postAddressData, addBreadcrumbs };
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;

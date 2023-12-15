@@ -168,7 +168,7 @@ i.cfl-register-patient {
 #breadcrumbs li::after {
   content: '>>';
   color: #4e5155 !important;
-  margin: 0 0.1em !important;
+  margin: 0 0.35em !important;
 }
 
 #breadcrumbs li:last-child::after {
@@ -184,10 +184,10 @@ i.cfl-register-patient {
   display: none;
 }
 
-#breadcrumbs.breadcrumb a:not(:first-child),
+/* #breadcrumbs.breadcrumb a:not(:first-child),
 #breadcrumbs.breadcrumb span:not(:first-child) {
   margin-left: 0.35em !important;
-}
+} */
 
 #breadcrumbs span::after {
   content: '>>';
