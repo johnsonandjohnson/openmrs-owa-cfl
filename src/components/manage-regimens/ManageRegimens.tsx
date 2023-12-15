@@ -61,6 +61,8 @@ import { IDrugsState } from '../../shared/models/drugs';
 import { IOrderFrequencyState } from '../../shared/models/order-frequency';
 import { IOrderTypeState } from '../../shared/models/order-type';
 import { EMPTY_STRING } from '../../shared/constants/input';
+import { addBreadcrumbs } from 'src/redux/reducers/breadcrumbs';
+import { CONFIGURE_METADATA_BREADCRUMB_ELEMENT } from 'src/shared/constants/breadcrumbs';
 
 interface IStore {
   manageRegimens: IManageRegimensState;
@@ -109,7 +111,8 @@ export const ManageRegimens = ({
   setEditedRegimens,
   setRegimenToDelete,
   setDrugToDelete,
-  setConfirmationModal
+  setConfirmationModal,
+  addBreadcrumbs
 }: IMangeRegimensProps) => {
   const [isAllSectionsExpanded, setIsAllSectionsExpanded] = useState(false);
   const onReturn = useCallback(() => (window.location.href = RETURN_LOCATION), []);
@@ -153,6 +156,10 @@ export const ManageRegimens = ({
       }),
     [orderSet]
   );
+
+  useEffect(() => {
+    addBreadcrumbs([CONFIGURE_METADATA_BREADCRUMB_ELEMENT]);
+  }, []);
 
   useEffect(() => {
     getSettings(DRUG_DOSING_UNITS_SETTING_KEY);
@@ -468,7 +475,8 @@ const mapDispatchToProps = {
   setEditedRegimens,
   setRegimenToDelete,
   setDrugToDelete,
-  setConfirmationModal
+  setConfirmationModal,
+  addBreadcrumbs
 };
 
 type StateProps = ReturnType<typeof mapStateToProps>;

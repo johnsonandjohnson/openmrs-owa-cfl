@@ -55,12 +55,8 @@ jqr &&
   });
 
 function getDisplayPatientName() {
-  const titleElements = document.getElementsByClassName("title-field");
-  let fullName = "";
-  for (let i = 0; i < titleElements.length; i++) {
-    fullName += titleElements[i].textContent.trim() + ' ';
-  }
+  const titleElement = document.getElementsByClassName("title-field")[0];
 
-  return fullName;
+  return titleElement?.textContent.trim();
 }
 

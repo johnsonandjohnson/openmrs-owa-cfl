@@ -59,6 +59,8 @@ import { ONE, TEN, ZERO } from '../../shared/constants/input';
 import { ROOT_URL } from '../../shared/constants/openmrs';
 import { COUNTRY_CONCEPT_UUID, COUNTRY_CONCEPT_REPRESENTATION } from '../../shared/constants/concept';
 import { getConcept } from '../../redux/reducers/concept';
+import { addBreadcrumbs } from 'src/redux/reducers/breadcrumbs';
+import { CONFIGURE_METADATA_BREADCRUMB_ELEMENT } from 'src/shared/constants/breadcrumbs';
 
 interface IStore {
   appError: string;
@@ -96,6 +98,7 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
     this.props.getCallflowsProviders();
     this.props.getSmsProviders();
     this.props.getConcept(COUNTRY_CONCEPT_UUID, COUNTRY_CONCEPT_REPRESENTATION);
+    this.props.addBreadcrumbs([CONFIGURE_METADATA_BREADCRUMB_ELEMENT]);
   }
 
   componentDidUpdate(prevProps: Readonly<INotificationConfigurationProps>) {
@@ -723,7 +726,7 @@ const mapStateToProps = ({
     loadingConcept
   } as IStore);
 
-const mapDispatchToProps = { getCountryProperties, setCountryPropertyValues, getCallflowsProviders, getSmsProviders, getConcept };
+const mapDispatchToProps = { getCountryProperties, setCountryPropertyValues, getCallflowsProviders, getSmsProviders, getConcept, addBreadcrumbs };
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;

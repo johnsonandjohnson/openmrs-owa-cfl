@@ -30,6 +30,8 @@ import { ConfirmationModal } from '../common/form/ConfirmationModal';
 import { successToast, errorToast } from '../toast-handler/toast-handler';
 import '../Inputs.scss';
 import './FindPatientColumnsConfiguration.scss';
+import { addBreadcrumbs } from 'src/redux/reducers/breadcrumbs';
+import { CONFIGURE_METADATA_BREADCRUMB_ELEMENT } from 'src/shared/constants/breadcrumbs';
 
 interface IStore {
   apps: {
@@ -66,17 +68,26 @@ const FindPatientColumnsConfiguration = ({
   setColumnsConfiguration,
   getSettingByQuery,
   createSetting,
-  updateSetting
+  updateSetting,
+  addBreadcrumbs
 }: IFindPatientColumnsConfigurationProps) => {
+
+  useEffect(() => {
+    addBreadcrumbs([CONFIGURE_METADATA_BREADCRUMB_ELEMENT]);
+  }, []);
+
   useEffect(() => {
     getSettingByQuery(COLUMNS_CONFIGURATION_SETTING_KEY);
   }, [getSettingByQuery]);
+
   useEffect(() => {
     settingValue && setColumnsConfiguration(JSON.parse(settingValue));
   }, [setColumnsConfiguration, settingValue]);
+
   useEffect(() => {
     settingsSaved && successToast(formatMessage({ id: 'findPatientColumnsConfiguration.configurationSaved' }));
   }, [formatMessage, settingsSaved]);
+
   useEffect(() => {
     if (patientRegistrationSteps) {
       const columns = [...FIXED_COLUMNS];
@@ -200,7 +211,8 @@ const mapDispatchToProps = {
   setColumnsConfiguration,
   getSettingByQuery,
   createSetting,
-  updateSetting
+  updateSetting,
+  addBreadcrumbs
 };
 
 type StateProps = ReturnType<typeof mapStateToProps>;

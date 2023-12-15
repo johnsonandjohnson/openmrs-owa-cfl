@@ -54,6 +54,7 @@ class Breadcrumbs extends React.Component<PropsWithIntl<IBreadcrumbsProps>> {
         order: 1
       });
     }
+
     breadcrumbs = breadcrumbs.concat(this.props.additionalBreadcrumbs).sort((b1, b2) => b1.order - b2.order);
     return (
       <div className="breadcrumbs">
