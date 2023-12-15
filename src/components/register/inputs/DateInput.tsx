@@ -48,8 +48,8 @@ class DateInput extends React.Component<IDateInputProps, IFieldState> {
     const props = {
       ...getCommonInputProps(this.props, placeholder),
       placeholderText: placeholder,
-      value: value != null ? value : this.getDateFromModel(patient, name),
-      selected: value != null ? value : this.getDateFromModel(patient, name),
+      value: value != null ? value : getDateFromModel(patient, name),
+      selected: value != null ? value : getDateFromModel(patient, name),
       onChange: this.createOnChangeCallback(patient, name, onPatientChange)
     };
     return (
@@ -61,16 +61,16 @@ class DateInput extends React.Component<IDateInputProps, IFieldState> {
       </div>
     );
   };
+}
 
-  getDateFromModel = (patient, name) => {
-    const modelValue = patient[name];
+export function getDateFromModel(patient, field) {
+  const modelValue = patient[field];
 
-    if (typeof modelValue === 'string') {
-      return new Date(modelValue);
-    } else {
-      return modelValue;
-    }
-  };
+  if (typeof modelValue === 'string') {
+    return new Date(modelValue);
+  } else {
+    return modelValue;
+  }
 }
 
 const mapStateToProps = () => ({});
