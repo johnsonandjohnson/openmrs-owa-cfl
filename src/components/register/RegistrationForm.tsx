@@ -36,11 +36,12 @@ import Step from './Step';
 import Confirm from './Confirm';
 import queryString from 'query-string';
 import {redirectUrl} from '../../shared/util/url-util';
-import {DEFAULT_REGISTRATION_FORM_REDIRECT} from '../../shared/constants/openmrs';
+import {DEFAULT_REGISTRATION_FORM_REDIRECT, PATIENT_PAGE_URL} from '../../shared/constants/openmrs';
 import { CONCEPT_CUSTOM_REPRESENTATION } from '../../shared/constants/manage-regimens';
 import { getConcept } from '../../redux/reducers/concept';
 import { getSettingByQuery } from '../../redux/reducers/settings';
 import { CONCEPT, GLOBAL_PROPERTY, OPTION_UUID } from '../../shared/constants/concept';
+import { addBreadcrumbs } from 'src/redux/reducers/breadcrumbs';
 
 export interface IRegistrationProps extends StateProps, DispatchProps, RouteComponentProps<{ id?: string }> {
   intl: any;
@@ -97,6 +98,12 @@ class RegistrationForm extends React.Component<IRegistrationProps, IRegistration
           stepValidity: {},
           visitedSteps: _.map(this.steps(), (stepDefinition, i) => i)
         });
+
+        this.props.addBreadcrumbs([{
+          label: this.props.patient.person.preferredName.display,
+          url: `${PATIENT_PAGE_URL}?patientId=${this.props.patient.uuid}`,
+          order: 1
+        }]);
       } else if (prevProps.personRelationships !== this.props.personRelationships && this.props.personRelationships != null) {
         const patient = {
           ...this.state.patient,
@@ -432,7 +439,8 @@ const mapDispatchToProps = {
   getPersonRelationships,
   getPatientIdentifierTypes,
   getConcept,
-  getSettingByQuery
+  getSettingByQuery,
+  addBreadcrumbs
 };
 
 type StateProps = ReturnType<typeof mapStateToProps>;

@@ -13,7 +13,6 @@ import { RouteComponentProps, withRouter } from 'react-router-dom';
 import withBreadcrumbs from 'react-router-breadcrumbs-hoc';
 import './Breadcrumbs.scss';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { nameParamVal, redirectUrl } from '../../shared/util/url-util';
 import { ROOT_URL } from '../../shared/constants/openmrs';
 import { connect } from 'react-redux';
 import { routeConfig } from '../../shared/constants/routes';
@@ -45,16 +44,6 @@ class Breadcrumbs extends React.Component<PropsWithIntl<IBreadcrumbsProps>> {
 
   render() {
     let breadcrumbs = this.routeBreadcrumbs();
-    const urlParam = redirectUrl(this.props.location.search);
-    const nameParam = nameParamVal(this.props.location.search);
-    if (urlParam && nameParam) {
-      breadcrumbs.push({
-        url: urlParam,
-        label: nameParam,
-        order: 1
-      });
-    }
-
     breadcrumbs = breadcrumbs.concat(this.props.additionalBreadcrumbs).sort((b1, b2) => b1.order - b2.order);
     return (
       <div className="breadcrumbs">
