@@ -16,15 +16,14 @@ jqr &&
     const searchParams = new URLSearchParams(window.location.search);
     if (searchParams.has('patientId')) {
       const patientId = searchParams.get('patientId');
-      const displayPatientName = getDisplayPatientName();
 
       const patientProfileAnchor = document.querySelector('a#cfl\\.patientProfile');
       if (!!patientProfileAnchor) {
-        patientProfileAnchor.href = `${CFL_UI_BASE}index.html#/edit-patient/${patientId}?redirect=${window.location.href}&name=${displayPatientName}`;
+        patientProfileAnchor.href = `${CFL_UI_BASE}index.html#/edit-patient/${patientId}?redirect=${window.location.href}`;
       }
       const caregiverProfileAnchor = document.querySelector('a#cfl\\.caregiverProfile');
       if (!!caregiverProfileAnchor) {
-        caregiverProfileAnchor.href = `${CFL_UI_BASE}index.html#/edit-caregiver/${patientId}?redirect=${window.location.href}&name=${displayPatientName}`;
+        caregiverProfileAnchor.href = `${CFL_UI_BASE}index.html#/edit-caregiver/${patientId}?redirect=${window.location.href}`;
       }
       const conditionsIcon = document.querySelector('.info-section.conditions i.edit-action');
       if (!!conditionsIcon) {
@@ -53,10 +52,4 @@ jqr &&
       );
     }
   });
-
-function getDisplayPatientName() {
-  const titleElement = document.getElementsByClassName("title-field")[0];
-
-  return titleElement?.textContent.trim();
-}
 

@@ -19,7 +19,3 @@ export const redirectUrl = search => {
   return (redirectUrlRaw || ROOT_URL).toString();
 };
 
-export const nameParamVal = search => {
-  const params = queryString.parse(search);
-  return params['name'] && params['name'].toString();
-};
