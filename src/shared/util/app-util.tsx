@@ -19,4 +19,4 @@ export const getAppConfig = (apps, appName, projectName) => {
   return app && app.config;
 };
 
-export const getApp = (apps, id) => apps && apps.find(app => app.id === id);
+export const getApp = (apps, uuid) => apps && apps.find(app => app.uuid === uuid);
