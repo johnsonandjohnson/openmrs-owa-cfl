@@ -21,7 +21,8 @@ import ErrorDesc from '../../error-description/error-desc';
 import FormLabel from '../../form-label/form-label';
 import { PersonStatusUI } from '../model/person-status.model-ui';
 import { IPersonStatusEntry } from '../model/person-status-entry.model';
-import * as Msg from '../constants'
+import * as Msg from '../constants';
+import { injectIntl } from 'react-intl';
 
 interface IChangeStatusProps {
   submitDisabled: boolean,
@@ -30,6 +31,7 @@ interface IChangeStatusProps {
   confirm: (value: string, reason?: string) => void
   cancel: () => void
   possibleResults: Array<string>
+  intl?: any
 }
 
 interface IChangeStatusState {
@@ -84,15 +86,15 @@ class ChangeStatusModal extends React.PureComponent<IChangeStatusProps, IChangeS
     </FormGroup>
 
   renderStatusField = () => 
-    this.renderDropdown(Msg.PERSON_STATUS_MODAL_FIELD_LABEL, 
+    this.renderDropdown(this.props.intl.formatMessage({ id: 'person.status.update.label', defaultMessage: 'Status' }) + ':', 
       'statusValue',
       this.state.possibleStatuses.map(status =>
-        <option value={status.value} key={status.value}>{status.label}</option>
+        <option value={status.value} key={status.value}>{this.props.intl.formatMessage({ id: `${status.key}`, defaultMessage: status.label })}</option>
       ), 
       true);
 
   renderReasonField = () =>
-    this.renderDropdown(Msg.PERSON_STATUS_MODAL_REASON_FIELD_LABEL, 
+    this.renderDropdown(this.props.intl.formatMessage({ id: 'person.status.update.reason.label', defaultMessage: 'Reason' }) + ':', 
       'statusReason',
       this.props.possibleResults.map(reason =>
         <option value={reason} key={reason}>{reason}</option>
@@ -103,7 +105,7 @@ class ChangeStatusModal extends React.PureComponent<IChangeStatusProps, IChangeS
     return (
       <Form className="cfl-dialog-content">
         <div className="cfl-dialog-instructions">
-          {Msg.PERSON_STATUS_MODAL_INSTRUCTION}
+          {this.props.intl.formatMessage({ id: 'person.status.update.instructions', defaultMessage: 'Change status' })}
         </div>
         {this.renderStatusField()}
         {this.state.statusValue === Msg.DEACTIVATED_KEY && this.renderReasonField()}
@@ -115,7 +117,7 @@ class ChangeStatusModal extends React.PureComponent<IChangeStatusProps, IChangeS
     return (
       <>
         <i className="icon-user" />
-        {Msg.PERSON_STATUS_MODAL_LABEL}
+        {this.props.intl.formatMessage({ id: 'person.status.update.title', defaultMessage: 'Update the person status' })}
       </>
     );
   };
@@ -124,7 +126,7 @@ class ChangeStatusModal extends React.PureComponent<IChangeStatusProps, IChangeS
     const { submitDisabled } = this.props;
     return (
       <>
-        {Msg.CONFIRM}
+        {this.props.intl.formatMessage({ id: 'messages.confirm', defaultMessage: 'Confirm' })}
         {submitDisabled && <i className="icon-spinner icon-spin icon-2x" />}
       </>
     );
@@ -174,7 +176,7 @@ class ChangeStatusModal extends React.PureComponent<IChangeStatusProps, IChangeS
             {this.buildConfirmButton()}
           </Button>
           <Button bsClass="button cancel" onClick={this.props.cancel}>
-            {Msg.CANCEL}
+            {this.props.intl.formatMessage({ id: 'messages.cancel', defaultMessage: 'Cancel' })}
           </Button>
         </Modal.Body>
       </Modal>
@@ -203,4 +205,4 @@ class ChangeStatusModal extends React.PureComponent<IChangeStatusProps, IChangeS
   };
 }
 
-export default ChangeStatusModal;
+export default injectIntl(ChangeStatusModal);

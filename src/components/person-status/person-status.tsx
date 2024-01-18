@@ -21,7 +21,7 @@ import './person-status.scss';
 import ChangeStatusModal from './modal/change-status-modal';
 import { PersonStatusUI } from './model/person-status.model-ui';
 import * as Msg from './constants';
-import { stat } from 'fs';
+import { injectIntl } from 'react-intl';
 
 interface IPersonStatusProps extends DispatchProps, StateProps {
   patientUuid: string;
@@ -71,7 +71,7 @@ class PersonStatus extends React.PureComponent<IPersonStatusProps, IPersonStatus
   renderStatus = () => {
     const { personStatus } = this.props;
     return (
-      <p>{Msg.PERSON_STATUS_LABEL + ' ' + this.getStatusLabel(personStatus.status.value, Msg.PERSON_STATUSES)}</p>
+      <p>{this.props.intl.formatMessage({ id: "person.status.update.label", defaultMessage: 'Status' }) + ': ' + this.getStatusLabel(personStatus.status.value, Msg.PERSON_STATUSES)}</p>
     );
   };
 
@@ -97,7 +97,7 @@ class PersonStatus extends React.PureComponent<IPersonStatusProps, IPersonStatus
           possibleResults={possibleResults} 
         />
         <button className='btn btn-secondary' onClick={this.handleChangeStatus}>
-          {this.props.intl.formatMessage({ id: "cfl.updateStatusButton.label", defaultMessage: "Update the status" })}
+          {this.props.intl.formatMessage({ id: "cfl.updateStatusButton.label", defaultMessage: 'Update the status' })}
         </button>
       </>
     );
@@ -120,4 +120,4 @@ type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
 
 // @ts-ignore
-export default connect(mapStateToProps,mapDispatchToProps)(PersonStatus);
+export default injectIntl(connect(mapStateToProps,mapDispatchToProps)(PersonStatus));
