@@ -103,6 +103,7 @@ class FindPatient extends React.Component<IPatientsProps, IPatientsState> {
                 value={this.state.query}
                 onChange={this.onQueryChange}
                 className="search-input"
+                autoFocus
               />
             </FormGroup>
           </Form>
