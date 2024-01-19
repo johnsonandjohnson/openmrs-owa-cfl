@@ -4,7 +4,7 @@
 
     <groupId>org.openmrs.owa</groupId>
     <artifactId>openmrs-owa-cfl</artifactId>
-    <version>1.9.3-SNAPSHOT</version>
+    <version>1.9.3-leprosy-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>openmrs-owa-cfl</name>
     <description>OpenMRS CFL UI OWA</description>
