@@ -8,6 +8,15 @@
  * graphic logo is a trademark of OpenMRS Inc.
  */
 
+const HOME_PAGE_PATH = '/openmrs/cfl/home.page';
+const REDIRECT_TO_HOME_PAGE_DELAY_TIME_IN_MS = 1000;
+
+window.addEventListener('load', () => {
+  disableReloadPageEvent();
+  handleLocationChange();
+  watchElementMutations('.change-location', handleLocationChange);
+});
+
 // JQuery overrides (only for core OpenMRS)
 const jqr = (typeof $ === 'function' || typeof jQuery === 'function') && ($ || jQuery);
 jqr &&
@@ -53,3 +62,78 @@ jqr &&
     }
   });
 
+/*
+  Disables reload page event defined in coreapps module.
+  This event was triggered on some pages(e.g. patient dashboard) 
+  after every change location from top header.
+*/
+function disableReloadPageEvent() {
+  if (typeof jQuery !== 'undefined') {
+    jqr(document).off('sessionLocationChanged');
+  }
+}
+
+function handleLocationChange() {
+  handleLocationChangeInOWAPages();
+  handleLocationChangeInOpenMRSPages();
+}
+
+function handleLocationChangeInOWAPages() {
+  const changeLocationElement = document.querySelector('.change-location');
+  if (changeLocationElement) {
+    changeLocationElement.addEventListener('click', function(event) {
+      const clickedElement = event.target;
+      const clickedElementName = clickedElement.tagName.toLowerCase();
+      if (clickedElementName === 'li') {
+        const originalLocation = this.querySelector('a #selected-location')?.textContent?.trim();
+        const updatedLocation = clickedElement.textContent?.trim();
+        redirectToHomePageIfRequired(originalLocation, updatedLocation);
+      }
+    });
+  }
+}
+
+function handleLocationChangeInOpenMRSPages() {
+  const changeLocationElement = document.querySelector('#session-location .select');
+  if (changeLocationElement) {
+    changeLocationElement.addEventListener('click', function(event) {
+      const clickedElement = event.target;
+      const clickedLiElement = clickedElement.closest('li');
+      if (clickedLiElement) {
+        const originalLocation = this.querySelector('.select li.selected')?.textContent?.trim();
+        const updatedLocation = clickedElement.textContent?.trim();
+        redirectToHomePageIfRequired(originalLocation, updatedLocation);
+      }
+    });
+  }
+}
+
+function redirectToHomePageIfRequired(originalLocation, updatedLocation) {
+  if (originalLocation !== updatedLocation && updatedLocation !== '') {
+    setTimeout(() => {
+      window.location.href = HOME_PAGE_PATH;
+    }, REDIRECT_TO_HOME_PAGE_DELAY_TIME_IN_MS);
+  }
+}
+
+/**
+ * Observes changes to DOM starting from {@code parentElement} and its children, then calls {@code callback} on all elements
+ * fitting {@code selector} once a change is detected.
+ *
+ * @param selector
+ * @param callback
+ * @param parentElement
+ */
+function watchElementMutations(selector, callback, parentElement = document) {
+  new MutationObserver((mutationRecords, observer) => {
+    // Query for elements matching the specified selector
+    Array.from(parentElement.querySelectorAll(selector)).forEach(element => {
+      if (!!element.textContent) {
+        callback(element);
+      }
+    });
+  }).observe(parentElement === document ? document.documentElement : parentElement, {
+    childList: true,
+    subtree: true
+  });
+}

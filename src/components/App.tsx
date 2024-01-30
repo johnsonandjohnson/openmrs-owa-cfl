@@ -24,6 +24,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { PROJECT_LOCATION_ATTRIBUTE_TYPE_NAME } from 'src/shared/constants/app';
 import TranslationProvider from './translation/translation-provider';
+import Customize from './customize/customize';
 
 toast.configure();
 
@@ -56,14 +57,15 @@ class App extends React.Component<IAppProps> {
   }
 
   render() {
-    return ( 
+    return <>
+      <Customize />
       <TranslationProvider>
         <div id="app" className="app">
           <Routes/>
           <ScrollUpButton/>
         </div>
       </TranslationProvider>
-    );
+    </>
   }
 }
 
