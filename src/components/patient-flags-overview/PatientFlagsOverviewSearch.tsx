@@ -14,14 +14,17 @@ import { injectIntl } from 'react-intl';
 
 interface IPatientFlagsOverviewSearchProps {
   flags: IFlag[],
-  setFlagName: (flag: string) => void
+  setFlagName: (flag: string) => void,
+  defaultFlagName: string
 }
 
 const PatientFlagsOverviewSearch = ({
   flags,
   setFlagName,
+  defaultFlagName,
   intl
 }: PropsWithIntl<IPatientFlagsOverviewSearchProps>) => {
+
   const handleSelectOnChange = ({ name }) => {
     setFlagName(name)
   };
@@ -32,6 +35,8 @@ const PatientFlagsOverviewSearch = ({
     name
   }))
 
+  const defaultFlagOption = flagOptions?.find(flag => flag.name === defaultFlagName);
+
   return (
     <div className="patient-flags-overview-search">
       <Select
@@ -40,6 +45,7 @@ const PatientFlagsOverviewSearch = ({
         options={flagOptions}
         onChange={handleSelectOnChange}
         placeholder={intl.formatMessage({ id: 'patientFlagsOverview.selectPatientFlagsPlaceholder' })}
+        defaultValue={defaultFlagOption}
       />
     </div>
   )

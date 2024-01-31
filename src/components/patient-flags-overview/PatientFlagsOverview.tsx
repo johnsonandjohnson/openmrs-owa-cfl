@@ -40,8 +40,10 @@ const PatientFlagsOverview = ({
   getFlaggedPatientsOverview,
   isLoading,
   intl,
-  patientFlagsOverviewTableColumns
+  patientFlagsOverviewTableColumns,
+  defaultFlagName
 }: PropsWithIntl<StateProps & DispatchProps>) => {
+
   const usePrevious = value => {
     const ref = useRef();
 
@@ -79,6 +81,12 @@ const PatientFlagsOverview = ({
 
   }, [getFlaggedPatientsOverview, sessionLocation?.uuid, inputValue, flagName, page, pageSize, prevSessionLocationUuid]);
 
+  useEffect(() => {
+    if (defaultFlagName) {
+      setFlagName(defaultFlagName);
+    }
+  }, [defaultFlagName])
+
   return (
     <div className="patient-flags-overview">
       {isLoading ? (
@@ -94,6 +102,7 @@ const PatientFlagsOverview = ({
           <PatientFlagsOverviewSearch
             setFlagName={setFlagName}
             flags={flags}
+            defaultFlagName={defaultFlagName}
           />
           <PatientFlagsOverviewTable
             setPage={setPage}
@@ -133,7 +142,8 @@ const mapStateToProps = ({
   },
   apps: {
     appLoading,
-    patientFlagsOverviewTableColumns
+    patientFlagsOverviewTableColumns,
+    defaultFlagName
   }
 }: IStore) => ({
   sessionLocation,
@@ -145,7 +155,8 @@ const mapStateToProps = ({
   flaggedPatients,
   totalCount,
   isLoading: appLoading || flagsLoading,
-  patientFlagsOverviewTableColumns
+  patientFlagsOverviewTableColumns,
+  defaultFlagName
 });
 
 const mapDispatchToProps = { getPatientFlags, getFlaggedPatientsOverview };

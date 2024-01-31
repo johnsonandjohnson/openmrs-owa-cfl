@@ -30,6 +30,7 @@ const initialState = {
   caregiverRegistrationSteps: null,
   confirmPageCustomElements: null,
   patientFlagsOverviewTableColumns: null,
+  defaultFlagName: null,
   headerAppConfig: null
 };
 
@@ -42,6 +43,7 @@ export const getAppsState = (apps, projectName) => ({
   registrationRedirectUrl: getAppConfig(apps, REGISTER_PATIENT_APP, projectName)?.redirectUrl,
   confirmPageCustomElements: getAppConfig(apps, REGISTER_PATIENT_APP, projectName)?.confirmPageCustomElements,
   patientFlagsOverviewTableColumns: getAppConfig(apps, PATIENT_FLAGS_OVERVIEW_APP, projectName)?.tableColumns,
+  defaultFlagName: getAppConfig(apps, PATIENT_FLAGS_OVERVIEW_APP, projectName)?.defaultFlagName,
   headerAppConfig: getAppConfig(apps, CONFIGURABLE_PATIENT_HEADER_APP, projectName)
 });
 
