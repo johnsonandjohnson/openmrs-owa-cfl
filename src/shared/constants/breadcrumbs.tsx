@@ -8,10 +8,16 @@
  * graphic logo is a trademark of OpenMRS Inc.
  */
 
-import { CONFIGURE_METADTA_PAGE_URL } from "./openmrs";
+import { CONFIGURE_METADTA_PAGE_URL, SYSTEM_ADMINISTRATION_PAGE_URL } from "./openmrs"; 
 
 export const CONFIGURE_METADATA_BREADCRUMB_ELEMENT = {
   labelId: 'adminui.app.configureMetadata.label',
   url: CONFIGURE_METADTA_PAGE_URL,
+  order: 0
+};
+
+export const SYSTEM_ADMINISTRATION_BREADCRUMB_ELEMENT = {
+  labelId: 'coreapps.app.systemAdministration.label',
+  url: SYSTEM_ADMINISTRATION_PAGE_URL,
   order: 0
 };

@@ -46,7 +46,10 @@ import {
 import { TextareaWithPlaceholder } from '../common/textarea/Textarea';
 import { VelocityCodeEditorWithPlaceholder } from '../common/code-editor/VelocityCodeEditor';
 import { addBreadcrumbs } from 'src/redux/reducers/breadcrumbs';
-import { CONFIGURE_METADATA_BREADCRUMB_ELEMENT } from 'src/shared/constants/breadcrumbs';
+import { 
+  CONFIGURE_METADATA_BREADCRUMB_ELEMENT,
+  SYSTEM_ADMINISTRATION_BREADCRUMB_ELEMENT 
+} from 'src/shared/constants/breadcrumbs';
 
 interface INotificationConfigurationProps extends StateProps, DispatchProps, RouteComponentProps {
   intl: any;
@@ -85,7 +88,7 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
 
   componentDidMount() {
     this.props.getMessagesTemplatesGlobalProperties();
-    this.props.addBreadcrumbs([CONFIGURE_METADATA_BREADCRUMB_ELEMENT]);
+    this.props.addBreadcrumbs([SYSTEM_ADMINISTRATION_BREADCRUMB_ELEMENT, CONFIGURE_METADATA_BREADCRUMB_ELEMENT]);
   }
 
   componentDidUpdate(prevProps: Readonly<INotificationConfigurationProps>) {

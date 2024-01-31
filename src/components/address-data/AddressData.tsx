@@ -31,7 +31,10 @@ import { STRING_FALSE, STRING_TRUE } from '../../shared/constants/input';
 import downloadCsv from 'download-csv';
 import Dropzone from '../common/dropzone/Dropzone';
 import { addBreadcrumbs } from 'src/redux/reducers/breadcrumbs';
-import { CONFIGURE_METADATA_BREADCRUMB_ELEMENT } from 'src/shared/constants/breadcrumbs';
+import { 
+  CONFIGURE_METADATA_BREADCRUMB_ELEMENT,
+  SYSTEM_ADMINISTRATION_BREADCRUMB_ELEMENT
+} from 'src/shared/constants/breadcrumbs';
 
 export interface IAddressDataProps extends StateProps, DispatchProps, RouteComponentProps {
   intl: any;
@@ -68,7 +71,7 @@ class AddressData extends React.Component<IAddressDataProps, IAddressDataState> 
 
   componentDidMount() {
     this.props.getAddressDataPage(this.state.page);
-    this.props.addBreadcrumbs([CONFIGURE_METADATA_BREADCRUMB_ELEMENT]);
+    this.props.addBreadcrumbs([SYSTEM_ADMINISTRATION_BREADCRUMB_ELEMENT, CONFIGURE_METADATA_BREADCRUMB_ELEMENT]);
   }
 
   componentDidUpdate(prevProps: Readonly<IAddressDataProps>, prevState: Readonly<IAddressDataState>, snapshot?: any) {

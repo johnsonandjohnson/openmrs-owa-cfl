@@ -31,7 +31,10 @@ import { successToast, errorToast } from '../toast-handler/toast-handler';
 import '../Inputs.scss';
 import './FindPatientColumnsConfiguration.scss';
 import { addBreadcrumbs } from 'src/redux/reducers/breadcrumbs';
-import { CONFIGURE_METADATA_BREADCRUMB_ELEMENT } from 'src/shared/constants/breadcrumbs';
+import { 
+  CONFIGURE_METADATA_BREADCRUMB_ELEMENT,
+  SYSTEM_ADMINISTRATION_BREADCRUMB_ELEMENT
+} from 'src/shared/constants/breadcrumbs';
 
 interface IStore {
   apps: {
@@ -73,7 +76,7 @@ const FindPatientColumnsConfiguration = ({
 }: IFindPatientColumnsConfigurationProps) => {
 
   useEffect(() => {
-    addBreadcrumbs([CONFIGURE_METADATA_BREADCRUMB_ELEMENT]);
+    addBreadcrumbs([SYSTEM_ADMINISTRATION_BREADCRUMB_ELEMENT, CONFIGURE_METADATA_BREADCRUMB_ELEMENT]);
   }, []);
 
   useEffect(() => {

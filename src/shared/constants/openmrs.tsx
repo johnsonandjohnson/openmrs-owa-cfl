@@ -15,3 +15,4 @@ export const CONDITIONS_PAGE_URL = `${ROOT_URL}coreapps/conditionlist/manageCond
 /** Default URL to redirect after successful registration. */
 export const DEFAULT_REGISTRATION_FORM_REDIRECT = `${PATIENT_PAGE_URL}?patientId=%PATIENT_ID%&dashboard=%PERSON_TYPE%`;
 export const CONFIGURE_METADTA_PAGE_URL = `${ROOT_URL}adminui/metadata/configureMetadata.page`;
+export const SYSTEM_ADMINISTRATION_PAGE_URL = `${ROOT_URL}coreapps/systemadministration/systemAdministration.page`;
