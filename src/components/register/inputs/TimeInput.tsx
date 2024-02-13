@@ -26,7 +26,11 @@ const TimeInput = (props: PropsWithIntl<ITimeInputProps>) => {
   const placeholder = getPlaceholder(props.intl, label, name, required);
 
   useEffect(() => {
-    setValueInModel(patient, field.name, onPatientChange, field.defaultValue);
+    if (patient.uuid) {
+      setValueInModel(patient, field.name, onPatientChange, patient[field.name]);
+    } else {
+      setValueInModel(patient, field.name, onPatientChange, field.defaultValue);
+    }
   }, []);
 
   const createOnChangeCallback = (patient, fieldName, callback) => event =>
