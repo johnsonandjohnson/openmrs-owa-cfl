@@ -56,7 +56,7 @@ const PatientFlagsOverview = ({
 
   const prevSessionLocationUuid = usePrevious(sessionLocation?.uuid);
   const [inputValue, setInputValue] = useState(EMPTY_STRING);
-  const [flagName, setFlagName] = useState(EMPTY_STRING);
+  const [flagName, setFlagName] = useState(defaultFlagName);
   const [page, setPage] = useState(DEFAULT_PAGE_NUMBER);
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
   const [isSelectFilterTextEnabled, setInitialTextEnabled] = useState(true);
@@ -64,6 +64,12 @@ const PatientFlagsOverview = ({
   useEffect(() => {
     getPatientFlags();
   }, [getPatientFlags]);
+
+  useEffect(() => {
+    if (defaultFlagName) {
+      setFlagName(defaultFlagName);
+    }
+  }, [defaultFlagName]);
 
   useEffect(() => {
     if (sessionLocation?.uuid && (inputValue || flagName)) {
@@ -80,12 +86,6 @@ const PatientFlagsOverview = ({
     }
 
   }, [getFlaggedPatientsOverview, sessionLocation?.uuid, inputValue, flagName, page, pageSize, prevSessionLocationUuid]);
-
-  useEffect(() => {
-    if (defaultFlagName) {
-      setFlagName(defaultFlagName);
-    }
-  }, [defaultFlagName])
 
   return (
     <div className="patient-flags-overview">
