@@ -99,11 +99,13 @@ const PatientFlagsOverview = ({
             <h2 className="title-header">{intl.formatMessage({ id: 'patientFlagsOverview.title' })}</h2>
             <div className="helper-text">{intl.formatMessage({ id: 'patientFlagsOverview.description' })}</div>
           </div>
-          <PatientFlagsOverviewSearch
-            setFlagName={setFlagName}
-            flags={flags}
-            defaultFlagName={defaultFlagName}
-          />
+          {defaultFlagName != null && 
+            <PatientFlagsOverviewSearch
+              setFlagName={setFlagName}
+              flags={flags}
+              defaultFlagName={defaultFlagName}
+            />
+          }
           <PatientFlagsOverviewTable
             setPage={setPage}
             setPageSize={setPageSize}
