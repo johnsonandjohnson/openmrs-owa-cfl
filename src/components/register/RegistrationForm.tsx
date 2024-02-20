@@ -376,7 +376,13 @@ class RegistrationForm extends React.Component<IRegistrationProps, IRegistration
       "%PATIENT_ID%": this.props.id,
       "%PERSON_TYPE%": this.props.isCaregiver ? "person" : "patient"
     };
-    return this.props.registrationRedirectUrl.replace(/%\w+%/g, placeholder => replacements[placeholder] || placeholder);
+
+    let redirectUrl = this.props.registrationRedirectUrl;
+    if (this.isEdit()) {
+      redirectUrl = this.props.editPatientRedirectUrl;
+    }
+
+    return redirectUrl.replace(/%\w+%/g, placeholder => replacements[placeholder] || placeholder);
   };
 
   render() {
@@ -423,6 +429,7 @@ const mapStateToProps = ({ registration, cflPatient, cflPerson, apps, settings, 
   patientSteps: apps.patientRegistrationSteps || defaultSteps,
   caregiverSteps: apps.caregiverRegistrationSteps || caregiverDefaultSteps,
   registrationRedirectUrl: apps.registrationRedirectUrl || DEFAULT_REGISTRATION_FORM_REDIRECT,
+  editPatientRedirectUrl: apps.editPatientRedirectUrl || DEFAULT_REGISTRATION_FORM_REDIRECT,
   settingsLoading: apps.loading || registration.loading || settings.loading || concept.loading.concept,
   confirmPageCustomElements: apps.confirmPageCustomElements || [],
   sessionLocation
