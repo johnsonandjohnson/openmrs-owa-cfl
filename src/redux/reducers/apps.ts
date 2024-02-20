@@ -41,6 +41,7 @@ export const getAppsState = (apps, projectName) => ({
   patientRegistrationSteps: getAppConfig(apps, REGISTER_PATIENT_APP, projectName)?.steps,
   caregiverRegistrationSteps: getAppConfig(apps, REGISTER_CAREGIVER_APP, projectName)?.steps,
   registrationRedirectUrl: getAppConfig(apps, REGISTER_PATIENT_APP, projectName)?.redirectUrl,
+  editPatientRedirectUrl:  getAppConfig(apps, REGISTER_PATIENT_APP, projectName)?.editPatientRedirectUrl,
   confirmPageCustomElements: getAppConfig(apps, REGISTER_PATIENT_APP, projectName)?.confirmPageCustomElements,
   patientFlagsOverviewTableColumns: getAppConfig(apps, PATIENT_FLAGS_OVERVIEW_APP, projectName)?.tableColumns,
   defaultFlagName: getAppConfig(apps, PATIENT_FLAGS_OVERVIEW_APP, projectName)?.defaultFlagName,
