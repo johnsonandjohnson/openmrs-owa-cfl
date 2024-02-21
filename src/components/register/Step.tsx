@@ -14,7 +14,7 @@ import { injectIntl } from 'react-intl';
 import { FormGroup } from 'reactstrap';
 import { IPatient } from '../../shared/models/patient';
 import _ from 'lodash';
-import Field from './inputs/Field';
+import Field, { isInputField } from './inputs/Field';
 import { isPossiblePhoneNumber } from 'react-phone-number-input';
 import { searchLocations } from '../../redux/reducers/location';
 import { getPhoneNumberWithPlusSign } from '../../shared/util/person-util';
@@ -38,6 +38,7 @@ export interface IStepProps extends StateProps, DispatchProps {
   setValidity: any;
   setStep: any;
   stepNumber: number;
+  isSelected: boolean;
   patientIdentifierTypes: IPatientIdentifierType[];
   isEdit: boolean;
 }
@@ -45,6 +46,7 @@ export interface IStepProps extends StateProps, DispatchProps {
 export interface IStepState {
   invalidFields: any[];
   dirtyFields: any[];
+  firstVisibleInput: { focus: () => void }
 }
 
 export const LOCATIONS_OPTION_SOURCE = 'locations';
@@ -59,7 +61,8 @@ export const ESTIMATED_BIRTHDATE_FIELDS = ['birthdateYears', 'birthdateMonths'];
 export class Step extends React.Component<IStepProps, IStepState> {
   state = {
     invalidFields: [] as any[],
-    dirtyFields: [] as any[]
+    dirtyFields: [] as any[],
+    firstVisibleInput: undefined as { focus: () => void }
   };
 
   componentDidMount() {
@@ -74,6 +77,10 @@ export class Step extends React.Component<IStepProps, IStepState> {
     // re-validate fields
     if (prevProps.patient !== this.props.patient) {
       this.validate();
+    }
+    if (this.props.isSelected && prevProps.isSelected != this.props.isSelected) {
+      // Delay helps ensure the correct input is focused
+      setTimeout(() => this.state.firstVisibleInput && this.state.firstVisibleInput.focus(), 50);
     }
   }
 
@@ -234,6 +241,57 @@ export class Step extends React.Component<IStepProps, IStepState> {
 
   getPatientIdentifierType = field => this.props.patientIdentifierTypes.find(type => type.name === field.name && type.format);
 
+  createInputRefHandler = (stepDefinition, field) => {
+    return inputElement => {
+      // Fist input field (ex. static, separators, etc)
+      if (inputElement && _.find(stepDefinition.fields, f => isInputField(f.type))?.name === field.name) {
+        if (this.props.isSelected) inputElement.focus();
+        this.setState({ firstVisibleInput: inputElement });
+        if (this.state.firstVisibleInput !== inputElement) {
+          this.setState({ firstVisibleInput: inputElement });
+        }
+      }
+    };
+  };
+
+  createFirstInputTabHandler = (stepDefinition, field) => {
+    return e => {
+      // Tab-Shift at Fist input field (ex. static, separators, etc)
+      if (e.key === 'Tab' && e.shiftKey && stepDefinition.fields.find(f => isInputField(f.type))?.name === field.name) {
+        if (this.props.stepNumber > 0) {
+          e.preventDefault();
+          this.props.setStep(this.props.stepNumber - 1);
+        }
+      }
+    };
+  };
+
+  createLastInputTabHandler = (stepDefinition, field) => {
+    return e => {
+      // Tab-Shift at Fist input field (ex. static, separators, etc)
+      if (e.key === 'Tab'&& !e.shiftKey && stepDefinition.fields.findLast(f => isInputField(f.type))?.name === field.name) {
+        const isValid = this.validate(stepDefinition.fields, stepDefinition.fields);
+        if (isValid) {
+          e.preventDefault();
+          this.props.setStep(this.props.stepNumber + 1);
+        }
+      }
+    };
+  };
+
+  createBirthDateTabHandler = (stepDefinition, patient) => {
+    return e => {
+      // If BirthDate is set, then next inputs are disabled - allow to move to the next step
+      if (e.key === 'Tab'&& !e.shiftKey && !!patient[BIRTHDATE_FIELD]) {
+        const isValid = this.validate(stepDefinition.fields, stepDefinition.fields);
+        if (isValid) {
+          e.preventDefault();
+          this.props.setStep(this.props.stepNumber + 1);
+        }
+      }
+    };
+  };
+
   render() {
     const { stepDefinition, patient } = this.props;
     const { invalidFields, dirtyFields } = this.state;
@@ -251,11 +309,6 @@ export class Step extends React.Component<IStepProps, IStepState> {
               const additionalProps = {} as any;
               const patientIdentifierType = this.getPatientIdentifierType(field);
 
-              if (i === stepDefinition.fields.filter(field => field.type !== STATIC_FIELD_TYPE).length - 1 ||
-                (field.name === BIRTHDATE_FIELD && !!patient[BIRTHDATE_FIELD])) {
-                additionalProps.onKeyDown = this.handleLastFieldKeyDown;
-              }
-
               if (patientIdentifierType) {
                 additionalProps.message = patientIdentifierType.formatDescription;
               }
@@ -267,9 +320,14 @@ export class Step extends React.Component<IStepProps, IStepState> {
               ) : (
                 <Field
                   {...this.props}
+                  inputRef={this.createInputRefHandler(stepDefinition, field)}
+                  onFirstInputKeyDown={this.createFirstInputTabHandler(stepDefinition, field)}
+                  onLastInputKeyDown={field.name === BIRTHDATE_FIELD ?
+                    this.createBirthDateTabHandler(stepDefinition, patient) : this.createLastInputTabHandler(stepDefinition, field)}
                   field={field}
                   isInvalid={!!invalidFields.find(f => f['name'] === field.name)}
                   isDirty={!!dirtyFields.find(f => f['name'] === field.name)}
+                  isFirstVisible={false}
                   className={this.getClassName(field)}
                   selectOptions={selectOptions}
                   key={`field-${i}`}

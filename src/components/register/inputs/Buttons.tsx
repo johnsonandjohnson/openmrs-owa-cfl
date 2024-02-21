@@ -23,12 +23,26 @@ class Buttons extends React.Component<IButtonsProps, IFieldState> {
   onChange = value => setValue(this.props.patient, this.props.field.name, this.props.onPatientChange, value);
 
   render = () => {
-    const { intl, field, isInvalid, className, patient, isDirty, onKeyDown } = this.props;
+    const { intl, field, isInvalid, className, patient, isDirty, onFirstInputKeyDown, onLastInputKeyDown } = this.props;
     const { options } = field;
     const hasValue = !!patient[field.name];
     return (
       <div className={`${className}`}>
-        <GenericButtons options={options} entity={patient} fieldName={field.name} onChange={this.onChange} onKeyDown={onKeyDown} intl={intl}/>
+        <GenericButtons
+          firstButtonRef={this.props.inputRef}
+          options={options}
+          entity={patient}
+          fieldName={field.name}
+          onChange={this.onChange}
+          onButtonKeyDown={(e, idx) => {
+            if (idx == 0) {
+              onFirstInputKeyDown && onFirstInputKeyDown(e);
+            } else if (idx == options.length - 1) {
+              onLastInputKeyDown && onLastInputKeyDown(e);
+            }
+          }}
+          intl={intl}
+        />
         {isDirty && isInvalid && (
           <span className="error field-error">
             {intl.formatMessage({

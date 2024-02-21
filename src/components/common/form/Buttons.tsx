@@ -9,21 +9,28 @@
  */
 
 import { Button, FormGroup } from 'reactstrap';
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import _ from 'lodash';
 
 export interface IButtonsProps {
+  firstButtonRef?: (element: { focus: () => void }) => void;
   options: any[];
   entity: any;
   fieldName: any;
   intl: any;
   onChange: (value) => void;
   onKeyDown?: () => void;
+  onButtonKeyDown?: (e, idx) => void;
 }
 
 export const Buttons = (props: IButtonsProps) => {
-  const { options, entity, fieldName, onKeyDown, onChange, intl } = props;
+  const { options, entity, fieldName, onKeyDown, onButtonKeyDown, onChange, intl } = props;
   const handleOnChange = value => evt => onChange(value);
+  const internalFirstButtonRef = useRef(null);
+
+  useEffect(() => {
+    props.firstButtonRef && props.firstButtonRef({ focus: () => internalFirstButtonRef.current.focus() });
+  }, []);
 
   return (
     <>
@@ -35,10 +42,8 @@ export const Buttons = (props: IButtonsProps) => {
             <Button
               onClick={handleOnChange(value)}
               className={`select-button w-100 ${entity[fieldName] === value ? 'active' : ''}`}
-              {...(!!onKeyDown &&
-                i === options.length - 1 && {
-                  onKeyDown
-                })}
+              innerRef={i == 0 ? internalFirstButtonRef : undefined}
+              onKeyDown={!!onKeyDown ? onKeyDown : (!!onButtonKeyDown ? e => onButtonKeyDown(e, i) : undefined)}
             >
               {label ? intl.formatMessage({ id: `${label}` }) : ''}
             </Button>

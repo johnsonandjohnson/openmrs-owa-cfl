@@ -8,7 +8,7 @@
  * graphic logo is a trademark of OpenMRS Inc.
  */
 
-import React, { RefObject } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
 import { IFieldProps, IFieldState } from './Field';
@@ -25,7 +25,15 @@ export interface IInputProps extends StateProps, DispatchProps, IFieldProps {
 const PLUS_SIGN_LENGTH = 1;
 
 class Input extends React.Component<IInputProps, IFieldState> {
-  private inputRef = React.createRef() as RefObject<HTMLInputElement>;
+  private inputRef = React.createRef<HTMLInputElement>();
+
+  componentDidMount(): void {
+    this.props.inputRef({
+      focus: () => {
+        this.inputRef.current.focus()
+      }
+    });
+  }
 
   getErrorMessage = inputValue => {
     if (inputValue.length > 0 && !isPossiblePhoneNumber(inputValue)) {
@@ -36,7 +44,7 @@ class Input extends React.Component<IInputProps, IFieldState> {
   removePlusSign = phoneNumber => phoneNumber && phoneNumber.substring(PLUS_SIGN_LENGTH);
 
   render = () => {
-    const { intl, field, isInvalid, isDirty, className, value, patient } = this.props;
+    const { intl, field, isInvalid, isDirty, className, value, patient, onFirstInputKeyDown, onLastInputKeyDown } = this.props;
     const { name, required, label, defaultCountry = '' } = field;
     const inputValue = getPhoneNumberWithPlusSign(value || patient[field.name] || '');
     const placeholder = getPlaceholder(intl, label, name, required);
@@ -48,6 +56,12 @@ class Input extends React.Component<IInputProps, IFieldState> {
       <div className={`${className} input-container`}>
         <PhoneInput
           {...props}
+          onKeyDown={e => {
+            !!onFirstInputKeyDown && onFirstInputKeyDown(e);
+            if (!e.defaultPrevented) {
+              !!onLastInputKeyDown && onLastInputKeyDown(e);
+            }
+          }}
           defaultCountry={defaultCountry}
           value={inputValue}
           onChange={phoneNumber => props.onChange(this.removePlusSign(phoneNumber))}

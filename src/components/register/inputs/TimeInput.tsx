@@ -20,7 +20,7 @@ interface ITimeInputProps extends IFieldProps {
 }
 
 const TimeInput = (props: PropsWithIntl<ITimeInputProps>) => {
-  const {field, isInvalid, isDirty, className, value, patient, onPatientChange} = props;
+  const {inputRef, field, isInvalid, isDirty, className, value, patient, onPatientChange, onFirstInputKeyDown, onLastInputKeyDown} = props;
   const {name, required, label} = field;
   const hasValue = !!value || !!patient[field.name];
   const placeholder = getPlaceholder(props.intl, label, name, required);
@@ -61,6 +61,12 @@ const TimeInput = (props: PropsWithIntl<ITimeInputProps>) => {
 
   const timePickerProps = {
     ...getCommonInputProps(props, placeholder),
+    onKeyDown: e => {
+      !!onFirstInputKeyDown && onFirstInputKeyDown(e);
+      if (!e.defaultPrevented) {
+        !!onLastInputKeyDown && onLastInputKeyDown(e);
+      }
+    },
     placeholderText: placeholder,
     value: value ? value : getDateTimeFromModel(patient, name),
     selected: value ? value : getDateTimeFromModel(patient, name),
@@ -69,7 +75,8 @@ const TimeInput = (props: PropsWithIntl<ITimeInputProps>) => {
 
   return (
     <div className={`${className} input-container`}>
-      <TimePicker {...timePickerProps} />
+      <TimePicker inputRef={inputRef}
+        {...timePickerProps} />
       {hasValue && <span className="placeholder">{placeholder ? props.intl.formatMessage({ id: `${placeholder}` }) : ''}</span>}
       {isDirty && isInvalid && <ValidationError hasValue={hasValue} field={field}/>}
     </div>

@@ -18,6 +18,7 @@ import { uniq } from 'lodash';
 import './AddressFields.scss';
 
 interface IAddressFieldsProps extends StateProps, DispatchProps {
+  inputRef: (element: { focus: () => void }) => void,
   field: {
     label: string,
     name: string,
@@ -62,7 +63,7 @@ const AddressFields = (props: IAddressFieldsProps) => {
   } = props;
   const isGlobalPropertyOptionSource = optionSource === GLOBAL_PROPERTY;
   const foundGlobalProperty = settings.find(({ property }) => property === optionUuid);
-  
+
   const [addressFields, setAddresFields] = useState([]);
   const [dirtyFields, setDirtyFields] = useState([]);
 
@@ -79,7 +80,7 @@ const AddressFields = (props: IAddressFieldsProps) => {
 
 
   const selectProps = {
-    ...props,
+    ...props, // inc. inputRef
     className: 'col-sm-6 address-field-country',
     field: {
       ...props.field,
@@ -105,8 +106,10 @@ const AddressFields = (props: IAddressFieldsProps) => {
         {!!addressFields?.length && addressFields.map(addressField => {
           const inputProps = {
             ...props,
+            // prevent inputRef, it's passed to country Select only
+            inputRef: undefined,
             onPatientChange: () => {
-              setDirtyFields(uniq([...dirtyFields, addressField.field]))
+              setDirtyFields(uniq([...dirtyFields, addressField.field]));
               props.onPatientChange(props.patient);
             },
             field: {

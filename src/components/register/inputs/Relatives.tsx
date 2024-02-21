@@ -90,6 +90,18 @@ class Relatives extends React.Component<IRelativesProps, IRelativesState> {
     });
   };
 
+  removeRelative = (rowNo) => {
+    const { relatives } = this.state;
+    if (relatives.length > 1) {
+      relatives.splice(rowNo, 1);
+    } else {
+      relatives[0] = { ...emptyRelative };
+    }
+    this.setState({
+      relatives
+    });
+  };
+
   relationshipTypeOptions = () =>
     this.props.relationshipTypes
       .filter(relationshipType => !relationshipType.retired)
@@ -103,18 +115,6 @@ class Relatives extends React.Component<IRelativesProps, IRelativesState> {
           label: relationshipType.displayBIsToA
         }
       ]);
-
-  removeRelative = rowNo => () => {
-    const { relatives } = this.state;
-    if (relatives.length > 1) {
-      relatives.splice(rowNo, 1);
-    } else {
-      relatives[0] = { ...emptyRelative };
-    }
-    this.setState({
-      relatives
-    });
-  };
 
   onChangeEvent = (rowNo, fieldName) => event => this.onChange(rowNo, fieldName)(event.target.value);
 
@@ -154,14 +154,12 @@ class Relatives extends React.Component<IRelativesProps, IRelativesState> {
   patientOptions = rowNo => {
     const { relatives } = this.state;
     const name = relatives[rowNo].otherPersonInput;
-    const options =
-      name && name.length >= 3
-        ? this.props.patients.map(patient => ({
-            value: patient.uuid,
-            label: patient.person.display
-          }))
-        : [];
-    return options;
+    return name && name.length >= 3
+      ? this.props.patients.map(patient => ({
+        value: patient.uuid,
+        label: patient.person.display
+      }))
+      : [];
   };
 
   relative = (relative, rowNo) => {
@@ -173,6 +171,9 @@ class Relatives extends React.Component<IRelativesProps, IRelativesState> {
         {rowFields.includes(relationshipTypeField) && (
           <Field
             {...this.props}
+            inputRef={rowNo == 0 ? this.props.inputRef : undefined}
+            onFirstInputKeyDown={rowNo == 0 ? this.props.onFirstInputKeyDown : undefined}
+            onLastInputKeyDown={undefined}
             field={relationshipTypeField}
             selectOptions={this.relationshipTypeOptions()}
             value={relative[relationshipTypeField.name]}
@@ -191,7 +192,6 @@ class Relatives extends React.Component<IRelativesProps, IRelativesState> {
               placeholder={otherPersonPlaceholder}
               value={relative.otherPerson}
               inputValue={relative.otherPersonInput}
-              onKeyDown={rowNo + 1 === this.state.relatives.length ? this.props.onKeyDown : null}
               onFocus={this.onFocus(rowNo)}
               isFocused
             />
@@ -199,8 +199,29 @@ class Relatives extends React.Component<IRelativesProps, IRelativesState> {
           </div>
         )}
         <div className="align-items-center justify-content-center d-flex">
-          <img src={Plus} alt="add" className="mx-2" onClick={this.addRelative} />
-          <img src={Minus} alt="remove" onClick={this.removeRelative(rowNo)} />
+          <img
+            tabIndex={0}
+            src={Plus}
+            alt="add"
+            className="mx-2"
+            onClick={this.addRelative}
+            onKeyDown={e => {
+              if (e.key == 'Enter') {
+                this.addRelative();
+              }
+            }}
+          />
+          <img
+            tabIndex={0}
+            src={Minus}
+            alt="remove"
+            onClick={() => this.removeRelative(rowNo)}
+            onKeyDown={e => {
+              if (e.key == 'Enter') {
+                this.removeRelative(rowNo);
+              }
+            }}
+          />
         </div>
       </FormGroup>
     );

@@ -9,14 +9,14 @@
  */
 
 import React from 'react';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import './RegisterPatient.scss';
 import '../Inputs.scss';
-import {FormattedMessage, injectIntl} from 'react-intl';
-import {Button, Col, Form, ListGroup, ListGroupItem, Row, Spinner} from 'reactstrap';
+import { FormattedMessage, injectIntl } from 'react-intl';
+import { Button, Col, Form, ListGroup, ListGroupItem, Row, Spinner } from 'reactstrap';
 import _ from 'lodash';
-import {IPatient} from '../../shared/models/patient';
-import {extractPatientOrPersonData, extractPersonRelationships} from '../../shared/util/patient-util';
+import { IPatient } from '../../shared/models/patient';
+import { extractPatientOrPersonData, extractPersonRelationships } from '../../shared/util/patient-util';
 import Check from '../../assets/img/check.svg';
 import CheckCircle from '../../assets/img/check-circle.svg';
 import {
@@ -27,16 +27,16 @@ import {
   registerPerson,
   updateRelationships
 } from '../../redux/reducers/registration';
-import {RouteComponentProps, withRouter} from 'react-router-dom';
-import {getPatient} from '../../redux/reducers/patient';
-import {getPerson, getPersonRelationships} from '../../redux/reducers/person';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { getPatient } from '../../redux/reducers/patient';
+import { getPerson, getPersonRelationships } from '../../redux/reducers/person';
 import defaultSteps from './patientDefaultSteps.json';
 import caregiverDefaultSteps from './caregiverDefaultSteps.json';
 import Step from './Step';
 import Confirm from './Confirm';
 import queryString from 'query-string';
-import {redirectUrl} from '../../shared/util/url-util';
-import {DEFAULT_REGISTRATION_FORM_REDIRECT, PATIENT_PAGE_URL} from '../../shared/constants/openmrs';
+import { redirectUrl } from '../../shared/util/url-util';
+import { DEFAULT_REGISTRATION_FORM_REDIRECT, PATIENT_PAGE_URL } from '../../shared/constants/openmrs';
 import { CONCEPT_CUSTOM_REPRESENTATION } from '../../shared/constants/manage-regimens';
 import { getConcept } from '../../redux/reducers/concept';
 import { getSettingByQuery } from '../../redux/reducers/settings';
@@ -225,6 +225,7 @@ class RegistrationForm extends React.Component<IRegistrationProps, IRegistration
             patientIdentifierTypes={this.props.patientIdentifierTypes}
             setValidity={this.setValidity(i)}
             setStep={this.setStep}
+            isSelected={this.state.step == i}
             stepNumber={i}
             isEdit={!!this.isEdit()}
           />
@@ -246,6 +247,18 @@ class RegistrationForm extends React.Component<IRegistrationProps, IRegistration
   onNextClick = isValid => e => {
     if (isValid) {
       this.setStep(this.state.step + 1);
+    }
+  };
+
+  onTabDownForNext = isValid => e => {
+    if (isValid && e.key == 'Tab' && !e.shiftKey) {
+      this.setStep(this.state.step + 1);
+    }
+  };
+
+  onTabDownForPrev = () => e => {
+    if (e.key == 'Tab' && e.shiftKey) {
+      this.setStep(this.state.step - 1);
     }
   };
 
@@ -316,7 +329,11 @@ class RegistrationForm extends React.Component<IRegistrationProps, IRegistration
     return (
       <div className="step-buttons">
         {stepNumber > 0 ? (
-          <Button id={`${person}-previous-button`} onClick={() => this.setStep(stepNumber - 1)}>
+          <Button
+            id={`${person}-previous-button`}
+            onClick={() => this.setStep(stepNumber - 1)}
+            onKeyDown={this.onTabDownForPrev()}
+          >
             <FormattedMessage id="registerPatient.previous" />
           </Button>
         ) : (
@@ -326,6 +343,7 @@ class RegistrationForm extends React.Component<IRegistrationProps, IRegistration
           <Button
             id={`${person}-next-button`}
             onClick={this.onNextClick(isValid)}
+            onKeyDown={this.onTabDownForNext(isValid)}
             disabled={!isValid || stepNumber >= stepCount + 1}
             className="next"
           >

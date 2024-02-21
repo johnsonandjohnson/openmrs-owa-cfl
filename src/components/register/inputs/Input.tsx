@@ -33,7 +33,7 @@ class Input extends React.Component<IInputProps, IFieldState> {
   };
 
   render = () => {
-    const { intl, field, isInvalid, isDirty, className, value, patient, message } = this.props;
+    const { intl, field, isInvalid, isDirty, className, value, patient, message, onFirstInputKeyDown, onLastInputKeyDown } = this.props;
     const { name, required, type, label, mask, editable } = field;
     const hasValue = !!value || !!patient[field.name];
     const placeholder = getPlaceholder(intl, label, name, required);
@@ -49,7 +49,19 @@ class Input extends React.Component<IInputProps, IFieldState> {
 
     return (
       <div className={`${className} input-container`}>
-        <InputMask {...props} mask={mask} maskChar={null} value={props.value} onChange={props.onChange} />
+        <InputMask
+          {...props}
+          onKeyDown={e => {
+            !!onFirstInputKeyDown && onFirstInputKeyDown(e);
+            if (!e.defaultPrevented) {
+              !!onLastInputKeyDown && onLastInputKeyDown(e);
+            }
+          }}
+          mask={mask}
+          maskChar={null}
+          value={props.value}
+          onChange={props.onChange}
+          inputRef={this.props.inputRef} />
         {hasValue && <span className="placeholder">{placeholder}</span>}
         {isDirty && isInvalid && <ValidationError hasValue={hasValue} field={field} message={message} />}
       </div>

@@ -8,7 +8,7 @@
  * graphic logo is a trademark of OpenMRS Inc.
  */
 
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { TimePicker as ReactTimePicker } from 'antd';
 import { DEFAULT_TIME_FORMAT, EMPTY_STRING } from '../../../shared/constants/input';
 import 'antd/dist/antd.css';
@@ -16,22 +16,32 @@ import './TimePicker.scss';
 import '../../Inputs.scss';
 
 export const TimePicker = ({
-  format = DEFAULT_TIME_FORMAT,
-  placeholder = null,
-  showPlaceholder = false,
-  value,
-  onChange,
-  onKeyDown = undefined
-}) => (
-  <div className="input-container"
-    onKeyDown={!!onKeyDown && onKeyDown}>
-    <ReactTimePicker
-      format={format}
-      placeholder={placeholder}
-      value={value}
-      onChange={onChange}
-      className="default-time-picker"
-    />
-    {!!showPlaceholder && <span className="placeholder">{placeholder || EMPTY_STRING}</span>}
-  </div>
-);
+    inputRef = undefined,
+    format = DEFAULT_TIME_FORMAT,
+    placeholder = null,
+    showPlaceholder = false,
+    value,
+    onChange,
+    onKeyDown = undefined
+  }) => {
+  const timePickerRef = useRef(null);
+
+  useEffect(() => {
+    inputRef && inputRef(timePickerRef.current.timePickerRef.picker);
+  }, []);
+
+  return (
+    <div className="input-container"
+         onKeyDown={!!onKeyDown && onKeyDown}>
+      <ReactTimePicker
+        ref={timePickerRef}
+        format={format}
+        placeholder={placeholder}
+        value={value}
+        onChange={onChange}
+        className="default-time-picker"
+      />
+      {!!showPlaceholder && <span className="placeholder">{placeholder || EMPTY_STRING}</span>}
+    </div>
+  );
+};

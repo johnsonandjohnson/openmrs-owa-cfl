@@ -8,7 +8,7 @@
  * graphic logo is a trademark of OpenMRS Inc.
  */
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import ValidationError from './ValidationError';
 import cx from 'classnames';
 import { connect } from 'react-redux';
@@ -34,6 +34,7 @@ interface IStore {
 
 export const Select = (props: ISelectProps) => {
   const {
+    inputRef,
     field,
     isInvalid,
     isDirty,
@@ -44,7 +45,9 @@ export const Select = (props: ISelectProps) => {
     selectOptions,
     concept,
     onPatientChange,
-    settings
+    settings,
+    onFirstInputKeyDown,
+    onLastInputKeyDown
   } = props;
   const { name, required, label, options, defaultOption = '', optionSource = '', optionUuid = '', optionKey = '' } = field;
   const hasValue = value || patient[name] || defaultOption;
@@ -53,6 +56,11 @@ export const Select = (props: ISelectProps) => {
   const dataTestId = props['data-testid'] || name;
   const isConceptOptionSource = optionSource === CONCEPT;
   const isGlobalPropertyOptionSource = optionSource === GLOBAL_PROPERTY;
+  const innerRef = useRef(null);
+
+  useEffect(() => {
+    inputRef && inputRef(innerRef.current);
+  }, []);
 
   useEffect(() => {
     if (!patient[name] && defaultOption) {
@@ -99,7 +107,14 @@ export const Select = (props: ISelectProps) => {
   return (
     <div className={`${className} input-container`}>
       <ReactstrapInput
+        innerRef={innerRef}
         {...commonProps}
+        onKeyDown={e => {
+          !!onFirstInputKeyDown && onFirstInputKeyDown(e);
+          if (!e.defaultPrevented) {
+            !!onLastInputKeyDown && onLastInputKeyDown(e);
+          }
+        }}
         className={cx('form-control', {
           invalid: isDirty && isInvalid,
           placeholder: !hasValue

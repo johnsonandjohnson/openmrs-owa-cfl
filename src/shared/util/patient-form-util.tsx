@@ -43,8 +43,7 @@ export const getCommonInputProps = (props: IFieldProps, placeholder) => {
     onChange: onChange || setValueOnChange(patient, name, onPatientChange),
     required,
     className: 'form-control ' + (isDirty && isInvalid ? 'invalid' : ''),
-    type: type || 'text',
-    onKeyDown: !!onKeyDown && onKeyDown
+    type: type || 'text'
   };
 };
 

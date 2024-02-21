@@ -8,22 +8,35 @@
  * graphic logo is a trademark of OpenMRS Inc.
  */
 
-import React from 'react';
-import {connect} from 'react-redux';
-import {injectIntl} from 'react-intl';
+import React, { RefObject } from 'react';
+import { connect } from 'react-redux';
+import { injectIntl } from 'react-intl';
 import DatePicker from 'react-datepicker';
-import {IFieldProps, IFieldState} from './Field';
+import { IFieldProps, IFieldState } from './Field';
 import ValidationError from './ValidationError';
-import {getCommonInputProps, getPlaceholder} from '../../../shared/util/patient-form-util';
-import {DATE_FORMAT, MILLIS_PER_MINUTE} from '../../../shared/util/date-util';
+import { getPlaceholder } from '../../../shared/util/patient-form-util';
+import { DATE_FORMAT, MILLIS_PER_MINUTE } from '../../../shared/util/date-util';
 
 export interface IDateInputProps extends StateProps, DispatchProps, IFieldProps {
   intl: any;
+  datePickerRef: any
 }
 
 class DateInput extends React.Component<IDateInputProps, IFieldState> {
-  createOnChangeCallback = (patient, fieldName, callback) => event =>
+  datePickerRef: RefObject<DatePicker>;
+
+  constructor(props) {
+    super(props);
+    this.datePickerRef = React.createRef();
+  }
+
+  componentDidMount(): void {
+    this.props.inputRef({ focus: () => this.datePickerRef.current.setFocus() });
+  }
+
+  createOnChangeCallback = (patient, fieldName, callback) => event => {
     this.setValueInModel(patient, fieldName, callback, event && event.target ? event.target.value : event);
+  };
 
   setValueInModel = (patient, fieldName, callback, value) => {
     patient[fieldName] = this.getDateFromDateTime(value);
@@ -41,21 +54,36 @@ class DateInput extends React.Component<IDateInputProps, IFieldState> {
   };
 
   render = () => {
-    const {intl, field, isInvalid, isDirty, className, value, patient, onPatientChange} = this.props;
+    const {intl, field, isInvalid, isDirty, className, value, patient, onPatientChange, onFirstInputKeyDown, onLastInputKeyDown} = this.props;
     const {name, required, label} = field;
     const hasValue = !!value || !!patient[field.name];
     const placeholder = getPlaceholder(intl, label, name, required);
     const props = {
-      ...getCommonInputProps(this.props, placeholder),
+      name,
+      id: name,
+      required,
+      className: 'form-control ' + (isDirty && isInvalid ? 'invalid' : ''),
       placeholderText: placeholder,
       value: value != null ? value : getDateFromModel(patient, name),
       selected: value != null ? value : getDateFromModel(patient, name),
-      onChange: this.createOnChangeCallback(patient, name, onPatientChange)
+      onChange: this.createOnChangeCallback(patient, name, onPatientChange),
+      peekNextMonth: true,
+      showMonthDropdown: true,
+      showYearDropdown: true,
+      dropdownMode: 'select',
+      dateFormat: DATE_FORMAT
     };
+
     return (
-      <div className={`${className} input-container`}>
-        <DatePicker {...props} peekNextMonth showMonthDropdown showYearDropdown dropdownMode="select"
-                    dateFormat={DATE_FORMAT}/>
+      <div className={`${className} input-container`}
+           // Overriding onKeyDown in DatePicker breaks its navigation
+           onKeyDown={e => {
+             !!onFirstInputKeyDown && onFirstInputKeyDown(e);
+             if (!e.defaultPrevented) {
+               !!onLastInputKeyDown && onLastInputKeyDown(e);
+             }
+           }}>
+        <DatePicker ref={this.datePickerRef} {...props} />
         {hasValue && <span className="placeholder">{placeholder ? intl.formatMessage({ id: `${placeholder}` }) : ''}</span>}
         {isDirty && isInvalid && <ValidationError hasValue={hasValue} field={field}/>}
       </div>

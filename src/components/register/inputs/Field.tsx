@@ -23,6 +23,7 @@ const DEFAULT_FIELD_TYPE = 'text';
 const DEFAULT_INPUT = Input;
 
 export interface IFieldProps {
+  inputRef: (element: { focus: () => void }) => void | undefined;
   patient: any;
   field: any;
   className?: any;
@@ -32,7 +33,10 @@ export interface IFieldProps {
   selectOptions?: any[];
   isInvalid: boolean;
   isDirty: boolean;
+  isFirstVisible?: boolean;
   onKeyDown?: any;
+  onFirstInputKeyDown?: (e) => void;
+  onLastInputKeyDown?: (e) => void;
   message?: string;
 }
 
@@ -50,6 +54,10 @@ export const inputsByType = {
   time: TimeInput,
   static: StaticInput,
   addressFields: AddressFields
+};
+
+export const isInputField = (type: string): boolean => {
+  return !type || ['buttons', 'select', 'number', 'text', 'phone', 'date', 'time', 'addressFields', 'relatives'].includes(type);
 };
 
 function Field(props: IFieldProps) {
