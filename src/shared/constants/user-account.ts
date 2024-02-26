@@ -44,3 +44,4 @@ export const DEFAULT_USER_VALUES = {
   password: { value: '', isValid: true, error: '' },
   confirmPassword: { value: '', isValid: true, error: '' }
 };
+export const ROLE_UUIDS_TO_HIDE_GP_KEY = "cfl.rolesExcludedFromUI";

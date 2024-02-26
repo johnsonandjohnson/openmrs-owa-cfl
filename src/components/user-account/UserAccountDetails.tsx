@@ -41,9 +41,12 @@ const UserAccountDetails = ({
     userRole: { value: userRoleValue, isValid: isUserRoleValid, error: userRoleError },
     password: { value: passwordValue, isValid: isPasswordValid, error: passwordError },
     confirmPassword: { value: confirmPasswordValue, isValid: isConfirmPasswordValid, error: confirmPasswordError }
-  }
+  },
+  roleUuidsToHide,
 }: IDetails) => {
   const getOptions = (options: IDetailsOption[]) => options.map(option => ({ label: option.display, value: option.uuid }));
+
+  const rolesToDisplay = roles.filter(role => !roleUuidsToHide?.split(',').includes(role.uuid));
 
   return (
     <>
@@ -82,7 +85,7 @@ const UserAccountDetails = ({
             placeholder={formatMessage({ id: `userAccount.userAccountDetails.${USER_ROLE_FIELD}` })}
             showPlaceholder={!!userRoleValue?.value}
             value={userRoleValue?.value ? userRoleValue : null}
-            options={getOptions(roles)}
+            options={getOptions(rolesToDisplay)}
             onChange={onValueChange(USER_ROLE_FIELD)}
             wrapperClassName={cx({ invalid: !isUserRoleValid })}
             classNamePrefix="default-select"
