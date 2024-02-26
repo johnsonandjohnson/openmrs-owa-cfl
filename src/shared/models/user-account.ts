@@ -54,6 +54,7 @@ export interface IDetails {
   forcePassword?: boolean;
   isEdit?: boolean;
   setForcePassword?: Dispatch<SetStateAction<boolean>>;
+  roleUuidsToHide?: string
 }
 
 export interface IAudit {

@@ -59,7 +59,7 @@ const reducer = (state = initialState, action) => {
     case SUCCESS(ACTION_TYPES.GET_SETTING): {
       const results = action.payload.data.results;
       const isSettingExist = !!results && results.length > 0;
-
+      
       return {
         ...state,
         loading: false,

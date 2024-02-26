@@ -27,7 +27,7 @@ import _ from 'lodash';
 import { IUserAccount, IDetailsOption, ICurrentUser, IPersonAttribute } from '../../shared/models/user-account';
 import '../Inputs.scss';
 import './UserAccount.scss';
-import { getSettings } from '../../redux/reducers/settings';
+import { getSettingByQuery, getSettings } from '../../redux/reducers/settings';
 import { getPerson } from '../../redux/reducers/person';
 import { isPossiblePhoneNumber } from 'react-phone-number-input';
 import { errorToast } from '../toast-handler/toast-handler';
@@ -48,7 +48,8 @@ import {
   PASSWORD_FIELD,
   PASSWORD_REGEX,
   CONFIRM_PASSWORD_FIELD,
-  USERNAME_REGEX
+  USERNAME_REGEX,
+  ROLE_UUIDS_TO_HIDE_GP_KEY
 } from '../../shared/constants/user-account';
 import { EMPTY_STRING } from 'src/shared/constants/input';
 import { ConfirmationModal } from '../common/form/ConfirmationModal';
@@ -80,7 +81,7 @@ interface IStore {
       deleteProvider: boolean;
     };
   };
-  settings: { settings: [{ property: string; value: string }]; loading: boolean };
+  settings: { settings: [{ property: string; value: string }]; loading: boolean, setting: any };
   cflPerson: { person: { uuid: string; preferredName: { uuid: string; familyName: string; givenName: string }; attributes: IPersonAttribute[]; gender: string } };
 }
 
@@ -103,6 +104,7 @@ const UserAccount = (props: ILocationProps) => {
     currentUser,
     settings,
     loadingSettings,
+    setting,
     person,
     updatedUser,
     successCreateUser,
@@ -115,6 +117,7 @@ const UserAccount = (props: ILocationProps) => {
     getUsers,
     getUserByPersonId,
     getSettings,
+    getSettingByQuery,
     getPerson,
     saveUser,
     saveProvider,
@@ -126,6 +129,7 @@ const UserAccount = (props: ILocationProps) => {
   const userUuid = currentUser?.uuid;
   const emailAddressAtributeTypeUuid = settings?.find(setting => setting.property === SETTING_EMAIL_ADDRESS_ATRRIBUTE_TYPE)?.value;
   const telephoneNumberAtributeTypeUuid = settings?.find(setting => setting.property === SETTING_TELEPHONE_NUMBER_ATRRIBUTE_TYPE)?.value;
+  const roleUuidsToHide = setting?.value;
 
   const [userAccount, setUserAccount] = useState<IUserAccount>(DEFAULT_USER_VALUES);
   const [dirtyFields, setDirtyFields] = useState<string[]>([]);
@@ -165,6 +169,7 @@ const UserAccount = (props: ILocationProps) => {
     getRoles();
     getUsers();
     getSettings(SETTING_ATTRIBUTE_TYPE_PREFIX);
+    getSettingByQuery(ROLE_UUIDS_TO_HIDE_GP_KEY);
     personId && getUserByPersonId(personId);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -215,6 +220,7 @@ const UserAccount = (props: ILocationProps) => {
       setForcePassword(false);
       getProviders(userUuid);
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [person, currentUser]);
 
@@ -398,6 +404,7 @@ const UserAccount = (props: ILocationProps) => {
                 setForcePassword={setForcePassword}
                 forcePassword={forcePassword}
                 isEdit={!!person}
+                roleUuidsToHide={roleUuidsToHide}
               />
             </div>
             <div className="buttons mt-5 pb-5">
@@ -435,7 +442,7 @@ const mapStateToProps = ({
       deleteProvider: successDeleteProvider
     }
   },
-  settings: { settings, loading: loadingSettings },
+  settings: { settings, loading: loadingSettings, setting },
   cflPerson: { person }
 }: IStore) => ({
   userLoading: !personId ? loading : isNil(person),
@@ -446,6 +453,7 @@ const mapStateToProps = ({
   currentUser,
   settings,
   loadingSettings,
+  setting,
   person,
   updatedUser,
   successCreateUser,
@@ -461,6 +469,7 @@ const mapDispatchToProps = {
   getProviders,
   getUserByPersonId,
   getSettings,
+  getSettingByQuery,
   getPerson,
   saveUser,
   saveProvider,
