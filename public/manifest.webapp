@@ -1,5 +1,5 @@
 {
-  "version": "1.9.3-leprosy-india-SNAPSHOT",
+  "version": "1.9.3-leprosy-india",
   "name": "cfl",
   "description": "CFL UI for OpenMRS",
   "launch_path": "index.html",
