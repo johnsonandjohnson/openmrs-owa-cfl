@@ -1,6 +1,6 @@
 {
   "name": "cfl",
-  "version": "1.9.2-SNAPSHOT",
+  "version": "1.9.2-demo",
   "private": true,
   "homepage": "./",
   "dependencies": {

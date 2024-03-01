@@ -36,11 +36,12 @@ import Step from './Step';
 import Confirm from './Confirm';
 import queryString from 'query-string';
 import {redirectUrl} from '../../shared/util/url-util';
-import {DEFAULT_REGISTRATION_FORM_REDIRECT} from '../../shared/constants/openmrs';
+import {DEFAULT_REGISTRATION_FORM_REDIRECT, PATIENT_PAGE_URL} from '../../shared/constants/openmrs';
 import { CONCEPT_CUSTOM_REPRESENTATION } from '../../shared/constants/manage-regimens';
 import { getConcept } from '../../redux/reducers/concept';
 import { getSettingByQuery } from '../../redux/reducers/settings';
 import { CONCEPT, GLOBAL_PROPERTY, OPTION_UUID } from '../../shared/constants/concept';
+import RegisterPatientConfirmationModal from './RegisterPatientConfirmationModal';
 
 export interface IRegistrationProps extends StateProps, DispatchProps, RouteComponentProps<{ id?: string }> {
   intl: any;
@@ -356,12 +357,22 @@ class RegistrationForm extends React.Component<IRegistrationProps, IRegistration
 
   success = () => {
     const { location, id } = this.props;
-    window.location.href = id
-      ? this.createRedirectURL()
-      : queryString.stringifyUrl({
-          url: redirectUrl(location.search)
-        });
-    return <Spinner />;
+    const redirect = () =>
+      (window.location.href = id
+        ? `${PATIENT_PAGE_URL}?patientId=${id}${this.props.isCaregiver ? '&dashboard=person' : ''}`
+        : queryString.stringifyUrl({
+            url: redirectUrl(location.search)
+          }));
+
+    return (
+      <RegisterPatientConfirmationModal
+        className="register-patient-modal"
+        header={{ id: 'registerPatient.confirmModal.title' }}
+        body={{ id: 'registerPatient.confirmModal.message' }}
+        onYes={redirect}
+        isOpen={this.state.success}
+      />
+    );
   };
 
   createRedirectURL = () => {

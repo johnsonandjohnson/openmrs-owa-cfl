@@ -12,8 +12,10 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import './Modal.scss';
+import cx from 'classnames';
 
 export interface IConfirmationModalProps {
+  className?: string;
   header: {
     id: string;
     values?: {};
@@ -23,33 +25,40 @@ export interface IConfirmationModalProps {
     values?: {};
   };
   onYes: () => void;
-  onNo: () => void;
+  onNo?: () => void;
   isOpen: boolean;
 }
 
 export const ConfirmationModal = (props: IConfirmationModalProps) => {
-  const { header, body, onYes, onNo, isOpen } = props;
-  const headerValues = !!header && !!header.values && header.values;
-  const bodyValues = !!body && !!body.values && body.values;
+  const {
+    className,
+    header: { id: headerId, values: headerValues = {} },
+    body: { id: bodyId, values: bodyValues = {} },
+    onYes,
+    onNo,
+    isOpen
+  } = props;
+
   return (
-    <Modal isOpen={isOpen} fade={false}>
+    <Modal className={className} isOpen={isOpen} fade={false}>
       <ModalHeader>
-        <FormattedMessage id={!!header && !!header.id && header.id} values={{ ...headerValues, br: <br /> }} />
+        <div className="modal-images">
+          <i className="bi bi-person-check"></i>
+        </div>
+        <FormattedMessage id={headerId} values={{ ...headerValues, br: <br /> }} />
       </ModalHeader>
       <ModalBody>
-        <p>
-          <FormattedMessage id={!!body && !!body.id && body.id} values={{ ...bodyValues, br: <br /> }} />
-        </p>
+        <FormattedMessage id={bodyId} values={{ ...bodyValues, br: <br /> }} tagName="p" />
       </ModalBody>
-      <ModalFooter className={`${!!onNo ? '' : 'justify-content-end'}`}>
-        {!!onNo && (
+      <ModalFooter className={cx({ 'justify-content-end': !onNo })}>
+        {onNo && (
           <Button className="btn cancel" onClick={onNo} data-testid="cancelModalButton">
             <FormattedMessage id="common.no" />
           </Button>
         )}
-        {!!onYes && (
+        {onYes && (
           <Button className="btn btn-primary" onClick={onYes} data-testid="confirmModalButton">
-            <FormattedMessage id={`${!!onNo ? 'common.yes' : 'common.ok'}`} />
+            <FormattedMessage id={`${onNo ? 'common.yes' : 'common.ok'}`} />
           </Button>
         )}
       </ModalFooter>

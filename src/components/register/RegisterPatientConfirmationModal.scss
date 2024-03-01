@@ -1,0 +1,64 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at http://mozilla.org/MPL/2.0/. OpenMRS is also distributed under
+ * the terms of the Healthcare Disclaimer located at http://openmrs.org/license.
+ * <p>
+ * Copyright (C) OpenMRS Inc. OpenMRS is a registered trademark and the OpenMRS
+ * graphic logo is a trademark of OpenMRS Inc.
+ */
+
+.modal-open .modal .register-patient-modal {
+    .modal-content {
+      @media only screen and (min-width: 730px) {
+        height: 358px;
+        width: 560px;
+      }
+      border-radius: 0px;
+  
+      .modal-header {
+        justify-content: center;
+        padding: 42.38px 0 17px;
+  
+        .modal-title {
+          font-size: 25px;
+          font-style: normal;
+          font-weight: 400;
+          line-height: 32px;
+          letter-spacing: 0em;
+          text-align: center;
+          color: #000;
+  
+          .modal-images {
+            padding-bottom: 15px;
+  
+            .bi-person-check {
+              font-size: 75px;
+              color: #003c52;
+            }
+          }
+        }
+      }
+  
+      .modal-body {
+        font-size: 18px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 23px;
+        letter-spacing: 0em;
+        text-align: center;
+      }
+  
+      .modal-footer {
+        padding: 21px 0 33px;
+        justify-content: center !important;
+  
+        button {
+          padding: 0.5rem 1.85rem;
+          border-radius: 3px;
+          background-color: #003c52;
+          border: 1px solid #003c52;
+        }
+      }
+    }
+  }
