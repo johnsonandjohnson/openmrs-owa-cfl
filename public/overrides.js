@@ -224,36 +224,46 @@ function overridePatientHeader() {
         breadcrumbs[1].textContent = shownName + ageAndGender;
       }
 
+      const homeBreadcrumb = $('#breadcrumbs li:first-child:not(:empty)');
+      const nameBreadCrumb = homeBreadcrumb.next();
       // Customize breadcrumbs for the allergies & htmlform pages
       if (new URL(window.location.href).pathname.includes("/allergyui")) {
-        const homeBreadcrumb = $('#breadcrumbs li:first-child:not(:empty)');
-        const nameBreadCrumb = homeBreadcrumb.next();
-
-        const urlParams = new URLSearchParams(window.location.search);
-        const patientUuid = urlParams.get('patientId');
-        const patientDashboardURL = '/openmrs/coreapps/clinicianfacing/patient.page?patientId=' + patientUuid;
-
-        const nameBreadCrumbWrapper = $('<a>', {
-          href: patientDashboardURL,
-          text: shownName + ageAndGender + ' '
-        });
-
-        nameBreadCrumb.empty().append(nameBreadCrumbWrapper);
+        nameBreadCrumb.empty().append(getNameBreadCrumbWrapper(shownName, ageAndGender));
       } else if (!new URL(window.location.href).pathname.includes("/htmlformentryui/htmlform")) {
         elementReady('#breadcrumbs li:last-child:not(:empty)').then(element => {
           element.textContent = shownName + ageAndGender;
         });
+      } else if (new URL(window.location.href).pathname.includes("/htmlformentryui/htmlform")) {
+        nameBreadCrumb.empty().append(getNameBreadCrumbWrapper(shownName, ageAndGender));
       }
 
-      if(window.location.href.includes("/conditions")) {
+      if (window.location.href.includes("/conditions")) {
         document.getElementsByClassName('patient-header')[0].style.color = '#000000';
         elementReady('.breadcrumbs > a:nth-of-type(2)').then(element => {
-          const shipId = patientHeader.querySelector('#shipId')?.textContent.trim();
           element.textContent = shownName + ageAndGender;
         });
        }
     });
   }
+}
+
+function getNameBreadCrumbWrapper(shipId, ageAndGender) {
+  const patientDashboardURL = getPatientDashboardUrl();
+
+  const nameBreadCrumbWrapper = $('<a>', {
+    href: patientDashboardURL,
+    text: shipId + ageAndGender + ' '
+  });
+
+  return nameBreadCrumbWrapper;
+}
+
+function getPatientDashboardUrl() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const patientUuid = urlParams.get('patientId');
+  const patientDashboardURL = '/openmrs/coreapps/clinicianfacing/patient.page?patientId=' + patientUuid;
+
+  return patientDashboardURL;
 }
 
 /**
