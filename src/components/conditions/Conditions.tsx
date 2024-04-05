@@ -8,22 +8,22 @@
  * graphic logo is a trademark of OpenMRS Inc.
  */
 
-import React from 'react';
-import { connect } from 'react-redux';
-import { Modal, ModalHeader, ModalBody, ModalFooter, Table, Spinner } from 'reactstrap';
-import './Conditions.scss';
-import { FormattedMessage, injectIntl } from 'react-intl';
-import '../Inputs.scss';
-import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
-import { getConditionHistory, saveCondition, saveConditions } from '../../redux/reducers/condition';
-import { addBreadcrumbs, resetBreadcrumbs } from '../../redux/reducers/breadcrumbs';
-import { PATIENT_PAGE_URL } from '../../shared/constants/openmrs';
-import { getPatient } from '../../redux/reducers/patient';
-import PersonStatus from '../person-status/person-status';
-import { STATUS_ACTIVE, STATUS_INACTIVE } from '../../shared/constants/condition';
-import { formatDate } from '../../shared/util/date-util';
-import { successToast } from '../toast-handler/toast-handler';
-import PatientHeader from '../patient-header/patient-header';
+import React from "react";
+import { connect } from "react-redux";
+import { Modal, ModalHeader, ModalBody, ModalFooter, Table, Spinner } from "reactstrap";
+import "./Conditions.scss";
+import { FormattedMessage, injectIntl } from "react-intl";
+import "../Inputs.scss";
+import { Link, RouteComponentProps, withRouter } from "react-router-dom";
+import { getConditionHistory, saveCondition, saveConditions } from "../../redux/reducers/condition";
+import { addBreadcrumbs, resetBreadcrumbs } from "../../redux/reducers/breadcrumbs";
+import { PATIENT_PAGE_URL } from "../../shared/constants/openmrs";
+import { getPatient } from "../../redux/reducers/patient";
+import PersonStatus from "../person-status/person-status";
+import { STATUS_ACTIVE, STATUS_INACTIVE } from "../../shared/constants/condition";
+import { formatDate } from "../../shared/util/date-util";
+import { successToast } from "../toast-handler/toast-handler";
+import PatientHeader from "../patient-header/patient-header";
 
 export interface IConditionsProps extends StateProps, DispatchProps, RouteComponentProps<{ patientUuid?: string }> {
   intl: any;
@@ -37,7 +37,7 @@ export interface IConditionsState {
 class Condition extends React.Component<IConditionsProps, IConditionsState> {
   state = {
     active: true,
-    conditionToDelete: null
+    conditionToDelete: null,
   };
 
   redirectUrl = () => `${PATIENT_PAGE_URL}?patientId=${this.props.match.params.patientUuid}`;
@@ -57,13 +57,13 @@ class Condition extends React.Component<IConditionsProps, IConditionsState> {
         {
           label: patient.person.preferredName.display,
           url: `${PATIENT_PAGE_URL}?patientId=${id}`,
-          order: 1
-        }
+          order: 1,
+        },
       ]);
     }
     if (conditionUpdated && !prevProps.conditionUpdated) {
       this.props.getConditionHistory(id);
-      successToast(this.props.intl.formatMessage({ id: 'conditions.success' }));
+      successToast(this.props.intl.formatMessage({ id: "conditions.success" }));
     }
   }
 
@@ -71,17 +71,17 @@ class Condition extends React.Component<IConditionsProps, IConditionsState> {
     this.props.history.goBack();
   };
 
-  editCondition = id => () => {
+  editCondition = (id) => () => {
     this.props.history.push(`/conditions/${this.props.match.params.patientUuid}/manage/?conditionId=${id}`);
   };
 
-  setConditionToDelete = condition => () => {
+  setConditionToDelete = (condition) => () => {
     this.setState({
-      conditionToDelete: condition
+      conditionToDelete: condition,
     });
   };
 
-  switchConditionActive = condition => () => {
+  switchConditionActive = (condition) => () => {
     condition.status = condition.status === STATUS_ACTIVE ? STATUS_INACTIVE : STATUS_ACTIVE;
     this.props.saveCondition(condition);
   };
@@ -93,13 +93,18 @@ class Condition extends React.Component<IConditionsProps, IConditionsState> {
     if (isActive === this.state.active) {
       return (
         <tr>
-          <td>{lastCondition.conditionNonCoded ? `"${lastCondition.conditionNonCoded}"` : lastCondition.concept?.name}</td>
+          <td>
+            {lastCondition.conditionNonCoded ? `"${lastCondition.conditionNonCoded}"` : lastCondition.concept?.name}
+          </td>
           <td>{lastCondition.onSetDate && formatDate(intl, new Date(lastCondition.onSetDate))}</td>
           <td>
             <i className="icon-pencil edit-action" onClick={this.editCondition(lastCondition.uuid)} />
             <i className="icon-remove delete-action" onClick={this.setConditionToDelete(condition)} />
-            <button className="btn-small set-status-button" onClick={this.switchConditionActive(lastCondition)}>{`${intl.formatMessage({
-              id: 'conditions.set'
+            <button
+              className="btn-small set-status-button"
+              onClick={this.switchConditionActive(lastCondition)}
+            >{`${intl.formatMessage({
+              id: "conditions.set",
             })} ${isActive ? STATUS_INACTIVE : STATUS_ACTIVE}`}</button>
           </td>
         </tr>
@@ -109,19 +114,19 @@ class Condition extends React.Component<IConditionsProps, IConditionsState> {
 
   switchActive = () => {
     this.setState({
-      active: !this.state.active
+      active: !this.state.active,
     });
   };
 
   voidCondition = () => {
     const { conditionToDelete } = this.state;
-    conditionToDelete.conditions.forEach(condition => {
+    conditionToDelete.conditions.forEach((condition) => {
       condition.voided = true;
       condition.endDate = new Date().toISOString();
     });
     this.props.saveConditions(conditionToDelete.conditions);
     this.setState({
-      conditionToDelete: null
+      conditionToDelete: null,
     });
   };
 
@@ -177,32 +182,32 @@ class Condition extends React.Component<IConditionsProps, IConditionsState> {
     const headerProps = {
       ...this.props,
       patientUuid: this.props.match.params.patientUuid,
-      dashboardType: 'PATIENT',
+      dashboardType: "PATIENT",
       redirectUrl: this.redirectUrl(),
       displayTelephone: true,
       headerAppConfig: this.props.headerApp,
-      personId: this.props.match.params.patientUuid
+      personId: this.props.match.params.patientUuid,
     };
     return (
       <div className="conditions">
         <PatientHeader {...headerProps}>
-          <PersonStatus {...headerProps}/>
+          <PersonStatus {...headerProps} />
         </PatientHeader>
         {!!this.state.conditionToDelete && this.renderDeleteModal()}
         <h2>
-          <FormattedMessage id={'conditions.title'} />
+          <FormattedMessage id={"conditions.title"} />
         </h2>
         <div className="inner-content">
           <div className="error">{this.props.error}</div>
           <ul className="nav nav-tabs">
             <li className="nav-item">
-              <div className={`nav-link ${this.state.active && 'active'}`} onClick={this.switchActive}>
-                <FormattedMessage id={'conditions.active'} />
+              <div className={`nav-link ${this.state.active && "active"}`} onClick={this.switchActive}>
+                <FormattedMessage id={"conditions.active"} />
               </div>
             </li>
             <li className="nav-item">
-              <div className={`nav-link ${!this.state.active && 'active'}`} onClick={this.switchActive}>
-                <FormattedMessage id={'conditions.inactive'} />
+              <div className={`nav-link ${!this.state.active && "active"}`} onClick={this.switchActive}>
+                <FormattedMessage id={"conditions.inactive"} />
               </div>
             </li>
           </ul>
@@ -211,12 +216,12 @@ class Condition extends React.Component<IConditionsProps, IConditionsState> {
         <div className="mt-5">
           <div className="d-inline">
             <a href={this.redirectUrl()} className="cancel btn">
-              <FormattedMessage id={'common.return'} />
+              <FormattedMessage id={"common.cancel"} />
             </a>
           </div>
           <div className="d-inline pull-right confirm-button-container">
-            <Link to={this.props.location.pathname + '/manage'} className="save btn">
-              <FormattedMessage id={'conditions.addNew'} />
+            <Link to={this.props.location.pathname + "/manage"} className="save btn">
+              <FormattedMessage id={"conditions.addNew"} />
             </Link>
           </div>
         </div>
@@ -232,10 +237,17 @@ const mapStateToProps = ({ condition, cflPatient, cflPerson, apps }) => ({
   conditionUpdated: condition.conditionUpdated,
   patient: cflPatient.patient,
   person: cflPerson.person,
-  headerApp: apps.headerAppConfig
+  headerApp: apps.headerAppConfig,
 });
 
-const mapDispatchToProps = { saveCondition, saveConditions, getConditionHistory, addBreadcrumbs, resetBreadcrumbs, getPatient };
+const mapDispatchToProps = {
+  saveCondition,
+  saveConditions,
+  getConditionHistory,
+  addBreadcrumbs,
+  resetBreadcrumbs,
+  getPatient,
+};
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;

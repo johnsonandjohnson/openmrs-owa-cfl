@@ -149,7 +149,7 @@ Object {
                 data-testid="returnButton"
                 type="button"
               >
-                common.return
+                common.cancel
               </button>
             </div>
             <div
@@ -160,7 +160,7 @@ Object {
                 data-testid="saveButton"
                 type="button"
               >
-                common.save
+                common.confirm
               </button>
             </div>
           </div>
@@ -313,7 +313,7 @@ Object {
               data-testid="returnButton"
               type="button"
             >
-              common.return
+              common.cancel
             </button>
           </div>
           <div
@@ -324,7 +324,7 @@ Object {
               data-testid="saveButton"
               type="button"
             >
-              common.save
+              common.confirm
             </button>
           </div>
         </div>
@@ -682,7 +682,7 @@ Object {
                 data-testid="returnButton"
                 type="button"
               >
-                common.return
+                common.cancel
               </button>
             </div>
             <div
@@ -693,7 +693,7 @@ Object {
                 data-testid="saveButton"
                 type="button"
               >
-                common.save
+                common.confirm
               </button>
             </div>
           </div>
@@ -994,7 +994,7 @@ Object {
               data-testid="returnButton"
               type="button"
             >
-              common.return
+              common.cancel
             </button>
           </div>
           <div
@@ -1005,7 +1005,7 @@ Object {
               data-testid="saveButton"
               type="button"
             >
-              common.save
+              common.confirm
             </button>
           </div>
         </div>

@@ -8,27 +8,27 @@
  * graphic logo is a trademark of OpenMRS Inc.
  */
 
-import React from 'react';
-import { connect } from 'react-redux';
-import { FormattedMessage, injectIntl } from 'react-intl';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
-import { ICountryProperty, ICountryPropertyValue } from '../../shared/models/country-property';
-import { getCountryProperties, setCountryPropertyValues } from '../../redux/reducers/countryProperty';
-import { getCallflowsProviders, getSmsProviders } from '../../redux/reducers/provider';
-import { Button, Label, Spinner } from 'reactstrap';
-import ExpandableSection from '../common/expandable-section/ExpandableSection';
-import { InputWithPlaceholder, SelectWithPlaceholder } from '../common/form/withPlaceholder';
-import { extractEventValue, selectDefaultTheme } from '../../shared/util/form-util';
-import { errorToast, successToast } from '../toast-handler/toast-handler';
-import _ from 'lodash';
-import { Switch } from '../common/switch/Switch';
-import Divider from '../common/divider/Divider';
-import { TimePicker } from '../common/time-picker/TimePicker';
-import { PlusMinusButtons } from '../common/form/PlusMinusButtons';
-import { ConfirmationModal } from '../common/form/ConfirmationModal';
-import ValidationError from '../common/form/ValidationError';
-import './NotificationConfiguration.scss';
-import '../Inputs.scss';
+import React from "react";
+import { connect } from "react-redux";
+import { FormattedMessage, injectIntl } from "react-intl";
+import { RouteComponentProps, withRouter } from "react-router-dom";
+import { ICountryProperty, ICountryPropertyValue } from "../../shared/models/country-property";
+import { getCountryProperties, setCountryPropertyValues } from "../../redux/reducers/countryProperty";
+import { getCallflowsProviders, getSmsProviders } from "../../redux/reducers/provider";
+import { Button, Label, Spinner } from "reactstrap";
+import ExpandableSection from "../common/expandable-section/ExpandableSection";
+import { InputWithPlaceholder, SelectWithPlaceholder } from "../common/form/withPlaceholder";
+import { extractEventValue, selectDefaultTheme } from "../../shared/util/form-util";
+import { errorToast, successToast } from "../toast-handler/toast-handler";
+import _ from "lodash";
+import { Switch } from "../common/switch/Switch";
+import Divider from "../common/divider/Divider";
+import { TimePicker } from "../common/time-picker/TimePicker";
+import { PlusMinusButtons } from "../common/form/PlusMinusButtons";
+import { ConfirmationModal } from "../common/form/ConfirmationModal";
+import ValidationError from "../common/form/ValidationError";
+import "./NotificationConfiguration.scss";
+import "../Inputs.scss";
 import {
   BEST_CONTACT_TIME_PROPERTY_NAME,
   CALL_PROPERTY_NAME,
@@ -53,17 +53,17 @@ import {
   SHOULD_CREATE_FUTURE_VISITS,
   SMS_PROPERTY_NAME,
   VISIT_REMINDER_PROPERTY_NAME,
-  WHATSAPP_PROPERTY_NAME
-} from '../../shared/constants/notification-configuration';
-import { ONE, TEN, ZERO } from '../../shared/constants/input';
-import { ROOT_URL } from '../../shared/constants/openmrs';
-import { COUNTRY_CONCEPT_UUID, COUNTRY_CONCEPT_REPRESENTATION } from '../../shared/constants/concept';
-import { getConcept } from '../../redux/reducers/concept';
-import { addBreadcrumbs } from 'src/redux/reducers/breadcrumbs';
-import { 
+  WHATSAPP_PROPERTY_NAME,
+} from "../../shared/constants/notification-configuration";
+import { ONE, TEN, ZERO } from "../../shared/constants/input";
+import { ROOT_URL } from "../../shared/constants/openmrs";
+import { COUNTRY_CONCEPT_UUID, COUNTRY_CONCEPT_REPRESENTATION } from "../../shared/constants/concept";
+import { getConcept } from "../../redux/reducers/concept";
+import { addBreadcrumbs } from "src/redux/reducers/breadcrumbs";
+import {
   CONFIGURE_METADATA_BREADCRUMB_ELEMENT,
-  SYSTEM_ADMINISTRATION_BREADCRUMB_ELEMENT
-} from 'src/shared/constants/breadcrumbs';
+  SYSTEM_ADMINISTRATION_BREADCRUMB_ELEMENT,
+} from "src/shared/constants/breadcrumbs";
 
 interface IStore {
   appError: string;
@@ -89,11 +89,14 @@ interface INotificationConfigurationState {
   isConfirmationModalOpen: boolean;
 }
 
-class NotificationConfiguration extends React.Component<INotificationConfigurationProps, INotificationConfigurationState> {
+class NotificationConfiguration extends React.Component<
+  INotificationConfigurationProps,
+  INotificationConfigurationState
+> {
   state = {
     notificationConfiguration: [],
     isAllSectionsExpanded: false,
-    isConfirmationModalOpen: false
+    isConfirmationModalOpen: false,
   };
 
   componentDidMount() {
@@ -112,7 +115,7 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
     }
 
     if (!prevProps.isSetValuesSuccessful && isSetValuesSuccessful) {
-      successToast(intl.formatMessage({ id: 'notificationConfiguration.success' }));
+      successToast(intl.formatMessage({ id: "notificationConfiguration.success" }));
       this.setState({ isAllSectionsExpanded: false });
     } else if (prevProps.error !== this.props.error && !loading) {
       errorToast(error);
@@ -152,7 +155,8 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
         const configurationPropertyName = COUNTRY_CONFIGURATION_TO_PROPERTY_MAPPING[singleCountryPropertyName];
 
         const valueGetter =
-          COUNTRY_CONFIGURATION_TO_PROPERTY_GETTER[singleCountryPropertyName] ?? COUNTRY_CONFIGURATION_TO_PROPERTY_GETTER_DEFAULT;
+          COUNTRY_CONFIGURATION_TO_PROPERTY_GETTER[singleCountryPropertyName] ??
+          COUNTRY_CONFIGURATION_TO_PROPERTY_GETTER_DEFAULT;
         configurationForCountry[configurationPropertyName] = valueGetter(singleCountryProperty?.value);
       });
 
@@ -162,7 +166,8 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
     return notificationConfiguration;
   };
 
-  isSaveDisabled = () => this.props.loading || this.state.notificationConfiguration.some(configuration => !configuration.name);
+  isSaveDisabled = () =>
+    this.props.loading || this.state.notificationConfiguration.some((configuration) => !configuration.name);
 
   onSave = () => this.setState({ isConfirmationModalOpen: true });
 
@@ -172,7 +177,7 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
 
     const allMessageCountryPropertiesMap = new Map([
       ...Array.from(newMessageCountryPropertiesMap.entries()),
-      ...Array.from(toDeleteMessageCountryPropertiesMap.entries())
+      ...Array.from(toDeleteMessageCountryPropertiesMap.entries()),
     ]);
     const allMessageCountryPropertyValues = this.flattenAllCountryPropertyValuesMap(allMessageCountryPropertiesMap);
 
@@ -183,12 +188,12 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
     const { notificationConfiguration } = this.state;
     const newMessageCountryPropertiesMap = new Map<String, ICountryPropertyValue[]>();
 
-    notificationConfiguration.forEach(configuration => {
+    notificationConfiguration.forEach((configuration) => {
       const { name, ...configurationProps } = configuration;
 
       newMessageCountryPropertiesMap.set(name, [] as ICountryPropertyValue[]);
 
-      Object.keys(configurationProps).forEach(notificationConfigurationPropertyName => {
+      Object.keys(configurationProps).forEach((notificationConfigurationPropertyName) => {
         if (notificationConfigurationPropertyName !== "undefined") {
           const valueGetter =
             PROPERTY_TO_COUNTRY_CONFIGURATION_GETTER[notificationConfigurationPropertyName] ??
@@ -197,7 +202,7 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
           const countryPropertyValue = {
             country: this.getCountryNameFromConfigurationName(configuration[CONFIGURATION_NAME_PROPERTY_NAME]),
             name: PROPERTY_TO_COUNTRY_CONFIGURATION_MAPPING[notificationConfigurationPropertyName],
-            value: valueGetter(configuration[notificationConfigurationPropertyName])
+            value: valueGetter(configuration[notificationConfigurationPropertyName]),
           } as ICountryPropertyValue;
 
           newMessageCountryPropertiesMap.get(name).push(countryPropertyValue);
@@ -210,13 +215,13 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
 
   getCountryPropertyValuesToDelete = (newMessageCountryPropertiesMap: Map<String, ICountryPropertyValue[]>) => {
     const toDeleteMessageCountryPropertiesMap = new Map<String, ICountryPropertyValue[]>();
-    this.props.messageCountryProperties.forEach(countryProperty => {
+    this.props.messageCountryProperties.forEach((countryProperty) => {
       const configurationName = this.getCountryConfigurationName(countryProperty);
 
       if (!newMessageCountryPropertiesMap.has(configurationName)) {
         const nullCountryPropertyValue = this.getNullCountryValue(
           this.getCountryNameFromConfigurationName(configurationName),
-          countryProperty.name
+          countryProperty.name,
         );
 
         if (!toDeleteMessageCountryPropertiesMap.has(configurationName)) {
@@ -237,7 +242,7 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
     const allMessageCountryPropertyValues = [] as ICountryPropertyValue[];
     allMessageCountryPropertiesMap.forEach((countryPropertyValues: ICountryPropertyValue[], countryName: string) => {
       countryPropertyValues.forEach((countryPropertyValue: ICountryPropertyValue) =>
-        allMessageCountryPropertyValues.push(countryPropertyValue)
+        allMessageCountryPropertyValues.push(countryPropertyValue),
       );
     });
 
@@ -255,8 +260,8 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
 
   confirmationModal = () => (
     <ConfirmationModal
-      header={{ id: 'notificationConfiguration.confirmationModal.header' }}
-      body={{ id: 'notificationConfiguration.confirmationModal.body' }}
+      header={{ id: "notificationConfiguration.confirmationModal.header" }}
+      body={{ id: "notificationConfiguration.confirmationModal.body" }}
       onYes={() => {
         this.save();
         this.closeModal();
@@ -266,28 +271,32 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
     />
   );
 
-  onChange = (configurationIdx, propertyName, isSelect = false) => event => {
+  onChange = (configurationIdx, propertyName, isSelect = false) => (event) => {
     const { notificationConfiguration } = this.state;
     const configuration = notificationConfiguration[configurationIdx];
     const value = isSelect ? event.value : extractEventValue(event);
     if (!configuration) {
-      notificationConfiguration.push({ [CONFIGURATION_NAME_PROPERTY_NAME]: configuration[CONFIGURATION_NAME_PROPERTY_NAME] });
+      notificationConfiguration.push({
+        [CONFIGURATION_NAME_PROPERTY_NAME]: configuration[CONFIGURATION_NAME_PROPERTY_NAME],
+      });
     }
     configuration[propertyName] = value;
     this.setState({ notificationConfiguration });
   };
 
-  getBooleanValue = value => {
-    return (value === "true" || value === true) ? true : false;
-  }
+  getBooleanValue = (value) => {
+    return value === "true" || value === true ? true : false;
+  };
 
-  smsSettings = configurationIdx => {
+  smsSettings = (configurationIdx) => {
     const { intl, smsProviders } = this.props;
     const { notificationConfiguration } = this.state;
     const configuration = notificationConfiguration[configurationIdx];
-    const smsProviderOptions = smsProviders.map(provider => ({ label: provider.name, value: provider.name }));
-    const smsProvider = smsProviderOptions.find(provider => provider.value === configuration?.[SMS_PROPERTY_NAME]);
-    const shouldSendSmsUponRegistration = this.getBooleanValue(configuration?.[SEND_SMS_UPON_REGISTRATION_PROPERTY_NAME]);
+    const smsProviderOptions = smsProviders.map((provider) => ({ label: provider.name, value: provider.name }));
+    const smsProvider = smsProviderOptions.find((provider) => provider.value === configuration?.[SMS_PROPERTY_NAME]);
+    const shouldSendSmsUponRegistration = this.getBooleanValue(
+      configuration?.[SEND_SMS_UPON_REGISTRATION_PROPERTY_NAME],
+    );
     const shouldSendSmsReminder = this.getBooleanValue(configuration?.[SEND_SMS_REMINDER_PROPERTY_NAME]);
 
     return (
@@ -299,7 +308,7 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
           <div className="inline-fields">
             <div className="col-6 pl-0">
               <SelectWithPlaceholder
-                placeholder={intl.formatMessage({ id: 'notificationConfiguration.provider' })}
+                placeholder={intl.formatMessage({ id: "notificationConfiguration.provider" })}
                 showPlaceholder={!!smsProvider}
                 value={smsProvider}
                 onChange={this.onChange(configurationIdx, SMS_PROPERTY_NAME, true)}
@@ -327,13 +336,17 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
     );
   };
 
-  whatsAppSettings = configurationIdx => {
+  whatsAppSettings = (configurationIdx) => {
     const { intl, smsProviders } = this.props;
     const { notificationConfiguration } = this.state;
     const configuration = notificationConfiguration[configurationIdx];
-    const whatsAppProviderOptions = smsProviders.map(provider => ({ label: provider.name, value: provider.name }));
-    const whatsAppProvider = whatsAppProviderOptions.find(provider => provider.value === configuration?.[WHATSAPP_PROPERTY_NAME]);
-    const shouldSendWhatsAppUponRegistration = this.getBooleanValue(configuration?.[SEND_WHATSAPP_UPON_REGISTRATION_PROPERTY_NAME]);
+    const whatsAppProviderOptions = smsProviders.map((provider) => ({ label: provider.name, value: provider.name }));
+    const whatsAppProvider = whatsAppProviderOptions.find(
+      (provider) => provider.value === configuration?.[WHATSAPP_PROPERTY_NAME],
+    );
+    const shouldSendWhatsAppUponRegistration = this.getBooleanValue(
+      configuration?.[SEND_WHATSAPP_UPON_REGISTRATION_PROPERTY_NAME],
+    );
     const shouldSendWhatsAppReminder = this.getBooleanValue(configuration?.[SEND_WHATSAPP_REMINDER_PROPERTY_NAME]);
     return (
       <>
@@ -344,7 +357,7 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
           <div className="inline-fields">
             <div className="col-6 pl-0">
               <SelectWithPlaceholder
-                placeholder={intl.formatMessage({ id: 'notificationConfiguration.provider' })}
+                placeholder={intl.formatMessage({ id: "notificationConfiguration.provider" })}
                 showPlaceholder={!!whatsAppProvider}
                 value={whatsAppProvider}
                 onChange={this.onChange(configurationIdx, WHATSAPP_PROPERTY_NAME, true)}
@@ -370,17 +383,24 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
         <Divider />
       </>
     );
-  }
+  };
 
-  callSettings = configurationIdx => {
+  callSettings = (configurationIdx) => {
     const { intl, callflowsProviders } = this.props;
     const { notificationConfiguration } = this.state;
     const configuration = notificationConfiguration[configurationIdx];
-    const callflowsProviderOptions = callflowsProviders.map(provider => ({ label: provider.name, value: provider.name }));
-    const callflowsProvider = callflowsProviderOptions.find(provider => provider.value === configuration?.[CALL_PROPERTY_NAME]);
-    const shouldPerformCallUponRegistration = this.getBooleanValue(configuration?.[PERFORM_CALL_UPON_REGISTRATION_PROPERTY_NAME]);
+    const callflowsProviderOptions = callflowsProviders.map((provider) => ({
+      label: provider.name,
+      value: provider.name,
+    }));
+    const callflowsProvider = callflowsProviderOptions.find(
+      (provider) => provider.value === configuration?.[CALL_PROPERTY_NAME],
+    );
+    const shouldPerformCallUponRegistration = this.getBooleanValue(
+      configuration?.[PERFORM_CALL_UPON_REGISTRATION_PROPERTY_NAME],
+    );
     const shouldSendCallReminder = this.getBooleanValue(configuration?.[SEND_CALL_REMINDER_PROPERTY_NAME]);
-   
+
     return (
       <>
         <div className="py-3">
@@ -390,7 +410,7 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
           <div className="inline-fields">
             <div className="col-6 pl-0">
               <SelectWithPlaceholder
-                placeholder={intl.formatMessage({ id: 'notificationConfiguration.provider' })}
+                placeholder={intl.formatMessage({ id: "notificationConfiguration.provider" })}
                 showPlaceholder={!!callflowsProvider}
                 value={callflowsProvider}
                 onChange={this.onChange(configurationIdx, CALL_PROPERTY_NAME, true)}
@@ -418,7 +438,7 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
     );
   };
 
-  notificationWindowAndBestContactTime = configurationIdx => {
+  notificationWindowAndBestContactTime = (configurationIdx) => {
     const { intl } = this.props;
     const { notificationConfiguration } = this.state;
     const configuration = notificationConfiguration[configurationIdx];
@@ -428,7 +448,9 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
     const notificationTimeWindowTo = !!configuration?.[NOTIFICATION_TIME_WINDOW_TO_PROPERTY_NAME]
       ? configuration[NOTIFICATION_TIME_WINDOW_TO_PROPERTY_NAME]
       : null;
-    const bestContactTime = !!configuration?.[BEST_CONTACT_TIME_PROPERTY_NAME] ? configuration[BEST_CONTACT_TIME_PROPERTY_NAME] : null;
+    const bestContactTime = !!configuration?.[BEST_CONTACT_TIME_PROPERTY_NAME]
+      ? configuration[BEST_CONTACT_TIME_PROPERTY_NAME]
+      : null;
 
     return (
       <>
@@ -439,13 +461,13 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
             </Label>
             <div className="inline-fields">
               <TimePicker
-                placeholder={intl.formatMessage({ id: 'notificationConfiguration.allowedNotificationWindow.from' })}
+                placeholder={intl.formatMessage({ id: "notificationConfiguration.allowedNotificationWindow.from" })}
                 showPlaceholder={!!notificationTimeWindowFrom}
                 value={notificationTimeWindowFrom}
                 onChange={this.onChange(configurationIdx, NOTIFICATION_TIME_WINDOW_FROM_PROPERTY_NAME)}
               />
               <TimePicker
-                placeholder={intl.formatMessage({ id: 'notificationConfiguration.allowedNotificationWindow.to' })}
+                placeholder={intl.formatMessage({ id: "notificationConfiguration.allowedNotificationWindow.to" })}
                 showPlaceholder={!!notificationTimeWindowTo}
                 value={notificationTimeWindowTo}
                 onChange={this.onChange(configurationIdx, NOTIFICATION_TIME_WINDOW_TO_PROPERTY_NAME)}
@@ -458,7 +480,7 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
             </Label>
             <div className="inline-fields">
               <TimePicker
-                placeholder={intl.formatMessage({ id: 'notificationConfiguration.bestContactTime.placeholder' })}
+                placeholder={intl.formatMessage({ id: "notificationConfiguration.bestContactTime.placeholder" })}
                 showPlaceholder={!!bestContactTime}
                 value={bestContactTime}
                 onChange={this.onChange(configurationIdx, BEST_CONTACT_TIME_PROPERTY_NAME)}
@@ -471,7 +493,7 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
     );
   };
 
-  onVisitReminderChange = (configurationIdx, reminderIdx) => event => {
+  onVisitReminderChange = (configurationIdx, reminderIdx) => (event) => {
     const { notificationConfiguration } = this.state;
     const extractedEventValue = extractEventValue(event);
     const value = !!extractedEventValue ? Number.parseInt(extractedEventValue, TEN) : ZERO;
@@ -481,7 +503,7 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
     }
   };
 
-  addVisitReminder = configurationIdx => {
+  addVisitReminder = (configurationIdx) => {
     const { notificationConfiguration } = this.state;
     notificationConfiguration[configurationIdx][VISIT_REMINDER_PROPERTY_NAME].push(ZERO);
     this.setState({ notificationConfiguration });
@@ -497,12 +519,14 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
     this.setState({ notificationConfiguration });
   };
 
-  visitReminder = configurationIdx => {
+  visitReminder = (configurationIdx) => {
     const { intl } = this.props;
     const { notificationConfiguration } = this.state;
     const configuration = notificationConfiguration[configurationIdx];
-    const visitReminders = !!configuration?.[VISIT_REMINDER_PROPERTY_NAME] ? configuration[VISIT_REMINDER_PROPERTY_NAME] : [ZERO];
-    
+    const visitReminders = !!configuration?.[VISIT_REMINDER_PROPERTY_NAME]
+      ? configuration[VISIT_REMINDER_PROPERTY_NAME]
+      : [ZERO];
+
     return (
       <>
         <div className="pt-3 py-3">
@@ -512,7 +536,7 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
           {visitReminders.map((reminder, i) => (
             <div className="inline-fields py-1" key={`${configuration}-${configurationIdx}-reminder-${i}`}>
               <InputWithPlaceholder
-                placeholder={intl.formatMessage({ id: 'notificationConfiguration.visitReminder.placeholder' })}
+                placeholder={intl.formatMessage({ id: "notificationConfiguration.visitReminder.placeholder" })}
                 showPlaceholder
                 value={reminder}
                 onChange={this.onVisitReminderChange(configurationIdx, i)}
@@ -534,7 +558,7 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
     );
   };
 
-  firstAndFutureVisitsSettings = configurationIdx => {
+  firstAndFutureVisitsSettings = (configurationIdx) => {
     const { intl } = this.props;
     const { notificationConfiguration } = this.state;
     const configuration = notificationConfiguration[configurationIdx];
@@ -565,7 +589,7 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
     );
   };
 
-  onCountryChange = configurationIdx => event => {
+  onCountryChange = (configurationIdx) => (event) => {
     const { notificationConfiguration } = this.state;
     const configuration = notificationConfiguration[configurationIdx];
     configuration[CONFIGURATION_NAME_PROPERTY_NAME] = event.value;
@@ -578,7 +602,7 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
     this.setState({ notificationConfiguration });
   };
 
-  removeCountryConfiguration = configurationIdx => {
+  removeCountryConfiguration = (configurationIdx) => {
     const { notificationConfiguration } = this.state;
     notificationConfiguration.splice(configurationIdx, ONE);
     this.setState({ notificationConfiguration });
@@ -590,7 +614,8 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
     const configurationName = configuration[CONFIGURATION_NAME_PROPERTY_NAME];
     const isDefaultCountryConfiguration = configurationName === DEFAULT_COUNTRY_CONFIGURATION_NAME;
     const countryOptions = conceptCountryOptions.filter(
-      country => !notificationConfiguration.map(configurationToMap => configurationToMap.name).includes(country.value)
+      (country) =>
+        !notificationConfiguration.map((configurationToMap) => configurationToMap.name).includes(country.value),
     );
     const headerComponent = isDefaultCountryConfiguration ? (
       <Label>
@@ -599,12 +624,14 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
     ) : (
       <div className="flex-1">
         <SelectWithPlaceholder
-          placeholder={intl.formatMessage({ id: 'notificationConfiguration.country' })}
+          placeholder={intl.formatMessage({ id: "notificationConfiguration.country" })}
           showPlaceholder={!!configurationName}
-          value={!!configurationName && conceptCountryOptions.find(countryName => countryName.value === configurationName)}
+          value={
+            !!configurationName && conceptCountryOptions.find((countryName) => countryName.value === configurationName)
+          }
           onChange={this.onCountryChange(configurationIdx)}
           options={countryOptions}
-          wrapperClassName={!configurationName ? 'invalid' : ''}
+          wrapperClassName={!configurationName ? "invalid" : ""}
           classNamePrefix="default-select"
           theme={selectDefaultTheme}
         />
@@ -615,9 +642,9 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
       headerComponent
     ) : (
       <InputWithPlaceholder
-        placeholder={intl.formatMessage({ id: 'notificationConfiguration.country' })}
+        placeholder={intl.formatMessage({ id: "notificationConfiguration.country" })}
         showPlaceholder={!!configurationName}
-        value={!!configurationName ? configurationName : ''}
+        value={!!configurationName ? configurationName : ""}
         wrapperClassName="flex-1"
         readOnly
       />
@@ -626,7 +653,7 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
       this.smsSettings(configurationIdx),
       this.whatsAppSettings(configurationIdx),
       this.callSettings(configurationIdx),
-      this.notificationWindowAndBestContactTime(configurationIdx)
+      this.notificationWindowAndBestContactTime(configurationIdx),
     ];
     return (
       <ExpandableSection
@@ -644,8 +671,11 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
   expandOrCollapseAllButton = () => {
     const { isAllSectionsExpanded } = this.state;
     return (
-      <Button onClick={() => this.setState(state => ({ isAllSectionsExpanded: !state.isAllSectionsExpanded }))} className="cancel">
-        <FormattedMessage id={`notificationConfiguration.button.${isAllSectionsExpanded ? 'collapse' : 'expand'}`} />
+      <Button
+        onClick={() => this.setState((state) => ({ isAllSectionsExpanded: !state.isAllSectionsExpanded }))}
+        className="cancel"
+      >
+        <FormattedMessage id={`notificationConfiguration.button.${isAllSectionsExpanded ? "collapse" : "expand"}`} />
       </Button>
     );
   };
@@ -683,12 +713,12 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
               <div className="mt-5 pb-5">
                 <div className="d-inline">
                   <Button className="cancel" onClick={this.return}>
-                    <FormattedMessage id="common.return" />
+                    <FormattedMessage id="common.cancel" />
                   </Button>
                 </div>
                 <div className="d-inline pull-right confirm-button-container">
                   <Button className="save" onClick={this.onSave} disabled={this.isSaveDisabled()}>
-                    <FormattedMessage id="common.save" />
+                    <FormattedMessage id="common.confirm" />
                   </Button>
                 </div>
               </div>
@@ -706,8 +736,8 @@ const mapStateToProps = ({
   countryProperty,
   concept: {
     concept: { setMembers: countries },
-    loading: { concept: loadingConcept }
-  }
+    loading: { concept: loadingConcept },
+  },
 }) =>
   ({
     appError: apps.errorMessage,
@@ -724,12 +754,19 @@ const mapStateToProps = ({
       .map(({ display }) => ({ label: display, value: display })),
     countryNames: countries.map(({ display: fullySpecified, names }) => ({
       fullySpecified,
-      short: names.find(({ display }) => display !== fullySpecified)?.display
+      short: names.find(({ display }) => display !== fullySpecified)?.display,
     })),
-    loadingConcept
+    loadingConcept,
   } as IStore);
 
-const mapDispatchToProps = { getCountryProperties, setCountryPropertyValues, getCallflowsProviders, getSmsProviders, getConcept, addBreadcrumbs };
+const mapDispatchToProps = {
+  getCountryProperties,
+  setCountryPropertyValues,
+  getCallflowsProviders,
+  getSmsProviders,
+  getConcept,
+  addBreadcrumbs,
+};
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;

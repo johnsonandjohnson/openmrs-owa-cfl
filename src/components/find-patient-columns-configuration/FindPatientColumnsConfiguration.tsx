@@ -8,33 +8,33 @@
  * graphic logo is a trademark of OpenMRS Inc.
  */
 
-import React, { useCallback, useEffect, useState } from 'react';
-import ColumnRow from './ColumnRow';
-import { connect } from 'react-redux';
-import { FormattedMessage, injectIntl, IntlShape } from 'react-intl';
-import { Button, Spinner } from 'reactstrap';
-import { uniqWith, isEqual, cloneDeep } from 'lodash';
-import { setAllPossibleColumns, setColumnsConfiguration } from '../../redux/reducers/columns-configuration';
-import { createSetting, getSettingByQuery, updateSetting } from '../../redux/reducers/settings';
-import { IRegistrationStep } from '../../shared/models/registration-steps';
+import React, { useCallback, useEffect, useState } from "react";
+import ColumnRow from "./ColumnRow";
+import { connect } from "react-redux";
+import { FormattedMessage, injectIntl, IntlShape } from "react-intl";
+import { Button, Spinner } from "reactstrap";
+import { uniqWith, isEqual, cloneDeep } from "lodash";
+import { setAllPossibleColumns, setColumnsConfiguration } from "../../redux/reducers/columns-configuration";
+import { createSetting, getSettingByQuery, updateSetting } from "../../redux/reducers/settings";
+import { IRegistrationStep } from "../../shared/models/registration-steps";
 import {
   ADJACENT_LOWER_AND_UPPER_LETTERS_REGEX,
   COLUMNS_CONFIGURATION_SETTING_KEY,
   FIRST_COLUMN_NAME_LETTERS_REGEX,
   FIXED_COLUMNS,
-  RETURN_LOCATION
-} from '../../shared/constants/columns-configuration';
-import { IColumnConfiguration } from '../../shared/models/columns-configuration';
-import { EMPTY_STRING } from '../../shared/constants/input';
-import { ConfirmationModal } from '../common/form/ConfirmationModal';
-import { successToast, errorToast } from '../toast-handler/toast-handler';
-import '../Inputs.scss';
-import './FindPatientColumnsConfiguration.scss';
-import { addBreadcrumbs } from 'src/redux/reducers/breadcrumbs';
-import { 
+  RETURN_LOCATION,
+} from "../../shared/constants/columns-configuration";
+import { IColumnConfiguration } from "../../shared/models/columns-configuration";
+import { EMPTY_STRING } from "../../shared/constants/input";
+import { ConfirmationModal } from "../common/form/ConfirmationModal";
+import { successToast, errorToast } from "../toast-handler/toast-handler";
+import "../Inputs.scss";
+import "./FindPatientColumnsConfiguration.scss";
+import { addBreadcrumbs } from "src/redux/reducers/breadcrumbs";
+import {
   CONFIGURE_METADATA_BREADCRUMB_ELEMENT,
-  SYSTEM_ADMINISTRATION_BREADCRUMB_ELEMENT
-} from 'src/shared/constants/breadcrumbs';
+  SYSTEM_ADMINISTRATION_BREADCRUMB_ELEMENT,
+} from "src/shared/constants/breadcrumbs";
 
 interface IStore {
   apps: {
@@ -72,9 +72,8 @@ const FindPatientColumnsConfiguration = ({
   getSettingByQuery,
   createSetting,
   updateSetting,
-  addBreadcrumbs
+  addBreadcrumbs,
 }: IFindPatientColumnsConfigurationProps) => {
-
   useEffect(() => {
     addBreadcrumbs([SYSTEM_ADMINISTRATION_BREADCRUMB_ELEMENT, CONFIGURE_METADATA_BREADCRUMB_ELEMENT]);
   }, []);
@@ -88,7 +87,7 @@ const FindPatientColumnsConfiguration = ({
   }, [setColumnsConfiguration, settingValue]);
 
   useEffect(() => {
-    settingsSaved && successToast(formatMessage({ id: 'findPatientColumnsConfiguration.configurationSaved' }));
+    settingsSaved && successToast(formatMessage({ id: "findPatientColumnsConfiguration.configurationSaved" }));
   }, [formatMessage, settingsSaved]);
 
   useEffect(() => {
@@ -100,13 +99,13 @@ const FindPatientColumnsConfiguration = ({
           if (fieldName) {
             const capitalizedFirstColumnNameLetter = fieldName.replace(
               FIRST_COLUMN_NAME_LETTERS_REGEX,
-              str => str.charAt(0).toUpperCase() + str.substring(1)
+              (str) => str.charAt(0).toUpperCase() + str.substring(1),
             );
-            const name = capitalizedFirstColumnNameLetter.replace(ADJACENT_LOWER_AND_UPPER_LETTERS_REGEX, '$1 $2');
+            const name = capitalizedFirstColumnNameLetter.replace(ADJACENT_LOWER_AND_UPPER_LETTERS_REGEX, "$1 $2");
 
             columns.push({ label: name, value: fieldName });
           }
-        })
+        }),
       );
 
       setAllPossibleColumns(uniqWith(columns, isEqual));
@@ -121,7 +120,7 @@ const FindPatientColumnsConfiguration = ({
 
     clonedColumnsConfiguration[0].isValid = false;
 
-    errorToast(formatMessage({ id: 'findPatientColumnsConfiguration.configurationNotSaved' }));
+    errorToast(formatMessage({ id: "findPatientColumnsConfiguration.configurationNotSaved" }));
     setColumnsConfiguration(clonedColumnsConfiguration);
     setIsModalOpen(false);
   }, [columnsConfiguration, formatMessage, setColumnsConfiguration]);
@@ -133,7 +132,7 @@ const FindPatientColumnsConfiguration = ({
       return markConfigurationAsInvalid();
     }
 
-    const config = omittedEmptyColumnsConfiguration.map(column => ({ label: column.label, value: column.value }));
+    const config = omittedEmptyColumnsConfiguration.map((column) => ({ label: column.label, value: column.value }));
     const configJson = JSON.stringify(config);
 
     if (isSettingExist) {
@@ -148,8 +147,8 @@ const FindPatientColumnsConfiguration = ({
   return (
     <div id="find-patient-columns-configuration" data-testid="findPatientColumnsConfiguration">
       <ConfirmationModal
-        header={{ id: 'findPatientColumnsConfiguration.modal.header' }}
-        body={{ id: 'findPatientColumnsConfiguration.modal.body' }}
+        header={{ id: "findPatientColumnsConfiguration.modal.header" }}
+        body={{ id: "findPatientColumnsConfiguration.modal.body" }}
         onYes={onYesHandler}
         onNo={onNoHandler}
         isOpen={isModalOpen}
@@ -176,12 +175,12 @@ const FindPatientColumnsConfiguration = ({
           <div className="mt-5 pb-5">
             <div className="d-inline">
               <Button className="cancel" onClick={onReturnHandler} data-testid="returnButton">
-                <FormattedMessage id="common.return" />
+                <FormattedMessage id="common.cancel" />
               </Button>
             </div>
             <div className="d-inline pull-right confirm-button-container">
               <Button className="save" onClick={onSaveHandler} data-testid="saveButton">
-                <FormattedMessage id="common.save" />
+                <FormattedMessage id="common.confirm" />
               </Button>
             </div>
           </div>
@@ -197,8 +196,8 @@ const mapStateToProps = ({
   settings: {
     success: settingsSaved,
     isSettingExist: { value: isSettingExist },
-    setting
-  }
+    setting,
+  },
 }: IStore) => ({
   isAppLoading,
   settingsSaved,
@@ -206,7 +205,7 @@ const mapStateToProps = ({
   columnsConfiguration,
   isSettingExist,
   settingUuid: setting?.uuid ?? EMPTY_STRING,
-  settingValue: setting?.value ?? EMPTY_STRING
+  settingValue: setting?.value ?? EMPTY_STRING,
 });
 
 const mapDispatchToProps = {
@@ -215,7 +214,7 @@ const mapDispatchToProps = {
   getSettingByQuery,
   createSetting,
   updateSetting,
-  addBreadcrumbs
+  addBreadcrumbs,
 };
 
 type StateProps = ReturnType<typeof mapStateToProps>;

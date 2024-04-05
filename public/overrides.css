@@ -8,7 +8,7 @@
  * graphic logo is a trademark of OpenMRS Inc.
  */
 
- :root {
+:root {
   --default-button-border-color: #6c757d;
   --default-button-line-height: 1.5;
   --default-button-border-radius: 4px;
@@ -16,31 +16,31 @@
 
 /** Fonts **/
 @font-face {
-  font-family: 'CircularStd';
+  font-family: "CircularStd";
   font-style: normal;
   font-weight: normal;
-  src: url('font/CircularStd-Medium.otf') format('opentype');
+  src: url("font/CircularStd-Medium.otf") format("opentype");
 }
 
 @font-face {
-  font-family: 'CircularStd';
+  font-family: "CircularStd";
   font-style: normal;
   font-weight: bold;
-  src: url('font/CircularStd-Bold.otf') format('opentype');
+  src: url("font/CircularStd-Bold.otf") format("opentype");
 }
 
 @font-face {
-  font-family: 'CircularStd-Book';
+  font-family: "CircularStd-Book";
   font-style: normal;
   font-weight: normal;
-  src: url('font/CircularStd-Book.otf') format('opentype');
+  src: url("font/CircularStd-Book.otf") format("opentype");
 }
 
 @font-face {
-  font-family: 'CircularStd-Book';
+  font-family: "CircularStd-Book";
   font-style: italic;
   font-weight: normal;
-  src: url('font/CircularStd-BookItalic.otf') format('opentype');
+  src: url("font/CircularStd-BookItalic.otf") format("opentype");
 }
 
 /** Common **/
@@ -80,24 +80,24 @@ html {
   line-height: normal !important;
 }
 
-i[class^='cfl-'] {
+i[class^="cfl-"] {
   padding: 0 !important;
 }
 
 i.cfl-find-patient {
-  content: url('img/find-patient.png');
+  content: url("img/find-patient.png");
 }
 
 i.cfl-find-caregiver {
-  content: url('img/find-caregiver.png');
+  content: url("img/find-caregiver.png");
 }
 
 i.cfl-register-caregiver {
-  content: url('img/register-caregiver.png');
+  content: url("img/register-caregiver.png");
 }
 
 i.cfl-register-patient {
-  content: url('img/register-patient.png');
+  content: url("img/register-patient.png");
 }
 
 #apps {
@@ -166,7 +166,7 @@ i.cfl-register-patient {
 }
 
 #breadcrumbs li::after {
-  content: '>>';
+  content: ">>";
   color: #4e5155 !important;
   margin: 0 0.35em !important;
 }
@@ -190,7 +190,7 @@ i.cfl-register-patient {
 } */
 
 #breadcrumbs span::after {
-  content: '>>';
+  content: ">>";
   color: #4e5155 !important;
 }
 
@@ -232,7 +232,7 @@ button.btn.cancel:hover {
 
 #content button.cancel {
   background: transparent;
-  color: black;
+  color: #00455c;
   padding: 0.5rem 1.85rem;
   border-radius: var(--default-button-border-radius);
   line-height: var(--default-button-line-height);
@@ -348,7 +348,7 @@ button.btn.cancel:hover {
   background-color: #00455c !important;
 }
 
-.general-actions-toggle .navbar-toggler[aria-expanded='true'] {
+.general-actions-toggle .navbar-toggler[aria-expanded="true"] {
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
   border-bottom: 2px solid rgba(255, 255, 255, 0.5) !important;
@@ -660,17 +660,22 @@ WARNING: This is not only for allergy, but at least for Program widget's enroll 
 #content button,
 #allergy > #actions > input {
   background: #00455c;
-  color: white;
-  border-color: var(--default-button-border-color) !important;
+  color: #ffffff;
+  margin: 0;
   font-size: 11px !important;
   text-transform: uppercase;
+  border-radius: 4px !important;
 }
 
 #allergy > #actions > input.cancel,
 #body-wrapper #content.container-fluid input.cancel {
-  background: none !important;
-  border: none !important;
+  background: transparent;
+  border: #00455c 1px solid !important;
   color: #00455c !important;
+  margin: 0;
+  font-size: 11px !important;
+  text-transform: uppercase;
+  border-radius: 4px;
 }
 
 /** Add new/edit Allergy **/
@@ -714,7 +719,7 @@ WARNING: This is not only for allergy, but at least for Program widget's enroll 
   color: white;
 }
 
-#body-wrapper #content.container-fluid #allergy input[type='checkbox'] {
+#body-wrapper #content.container-fluid #allergy input[type="checkbox"] {
   background-color: white !important;
   border: 1px solid #ededed !important;
   box-shadow: 0 0 2px #ededed;
@@ -724,13 +729,13 @@ WARNING: This is not only for allergy, but at least for Program widget's enroll 
   margin-top: 0.2em;
 }
 
-#body-wrapper #content.container-fluid #allergy input[type='radio'] {
+#body-wrapper #content.container-fluid #allergy input[type="radio"] {
   border: 1px solid #ededed !important;
   margin-right: 0.5em;
   margin-top: 0.35em;
 }
 
-#body-wrapper #content.container-fluid #allergy input[type='checkbox']:checked:after {
+#body-wrapper #content.container-fluid #allergy input[type="checkbox"]:checked:after {
   color: #00455c !important;
   font-size: 18px !important;
 }
