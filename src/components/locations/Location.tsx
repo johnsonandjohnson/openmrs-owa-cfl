@@ -8,26 +8,30 @@
  * graphic logo is a trademark of OpenMRS Inc.
  */
 
-import React, { ChangeEvent, useEffect, useState } from 'react';
-import { connect } from 'react-redux';
-import './Location.scss';
-import { FormattedMessage, injectIntl, IntlShape } from 'react-intl';
-import '../Inputs.scss';
-import { Button, Spinner } from 'reactstrap';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
-import { ROOT_URL } from '../../shared/constants/openmrs';
-import { InputWithPlaceholder, RadioButtonsWithPlaceholder, SelectWithPlaceholder } from '../common/form/withPlaceholder';
-import { extractEventValue, selectDefaultTheme } from '../../shared/util/form-util';
-import { getLocationAttributeTypes, searchLocations, saveLocation, getLocation } from '../../redux/reducers/location';
-import { chunk, cloneDeep, uniq } from 'lodash';
-import { ILocation, ILocationAttributeType, ILocationListItem } from '../../shared/models/location';
-import { EMPTY_STRING, STRING_FALSE, STRING_TRUE } from '../../shared/constants/input';
-import { TextareaWithPlaceholder } from '../common/textarea/Textarea';
-import ValidationError from '../common/form/ValidationError';
-import { scrollToTop } from '../../shared/util/window-util';
-import cx from 'classnames';
-import { getSettingByQuery } from '../../redux/reducers/settings';
-import { getConcept } from '../../redux/reducers/concept';
+import React, { ChangeEvent, useEffect, useState } from "react";
+import { connect } from "react-redux";
+import "./Location.scss";
+import { FormattedMessage, injectIntl, IntlShape } from "react-intl";
+import "../Inputs.scss";
+import { Button, Spinner } from "reactstrap";
+import { RouteComponentProps, withRouter } from "react-router-dom";
+import { ROOT_URL } from "../../shared/constants/openmrs";
+import {
+  InputWithPlaceholder,
+  RadioButtonsWithPlaceholder,
+  SelectWithPlaceholder,
+} from "../common/form/withPlaceholder";
+import { extractEventValue, selectDefaultTheme } from "../../shared/util/form-util";
+import { getLocationAttributeTypes, searchLocations, saveLocation, getLocation } from "../../redux/reducers/location";
+import { chunk, cloneDeep, uniq } from "lodash";
+import { ILocation, ILocationAttributeType, ILocationListItem } from "../../shared/models/location";
+import { EMPTY_STRING, STRING_FALSE, STRING_TRUE } from "../../shared/constants/input";
+import { TextareaWithPlaceholder } from "../common/textarea/Textarea";
+import ValidationError from "../common/form/ValidationError";
+import { scrollToTop } from "../../shared/util/window-util";
+import cx from "classnames";
+import { getSettingByQuery } from "../../redux/reducers/settings";
+import { getConcept } from "../../redux/reducers/concept";
 import {
   BOOLEAN_RADIOS_PREFERRED_HANDLER,
   COLUMNS,
@@ -40,11 +44,11 @@ import {
   COUNTRY_CODE_LOCATION_ATTRIBUTE_TYPE_UUID,
   CLUSTER_LOCATION_ATTRIBUTE_TYPE_UUID,
   PROJECT_LOCATION_ATTRIBUTE_TYPE_UUID,
-  MANDATORY_LOCATION_ATTRIBUTE_TYPE_UUID
-} from '../../shared/constants/location';
-import { COUNTRY_CONCEPT_UUID, COUNTRY_CONCEPT_REPRESENTATION } from '../../shared/constants/concept';
-import { IConceptSetMember } from '../../shared/models/concept';
-import { getProjectNames } from 'src/redux/reducers/project';
+  MANDATORY_LOCATION_ATTRIBUTE_TYPE_UUID,
+} from "../../shared/constants/location";
+import { COUNTRY_CONCEPT_UUID, COUNTRY_CONCEPT_REPRESENTATION } from "../../shared/constants/concept";
+import { IConceptSetMember } from "../../shared/models/concept";
+import { getProjectNames } from "src/redux/reducers/project";
 
 export interface ILocationProps extends StateProps, DispatchProps, RouteComponentProps {
   intl: IntlShape;
@@ -106,7 +110,7 @@ export const Location = ({
   getSettingByQuery,
   saveLocation,
   searchLocations,
-  getProjectNames
+  getProjectNames,
 }: ILocationProps) => {
   const [location, setLocation] = useState(DEFAULT_LOCATION);
   const [showValidationErrors, setShowValidationErrors] = useState(false);
@@ -136,13 +140,21 @@ export const Location = ({
 
   const onSave = () => {
     const requiredLocationAttributeTypes = locationAttributeTypes.filter(
-      locationAttributeType => locationAttributeType.minOccurs === REQUIRED_OCCURRENCE
+      (locationAttributeType) => locationAttributeType.minOccurs === REQUIRED_OCCURRENCE,
     );
-    const isAllRequiredLocationAttributeTypesFilled = requiredLocationAttributeTypes.every(({ uuid: requiredLocationAttributeTypeUuid }) =>
-      location.attributes.find(({ attributeType, value }) => requiredLocationAttributeTypeUuid === attributeType.uuid && value)
+    const isAllRequiredLocationAttributeTypesFilled = requiredLocationAttributeTypes.every(
+      ({ uuid: requiredLocationAttributeTypeUuid }) =>
+        location.attributes.find(
+          ({ attributeType, value }) => requiredLocationAttributeTypeUuid === attributeType.uuid && value,
+        ),
     );
 
-    if (isLocationNameEmpty || isLocationNameDuplicated || isCountryEmpty || !isAllRequiredLocationAttributeTypesFilled) {
+    if (
+      isLocationNameEmpty ||
+      isLocationNameDuplicated ||
+      isCountryEmpty ||
+      !isAllRequiredLocationAttributeTypesFilled
+    ) {
       setShowValidationErrors(true);
       scrollToTop();
     } else {
@@ -150,7 +162,7 @@ export const Location = ({
       const locationDefaultTags = settingValue ? JSON.parse(settingValue) : [];
 
       preparedLocation.attributes = preparedLocation.attributes
-        .filter(attribute => attribute.value !== '')
+        .filter((attribute) => attribute.value !== "")
         .map(({ attributeType, value }) => ({ attributeType, value }));
       preparedLocation.tags = uniq([...preparedLocation.tags, ...locationDefaultTags]);
 
@@ -164,15 +176,20 @@ export const Location = ({
     }
   }, [success]);
 
-  const onValueChange = (name: string) => (event: ChangeEvent) => setLocation({ ...location, [name]: extractEventValue(event) });
+  const onValueChange = (name: string) => (event: ChangeEvent) =>
+    setLocation({ ...location, [name]: extractEventValue(event) });
 
   const onCountryValueChange = (event: ChangeEvent) => {
     let attributes = location.attributes;
     const countryFullySpecifiedName: IOption = extractEventValue(event);
-    const countryShortName = countryNames.find(({ fullySpecified }) => fullySpecified === countryFullySpecifiedName.value)?.short;
+    const countryShortName = countryNames.find(
+      ({ fullySpecified }) => fullySpecified === countryFullySpecifiedName.value,
+    )?.short;
 
     if (locationAttributeTypes.some(({ uuid }) => uuid === COUNTRY_CODE_LOCATION_ATTRIBUTE_TYPE_UUID)) {
-      const countryCodeAttribute = attributes.find(({ attributeType }) => attributeType.uuid === COUNTRY_CODE_LOCATION_ATTRIBUTE_TYPE_UUID);
+      const countryCodeAttribute = attributes.find(
+        ({ attributeType }) => attributeType.uuid === COUNTRY_CODE_LOCATION_ATTRIBUTE_TYPE_UUID,
+      );
 
       // fill in Country Code based on the selected Country
       if (countryCodeAttribute) {
@@ -180,13 +197,15 @@ export const Location = ({
       } else {
         attributes = [
           ...location.attributes,
-          { attributeType: { uuid: COUNTRY_CODE_LOCATION_ATTRIBUTE_TYPE_UUID }, value: countryShortName }
+          { attributeType: { uuid: COUNTRY_CODE_LOCATION_ATTRIBUTE_TYPE_UUID }, value: countryShortName },
         ];
       }
     }
 
     if (locationAttributeTypes.some(({ uuid }) => uuid === CLUSTER_LOCATION_ATTRIBUTE_TYPE_UUID)) {
-      const clusterAttribute = attributes.find(({ attributeType }) => attributeType.uuid === CLUSTER_LOCATION_ATTRIBUTE_TYPE_UUID);
+      const clusterAttribute = attributes.find(
+        ({ attributeType }) => attributeType.uuid === CLUSTER_LOCATION_ATTRIBUTE_TYPE_UUID,
+      );
 
       // clear Cluster value on Country change
       if (clusterAttribute) {
@@ -199,7 +218,7 @@ export const Location = ({
 
   const onAttributeValueChange = (uuid: string) => (event: ChangeEvent | string) => {
     let attributes = location.attributes;
-    const attribute = attributes.find(attributeToCheck => attributeToCheck.attributeType.uuid === uuid);
+    const attribute = attributes.find((attributeToCheck) => attributeToCheck.attributeType.uuid === uuid);
     const value = extractEventValue(event);
 
     if (attribute) {
@@ -214,8 +233,8 @@ export const Location = ({
   const isLocationNameEmpty = !location.name;
 
   const isLocationNameDuplicated = locations
-    .filter(loc => loc.uuid !== location.uuid)
-    .map(loc => loc.display.toLowerCase())
+    .filter((loc) => loc.uuid !== location.uuid)
+    .map((loc) => loc.display.toLowerCase())
     .includes(location.name.toLowerCase());
 
   const isCountryEmpty = !location.country;
@@ -228,11 +247,13 @@ export const Location = ({
       name: placeholder,
       minOccurs,
       preferredHandlerClassname,
-      handlerConfig
+      handlerConfig,
     } = locationAttributeType;
     const key = `locationAttribute${locationAttributeTypeUuid}`;
-    const value = location.attributes.find(attribute => locationAttributeTypeUuid === attribute.attributeType.uuid)?.value;
-    const isRequired = minOccurs === REQUIRED_OCCURRENCE || MANDATORY_LOCATION_ATTRIBUTE_TYPE_UUID.includes(locationAttributeTypeUuid);
+    const value = location.attributes.find((attribute) => locationAttributeTypeUuid === attribute.attributeType.uuid)
+      ?.value;
+    const isRequired =
+      minOccurs === REQUIRED_OCCURRENCE || MANDATORY_LOCATION_ATTRIBUTE_TYPE_UUID.includes(locationAttributeTypeUuid);
     const isInvalid = isRequired && !value;
     const onChange = onAttributeValueChange(locationAttributeTypeUuid);
 
@@ -240,16 +261,16 @@ export const Location = ({
       const options: Array<IOption> =
         countryClusters
           .find(({ countryName }) => countryName === location.country)
-          ?.clusters?.map(clusterName => ({ label: clusterName, value: clusterName })) ?? [];
+          ?.clusters?.map((clusterName) => ({ label: clusterName, value: clusterName })) ?? [];
       return (
         <div className="input-container" key={key}>
           <SelectWithPlaceholder
             placeholder={placeholder}
             showPlaceholder={!!value}
-            value={value && options.find(option => option.value === value)}
+            value={value && options.find((option) => option.value === value)}
             onChange={(option: IOption) => onChange(option.value)}
             options={options}
-            wrapperClassName={cx('flex-1', { invalid: showValidationErrors && isInvalid })}
+            wrapperClassName={cx("flex-1", { invalid: showValidationErrors && isInvalid })}
             classNamePrefix="default-select"
             theme={selectDefaultTheme}
             isDisabled={isCountryEmpty}
@@ -259,16 +280,16 @@ export const Location = ({
       );
     } else if (locationAttributeTypeUuid === PROJECT_LOCATION_ATTRIBUTE_TYPE_UUID) {
       const options: Array<IOption> = projects.map(({ display, uuid }) => ({ label: display, value: uuid }));
-      const projectUuid = value ? value['uuid'] : '';
+      const projectUuid = value ? value["uuid"] : "";
       return (
         <div className="input-container" key={key}>
           <SelectWithPlaceholder
             placeholder={placeholder}
             showPlaceholder={!!value}
-            value={value && options.find(option => option.value === projectUuid)}
-            onChange={(option: IOption | null) => onChange(option?.value || '')}
+            value={value && options.find((option) => option.value === projectUuid)}
+            onChange={(option: IOption | null) => onChange(option?.value || "")}
             options={options}
-            wrapperClassName={cx('flex-1', { invalid: showValidationErrors && isInvalid })}
+            wrapperClassName={cx("flex-1", { invalid: showValidationErrors && isInvalid })}
             classNamePrefix="default-select"
             theme={selectDefaultTheme}
             isClearable
@@ -295,16 +316,16 @@ export const Location = ({
         case DROPDOWN_PREFERRED_HANDLER:
           const options: Array<IOption> = handlerConfig
             .split(DROPDOWN_HANDLER_CONFIG_SEPARATOR)
-            .map(dropdownValue => ({ label: dropdownValue, value: dropdownValue }));
+            .map((dropdownValue) => ({ label: dropdownValue, value: dropdownValue }));
           return (
             <div className="input-container" key={key}>
               <SelectWithPlaceholder
                 placeholder={placeholder}
                 showPlaceholder={!!value}
-                value={options.find(option => option.value === value)}
+                value={options.find((option) => option.value === value)}
                 onChange={(option: IOption) => onChange(option.value)}
                 options={options}
-                wrapperClassName={cx('flex-1', { invalid: showValidationErrors && isInvalid })}
+                wrapperClassName={cx("flex-1", { invalid: showValidationErrors && isInvalid })}
                 classNamePrefix="default-select"
                 theme={selectDefaultTheme}
               />
@@ -318,8 +339,8 @@ export const Location = ({
               name={key}
               onChange={onChange}
               options={[
-                { value: STRING_TRUE, label: formatMessage({ id: 'common.true' }) },
-                { value: STRING_FALSE, label: formatMessage({ id: 'common.false' }) }
+                { value: STRING_TRUE, label: formatMessage({ id: "common.true" }) },
+                { value: STRING_FALSE, label: formatMessage({ id: "common.false" }) },
               ]}
               value={value?.toString()}
               placeholder={placeholder}
@@ -353,13 +374,13 @@ export const Location = ({
               {showValidationErrors && isInvalid && <ValidationError message="common.error.required" />}
             </div>
           );
-    }
+      }
   };
 
   return (
     <div id="location">
       <h2>
-        <FormattedMessage id={`locations.location.${locationId ? 'edit' : 'create'}.title`} />
+        <FormattedMessage id={`locations.location.${locationId ? "edit" : "create"}.title`} />
       </h2>
       <div className="inner-content">
         {isLocationLoading ? (
@@ -373,11 +394,13 @@ export const Location = ({
                 <div className="input-container">
                   <InputWithPlaceholder
                     key="locationNameInput"
-                    placeholder={formatMessage({ id: 'locations.location.name' })}
+                    placeholder={formatMessage({ id: "locations.location.name" })}
                     showPlaceholder={!!location.name}
                     value={location.name || EMPTY_STRING}
-                    onChange={onValueChange('name')}
-                    className={cx({ invalid: showValidationErrors && (isLocationNameEmpty || isLocationNameDuplicated) })}
+                    onChange={onValueChange("name")}
+                    className={cx({
+                      invalid: showValidationErrors && (isLocationNameEmpty || isLocationNameDuplicated),
+                    })}
                     data-testid="locationNameInput"
                   />
                   {showValidationErrors &&
@@ -389,67 +412,67 @@ export const Location = ({
                 </div>
                 <InputWithPlaceholder
                   key="locationDescriptionInput"
-                  placeholder={formatMessage({ id: 'locations.location.description' })}
+                  placeholder={formatMessage({ id: "locations.location.description" })}
                   showPlaceholder={!!location.description}
                   value={location.description || EMPTY_STRING}
-                  onChange={onValueChange('description')}
+                  onChange={onValueChange("description")}
                   data-testid="locationDescriptionInput"
                 />
               </div>
               <div className="inline-fields">
                 <InputWithPlaceholder
                   key="locationAddress1Input"
-                  placeholder={formatMessage({ id: 'locations.location.address1' })}
+                  placeholder={formatMessage({ id: "locations.location.address1" })}
                   showPlaceholder={!!location.address1}
                   value={location.address1 || EMPTY_STRING}
-                  onChange={onValueChange('address1')}
+                  onChange={onValueChange("address1")}
                   data-testid="locationAddress1Input"
                 />
                 <InputWithPlaceholder
                   key="locationAddress2Input"
-                  placeholder={formatMessage({ id: 'locations.location.address2' })}
+                  placeholder={formatMessage({ id: "locations.location.address2" })}
                   showPlaceholder={!!location.address2}
                   value={location.address2 || EMPTY_STRING}
-                  onChange={onValueChange('address2')}
+                  onChange={onValueChange("address2")}
                   data-testid="locationAddress2Input"
                 />
               </div>
               <div className="inline-fields">
                 <InputWithPlaceholder
                   key="locationCityVillageInput"
-                  placeholder={formatMessage({ id: 'locations.location.cityVillage' })}
+                  placeholder={formatMessage({ id: "locations.location.cityVillage" })}
                   showPlaceholder={!!location.cityVillage}
                   value={location.cityVillage || EMPTY_STRING}
-                  onChange={onValueChange('cityVillage')}
+                  onChange={onValueChange("cityVillage")}
                   data-testid="locationCityVillageInput"
                 />
                 <InputWithPlaceholder
                   key="locationStateProvinceInput"
-                  placeholder={formatMessage({ id: 'locations.location.stateProvince' })}
+                  placeholder={formatMessage({ id: "locations.location.stateProvince" })}
                   showPlaceholder={!!location.stateProvince}
                   value={location.stateProvince || EMPTY_STRING}
-                  onChange={onValueChange('stateProvince')}
+                  onChange={onValueChange("stateProvince")}
                   data-testid="locationStateProvinceInput"
                 />
               </div>
               <div className="inline-fields">
                 <InputWithPlaceholder
                   key="locationPostalCodeInput"
-                  placeholder={formatMessage({ id: 'locations.location.postalCode' })}
+                  placeholder={formatMessage({ id: "locations.location.postalCode" })}
                   showPlaceholder={!!location.postalCode}
                   value={location.postalCode || EMPTY_STRING}
-                  onChange={onValueChange('postalCode')}
+                  onChange={onValueChange("postalCode")}
                   data-testid="locationPostalCodeInput"
                 />
                 <div className="input-container">
                   <SelectWithPlaceholder
                     key="locationCountryInput"
-                    placeholder={formatMessage({ id: 'locations.location.country' })}
+                    placeholder={formatMessage({ id: "locations.location.country" })}
                     showPlaceholder={!isCountryEmpty}
                     value={countryOptions.find(({ value }) => value === location.country)}
                     onChange={onCountryValueChange}
                     options={countryOptions}
-                    wrapperClassName={cx('flex-1', { invalid: showValidationErrors && isCountryEmpty })}
+                    wrapperClassName={cx("flex-1", { invalid: showValidationErrors && isCountryEmpty })}
                     classNamePrefix="default-select"
                     theme={selectDefaultTheme}
                   />
@@ -458,19 +481,19 @@ export const Location = ({
               </div>
               {locationAttributeTypesGrouped?.map((locationAttributeTypesGroup, idx) => (
                 <div className="inline-fields" key={`locationAttributeTypesGroup${idx}`}>
-                  {locationAttributeTypesGroup.map(locationAttributeType => input(locationAttributeType))}
+                  {locationAttributeTypesGroup.map((locationAttributeType) => input(locationAttributeType))}
                 </div>
               ))}
             </div>
             <div className="mt-5 pb-5">
               <div className="d-inline">
                 <Button className="cancel" onClick={onReturn} data-testid="returnButton">
-                  <FormattedMessage id="common.return" />
+                  <FormattedMessage id="common.cancel" />
                 </Button>
               </div>
               <div className="d-inline pull-right confirm-button-container">
                 <Button className="save" onClick={onSave} data-testid="saveButton">
-                  <FormattedMessage id="common.save" />
+                  <FormattedMessage id="common.confirm" />
                 </Button>
               </div>
             </div>
@@ -482,16 +505,23 @@ export const Location = ({
 };
 
 const mapStateToProps = ({
-  location: { loadingLocationAttributeTypes, locationAttributeTypes, locations, success, loadingLocation, location: editedLocation },
+  location: {
+    loadingLocationAttributeTypes,
+    locationAttributeTypes,
+    locations,
+    success,
+    loadingLocation,
+    location: editedLocation,
+  },
   settings: { loading: loadingSetting, setting },
   concept: {
     concept: { setMembers: countries },
-    loading: { concept: loadingConcept }
+    loading: { concept: loadingConcept },
   },
   project: { projects },
 }: IStore) => ({
   isLocationLoading: loadingLocationAttributeTypes || loadingLocation || loadingSetting || loadingConcept,
-  locationAttributeTypes: locationAttributeTypes.filter(locationAttributeType => !locationAttributeType.retired),
+  locationAttributeTypes: locationAttributeTypes.filter((locationAttributeType) => !locationAttributeType.retired),
   locations,
   success,
   editedLocation,
@@ -502,15 +532,23 @@ const mapStateToProps = ({
     .map(({ display }) => ({ label: display, value: display })),
   countryNames: countries.map(({ display: fullySpecified, names }) => ({
     fullySpecified,
-    short: names.find(({ display }) => display !== fullySpecified)?.display
+    short: names.find(({ display }) => display !== fullySpecified)?.display,
   })),
   countryClusters: countries.map(({ display: countryName, setMembers }) => ({
     countryName,
-    clusters: setMembers.map(({ display: clusterName }) => clusterName)
-  }))
+    clusters: setMembers.map(({ display: clusterName }) => clusterName),
+  })),
 });
 
-const mapDispatchToProps = { getLocationAttributeTypes, searchLocations, saveLocation, getLocation, getSettingByQuery, getConcept, getProjectNames };
+const mapDispatchToProps = {
+  getLocationAttributeTypes,
+  searchLocations,
+  saveLocation,
+  getLocation,
+  getSettingByQuery,
+  getConcept,
+  getProjectNames,
+};
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;

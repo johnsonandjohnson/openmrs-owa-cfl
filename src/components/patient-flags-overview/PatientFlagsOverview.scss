@@ -7,7 +7,7 @@
  * Copyright (C) OpenMRS Inc. OpenMRS is a registered trademark and the OpenMRS
  * graphic logo is a trademark of OpenMRS Inc.
  */
- #app .patient-flags-overview {
+#app .patient-flags-overview {
   .patient-flags-overview-search {
     display: flex;
     padding-bottom: 15px;
@@ -42,7 +42,7 @@
       .flags-select__control {
         height: 100%;
         border-radius: 0;
-        border-color: rgba(206,212,218,0.5);
+        border-color: rgba(206, 212, 218, 0.5);
         box-shadow: inset 0 1px 1px rgb(0 0 0 / 8%);
 
         .flags-select__input input {
@@ -65,11 +65,11 @@
   .ReactTable {
     border: none;
     font-size: 16px;
-  
+
     .rt-thead.-header {
       pointer-events: none;
       box-shadow: none;
-  
+
       .rt-tr {
         text-transform: uppercase;
         color: #212529;
@@ -78,15 +78,15 @@
         border-right: none;
       }
     }
-  
+
     .rt-tr-group {
       border: 0;
-  
+
       .td-cell {
         text-align: center;
         margin: auto;
       }
-  
+
       .rt-tr {
         border-right: 0;
 
@@ -98,27 +98,39 @@
 
       .rt-tr.-odd {
         background-color: rgba(0, 0, 0, 0.05) !important;
-  
+
         &:hover {
           background-color: rgba(0, 0, 0, 0.15) !important;
         }
       }
     }
-  
+
     .pagination-bottom {
+      .-pagination .-previous .-btn {
+        float: left;
+      }
+
+      .-pagination .-next .-btn {
+        float: right;
+      }
+
       button {
         border-radius: 0;
-        color: #000;
-        background-color: #fff;
-        border: 1px solid #AEC2D5;
-        max-width: unset;
-  
+        color: #ffffff;
+        background-color: #00455c;
+        border: 1px solid #00455c;
+        width: 100px;
+        font-size: 11px;
+        text-transform: uppercase;
+        cursor: pointer;
+        border-radius: 4px;
+
         &:hover {
-          background-color: #ededed;
+          background-color: #00455c;
         }
 
         &:disabled {
-          color: #000;
+          opacity: 0.65;
         }
       }
     }

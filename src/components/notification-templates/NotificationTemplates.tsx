@@ -8,26 +8,26 @@
  * graphic logo is a trademark of OpenMRS Inc.
  */
 
-import React from 'react';
-import { connect } from 'react-redux';
-import { FormattedMessage, injectIntl } from 'react-intl';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
-import { createSetting, getSettings, updateSetting, deleteSetting } from '../../redux/reducers/settings';
-import { getCallflowsProviders, getSmsProviders } from '../../redux/reducers/provider';
-import { getMessagesTemplatesGlobalProperties } from '../../redux/reducers/messages';
-import { Button, Label, Spinner } from 'reactstrap';
-import ExpandableSection from '../common/expandable-section/ExpandableSection';
-import { InputWithPlaceholder } from '../common/form/withPlaceholder';
-import { extractEventValue } from '../../shared/util/form-util';
-import { successToast, errorToast } from '../toast-handler/toast-handler';
-import _ from 'lodash';
-import { PlusMinusButtons } from '../common/form/PlusMinusButtons';
-import { ConfirmationModal } from '../common/form/ConfirmationModal';
-import ValidationError from '../common/form/ValidationError';
-import './NotificationTemplates.scss';
-import '../Inputs.scss';
-import { EMPTY_STRING, ONE, ZERO } from '../../shared/constants/input';
-import { ROOT_URL } from '../../shared/constants/openmrs';
+import React from "react";
+import { connect } from "react-redux";
+import { FormattedMessage, injectIntl } from "react-intl";
+import { RouteComponentProps, withRouter } from "react-router-dom";
+import { createSetting, getSettings, updateSetting, deleteSetting } from "../../redux/reducers/settings";
+import { getCallflowsProviders, getSmsProviders } from "../../redux/reducers/provider";
+import { getMessagesTemplatesGlobalProperties } from "../../redux/reducers/messages";
+import { Button, Label, Spinner } from "reactstrap";
+import ExpandableSection from "../common/expandable-section/ExpandableSection";
+import { InputWithPlaceholder } from "../common/form/withPlaceholder";
+import { extractEventValue } from "../../shared/util/form-util";
+import { successToast, errorToast } from "../toast-handler/toast-handler";
+import _ from "lodash";
+import { PlusMinusButtons } from "../common/form/PlusMinusButtons";
+import { ConfirmationModal } from "../common/form/ConfirmationModal";
+import ValidationError from "../common/form/ValidationError";
+import "./NotificationTemplates.scss";
+import "../Inputs.scss";
+import { EMPTY_STRING, ONE, ZERO } from "../../shared/constants/input";
+import { ROOT_URL } from "../../shared/constants/openmrs";
 import {
   DEFAULT_INJECTED_SERVICE,
   INJECTED_SERVICES_DELIMITER,
@@ -41,15 +41,15 @@ import {
   TEMPLATE_NAME_PROPERTY_NAME,
   TEMPLATE_NAME_REGEX,
   TEMPLATE_UUID_PROPERTY_NAME,
-  TEMPLATE_VALUE_PROPERTY_NAME
-} from '../../shared/constants/notification-templates';
-import { TextareaWithPlaceholder } from '../common/textarea/Textarea';
-import { VelocityCodeEditorWithPlaceholder } from '../common/code-editor/VelocityCodeEditor';
-import { addBreadcrumbs } from 'src/redux/reducers/breadcrumbs';
-import { 
+  TEMPLATE_VALUE_PROPERTY_NAME,
+} from "../../shared/constants/notification-templates";
+import { TextareaWithPlaceholder } from "../common/textarea/Textarea";
+import { VelocityCodeEditorWithPlaceholder } from "../common/code-editor/VelocityCodeEditor";
+import { addBreadcrumbs } from "src/redux/reducers/breadcrumbs";
+import {
   CONFIGURE_METADATA_BREADCRUMB_ELEMENT,
-  SYSTEM_ADMINISTRATION_BREADCRUMB_ELEMENT 
-} from 'src/shared/constants/breadcrumbs';
+  SYSTEM_ADMINISTRATION_BREADCRUMB_ELEMENT,
+} from "src/shared/constants/breadcrumbs";
 
 interface INotificationConfigurationProps extends StateProps, DispatchProps, RouteComponentProps {
   intl: any;
@@ -70,7 +70,10 @@ interface INotificationConfigurationState {
   isAllRequestsSent: boolean;
 }
 
-class NotificationConfiguration extends React.Component<INotificationConfigurationProps, INotificationConfigurationState> {
+class NotificationConfiguration extends React.Component<
+  INotificationConfigurationProps,
+  INotificationConfigurationState
+> {
   state = {
     notificationTemplates: [],
     savedNotificationTemplates: [],
@@ -83,7 +86,7 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
     onConfirmationModalCancel: null,
     dirtyNotificationTemplates: new Set<string>(),
     unifiedSuccessToastDisplayed: false,
-    isAllRequestsSent: false
+    isAllRequestsSent: false,
   };
 
   componentDidMount() {
@@ -94,45 +97,54 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
   componentDidUpdate(prevProps: Readonly<INotificationConfigurationProps>) {
     const { intl, settings, loading, success, appError, unremovableGlobalProperties } = this.props;
     if (prevProps.unremovableGlobalProperties !== unremovableGlobalProperties) {
-      this.setState({ unremovableGlobalProperties: unremovableGlobalProperties.map(globalProperty => globalProperty.toLowerCase()) }, () =>
-        this.props.getSettings(NOTIFICATION_TEMPLATE_SETTING_KEY_PREFIX)
+      this.setState(
+        {
+          unremovableGlobalProperties: unremovableGlobalProperties.map((globalProperty) =>
+            globalProperty.toLowerCase(),
+          ),
+        },
+        () => this.props.getSettings(NOTIFICATION_TEMPLATE_SETTING_KEY_PREFIX),
       );
     } else if (prevProps.settings !== settings) {
       const sortedSettings = [];
-      const injectedServicesSetting = settings.find(setting => setting[TEMPLATE_NAME_PROPERTY_NAME] === INJECTED_SERVICES_SETTING_KEY);
-      const injectedServices = injectedServicesSetting[TEMPLATE_VALUE_PROPERTY_NAME].split(INJECTED_SERVICES_DELIMITER).map(service => ({
+      const injectedServicesSetting = settings.find(
+        (setting) => setting[TEMPLATE_NAME_PROPERTY_NAME] === INJECTED_SERVICES_SETTING_KEY,
+      );
+      const injectedServices = injectedServicesSetting[TEMPLATE_VALUE_PROPERTY_NAME].split(
+        INJECTED_SERVICES_DELIMITER,
+      ).map((service) => ({
         [INJECTED_SERVICES_KEY]: service.split(INJECTED_SERVICES_KEY_VALUE_DELIMITER)[ZERO],
-        [INJECTED_SERVICES_VALUE]: service.split(INJECTED_SERVICES_KEY_VALUE_DELIMITER)[ONE]
+        [INJECTED_SERVICES_VALUE]: service.split(INJECTED_SERVICES_KEY_VALUE_DELIMITER)[ONE],
       }));
       injectedServicesSetting[TEMPLATE_VALUE_PROPERTY_NAME] = injectedServices;
       sortedSettings.push(injectedServicesSetting);
-      const otherSetttings = settings.filter(setting => setting !== injectedServicesSetting);
+      const otherSetttings = settings.filter((setting) => setting !== injectedServicesSetting);
       sortedSettings.push(...otherSetttings);
       sortedSettings.forEach(
-        setting =>
+        (setting) =>
           (setting[TEMPLATE_NAME_PROPERTY_NAME] = setting[TEMPLATE_NAME_PROPERTY_NAME].replace(
             NOTIFICATION_TEMPLATE_SETTING_KEY_PREFIX,
-            EMPTY_STRING
-          ))
+            EMPTY_STRING,
+          )),
       );
       this.setState({
         notificationTemplates: sortedSettings,
         savedNotificationTemplates: _.clone(sortedSettings),
-        unifiedSuccessToastDisplayed: false
+        unifiedSuccessToastDisplayed: false,
       });
     } else {
       // Do nothing
     }
     if (!prevProps.success && success && this.state.isAllRequestsSent && !this.state.unifiedSuccessToastDisplayed) {
-      successToast(intl.formatMessage({ id: 'notificationTemplates.success' }));
+      successToast(intl.formatMessage({ id: "notificationTemplates.success" }));
       this.setState(
         {
           isAllSectionsExpanded: false,
           dirtyNotificationTemplates: new Set(),
           isAllRequestsSent: false,
-          unifiedSuccessToastDisplayed: true
+          unifiedSuccessToastDisplayed: true,
         },
-        () => this.props.getSettings(NOTIFICATION_TEMPLATE_SETTING_KEY_PREFIX)
+        () => this.props.getSettings(NOTIFICATION_TEMPLATE_SETTING_KEY_PREFIX),
       );
     } else if (prevProps.appError !== this.props.appError && !loading) {
       errorToast(appError);
@@ -144,8 +156,8 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
   isSaveDisabled = () =>
     this.props.loading ||
     this.state.notificationTemplates
-      .filter(template => template[TEMPLATE_NAME_PROPERTY_NAME] !== INJECTED_SERVICES_SETTING_KEY_SUFFIX)
-      .some(template => {
+      .filter((template) => template[TEMPLATE_NAME_PROPERTY_NAME] !== INJECTED_SERVICES_SETTING_KEY_SUFFIX)
+      .some((template) => {
         const templateNameRegex = new RegExp(TEMPLATE_NAME_REGEX);
         const templateName = template[TEMPLATE_NAME_PROPERTY_NAME];
         return !templateName || !templateNameRegex.test(templateName);
@@ -154,26 +166,30 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
   onSave = () =>
     this.setState({
       isConfirmationModalOpen: true,
-      confirmationModalHeader: { id: 'notificationTemplates.saveModal.header' },
-      confirmationModalBody: { id: 'notificationTemplates.saveModal.body' },
+      confirmationModalHeader: { id: "notificationTemplates.saveModal.header" },
+      confirmationModalBody: { id: "notificationTemplates.saveModal.body" },
       onConfirmationModalConfirm: () => {
         this.save();
         this.closeModal();
       },
-      onConfirmationModalCancel: this.closeModal
+      onConfirmationModalCancel: this.closeModal,
     });
 
   save = () => {
     const notificationTemplates = _.cloneDeep(this.state.notificationTemplates);
     notificationTemplates.forEach(
-      template => (template[TEMPLATE_NAME_PROPERTY_NAME] = NOTIFICATION_TEMPLATE_SETTING_KEY_PREFIX + template[TEMPLATE_NAME_PROPERTY_NAME])
+      (template) =>
+        (template[TEMPLATE_NAME_PROPERTY_NAME] =
+          NOTIFICATION_TEMPLATE_SETTING_KEY_PREFIX + template[TEMPLATE_NAME_PROPERTY_NAME]),
     );
     const savedNotificationTemplates = _.cloneDeep(this.state.savedNotificationTemplates);
     savedNotificationTemplates.forEach(
-      template => (template[TEMPLATE_NAME_PROPERTY_NAME] = NOTIFICATION_TEMPLATE_SETTING_KEY_PREFIX + template[TEMPLATE_NAME_PROPERTY_NAME])
+      (template) =>
+        (template[TEMPLATE_NAME_PROPERTY_NAME] =
+          NOTIFICATION_TEMPLATE_SETTING_KEY_PREFIX + template[TEMPLATE_NAME_PROPERTY_NAME]),
     );
     const injectedServices = notificationTemplates.find(
-      template => template[TEMPLATE_NAME_PROPERTY_NAME] === INJECTED_SERVICES_SETTING_KEY
+      (template) => template[TEMPLATE_NAME_PROPERTY_NAME] === INJECTED_SERVICES_SETTING_KEY,
     );
     injectedServices[TEMPLATE_VALUE_PROPERTY_NAME] = injectedServices[TEMPLATE_VALUE_PROPERTY_NAME].reduce(
       (accumulator, currentService, counter) =>
@@ -181,22 +197,30 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
         currentService[INJECTED_SERVICES_KEY] +
         INJECTED_SERVICES_KEY_VALUE_DELIMITER +
         currentService[INJECTED_SERVICES_VALUE] +
-        (counter === injectedServices[TEMPLATE_VALUE_PROPERTY_NAME].length - ONE ? EMPTY_STRING : INJECTED_SERVICES_DELIMITER),
-      EMPTY_STRING
+        (counter === injectedServices[TEMPLATE_VALUE_PROPERTY_NAME].length - ONE
+          ? EMPTY_STRING
+          : INJECTED_SERVICES_DELIMITER),
+      EMPTY_STRING,
     );
     const deletedTemplates = savedNotificationTemplates.filter(
-      savedTemplate =>
-        !notificationTemplates.find(template => template[TEMPLATE_UUID_PROPERTY_NAME] === savedTemplate[TEMPLATE_UUID_PROPERTY_NAME])
+      (savedTemplate) =>
+        !notificationTemplates.find(
+          (template) => template[TEMPLATE_UUID_PROPERTY_NAME] === savedTemplate[TEMPLATE_UUID_PROPERTY_NAME],
+        ),
     );
-    deletedTemplates.forEach(template => this.props.deleteSetting(template));
-    notificationTemplates.forEach(template => {
-      if (template && template.uuid && this.state.dirtyNotificationTemplates.has(template[TEMPLATE_UUID_PROPERTY_NAME])) {
+    deletedTemplates.forEach((template) => this.props.deleteSetting(template));
+    notificationTemplates.forEach((template) => {
+      if (
+        template &&
+        template.uuid &&
+        this.state.dirtyNotificationTemplates.has(template[TEMPLATE_UUID_PROPERTY_NAME])
+      ) {
         this.props.updateSetting(template);
       } else if (template && !template.uuid) {
         this.props.createSetting(
           template[TEMPLATE_NAME_PROPERTY_NAME],
           template[TEMPLATE_VALUE_PROPERTY_NAME],
-          template[TEMPLATE_DESCRIPTION_PROPERTY_NAME]
+          template[TEMPLATE_DESCRIPTION_PROPERTY_NAME],
         );
       } else {
         // Do nothing
@@ -205,11 +229,14 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
     this.setState({ isAllRequestsSent: true });
   };
 
-  isRemovable = templateIdx => {
+  isRemovable = (templateIdx) => {
     const { notificationTemplates, unremovableGlobalProperties } = this.state;
     const globalPropertyName = notificationTemplates[templateIdx][TEMPLATE_NAME_PROPERTY_NAME];
     const globalPropertyFullName = NOTIFICATION_TEMPLATE_SETTING_KEY_PREFIX + globalPropertyName;
-    return !globalPropertyName || (globalPropertyName && !unremovableGlobalProperties.includes(globalPropertyFullName.toLowerCase()));
+    return (
+      !globalPropertyName ||
+      (globalPropertyName && !unremovableGlobalProperties.includes(globalPropertyFullName.toLowerCase()))
+    );
   };
 
   return = () => {
@@ -228,7 +255,7 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
     />
   );
 
-  onChange = (templateIdx, propertyName) => event => {
+  onChange = (templateIdx, propertyName) => (event) => {
     const { notificationTemplates, dirtyNotificationTemplates } = this.state;
     const template = notificationTemplates[templateIdx];
     const value = extractEventValue(event);
@@ -243,7 +270,7 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
       <TextareaWithPlaceholder
         value={template[TEMPLATE_DESCRIPTION_PROPERTY_NAME]}
         onChange={this.onChange(templateIdx, TEMPLATE_DESCRIPTION_PROPERTY_NAME)}
-        placeholder={this.props.intl.formatMessage({ id: 'notificationTemplates.template.description' })}
+        placeholder={this.props.intl.formatMessage({ id: "notificationTemplates.template.description" })}
         showPlaceholder={template[TEMPLATE_DESCRIPTION_PROPERTY_NAME]}
       />
     </div>
@@ -254,7 +281,7 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
       <VelocityCodeEditorWithPlaceholder
         value={template[TEMPLATE_VALUE_PROPERTY_NAME]}
         lineNumbers
-        placeholder={this.props.intl.formatMessage({ id: 'notificationTemplates.template.text' })}
+        placeholder={this.props.intl.formatMessage({ id: "notificationTemplates.template.text" })}
         showPlaceholder={!!template[TEMPLATE_VALUE_PROPERTY_NAME]}
         onChange={this.onChange(templateIdx, TEMPLATE_VALUE_PROPERTY_NAME)}
       />
@@ -267,23 +294,23 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
     this.setState({ notificationTemplates });
   };
 
-  onRemoveTemplate = templateIdx => {
+  onRemoveTemplate = (templateIdx) => {
     this.setState({
       isConfirmationModalOpen: true,
-      confirmationModalHeader: { id: 'notificationTemplates.removeTemplateModal.header' },
+      confirmationModalHeader: { id: "notificationTemplates.removeTemplateModal.header" },
       confirmationModalBody: {
-        id: 'notificationTemplates.removeTemplateModal.body',
-        values: { templateName: this.state.notificationTemplates[templateIdx][TEMPLATE_NAME_PROPERTY_NAME] }
+        id: "notificationTemplates.removeTemplateModal.body",
+        values: { templateName: this.state.notificationTemplates[templateIdx][TEMPLATE_NAME_PROPERTY_NAME] },
       },
       onConfirmationModalConfirm: () => {
         this.removeTemplate(templateIdx);
         this.closeModal();
       },
-      onConfirmationModalCancel: this.closeModal
+      onConfirmationModalCancel: this.closeModal,
     });
   };
 
-  removeTemplate = templateIdx => {
+  removeTemplate = (templateIdx) => {
     const { notificationTemplates } = this.state;
     notificationTemplates.splice(templateIdx, ONE);
     this.setState({ notificationTemplates });
@@ -299,25 +326,27 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
       <>
         <div className="flex-1">
           <InputWithPlaceholder
-            placeholder={intl.formatMessage({ id: 'notificationTemplates.template.customTemplateName.label' })}
+            placeholder={intl.formatMessage({ id: "notificationTemplates.template.customTemplateName.label" })}
             showPlaceholder={!isTemplateNameEmpty}
-            value={!!templateName ? templateName : ''}
+            value={!!templateName ? templateName : ""}
             onChange={this.onChange(templateIdx, TEMPLATE_NAME_PROPERTY_NAME)}
-            className={!disabled && (isTemplateNameEmpty || isTemplateNameInvalid) ? 'invalid' : ''}
+            className={!disabled && (isTemplateNameEmpty || isTemplateNameInvalid) ? "invalid" : ""}
             disabled={disabled}
           />
           {!disabled &&
             (isTemplateNameEmpty ? (
               <ValidationError message="common.error.required" />
             ) : (
-              isTemplateNameInvalid && <ValidationError message="notificationTemplates.template.customTemplateName.invalid" />
+              isTemplateNameInvalid && (
+                <ValidationError message="notificationTemplates.template.customTemplateName.invalid" />
+              )
             ))}
         </div>
         <Label className="custom-template-name-tooltip">
           <span
             className="glyphicon glyphicon-info-sign ml-2"
             aria-hidden="true"
-            title={intl.formatMessage({ id: 'notificationTemplates.template.customTemplateName.tooltip' })}
+            title={intl.formatMessage({ id: "notificationTemplates.template.customTemplateName.tooltip" })}
           />
         </Label>
       </>
@@ -327,16 +356,16 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
   addInjectedService = () => {
     const { notificationTemplates } = this.state;
     const injectedServices = notificationTemplates.find(
-      template => template[TEMPLATE_NAME_PROPERTY_NAME] === INJECTED_SERVICES_SETTING_KEY_SUFFIX
+      (template) => template[TEMPLATE_NAME_PROPERTY_NAME] === INJECTED_SERVICES_SETTING_KEY_SUFFIX,
     );
     injectedServices[TEMPLATE_VALUE_PROPERTY_NAME].push(_.clone(DEFAULT_INJECTED_SERVICE));
     this.setState({ notificationTemplates });
   };
 
-  removeInjectedService = injectedServiceIdx => {
+  removeInjectedService = (injectedServiceIdx) => {
     const { notificationTemplates } = this.state;
     const injectedServices = notificationTemplates.find(
-      template => template[TEMPLATE_NAME_PROPERTY_NAME] === INJECTED_SERVICES_SETTING_KEY_SUFFIX
+      (template) => template[TEMPLATE_NAME_PROPERTY_NAME] === INJECTED_SERVICES_SETTING_KEY_SUFFIX,
     );
     injectedServices[TEMPLATE_VALUE_PROPERTY_NAME].splice(injectedServiceIdx, ONE);
     if (!injectedServices[TEMPLATE_VALUE_PROPERTY_NAME].length) {
@@ -345,10 +374,10 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
     this.setState({ notificationTemplates });
   };
 
-  onInjectedServicePropertyChange = (injectedServiceIdx, propertyName) => event => {
+  onInjectedServicePropertyChange = (injectedServiceIdx, propertyName) => (event) => {
     const { notificationTemplates, dirtyNotificationTemplates } = this.state;
     const injectedServices = notificationTemplates.find(
-      template => template[TEMPLATE_NAME_PROPERTY_NAME] === INJECTED_SERVICES_SETTING_KEY_SUFFIX
+      (template) => template[TEMPLATE_NAME_PROPERTY_NAME] === INJECTED_SERVICES_SETTING_KEY_SUFFIX,
     );
     injectedServices[TEMPLATE_VALUE_PROPERTY_NAME][injectedServiceIdx][propertyName] = extractEventValue(event);
     const templateUuid = injectedServices?.[TEMPLATE_UUID_PROPERTY_NAME];
@@ -356,7 +385,7 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
     this.setState({ notificationTemplates, dirtyNotificationTemplates });
   };
 
-  injectedServicesBody = template => {
+  injectedServicesBody = (template) => {
     const { intl } = this.props;
     const injectedServices = template[TEMPLATE_VALUE_PROPERTY_NAME];
     return (
@@ -367,14 +396,14 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
           return (
             <div className="inline-fields py-1" key={`injectedService-${serviceIdx}`}>
               <InputWithPlaceholder
-                placeholder={intl.formatMessage({ id: 'notificationTemplates.injectedServices.key' })}
+                placeholder={intl.formatMessage({ id: "notificationTemplates.injectedServices.key" })}
                 showPlaceholder={!!key}
                 value={key}
                 onChange={this.onInjectedServicePropertyChange(serviceIdx, INJECTED_SERVICES_KEY)}
                 wrapperClassName="flex-1"
               />
               <InputWithPlaceholder
-                placeholder={intl.formatMessage({ id: 'notificationTemplates.injectedServices.value' })}
+                placeholder={intl.formatMessage({ id: "notificationTemplates.injectedServices.value" })}
                 showPlaceholder={!!value}
                 value={value}
                 onChange={this.onInjectedServicePropertyChange(serviceIdx, INJECTED_SERVICES_VALUE)}
@@ -406,7 +435,7 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
         <span
           className="glyphicon glyphicon-info-sign ml-2"
           aria-hidden="true"
-          title={intl.formatMessage({ id: 'notificationTemplates.injectedServices.tooltip' })}
+          title={intl.formatMessage({ id: "notificationTemplates.injectedServices.tooltip" })}
         />
       </Label>
     ) : isSavedTemplate ? (
@@ -435,8 +464,11 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
   expandOrCollapseAllButton = () => {
     const { isAllSectionsExpanded } = this.state;
     return (
-      <Button onClick={() => this.setState(state => ({ isAllSectionsExpanded: !state.isAllSectionsExpanded }))} className="cancel">
-        <FormattedMessage id={`notificationTemplates.button.${isAllSectionsExpanded ? 'collapse' : 'expand'}`} />
+      <Button
+        onClick={() => this.setState((state) => ({ isAllSectionsExpanded: !state.isAllSectionsExpanded }))}
+        className="cancel"
+      >
+        <FormattedMessage id={`notificationTemplates.button.${isAllSectionsExpanded ? "collapse" : "expand"}`} />
       </Button>
     );
   };
@@ -468,12 +500,12 @@ class NotificationConfiguration extends React.Component<INotificationConfigurati
               <div className="mt-5 pb-5">
                 <div className="d-inline">
                   <Button className="cancel" onClick={this.return}>
-                    <FormattedMessage id="common.return" />
+                    <FormattedMessage id="common.cancel" />
                   </Button>
                 </div>
                 <div className="d-inline pull-right confirm-button-container">
                   <Button className="save" onClick={this.onSave} disabled={this.isSaveDisabled()}>
-                    <FormattedMessage id="common.save" />
+                    <FormattedMessage id="common.confirm" />
                   </Button>
                 </div>
               </div>
@@ -497,7 +529,7 @@ const mapStateToProps = ({ apps, settings, provider, messages }) => ({
   smsProviders: provider.smsProviders,
   callflowsProviders: provider.callflowsProviders,
   loadingUnremovableGlobalProperties: messages.loading,
-  unremovableGlobalProperties: messages.messagesTemplatesGlobalProperties
+  unremovableGlobalProperties: messages.messagesTemplatesGlobalProperties,
 });
 
 const mapDispatchToProps = {
@@ -508,7 +540,7 @@ const mapDispatchToProps = {
   getCallflowsProviders,
   getSmsProviders,
   getMessagesTemplatesGlobalProperties,
-  addBreadcrumbs
+  addBreadcrumbs,
 };
 
 type StateProps = ReturnType<typeof mapStateToProps>;

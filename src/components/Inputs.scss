@@ -35,11 +35,11 @@
 #app .notification-templates,
 #app #user-account,
 .modal {
-  input:not([type='checkbox']):not([class*='filter-input']),
-  select:not([class*='react-datepicker__']),
+  input:not([type="checkbox"]):not([class*="filter-input"]),
+  select:not([class*="react-datepicker__"]),
   textarea,
-  div[class*='__value-container']:not([class*='filter-select']),
-  div[class*='-ValueContainer']:not([class*='filter-select']) {
+  div[class*="__value-container"]:not([class*="filter-select"]),
+  div[class*="-ValueContainer"]:not([class*="filter-select"]) {
     min-height: calc(var(--input-min-height) + 2px);
     margin-right: 15px;
     &.invalid {
@@ -62,8 +62,8 @@
       }
     }
   }
-  input:not([type='checkbox']):not(:placeholder-shown),
-  select:not(.placeholder):not([class*='react-datepicker__']):not(.filter-select),
+  input:not([type="checkbox"]):not(:placeholder-shown),
+  select:not(.placeholder):not([class*="react-datepicker__"]):not(.filter-select),
   textarea:not(:placeholder-shown) {
     padding-top: 2rem;
   }
@@ -79,7 +79,7 @@
   select:focus {
     outline: none !important;
   }
-  input[type='checkbox'] {
+  input[type="checkbox"] {
     cursor: pointer;
     &:focus {
       border: var(--input-border) !important;
@@ -96,59 +96,59 @@
       text-transform: uppercase;
       opacity: 0.65;
     }
-    & div[class*='__control--is-disabled'] {
+    & div[class*="__control--is-disabled"] {
       background-color: rgb(238, 238, 238);
     }
   }
   /* style react-select to resemble a regular input */
-  div[class*='-container']:not([class*='filter-select']) {
-    & > div[class*='-control'] {
+  div[class*="-container"]:not([class*="filter-select"]) {
+    & > div[class*="-control"] {
       border-radius: 0;
       box-shadow: var(--input-box-shadow) !important;
       border: var(--input-border);
 
-      &[class*='--is-focused'],
-      &[class*='--menu-is-open'] {
+      &[class*="--is-focused"],
+      &[class*="--menu-is-open"] {
         box-shadow: var(--input-box-shadow), var(--input-focused-box-shadow) !important;
       }
     }
-    &.invalid div[class*='-control'] {
+    &.invalid div[class*="-control"] {
       border: var(--error-border);
     }
   }
-  div[class*='__value-container']:not([class*='filter-select']) {
+  div[class*="__value-container"]:not([class*="filter-select"]) {
     min-height: var(--input-min-height);
     overflow: visible;
     padding: 0 8px;
     font-family: CircularStd-Book;
     font-size: 14px;
-    div[class*='-Placeholder'] {
+    div[class*="-Placeholder"] {
       color: rgba(0, 0, 0, 0.45);
     }
-    div[class*='__single-value'] {
+    div[class*="__single-value"] {
       padding-top: var(--select-with-placeholder-padding-top);
       position: initial;
       margin-left: auto;
       margin-right: auto;
       color: black;
     }
-    div[class*='__multi-value'] {
+    div[class*="__multi-value"] {
       z-index: 1;
     }
-    div[class*='__remove'] {
+    div[class*="__remove"] {
       z-index: 1;
     }
-    > div[class*='css-']:not([class*='-multiValue']) {
+    > div[class*="css-"]:not([class*="-multiValue"]) {
       position: absolute;
       width: 100%;
       margin-left: auto;
       margin-right: auto;
     }
-    &[class*='__value-container--is-multi'] {
+    &[class*="__value-container--is-multi"] {
       padding-top: var(--select-with-placeholder-padding-top);
     }
   }
-  div[class*='__menu'] {
+  div[class*="__menu"] {
     color: var(--main-color);
   }
   .react-datepicker-wrapper {
@@ -172,7 +172,7 @@
   button.cancel,
   .btn.cancel {
     background: transparent;
-    color: black;
+    color: #00455c;
 
     &:active {
       background-color: transparent !important;
