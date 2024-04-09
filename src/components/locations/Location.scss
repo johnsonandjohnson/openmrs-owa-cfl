@@ -25,4 +25,55 @@
   &.default-select-multi {
     min-width: 250px;
   }
+
+  .rmdp-container {
+    display: block !important;
+  }
+
+  .rmdp-input {
+    width: 100%;
+    font-size: 14px;
+    color: black;
+  }
+
+  .rmdp-panel {
+    min-width: 170px;
+  }
+
+  .rmdp-prime .rmdp-header {
+    border-bottom: none;
+  }
+
+  .rmdp-prime .rmdp-panel-header {
+    border-bottom: none;
+  }
+
+  .rmdp-week-day {
+    color: #333333;
+  }
+
+  .rmdp-day span {
+    border-radius: 0.3rem;
+  }
+
+  .rmdp-day.rmdp-today span {
+    background-color: transparent;
+    color: #000000;
+    font-weight: bold;
+  }
+
+  .rmdp-day.rmdp-selected span:not(.highlight),
+  .rmdp-panel-body li,
+  .rmdp-panel-body li .b-deselect {
+    background-color: #00455c;
+  }
+
+  .rmdp-day:not(.rmdp-disabled, .rmdp-day-hidden) span:hover {
+    background-color: #f0f0f0;
+    color: #000000;
+  }
+
+  .rmdp-header-values span {
+    padding: 0px;
+  }
 }
