@@ -45,10 +45,16 @@ import {
   CLUSTER_LOCATION_ATTRIBUTE_TYPE_UUID,
   PROJECT_LOCATION_ATTRIBUTE_TYPE_UUID,
   MANDATORY_LOCATION_ATTRIBUTE_TYPE_UUID,
+  CLINIC_CLOSED_DATES_ATTRIBUTE_TYPE_UUID,
+  CLINIC_CLOSED_WEEKDAYS_ATTRIBUTE_TYPE_UUID,
+  WEEKDAYS_OPTIONS_MAP,
 } from "../../shared/constants/location";
 import { COUNTRY_CONCEPT_UUID, COUNTRY_CONCEPT_REPRESENTATION } from "../../shared/constants/concept";
 import { IConceptSetMember } from "../../shared/models/concept";
 import { getProjectNames } from "src/redux/reducers/project";
+import DatePicker from "react-multi-date-picker";
+import "react-multi-date-picker/styles/layouts/prime.css";
+import DatePanel from "react-multi-date-picker/plugins/date_panel";
 
 export interface ILocationProps extends StateProps, DispatchProps, RouteComponentProps {
   intl: IntlShape;
@@ -230,6 +236,56 @@ export const Location = ({
     setLocation({ ...location, attributes });
   };
 
+  const onMultipleValuesChange = (uuid: string) => (event) => {
+    let attributes = location.attributes;
+    const attribute = attributes.find((attributeToCheck) => attributeToCheck.attributeType.uuid === uuid);
+    const value = event?.map((option) => option.value).join(",");
+
+    if (attribute) {
+      attribute.value = value;
+    } else {
+      attributes = [...location.attributes, { attributeType: { uuid }, value }];
+    }
+
+    setLocation({ ...location, attributes });
+  };
+
+  const getMultipleValues = (value, allValues) => {
+    const splittedValue = value?.split(",") || [];
+
+    return splittedValue.map((val) => {
+      return allValues.find((weekday) => weekday.value === val);
+    });
+  };
+
+  const onMultipleDatesChange = (uuid: string) => (event) => {
+    let attributes = location.attributes;
+    const attribute = attributes.find((attributeToCheck) => attributeToCheck.attributeType.uuid === uuid);
+    const value = event.map((date) => date.format("DD MMM YYYY")).join(",");
+
+    if (attribute) {
+      attribute.value = value;
+    } else {
+      attributes = [...location.attributes, { attributeType: { uuid }, value }];
+    }
+
+    setLocation({ ...location, attributes });
+  };
+
+  const getStringAsDateObjects = (value: string) => {
+    const datesArray = value?.split(",");
+
+    return datesArray?.map((stringDate) => {
+      const trimmedStringDate = stringDate.trim();
+      return new Date(trimmedStringDate);
+    });
+  };
+
+  const weekdayOptions = WEEKDAYS_OPTIONS_MAP.map((option) => ({
+    label: formatMessage({ id: option.label }),
+    value: option.value,
+  }));
+
   const isLocationNameEmpty = !location.name;
 
   const isLocationNameDuplicated = locations
@@ -309,6 +365,41 @@ export const Location = ({
             readOnly
           />
           {showValidationErrors && isInvalid && <ValidationError message="common.error.required" />}
+        </div>
+      );
+    } else if (locationAttributeTypeUuid === CLINIC_CLOSED_DATES_ATTRIBUTE_TYPE_UUID) {
+      return (
+        <div className="input-container" key={key}>
+          <DatePicker
+            multiple
+            value={getStringAsDateObjects(value)}
+            onChange={onMultipleDatesChange(locationAttributeTypeUuid)}
+            format="DD MMM YYYY"
+            sort
+            className="rmdp-prime"
+            showOtherDays
+            monthYearSeparator=" "
+            placeholder={placeholder}
+            plugins={[<DatePanel />]}
+          />
+          {!!value && <span className="placeholder">{placeholder || ""}</span>}
+        </div>
+      );
+    } else if (locationAttributeTypeUuid === CLINIC_CLOSED_WEEKDAYS_ATTRIBUTE_TYPE_UUID) {
+      return (
+        <div className="input-container" key={key}>
+          <SelectWithPlaceholder
+            placeholder={placeholder}
+            showPlaceholder={!!value}
+            value={getMultipleValues(value, weekdayOptions)}
+            onChange={onMultipleValuesChange(locationAttributeTypeUuid)}
+            options={weekdayOptions}
+            wrapperClassName={cx("flex-1", { invalid: showValidationErrors && isInvalid })}
+            classNamePrefix="default-select"
+            theme={selectDefaultTheme}
+            isMulti
+            type="text"
+          />
         </div>
       );
     } else
