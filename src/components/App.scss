@@ -9,31 +9,31 @@
  */
 
 @font-face {
-  font-family: 'CircularStd';
+  font-family: "CircularStd";
   font-style: normal;
   font-weight: normal;
-  src: url('../assets/font/CircularStd-Medium.otf') format('opentype');
+  src: url("../assets/font/CircularStd-Medium.otf") format("opentype");
 }
 
 @font-face {
-  font-family: 'CircularStd';
+  font-family: "CircularStd";
   font-style: normal;
   font-weight: bold;
-  src: url('../assets/font/CircularStd-Bold.otf') format('opentype');
+  src: url("../assets/font/CircularStd-Bold.otf") format("opentype");
 }
 
 @font-face {
-  font-family: 'CircularStd-Book';
+  font-family: "CircularStd-Book";
   font-style: normal;
   font-weight: normal;
-  src: url('../assets/font/CircularStd-Book.otf') format('opentype');
+  src: url("../assets/font/CircularStd-Book.otf") format("opentype");
 }
 
 @font-face {
-  font-family: 'CircularStd-Book';
+  font-family: "CircularStd-Book";
   font-style: italic;
   font-weight: normal;
-  src: url('../assets/font/CircularStd-BookItalic.otf') format('opentype');
+  src: url("../assets/font/CircularStd-BookItalic.otf") format("opentype");
 }
 
 body {
@@ -44,7 +44,7 @@ body {
   #app {
     min-height: 100vh;
     background-color: #fafafa;
-    font-family: 'CircularStd', serif;
+    font-family: "CircularStd", serif;
 
     .header {
       padding: 0 1em 0 1em;
@@ -141,6 +141,8 @@ body {
 
     .react-datepicker {
       font-size: 14px;
+      // Fix for some broken CSS
+      min-width: 243px;
     }
     @media only screen and (max-height: 768px) {
       .react-datepicker {
@@ -149,6 +151,10 @@ body {
       .react-datepicker__week > div {
         margin: 0.1em;
       }
+    }
+    .react-datepicker__current-month {
+      // Fix for some broken CSS
+      padding-bottom: 0.4em;
     }
 
     a.btn,

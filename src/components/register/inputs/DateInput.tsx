@@ -8,18 +8,19 @@
  * graphic logo is a trademark of OpenMRS Inc.
  */
 
-import React, { RefObject } from 'react';
-import { connect } from 'react-redux';
-import { injectIntl } from 'react-intl';
-import DatePicker from 'react-datepicker';
-import { IFieldProps, IFieldState } from './Field';
-import ValidationError from './ValidationError';
-import { getPlaceholder } from '../../../shared/util/patient-form-util';
-import { DATE_FORMAT, MILLIS_PER_MINUTE } from '../../../shared/util/date-util';
+import React, { RefObject } from "react";
+import { connect } from "react-redux";
+import { injectIntl } from "react-intl";
+import DatePicker from "react-datepicker";
+import { IFieldProps, IFieldState } from "./Field";
+import ValidationError from "./ValidationError";
+import { getPlaceholder } from "../../../shared/util/patient-form-util";
+import { DATE_FORMAT, MILLIS_PER_MINUTE } from "../../../shared/util/date-util";
+import "react-datepicker/dist/react-datepicker.css";
 
 export interface IDateInputProps extends StateProps, DispatchProps, IFieldProps {
   intl: any;
-  datePickerRef: any
+  datePickerRef: any;
 }
 
 class DateInput extends React.Component<IDateInputProps, IFieldState> {
@@ -34,7 +35,7 @@ class DateInput extends React.Component<IDateInputProps, IFieldState> {
     this.props.inputRef({ focus: () => this.datePickerRef.current.setFocus() });
   }
 
-  createOnChangeCallback = (patient, fieldName, callback) => event => {
+  createOnChangeCallback = (patient, fieldName, callback) => (event) => {
     this.setValueInModel(patient, fieldName, callback, event && event.target ? event.target.value : event);
   };
 
@@ -44,25 +45,36 @@ class DateInput extends React.Component<IDateInputProps, IFieldState> {
   };
 
   getDateFromDateTime = (dateTimeValue) => {
-    if(!!dateTimeValue) {
+    if (!!dateTimeValue) {
       const offsetInMinutes = dateTimeValue.getTimezoneOffset();
-      const date = new Date(dateTimeValue.getTime() - (offsetInMinutes * MILLIS_PER_MINUTE));
-      return date.toISOString().split('T')[0];
+      const date = new Date(dateTimeValue.getTime() - offsetInMinutes * MILLIS_PER_MINUTE);
+      return date.toISOString().split("T")[0];
     } else {
       return null;
     }
   };
 
   render = () => {
-    const {intl, field, isInvalid, isDirty, className, value, patient, onPatientChange, onFirstInputKeyDown, onLastInputKeyDown} = this.props;
-    const {name, required, label} = field;
+    const {
+      intl,
+      field,
+      isInvalid,
+      isDirty,
+      className,
+      value,
+      patient,
+      onPatientChange,
+      onFirstInputKeyDown,
+      onLastInputKeyDown,
+    } = this.props;
+    const { name, required, label } = field;
     const hasValue = !!value || !!patient[field.name];
     const placeholder = getPlaceholder(intl, label, name, required);
     const props = {
       name,
       id: name,
       required,
-      className: 'form-control ' + (isDirty && isInvalid ? 'invalid' : ''),
+      className: "form-control " + (isDirty && isInvalid ? "invalid" : ""),
       placeholderText: placeholder,
       value: value != null ? value : getDateFromModel(patient, name),
       selected: value != null ? value : getDateFromModel(patient, name),
@@ -70,22 +82,31 @@ class DateInput extends React.Component<IDateInputProps, IFieldState> {
       peekNextMonth: true,
       showMonthDropdown: true,
       showYearDropdown: true,
-      dropdownMode: 'select',
-      dateFormat: DATE_FORMAT
+      dropdownMode: "select",
+      dateFormat: DATE_FORMAT,
+      onKeyDown: (e) => {
+        if (!e.ctrlKey && e.keyCode >= 32 && e.keyCode <= 126) {
+          e.preventDefault();
+        }
+      },
     };
 
     return (
-      <div className={`${className} input-container`}
-           // Overriding onKeyDown in DatePicker breaks its navigation
-           onKeyDown={e => {
-             !!onFirstInputKeyDown && onFirstInputKeyDown(e);
-             if (!e.defaultPrevented) {
-               !!onLastInputKeyDown && onLastInputKeyDown(e);
-             }
-           }}>
+      <div
+        className={`${className} input-container`}
+        // Overriding onKeyDown in DatePicker breaks its navigation
+        onKeyDown={(e) => {
+          !!onFirstInputKeyDown && onFirstInputKeyDown(e);
+          if (!e.defaultPrevented) {
+            !!onLastInputKeyDown && onLastInputKeyDown(e);
+          }
+        }}
+      >
         <DatePicker ref={this.datePickerRef} {...props} />
-        {hasValue && <span className="placeholder">{placeholder ? intl.formatMessage({ id: `${placeholder}` }) : ''}</span>}
-        {isDirty && isInvalid && <ValidationError hasValue={hasValue} field={field}/>}
+        {hasValue && (
+          <span className="placeholder">{placeholder ? intl.formatMessage({ id: `${placeholder}` }) : ""}</span>
+        )}
+        {isDirty && isInvalid && <ValidationError hasValue={hasValue} field={field} />}
       </div>
     );
   };
@@ -94,7 +115,7 @@ class DateInput extends React.Component<IDateInputProps, IFieldState> {
 export function getDateFromModel(patient, field) {
   const modelValue = patient[field];
 
-  if (typeof modelValue === 'string') {
+  if (typeof modelValue === "string") {
     return new Date(modelValue);
   } else {
     return modelValue;

@@ -20,6 +20,7 @@ import Select from "react-select/creatable";
 import "../Inputs.scss";
 import { DATE_FORMAT, MONTH_NAMES_KEYS, WEEK_DAYS_KEYS, isoDateString } from "../../shared/util/date-util";
 import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { getCondition, saveCondition } from "../../redux/reducers/condition";
 import queryString from "query-string";
@@ -222,7 +223,7 @@ class Condition extends React.Component<IConditionsProps, IConditionsState> {
     const days = this.getDayLabelsKey();
     const months = this.getMonthLabelsKey();
 
-    const locale = {
+    return {
       localize: {
         day: (n) => days[n],
         month: (n) => months[n],
@@ -230,8 +231,8 @@ class Condition extends React.Component<IConditionsProps, IConditionsState> {
       formatLong: {
         date: () => DATE_FORMAT,
       },
+      match: () => {},
     };
-    return locale;
   };
 
   render() {
